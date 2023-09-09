@@ -24,7 +24,7 @@
           />
           <img
             v-if="!useMain().isMobile"
-            src="logo.jpg"
+            src="/logo.jpg"
             class="min-w-[100px] max-w-[100px]"
             alt=""
           />
@@ -32,7 +32,7 @@
 
         <img
           v-if="useMain().isMobile"
-          src="logo.jpg"
+          src="/logo.jpg"
           class="mx-auto min-w-[100px] max-w-[100px]"
           alt=""
         />
