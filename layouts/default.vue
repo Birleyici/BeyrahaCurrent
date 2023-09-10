@@ -15,30 +15,46 @@
       <UiMenuSideBarMenu :status="cartStatus" @change-status="(e) => (cartStatus = e)">
         <div class="p-4">
           <b>Sepet</b>
-          <div class="mt-8 flex space-x-4" v-for="item in 3">
+          <div class="mt-8 flex space-x-4" v-for="(item, index) in 3">
             <img src="/default-product.jpg" class="w-16 h-24 object-cover rounded-md" />
             <div>
-              <div class="flex space-x-2">
+              <div class="flex items-start space-x-2">
                 <p class="text-sm font-medium">
                   Bordo Renk Siyah İpli Deri Erkek Bileklik
                 </p>
-                <div>
-                  <button class="bg-red-500 text-white text-xs p-1 px-1 rounded-md">
-                    <Icon name="mdi:close" ></Icon>
-                  </button>
-                </div>
+                <button class="text-xs rounded-md bg-slate-100">
+                  <Icon
+                    name="material-symbols:close-rounded"
+                    :key="index"
+                    class="w-4 h-4"
+                  />
+                </button>
               </div>
               <div class="mt-2 flex items-center space-x-2">
-                <button class="bg-slate-200 text-xl flex items-center px-2 rounded-md">
+                <button class="bg-slate-200 text-md flex items-center px-2 rounded-md">
                   -
                 </button>
                 <p class="text-sm">1</p>
-                <button class="bg-slate-200 text-xl flex items-center px-2 rounded-md">
+                <button class="bg-slate-200 text-md flex items-center px-2 rounded-md">
                   +
                 </button>
               </div>
             </div>
           </div>
+          <div class="grid">
+            <button
+            class="mt-minimal rounded-md bg-slate-200 hover:bg-orange-400 duration-300 px-3 py-2"
+          >
+            Sepete git
+          </button>
+        
+          <button
+            class="mt-2 rounded-md bg-secondary text-white hover:bg-orange-400 duration-300 px-3 py-2"
+          >
+            Ödeme
+          </button>
+        
+        </div>
         </div>
       </UiMenuSideBarMenu>
       <div class="flex justify-between items-center">
