@@ -1,7 +1,7 @@
 <template>
-  <div v-if="status">
+  <div >
     <div
-      class="fixed left-0 bottom-0 top-0 flex z-10 duration-300"
+      class="fixed left-0 bottom-0 top-0 flex z-10 duration-300 "
       :class="status ? '' : '-translate-x-full'"
     >
       <div class="bg-white w-72 h-full">
