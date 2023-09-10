@@ -4,11 +4,30 @@
       <UiMenuSideBarMenu :status="menuStatus" @change-status="(e) => (menuStatus = e)">
         <PartialsMenuNestedSlideMenu></PartialsMenuNestedSlideMenu>
       </UiMenuSideBarMenu>
-      <UiMenuSideBarMenu
-        :status="accountStatus"
-        @change-status="(e) => (accountStatus = e)"
-      >
-        Hesap İçerik...
+      <UiMenuSideBarMenu :status="true" @change-status="(e) => (accountStatus = e)">
+        <div class="p-8">
+          <div class="flex justify-between">
+            <b>Giriş yap</b>
+            <p class="border-r-2 border-dotted"></p>
+            <b><a href="#" class="text-secondary">Kaydol</a></b>
+          </div>
+          <div class="mt-12 space-y-4">
+            <div>
+              <label class="text-sm" for="">E-mail / Kullanıcı adı</label>
+              <input
+                type="text"
+                class="bg-slate-50 text-sm focus:bg-white duration-300 p-3 focus:!outline-0 focus:border-secondary w-full rounded-md border"
+              />
+            </div>
+
+            <FormUiFormPasswordInput></FormUiFormPasswordInput>
+            <button
+              class="rounded-md bg-secondary hover:bg-orange-400 text-white duration-300 px-3 py-2"
+            >
+              Giriş Yap
+            </button>
+          </div>
+        </div>
       </UiMenuSideBarMenu>
       <UiMenuSideBarMenu :status="cartStatus" @change-status="(e) => (cartStatus = e)">
         Sepet İçerik...
@@ -78,5 +97,4 @@
 const menuStatus = ref(false);
 const accountStatus = ref(false);
 const cartStatus = ref(false);
-
 </script>

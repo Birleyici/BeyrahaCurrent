@@ -1,7 +1,7 @@
 <template>
   <div >
     <div
-      class="fixed left-0 bottom-0 top-0 flex z-10 duration-300 "
+      class="fixed left-0 bottom-0 top-0 flex z-[11] duration-300 "
       :class="status ? '' : '-translate-x-full'"
     >
       <div class="bg-white w-72 h-full">
@@ -15,11 +15,11 @@
           }
         "
       >
-        <button>
+        <button class="overflow-hidden">
           <Icon
             v-if="status"
             name="ion:ios-close-empty"
-            class="w-24 h-24 lg:w-[500px] lg:h-[500px] lg:-m-32 !text-slate-50"
+            class="w-24 h-24 lg:w-[500px] lg:h-[500px] lg:-m-32 !text-slate-50 "
           />
         </button>
       </div>
