@@ -4,33 +4,42 @@
       <UiMenuSideBarMenu :status="menuStatus" @change-status="(e) => (menuStatus = e)">
         <PartialsMenuNestedSlideMenu></PartialsMenuNestedSlideMenu>
       </UiMenuSideBarMenu>
-      <UiMenuSideBarMenu :status="true" @change-status="(e) => (accountStatus = e)">
+      <UiMenuSideBarMenu
+        :status="accountStatus"
+        @change-status="(e) => (accountStatus = e)"
+      >
         <div class="p-8">
-          <div class="flex justify-between">
-            <b>Giriş yap</b>
-            <p class="border-r-2 border-dotted"></p>
-            <b><a href="#" class="text-secondary">Kaydol</a></b>
-          </div>
-          <div class="mt-12 space-y-4">
-            <div>
-              <label class="text-sm" for="">E-mail / Kullanıcı adı</label>
-              <input
-                type="text"
-                class="bg-slate-50 text-sm focus:bg-white duration-300 p-3 focus:!outline-0 focus:border-secondary w-full rounded-md border"
-              />
-            </div>
-
-            <FormUiFormPasswordInput></FormUiFormPasswordInput>
-            <button
-              class="rounded-md bg-secondary hover:bg-orange-400 text-white duration-300 px-3 py-2"
-            >
-              Giriş Yap
-            </button>
-          </div>
+          <PartialsFormLoginRegisterForm />
         </div>
       </UiMenuSideBarMenu>
       <UiMenuSideBarMenu :status="cartStatus" @change-status="(e) => (cartStatus = e)">
-        Sepet İçerik...
+        <div class="p-4">
+          <b>Sepet</b>
+          <div class="mt-8 flex space-x-4" v-for="item in 3">
+            <img src="/default-product.jpg" class="w-16 h-24 object-cover rounded-md" />
+            <div>
+              <div class="flex space-x-2">
+                <p class="text-sm font-medium">
+                  Bordo Renk Siyah İpli Deri Erkek Bileklik
+                </p>
+                <div>
+                  <button class="bg-red-500 text-white text-xs p-1 px-1 rounded-md">
+                    <Icon name="mdi:close" ></Icon>
+                  </button>
+                </div>
+              </div>
+              <div class="mt-2 flex items-center space-x-2">
+                <button class="bg-slate-200 text-xl flex items-center px-2 rounded-md">
+                  -
+                </button>
+                <p class="text-sm">1</p>
+                <button class="bg-slate-200 text-xl flex items-center px-2 rounded-md">
+                  +
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
       </UiMenuSideBarMenu>
       <div class="flex justify-between items-center">
         <p class="font-primary text-heading-1 flex items-center space-x-3">
@@ -39,7 +48,6 @@
             v-if="useMain().isMobile"
             name="ph:list"
             class="w-8 h-8"
-            color="black"
           />
 
           <Icon
@@ -47,7 +55,6 @@
             @click="useMain().isOpenSearch = true"
             name="ph:magnifying-glass"
             class="w-7 h-7"
-            color="black"
           />
           <img
             v-if="!useMain().isMobile"

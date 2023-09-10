@@ -15,8 +15,9 @@
           >TAKI & AKSESUAR</a
         >
       </div>
-      <UiMenuSideBarMenu :status="status" @change-status="(e)=>status=e"> İçerik... </UiMenuSideBarMenu>
-     
+      <UiMenuSideBarMenu :status="status" @change-status="(e) => (status = e)">
+        <PartialsMenuNestedSlideMenu></PartialsMenuNestedSlideMenu>
+      </UiMenuSideBarMenu>
     </div>
   </div>
 </template>

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <label class="text-sm" for="">Şifre</label>
     <div class="w-full relative flex items-center">
       <input
         :type="!status ? 'password':'text'"
@@ -12,7 +11,7 @@
         v-if="!status"
         name="mdi:eye-off-outline"
         class="w-6  h-6 absolute right-2 text-gray-800"
-      ></Icon>
+      ></Icon> 
       <Icon
         @click="status = !status"
         v-else
