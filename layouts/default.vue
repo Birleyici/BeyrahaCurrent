@@ -2,9 +2,17 @@
   <header>
     <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
       <UiMenuSideBarMenu :status="menuStatus" @change-status="(e) => (menuStatus = e)">
-        Menü İçerik...
+        <PartialsMenuNestedSlideMenu></PartialsMenuNestedSlideMenu>
       </UiMenuSideBarMenu>
-
+      <UiMenuSideBarMenu
+        :status="accountStatus"
+        @change-status="(e) => (accountStatus = e)"
+      >
+        Hesap İçerik...
+      </UiMenuSideBarMenu>
+      <UiMenuSideBarMenu :status="cartStatus" @change-status="(e) => (cartStatus = e)">
+        Sepet İçerik...
+      </UiMenuSideBarMenu>
       <div class="flex justify-between items-center">
         <p class="font-primary text-heading-1 flex items-center space-x-3">
           <Icon
@@ -48,8 +56,8 @@
             </p>
           </div>
           <div class="flex items-center space-x-4 font-medium" v-else>
-            <Icon name="ph:user" class="w-8 h-8"></Icon>
-            <Icon name="ph:bag-simple" class="w-8 h-8"></Icon>
+            <Icon @click="accountStatus = true" name="ph:user" class="w-8 h-8"></Icon>
+            <Icon @click="cartStatus = true" name="ph:bag-simple" class="w-8 h-8"></Icon>
           </div>
         </div>
       </div>
@@ -68,4 +76,7 @@
 
 <script setup>
 const menuStatus = ref(false);
+const accountStatus = ref(false);
+const cartStatus = ref(false);
+
 </script>
