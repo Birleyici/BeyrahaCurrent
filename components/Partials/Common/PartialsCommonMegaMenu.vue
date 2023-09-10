@@ -1,7 +1,7 @@
 <template>
   <div class="py-minimal relative inline-block" v-if="!useMain().isMobile">
     <div class="flex items-center">
-      <Icon name="material-symbols:home-rounded" class="w-6 h-6 !text-secondary" />
+      <Icon name="material-symbols:home-rounded" class="w-6 h-6 !text-secondary-500" />
 
       <div
         @mouseover="changeStatusFewSecond()"

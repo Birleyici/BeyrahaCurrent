@@ -11,10 +11,55 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: 'black', // Siyah renk
-        secondary: '#F97316', // Tailwind CSS'in orange-500 rengi
-        tertiary: '#3B82F6', // Tailwind CSS'in blue-500 rengi
-        quaternary: '#9CA3AF', // Gri renk, Tailwind CSS'in gray-400 rengi
+        'primary': {
+          '50': '#f9fafb',  // gray-50
+          '100': '#f3f4f6', // gray-100
+          '200': '#e5e7eb', // gray-200
+          '300': '#d1d5db', // gray-300
+          '400': '#9ca3af', // gray-400
+          '500': '#6b7280', // gray-500 (Default)
+          '600': '#4b5563', // gray-600
+          '700': '#374151', // gray-700
+          '800': '#1f2937', // gray-800
+          '900': '#111827', // gray-900
+        },
+        'secondary': {
+          '50': '#fff7ed',  // orange-50
+          '100': '#ffedd5', // orange-100
+          '200': '#fed7aa', // orange-200
+          '300': '#fdba74', // orange-300
+          '400': '#fb923c', // orange-400
+          '500': '#f97316', // orange-500 (Default)
+          '600': '#ea580c', // orange-600
+          '700': '#c2410c', // orange-700
+          '800': '#9a3412', // orange-800
+          '900': '#7c2d12', // orange-900
+        },
+        'tertiary': {
+          '50': '#f8fafc',  // slate-50
+          '100': '#f1f5f9', // slate-100
+          '200': '#e2e8f0', // slate-200
+          '300': '#cbd5e1', // slate-300
+          '400': '#94a3b8', // slate-400
+          '500': '#64748b', // slate-500 (Default)
+          '600': '#475569', // slate-600
+          '700': '#334155', // slate-700
+          '800': '#1e293b', // slate-800
+          '900': '#0f172a', // slate-900
+        },
+        'quaternary': {
+          '50': '#f9fafb',  // gray-50
+          '100': '#f3f4f6', // gray-100
+          '200': '#e5e7eb', // gray-200
+          '300': '#d1d5db', // gray-300
+          '400': '#9ca3af', // gray-400
+          '500': '#6b7280', // gray-500 (Default)
+          '600': '#4b5563', // gray-600
+          '700': '#374151', // gray-700
+          '800': '#1f2937', // gray-800
+          '900': '#111827', // gray-900
+        },
+
       },
       spacing: {
         'section-desktop': '100px', // Y ekseninde masaüstü bölüm aralığı
@@ -33,7 +78,7 @@ module.exports = {
         'heading-3': '1.25rem', // Başlık 3 için yazı boyutu
       },
       fontFamily: {
-        'primary': ['Urbanist' ], // İlk yazı tipi olarak Bebas Neue
+        'primary': ['Urbanist'], // İlk yazı tipi olarak Bebas Neue
         'secondary': ['Open Sans', 'sans-serif'], // İkinci yazı tipi olarak Open Sans
       },
     },

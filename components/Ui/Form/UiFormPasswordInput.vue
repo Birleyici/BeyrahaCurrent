@@ -3,7 +3,7 @@
     <div class="w-full relative flex items-center">
       <input
         :type="!status ? 'password':'text'"
-        class="!pr-10 bg-slate-50 focus:bg-white duration-300 p-3 focus:!outline-0 focus:border-secondary w-full rounded-md border"
+        class="!pr-10 bg-slate-50 focus:bg-white duration-300 p-3 focus:!outline-0 focus:border-secondary-500 w-full rounded-md border"
       />
     <button class="flex items-center">
         <Icon

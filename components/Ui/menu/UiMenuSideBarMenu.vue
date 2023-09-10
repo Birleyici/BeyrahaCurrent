@@ -1,8 +1,13 @@
 <template>
-  <div >
+  <div>
     <div
-      class="fixed left-0 bottom-0 top-0 flex z-[11] duration-300 "
-      :class="status ? '' : '-translate-x-full'"
+      class="fixed bottom-0 top-0 flex z-[11] duration-300"
+      :class="{
+        '-translate-x-full': !status && !position,
+        'translate-x-full': !status && position,
+        'left-0': !position,
+        'right-0 flex-row-reverse': position,
+      }"
     >
       <div class="bg-white w-72 h-full">
         <slot></slot>
@@ -19,7 +24,7 @@
           <Icon
             v-if="status"
             name="ion:ios-close-empty"
-            class="w-24 h-24 lg:w-[500px] lg:h-[500px] lg:-m-32 !text-slate-50 "
+            class="w-24 h-24 lg:w-[500px] lg:h-[500px] lg:-m-32 !text-slate-50"
           />
         </button>
       </div>
@@ -37,5 +42,5 @@
 </template>
 
 <script setup>
-const { status } = defineProps(["status"]);
+const { status, position } = defineProps(["status", "position"]);
 </script>

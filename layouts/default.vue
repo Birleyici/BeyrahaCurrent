@@ -5,6 +5,7 @@
         <PartialsMenuNestedSlideMenu></PartialsMenuNestedSlideMenu>
       </UiMenuSideBarMenu>
       <UiMenuSideBarMenu
+        position="true"
         :status="accountStatus"
         @change-status="(e) => (accountStatus = e)"
       >
@@ -12,7 +13,11 @@
           <PartialsFormLoginRegisterForm />
         </div>
       </UiMenuSideBarMenu>
-      <UiMenuSideBarMenu :status="cartStatus" @change-status="(e) => (cartStatus = e)">
+      <UiMenuSideBarMenu
+        position="true"
+        :status="cartStatus"
+        @change-status="(e) => (cartStatus = e)"
+      >
         <div class="p-4">
           <b>Sepet</b>
           <div class="mt-8 flex space-x-4" v-for="(item, index) in 3">
@@ -41,20 +46,14 @@
               </div>
             </div>
           </div>
+          <div class="mt-minimal flex justify-between">
+            <b>Toplam:</b>
+            <p class="text-secondary-500">1590.00 TL</p>
+          </div>
           <div class="grid">
-            <button
-            class="mt-minimal rounded-md bg-slate-200 hover:bg-orange-400 duration-300 px-3 py-2"
-          >
-            Sepete git
-          </button>
-        
-          <button
-            class="mt-2 rounded-md bg-secondary text-white hover:bg-orange-400 duration-300 px-3 py-2"
-          >
-            Ödeme
-          </button>
-        
-        </div>
+            <UiButtonsBaseButton color="slate">Sepete Git</UiButtonsBaseButton>
+            <UiButtonsBaseButton color="secondary">Ödeme</UiButtonsBaseButton>
+          </div>
         </div>
       </UiMenuSideBarMenu>
       <div class="flex justify-between items-center">
@@ -94,7 +93,7 @@
             <p class="font-primary text-heading-4 border-r border-r pr-minimal">HESAP</p>
             <p class="font-primary text-heading-4 px-minimal">
               SEPET
-              <span class="text-secondary">2</span>
+              <span class="text-secondary-500">2</span>
             </p>
           </div>
           <div class="flex items-center space-x-4 font-medium" v-else>

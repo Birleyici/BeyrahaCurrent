@@ -1,12 +1,12 @@
 <template>
   <div class="overflow-hidden">
     <div class="flex justify-between">
-      <b :class="!type ? 'text-secondary' : ''" @click="type = false">
+      <b :class="!type ? 'text-secondary-500' : ''" @click="type = false">
         <button>Giriş yap</button>
       </b>
       <p class="border-r-2 border-dotted"></p>
       <b
-        ><button :class="type ? 'text-secondary' : ''" @click="type = true">
+        ><button :class="type ? 'text-secondary-500' : ''" @click="type = true">
           Kaydol
         </button></b
       >
@@ -21,7 +21,7 @@
 
         <UiFormPasswordInput />
         <button
-          class="rounded-md bg-secondary hover:bg-orange-400 text-white duration-300 px-3 py-2"
+          class="rounded-md bg-secondary-500 hover:bg-orange-400 text-white duration-300 px-3 py-2"
         >
           Giriş Yap
         </button>
@@ -43,7 +43,7 @@
           <UiFormPasswordInput />
         </div>
         <button
-          class="rounded-md bg-secondary hover:bg-orange-400 text-white duration-300 px-3 py-2"
+          class="rounded-md bg-secondary-500 hover:bg-orange-400 text-white duration-300 px-3 py-2"
         >
           Kaydol
         </button>

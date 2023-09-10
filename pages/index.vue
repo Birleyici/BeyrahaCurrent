@@ -7,23 +7,23 @@
       <div class="absolute bottom-0 flex justify-end md:justify-between w-full">
         <div class="md:flex hidden">
           <button
-            class="bg-white p-2 mx-2 rounded-t-md text-sm hover:text-secondary duration-300"
+            class="bg-white p-2 mx-2 rounded-t-md text-sm hover:text-secondary-500 duration-300"
           >
             Çok Satanlar
           </button>
           <button
-            class="bg-white p-2 mx-2 rounded-t-md text-sm hover:text-secondary duration-300"
+            class="bg-white p-2 mx-2 rounded-t-md text-sm hover:text-secondary-500 duration-300"
           >
             Yeniler
           </button>
           <button
-            class="bg-white p-2 mx-2 rounded-t-md text-sm hover:text-secondary duration-300"
+            class="bg-white p-2 mx-2 rounded-t-md text-sm hover:text-secondary-500 duration-300"
           >
             İndirimdekiler
           </button>
         </div>
         <button
-          class="bg-white p-2 mx-2 rounded-t-md text-sm hover:text-secondary duration-300"
+          class="bg-white p-2 mx-2 rounded-t-md text-sm hover:text-secondary-500 duration-300"
         >
           Tümünü Gör
         </button>
