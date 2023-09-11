@@ -15,13 +15,22 @@
         :style="'transform:translateX(-' + activeIndex * 100 + '%)'"
         class="transition-transform duration-300 min-w-full"
       >
+
+      <div
+          class="border-b py-3 flex justify-between items-center px-6"
+        >
+          <NuxtLink to="kategori">Kategori</NuxtLink>
+          <Icon name="ic:baseline-keyboard-arrow-right"></Icon>
+        </div>
+
+
         <div
           class="border-b py-3 flex justify-between items-center px-6"
           v-for="(item, index2) in 8"
           @click="index!=2 ? activeIndex++ : ''"
           :key="index2"
         >
-          <p>Menü Link {{ index2 }}</p>
+          <a to="/kategori">Menü Link {{ index2 }}</a>
           <Icon name="ic:baseline-keyboard-arrow-right"></Icon>
         </div>
       </div>
