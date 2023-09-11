@@ -12,3 +12,8 @@ body{
 a{
     @apply hover:text-secondary-500 duration-300 hover:ml-2
 }
+
+
+.no-select {
+    user-select: none;
+  }
