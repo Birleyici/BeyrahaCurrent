@@ -22,7 +22,6 @@
       >
         <button class="overflow-hidden">
           <Icon
-            v-if="status"
             name="ion:ios-close-empty"
             class="w-24 h-24 lg:w-[500px] lg:h-[500px] lg:-m-32 !text-slate-50"
           />
