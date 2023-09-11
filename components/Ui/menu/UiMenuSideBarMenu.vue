@@ -20,14 +20,16 @@
           }
         "
       >
-        <button class="overflow-hidden">
+        <button class="overflow-hidden w-24 h-24 lg:w-[500px] lg:h-[500px]">
           <Icon
+            v-show="status"
             name="ion:ios-close-empty"
             class="w-24 h-24 lg:w-[500px] lg:h-[500px] lg:-m-32 !text-slate-50"
           />
         </button>
       </div>
     </div>
+  <Transition name="fade">
     <div
       v-if="status"
       @click="
@@ -37,6 +39,7 @@
       "
       class="bg-black w-full fixed right-0 left top-0 bottom-0 z-[9] opacity-20"
     ></div>
+  </Transition>
   </div>
 </template>
 
