@@ -20,7 +20,7 @@
           }
         "
       >
-        <button class="overflow-hidden w-24 h-24 lg:w-[500px] lg:h-[500px]">
+        <button class="overflow-hidden">
           <Icon
             v-show="status"
             name="ion:ios-close-empty"
