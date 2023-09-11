@@ -23,16 +23,6 @@
 </template>
 
 <script setup>
-const status = ref(false);
-const mouseOut = ref(true);
+const { status, mouseOut, changeStatusFewSecond } = useDelayedStatusChange();
 
-const changeStatusFewSecond = () => {
-  mouseOut.value = false;
-
-  setTimeout(() => {
-    if (mouseOut.value == false) {
-      status.value = true;
-    }
-  }, 300);
-};
 </script>

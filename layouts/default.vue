@@ -90,8 +90,18 @@
 
         <div>
           <div v-if="!useMain().isMobile" class="flex items-center font-medium">
-            <p class="font-primary text-heading-4 border-r border-r pr-minimal">HESAP</p>
-            <p class="font-primary text-heading-4 px-minimal">
+            <p
+              @mouseover="changeAccountStatusFewSecond()"
+              @mouseout="mouseOutAccount = true"
+              class="cursor-pointer font-primary text-heading-4 border-r border-r pr-minimal"
+            >
+              HESAP
+            </p>
+            <p
+              @mouseover="changeCartStatusFewSecond()"
+              @mouseout="mouseOutCart = true"
+              class="cursor-pointer font-primary text-heading-4 px-minimal"
+            >
               SEPET
               <span class="text-secondary-500">2</span>
             </p>
@@ -107,16 +117,22 @@
   </header>
   <NuxtPage></NuxtPage>
   <footer>
-    <div
-      class="mx-x-mobil lg:mx-x-desktop py-minimal mt-section-desktop border-t border-primary"
-    >
-      footer
-    </div>
+    <PartialsCommonFooter></PartialsCommonFooter>
   </footer>
 </template>
 
 <script setup>
 const menuStatus = ref(false);
-const accountStatus = ref(false);
-const cartStatus = ref(false);
+
+const {
+  status: accountStatus,
+  mouseOut: mouseOutAccount,
+  changeStatusFewSecond: changeAccountStatusFewSecond,
+} = useDelayedStatusChange(false);
+
+const {
+  status: cartStatus,
+  mouseOut: mouseOutCart,
+  changeStatusFewSecond: changeCartStatusFewSecond,
+} = useDelayedStatusChange(false);
 </script>

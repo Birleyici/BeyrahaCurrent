@@ -9,7 +9,7 @@
         'right-0 flex-row-reverse': position,
       }"
     >
-      <div class="bg-white w-72 h-full">
+      <div class="bg-white w-full lg:w-[400px] h-full">
         <slot></slot>
       </div>
       <div
