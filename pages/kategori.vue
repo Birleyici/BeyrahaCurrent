@@ -1,20 +1,29 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop lg:grid grid-cols-10 gap-10">
-    
-    <button @click="isOpenFilters = !isOpenFilters" v-if="useMain().isMobile" class="w-full bg-slate-50 border rounded-full mb-minimal py-2 text-secondary-500 flex items-center space-x-2 justify-center">
-    <Icon name="ic:round-filter-alt" class="w-5 h-5"></Icon>
-    <p class="font-medium">Filtreler</p>
-    </button>
-    <div v-if="useMain().isMobile" class="right-0 left-0 p-4 duration-300 h-full fixed z-10 bg-slate-50 rounded-t-xl border"
-    :class="isOpenFilters ? 'translate-y-0':'translate-y-full'"
+    <button
+      @click="isOpenFilters = !isOpenFilters"
+      v-if="useMain().isMobile"
+      class="w-full bg-slate-50 border rounded-full mb-minimal py-2 text-secondary-500 flex items-center space-x-2 justify-center"
     >
-      <b>Filtreler</b>
+      <Icon name="ic:round-filter-alt" class="w-5 h-5"></Icon>
+      <p class="font-medium">Filtreler</p>
+    </button>
+
+    <div
+      v-if="useMain().isMobile"
+      class="right-0 z-[20] left-0 p-4 duration-300 h-full fixed z-10 bg-slate-50 rounded-t-xl border"
+      :class="isOpenFilters ? 'translate-y-0' : 'translate-y-full'"
+    >
+     <div @click="isOpenFilters = !isOpenFilters" class="flex justify-between items-center">
+        <b>Filtreler</b>
+        <Icon class="w-6 h-6" name="mdi:close"></Icon>
+     </div>
       <div class="space-y-minimal">
         <div class="rounded-md pt-minimal w-full">
           <div
             @click="isOpen = !isOpen"
             :class="isOpen ? 'rounded-t-md' : 'rounded-md'"
-            class="no-select cursor-pointer border py-2 px-4 bg-tertiary-50 font-medium flex justify-between items-center"
+            class="no-select cursor-pointer border py-2 px-4 bg-tertiary-100 font-medium flex justify-between items-center"
           >
             <p>Marka</p>
             <Icon
@@ -45,11 +54,18 @@
         </label>
       </div>
     </div>
+    <div
+      @click="isOpenFilters = false"
+      v-if="isOpenFilters"
+      class="absolute left-0 right-0 bottom-0 top-0 bg-black opacity-20 w-full h-full z-[0]"
+    ></div>
     <div class="col-span-8 space-y-minimal">
       <div class="space-y-minimal lg:flex justify-between items-center">
         <div class="flex space-x-4 items-center">
-            <div class="flex items-center space-x-2">
-            <div class="bg-slate-100 rounded-full pl-2 pr-1 py-1 lg:!p-2 text-xs lg:text-sm flex items-center space-x-2">
+          <div class="flex items-center space-x-2">
+            <div
+              class="bg-slate-100 rounded-full pl-2 pr-1 py-1 lg:!p-2 text-xs lg:text-sm flex items-center space-x-2"
+            >
               <span>Ücretsiz Kargo</span>
               <button
                 class="rounded-full bg-slate-300 w-5 h-5 flex items-center justify-center"
@@ -59,7 +75,9 @@
             </div>
           </div>
           <div class="flex items-center space-x-2">
-            <div class="bg-slate-100 rounded-full pl-2 pr-1 py-1 lg:!p-2 text-xs lg:text-sm flex items-center space-x-2">
+            <div
+              class="bg-slate-100 rounded-full pl-2 pr-1 py-1 lg:!p-2 text-xs lg:text-sm flex items-center space-x-2"
+            >
               <span>Marka 1</span>
               <button
                 class="rounded-full bg-slate-300 w-5 h-5 flex items-center justify-center"
@@ -78,7 +96,9 @@
           <option value="">Artan fiyat</option>
         </select>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-5">
+      <div
+        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-5"
+      >
         <PartialsProductCard v-for="item in 15"></PartialsProductCard>
       </div>
     </div>
@@ -87,5 +107,5 @@
 
 <script setup>
 const isOpen = ref(true);
-const isOpenFilters = ref(false)
+const isOpenFilters = ref(false);
 </script>
