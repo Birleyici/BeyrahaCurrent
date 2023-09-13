@@ -1,5 +1,5 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop max-w-full">
+  <div class=" lg:px-x-desktop max-w-full">
     <div class="lg:grid lg:grid-cols-8 gap-16">
       <div class="col-span-3">
         <swiper
@@ -39,7 +39,7 @@
           </swiper>
         </div>
       </div>
-      <div class="col-span-3 responsive-space">
+      <div class="col-span-3 responsive-space px-x-mobil">
         <h1 class="text-xl font-bold border-b ">
           Bordo Renk Siyah İpli Deri Erkek Bileklik
         </h1>
