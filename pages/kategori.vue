@@ -1,14 +1,16 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop lg:grid grid-cols-10 gap-10">
     
-    <button class="w-full bg-slate-50 border rounded-full mb-minimal py-2 text-secondary-500 flex items-center space-x-2 justify-center">
+    <button @click="isOpenFilters = !isOpenFilters" v-if="useMain().isMobile" class="w-full bg-slate-50 border rounded-full mb-minimal py-2 text-secondary-500 flex items-center space-x-2 justify-center">
     <Icon name="ic:round-filter-alt" class="w-5 h-5"></Icon>
     <p class="font-medium">Filtreler</p>
     </button>
-    <div v-if="false" class="col-span-2">
+    <div v-if="useMain().isMobile" class="right-0 left-0 p-4 duration-300 h-full fixed z-10 bg-slate-50 rounded-t-xl border"
+    :class="isOpenFilters ? 'translate-y-0':'translate-y-full'"
+    >
       <b>Filtreler</b>
       <div class="space-y-minimal">
-        <div class="rounded-md bg-white pt-minimal w-full">
+        <div class="rounded-md pt-minimal w-full">
           <div
             @click="isOpen = !isOpen"
             :class="isOpen ? 'rounded-t-md' : 'rounded-md'"
@@ -28,7 +30,7 @@
           </div>
           <div
             :class="isOpen ? 'border-l border-r border-b max-h-[200px] p-4' : 'max-h-0'"
-            class="duration-300 rounded-b-md grid gap-2 overflow-hidden overflow-y-scroll"
+            class="duration-300 bg-white rounded-b-md grid gap-2 overflow-hidden overflow-y-scroll"
           >
             <UiFormInput placeholder="Marka ara"></UiFormInput>
             <UiFormCheckbox v-for="item in 12">Marka {{ item }}</UiFormCheckbox>
@@ -46,8 +48,8 @@
     <div class="col-span-8 space-y-minimal">
       <div class="space-y-minimal lg:flex justify-between items-center">
         <div class="flex space-x-4 items-center">
-          <div class="flex space-x-2">
-            <div class="bg-slate-100 rounded-full p-2 text-sm flex space-x-2">
+            <div class="flex items-center space-x-2">
+            <div class="bg-slate-100 rounded-full pl-2 pr-1 py-1 lg:!p-2 text-xs lg:text-sm flex items-center space-x-2">
               <span>Ücretsiz Kargo</span>
               <button
                 class="rounded-full bg-slate-300 w-5 h-5 flex items-center justify-center"
@@ -56,8 +58,8 @@
               </button>
             </div>
           </div>
-          <div class="flex space-x-2">
-            <div class="bg-slate-100 rounded-full p-2 text-sm flex space-x-2">
+          <div class="flex items-center space-x-2">
+            <div class="bg-slate-100 rounded-full pl-2 pr-1 py-1 lg:!p-2 text-xs lg:text-sm flex items-center space-x-2">
               <span>Marka 1</span>
               <button
                 class="rounded-full bg-slate-300 w-5 h-5 flex items-center justify-center"
@@ -68,7 +70,7 @@
           </div>
         </div>
         <select
-          class="w-72 bg-slate-50 text-sm focus:bg-white duration-300 p-3 focus:!outline-0 focus:!ring-0 focus:border-secondary-500 w-full rounded-md border"
+          class="!w-72 bg-slate-50 text-sm focus:bg-white duration-300 p-3 focus:!outline-0 focus:!ring-0 focus:border-secondary-500 w-full rounded-md border"
         >
           <option value="">Akıllı sıralama</option>
           <option value="">En çok satanlar</option>
@@ -76,7 +78,7 @@
           <option value="">Artan fiyat</option>
         </select>
       </div>
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-5">
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-5">
         <PartialsProductCard v-for="item in 15"></PartialsProductCard>
       </div>
     </div>
@@ -85,4 +87,5 @@
 
 <script setup>
 const isOpen = ref(true);
+const isOpenFilters = ref(false)
 </script>
