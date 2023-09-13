@@ -1,13 +1,13 @@
 <template>
-  <div class=" lg:px-x-desktop max-w-full">
+  <div class="lg:px-x-desktop max-w-full">
     <div class="lg:grid lg:grid-cols-8 gap-16">
-      <div class="col-span-3">
+      <div class="col-span-3 border rounded-md p-1">
         <swiper
           :style="{
             '--swiper-navigation-color': '#fff',
             '--swiper-pagination-color': '#fff',
           }"
-          :pagination="true"
+          :pagination="useMain().isMobile ? true : false"
           :loop="true"
           :spaceBetween="10"
           :navigation="true"
@@ -17,8 +17,11 @@
           class="mySwiper2 max-w-[500px]"
         >
           <swiper-slide v-for="item in 8">
-            <div class="swiper-zoom-container !rounded-md max-h-[500px]">
-              <img src="/default-product.jpg" class="object-fit" />
+            <div class="swiper-zoom-container max-w-[500px]">
+              <img
+                src="/default-product.jpg"
+                class="!object-cover !h-[550px] !rounded-md"
+              />
             </div>
           </swiper-slide>
         </swiper>
@@ -40,19 +43,16 @@
         </div>
       </div>
       <div class="col-span-3 responsive-space px-x-mobil">
-        <h1 class="text-xl font-bold border-b ">
+        <h1 class="text-xl font-bold border-b pb-2">
           Bordo Renk Siyah İpli Deri Erkek Bileklik
         </h1>
 
         <div class="my-minimal">
           <p class="font-medium text-sm">Renk</p>
           <swiper
-            @swiper="setThumbsSwiper"
-            :loop="true"
             :spaceBetween="10"
             :slidesPerView="8"
             :freeMode="true"
-            :watchSlidesProgress="true"
             :modules="modules"
             class="mySwiper2"
           >
@@ -107,11 +107,23 @@
           </div>
           <UiButtonsBaseButton
             color="secondary"
-            class="!rounded-full text-sm font-bold !h-12 px-8 h-full items-center flex md:space-x-4"
+            class="!rounded-full text-sm font-bold !h-12 px-8 h-full items-center flex space-x-2 md:space-x-4"
           >
             <Icon name="material-symbols:shopping-bag" class="w-5 h-5"></Icon>
             <p>SEPETE EKLE</p>
           </UiButtonsBaseButton>
+        </div>
+        <div class="my-maximal bg-tertiary-50 border rounded-md p-4">
+          <p class="font-medium">Öne çıkan bilgiler</p>
+          <ul class="list-disc p-4 !pl-5 text-sm">
+            <li>15 gün içerisinde ücretsiz iade</li>
+            <li>
+              – Ürünlerin özelliklerini kaybetmeden daha uzun süre kullanılabilmesi için,
+              parfüm, su, deterjan, dezenfektan gibi sıvı kimyasallardan uzak tutularak
+              kullanılması tavsiye edilir. Dikkatli kullanımda kararma yapmaz- Sağlıklı ve
+              mutlu günlerde kullanmanız dileğiyle..
+            </li>
+          </ul>
         </div>
       </div>
       <div class="bg-slate-50 rounded-md col-span-2"></div>
@@ -120,7 +132,7 @@
 </template>
 
 <script setup>
-import {Pagination, Zoom, FreeMode, Navigation, Thumbs } from "swiper/modules";
+import { Pagination, Zoom, FreeMode, Navigation, Thumbs } from "swiper/modules";
 import "swiper/css/zoom";
 
 const modules = [Pagination, Zoom, FreeMode, Navigation, Thumbs];
@@ -134,17 +146,16 @@ const setThumbsSwiper = (swiper) => {
 .mySwiper .swiper-slide {
   width: 25%;
   height: 100%;
-  /* opacity: 0.4; */
+  opacity: 0.6;
 }
 
-/* .mySwiper .swiper-slide-thumb-active {
-   opacity: 1; 
-} */
+.mySwiper .swiper-slide-thumb-active {
+  opacity: 1;
+}
 
 .swiper-slide img {
   display: block;
   width: 100%;
   height: 100%;
-  object-fit: cover;
 }
 </style>

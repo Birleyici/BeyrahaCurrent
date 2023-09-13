@@ -67,6 +67,8 @@ module.exports = {
         'x-desktop': '100px', // X ekseninde masaüstü kenar boşluğu
         'x-mobil': '25px',  // X ekseninde mobil kenar boşluğu
         'minimal': '20px',
+        'orta': '40px',
+        'maximal': '60px',
       },
       borderColor: {
         'primary': 'black', // Normal durum için birincil kenarlık rengi
