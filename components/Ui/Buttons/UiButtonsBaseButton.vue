@@ -1,5 +1,5 @@
 <template>
-  <button :class="colorClasses" class="mt-2 rounded-md duration-300 px-3 py-2">
+  <button :class="colorClasses" class="rounded-md duration-300 px-3 py-2">
     <slot />
   </button>
   

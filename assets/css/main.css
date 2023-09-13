@@ -38,3 +38,9 @@ a{
   ::-webkit-scrollbar-thumb:hover {
     @apply bg-quaternary-400 
   }
+
+
+  .responsive-space{
+
+    @apply my-12 lg:my-0
+  }
