@@ -56,7 +56,7 @@
             :modules="modules"
             class="mySwiper2"
           >
-            <swiper-slide v-for="item in 16"
+            <swiper-slide v-for="item in 8"
               ><img
                 src="/default-product.jpg"
                 class="object-cover rounded-md border border-transparent hover:border-secondary-500"
@@ -130,16 +130,36 @@
     </div>
     <div class="px-x-mobil lg:px-0">
       <div class="border rounded-xl">
-        <div class="bg-tertiary-100 p-minimal w-full rounded-t-xl">
+        <div @click="isOpen = !isOpen" class="cursor-pointer bg-tertiary-100 p-minimal w-full rounded-t-xl flex justify-between">
           <b>Ürün açıklaması ve özellikleri</b>
+          <Icon
+            v-if="isOpen"
+            name="material-symbols:keyboard-arrow-down"
+            class="w-6 h-6"
+          ></Icon>
+          <Icon
+            v-else
+            name="material-symbols:keyboard-arrow-right"
+            class="w-6 h-6"
+          ></Icon>
         </div>
-        <div class="p-minimal">
+        <div :class="isOpen ? 'max-h-[800px] p-minimal':'max-h-[0px]'" class="overflow-y-scroll duration-300">
+          <img
+            src="/default-product.jpg"
+            class="w-full h-72 object-cover mb-4 rounded-md"
+            alt=""
+          />
           Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus ullam expedita
           adipisci hic molestiae minima? Pariatur dolor quisquam id cumque? Est architecto
           incidunt esse, magnam placeat corrupti cumque veniam atque.
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal">
-            <div class="bg-tertiary-100  p-4 w-full rounded-sm" v-for="item in 8">
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal"
+          >
+            <div
+              class="flex lg:block items-center space-x-4 lg:space-x-0 bg-tertiary-100 p-3 lg:p-4 w-full rounded-sm"
+              v-for="item in 8"
+            >
               <p class="text-xs">Materyal</p>
               <p class="font-medium">Timsah derisi</p>
             </div>
@@ -153,7 +173,7 @@
 <script setup>
 import { Pagination, Zoom, FreeMode, Navigation, Thumbs } from "swiper/modules";
 import "swiper/css/zoom";
-
+const isOpen = ref(true);
 const modules = [Pagination, Zoom, FreeMode, Navigation, Thumbs];
 const thumbsSwiper = ref(null);
 const setThumbsSwiper = (swiper) => {
