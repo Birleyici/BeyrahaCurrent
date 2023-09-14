@@ -1,3 +1,4 @@
+import { UiSlidesProductSlide } from '#build/components';
 <template>
   <div class="px-x-mobil lg:px-x-desktop">
     <p class="text-center font-semibold lg:text-left">Sepet</p>
@@ -47,7 +48,7 @@
               class="mt-minimal flex justify-between items-center fixed lg:relative bottom-0 right-0 left-0 bottom-0 bg-white py-3 px-3 lg:px-0 lg:border-t-0 border-t"
             >
               <div class="flex justify-start space-x-4 text-lg">
-                <p>Genel toplam:</p>
+                <p>Toplam:</p>
                 <p class="text-medium text-secondary-500 font-bold">39.00 TL</p>
               </div>
 
@@ -58,6 +59,11 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="my-maximal">
+      <b >Bunlarda ilginizi çekebilir</b>
+      <UiSlidesProductSlide class="mt-minimal"></UiSlidesProductSlide>
+
     </div>
   </div>
 </template>
