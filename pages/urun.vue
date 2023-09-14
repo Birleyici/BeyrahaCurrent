@@ -128,7 +128,7 @@
       </div>
       <div></div>
     </div>
-  
+
     <div class="px-x-mobil lg:px-0">
       <div class="border rounded-xl">
         <div
@@ -176,8 +176,40 @@
       </div>
     </div>
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
-    <p class="mb-2 font-bold">Benzer ürünler</p>
-    <UiSlidesProductSlide></UiSlidesProductSlide>
+      <p class="mb-2 font-bold">Benzer ürünler</p>
+      <UiSlidesProductSlide></UiSlidesProductSlide>
+    </div>
+
+    <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
+      <p class="mb-2 font-bold">Yorumlar</p>
+      <div class="bg-tertiary-100 items-stretch rounded-md flex  items-center">
+    <div class="bg-tertiary-200  rounded-l-md flex items-center p-2">
+        <Icon name="ph:info" class="w-8 h-8 mx-auto"></Icon>
+    </div>
+    <div class="p-4">
+        Ürüne yalnızca ürünü satın alan oturum açmış kullanıcılar yorum yapabilir.
+    </div>
+</div>
+
+      <UiFormTextarea
+        class="h-60 my-minimal border-quaternary-300"
+        placeholder="Yorumunuz"
+      ></UiFormTextarea>
+
+      
+
+      <div class="mb-minimal space-y-minimal lg:space-y-0 lg:flex items-center justify-between">
+        <UiFormFileInput></UiFormFileInput>
+        <UiFormSelect class="!w-full lg:!w-72 ">
+          <option value="">Ürüne puanınız</option>
+          <option class="text-secondary-500" value="">★</option>
+          <option class="text-secondary-500" value="">★★</option>
+          <option class="text-secondary-500" value="">★★★</option>
+          <option class="text-secondary-500" value="">★★★★</option>
+          <option class="text-secondary-500" value="">★★★★★</option>
+        </UiFormSelect>
+      </div>
+      <UiButtonsBaseButton color="secondary">Yorumu gönder</UiButtonsBaseButton>
     </div>
   </div>
 </template>
