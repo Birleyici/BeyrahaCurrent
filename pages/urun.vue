@@ -68,17 +68,17 @@
           <p class="font-medium text-sm">Beden</p>
           <div class="flex space-x-2">
             <button
-              class="bg-slate-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
+              class="bg-tertiary-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
             >
               M
             </button>
             <button
-              class="bg-slate-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
+              class="bg-tertiary-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
             >
               L
             </button>
             <button
-              class="bg-slate-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
+              class="bg-tertiary-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
             >
               XL
             </button>
@@ -113,7 +113,7 @@
             <p>SEPETE EKLE</p>
           </UiButtonsBaseButton>
         </div>
-        <div class="my-maximal bg-tertiary-50 border rounded-md p-4">
+        <div class="my-minimal lg:my-maximal bg-tertiary-50 border rounded-md p-4">
           <p class="font-medium">Öne çıkan bilgiler</p>
           <ul class="list-disc p-4 !pl-5 text-sm">
             <li>15 gün içerisinde ücretsiz iade</li>
@@ -128,9 +128,14 @@
       </div>
       <div></div>
     </div>
+  
     <div class="px-x-mobil lg:px-0">
       <div class="border rounded-xl">
-        <div @click="isOpen = !isOpen" :class="isOpen ?'':'rounded-xl'" class="cursor-pointer bg-tertiary-100 p-minimal w-full rounded-t-xl flex justify-between">
+        <div
+          @click="isOpen = !isOpen"
+          :class="isOpen ? '' : 'rounded-xl'"
+          class="cursor-pointer bg-tertiary-100 p-minimal w-full rounded-t-xl flex justify-between"
+        >
           <b>Ürün açıklaması ve özellikleri</b>
           <Icon
             v-if="isOpen"
@@ -143,7 +148,10 @@
             class="w-6 h-6"
           ></Icon>
         </div>
-        <div :class="isOpen ? 'max-h-auto p-minimal':'max-h-[0px]'" class="overflow-hidden duration-300">
+        <div
+          :class="isOpen ? 'max-h-auto p-minimal' : 'max-h-[0px]'"
+          class="overflow-hidden"
+        >
           <img
             src="/default-product.jpg"
             class="w-full h-72 object-cover mb-4 rounded-md"
@@ -166,6 +174,10 @@
           </div>
         </div>
       </div>
+    </div>
+    <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
+    <p class="mb-2 font-bold">Benzer ürünler</p>
+    <UiSlidesProductSlide></UiSlidesProductSlide>
     </div>
   </div>
 </template>
@@ -210,7 +222,7 @@ const breakpoints = {
 };
 </script>
 
-<style>
+<style scoped>
 .mySwiper .swiper-slide {
   width: 25%;
   height: 100%;
