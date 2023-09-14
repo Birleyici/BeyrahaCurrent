@@ -5,7 +5,7 @@ import { UiSlidesProductSlide } from '#build/components';
     <div class="lg:grid lg:grid-cols-3 gap-10">
       <div class="col-span-2">
         <div
-          v-for="item in 5"
+          v-for="item in 2"
           :class="item % 2 != 0 && 'bg-slate-50'"
           class="grid lg:grid-cols-2 gap-4 items-center my-minimal border p-2 rounded-md"
         >
