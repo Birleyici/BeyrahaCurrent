@@ -130,7 +130,7 @@
     </div>
     <div class="px-x-mobil lg:px-0">
       <div class="border rounded-xl">
-        <div @click="isOpen = !isOpen" class="cursor-pointer bg-tertiary-100 p-minimal w-full rounded-t-xl flex justify-between">
+        <div @click="isOpen = !isOpen" :class="isOpen ?'':'rounded-xl'" class="cursor-pointer bg-tertiary-100 p-minimal w-full rounded-t-xl flex justify-between">
           <b>Ürün açıklaması ve özellikleri</b>
           <Icon
             v-if="isOpen"
@@ -143,7 +143,7 @@
             class="w-6 h-6"
           ></Icon>
         </div>
-        <div :class="isOpen ? 'max-h-[800px] p-minimal':'max-h-[0px]'" class="overflow-y-scroll duration-300">
+        <div :class="isOpen ? 'max-h-auto p-minimal':'max-h-[0px]'" class="overflow-hidden duration-300">
           <img
             src="/default-product.jpg"
             class="w-full h-72 object-cover mb-4 rounded-md"
