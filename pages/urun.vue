@@ -91,19 +91,7 @@
 
         <div class="flex space-x-4 lg:space-x-8">
           <div class="inline-block">
-            <div class="flex items-center space-x-6 border rounded-full p-1 h-12">
-              <div
-                class="cursor-pointer bg-quaternary-100 flex items-center justify-center rounded-full w-10 h-10"
-              >
-                <Icon name="ph:minus-thin" class="w-4 h-4"></Icon>
-              </div>
-              <div>1</div>
-              <div
-                class="cursor-pointer bg-quaternary-100 flex items-center justify-center rounded-full w-10 h-10"
-              >
-                <Icon name="ph:plus-thin" class="w-4 h-4"></Icon>
-              </div>
-            </div>
+            <UiFormCounter></UiFormCounter>
           </div>
           <UiButtonsBaseButton
             color="secondary"
@@ -126,54 +114,32 @@
           </ul>
         </div>
       </div>
-      <div></div>
     </div>
 
-    <div class="px-x-mobil lg:px-0">
-      <div class="border rounded-xl">
-        <div
-          @click="isOpen = !isOpen"
-          :class="isOpen ? '' : 'rounded-xl'"
-          class="cursor-pointer bg-tertiary-100 p-minimal w-full rounded-t-xl flex justify-between"
-        >
-          <b>Ürün açıklaması ve özellikleri</b>
-          <Icon
-            v-if="isOpen"
-            name="material-symbols:keyboard-arrow-down"
-            class="w-6 h-6"
-          ></Icon>
-          <Icon
-            v-else
-            name="material-symbols:keyboard-arrow-right"
-            class="w-6 h-6"
-          ></Icon>
-        </div>
-        <div
-          :class="isOpen ? 'max-h-auto p-minimal' : 'max-h-[0px]'"
-          class="overflow-hidden"
-        >
-          <img
-            src="/default-product.jpg"
-            class="w-full h-72 object-cover mb-4 rounded-md"
-            alt=""
-          />
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus ullam expedita
-          adipisci hic molestiae minima? Pariatur dolor quisquam id cumque? Est architecto
-          incidunt esse, magnam placeat corrupti cumque veniam atque.
+    <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
+      <UiCardsSectionCard title="Ürün açıklaması ve özellikleri">
+        <img
+          src="/default-product.jpg"
+          class="w-full h-72 object-cover mb-4 rounded-md"
+          alt=""
+        />
 
+        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus ullam expedita
+        adipisci hic molestiae minima? Pariatur dolor quisquam id cumque? Est architecto
+        incidunt esse, magnam placeat corrupti cumque veniam atque.
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal"
+        >
           <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal"
+            class="flex lg:block items-center space-x-4 lg:space-x-0 bg-tertiary-100 p-3 lg:p-4 w-full rounded-sm"
+            v-for="item in 8"
           >
-            <div
-              class="flex lg:block items-center space-x-4 lg:space-x-0 bg-tertiary-100 p-3 lg:p-4 w-full rounded-sm"
-              v-for="item in 8"
-            >
-              <p class="text-xs">Materyal</p>
-              <p class="font-medium">Timsah derisi</p>
-            </div>
+            <p class="text-xs">Materyal</p>
+            <p class="font-medium">Timsah derisi</p>
           </div>
         </div>
-      </div>
+      </UiCardsSectionCard>
     </div>
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
       <p class="mb-2 font-bold">Benzer ürünler</p>
@@ -182,14 +148,10 @@
 
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
       <p class="mb-2 font-bold">Yorum yap</p>
-      <div class="bg-tertiary-100 items-stretch rounded-md flex items-center">
-        <div class="bg-tertiary-200 rounded-l-md flex items-center p-2">
-          <Icon name="ph:info" class="w-8 h-8 mx-auto"></Icon>
-        </div>
-        <div class="p-4">
-          Ürüne yalnızca ürünü satın alan oturum açmış kullanıcılar yorum yapabilir.
-        </div>
-      </div>
+
+      <UiNotificationBar type="info"
+        >Ürüne yalnızca ürünü satın alan oturum açmış kullanıcılar yorum yapabilir.
+      </UiNotificationBar>
 
       <UiFormTextarea
         class="h-60 my-minimal border-quaternary-300"
@@ -216,28 +178,7 @@
       <p class="mb-2 font-bold">Yorumlar</p>
 
       <div class="grid gap-4 border-b border-dotted pb-3">
-        <div class="space-y-4">
-          <div class="flex space-x-2">
-            <p class="font-medium">Muhammet Ç*** Y***</p>
-            <div class="flex">
-              <Icon
-                v-for="item in 5"
-                name="material-symbols:star-rate-rounded"
-                fill
-                class="text-secondary-500"
-              ></Icon>
-            </div>
-          </div>
-          <div>
-            <img src="/default-product.jpg" class="w-16 rounded-md" alt="" />
-          </div>
-          <p>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Et odio neque,
-            officia iste ratione veniam. Laboriosam possimus aut earum vero ducimus
-            praesentium sed debitis, sapiente illo harum quidem magni voluptatum!
-          </p>
-          <p class="text-sm italic">23 Eylül 2023 tarihinde satın alındı</p>
-        </div>
+        <PartialsCommentItem></PartialsCommentItem>
       </div>
     </div>
   </div>
@@ -245,8 +186,7 @@
 
 <script setup>
 import { Pagination, Zoom, FreeMode, Navigation, Thumbs } from "swiper/modules";
-import "swiper/css/zoom";
-const isOpen = ref(true);
+// import "swiper/css/zoom";
 const modules = [Pagination, Zoom, FreeMode, Navigation, Thumbs];
 const thumbsSwiper = ref(null);
 const setThumbsSwiper = (swiper) => {
