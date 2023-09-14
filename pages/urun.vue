@@ -1,7 +1,7 @@
 <template>
   <div class="lg:px-x-desktop max-w-full">
-    <div class="lg:grid lg:grid-cols-8 gap-16">
-      <div class="col-span-3 border rounded-md p-1">
+    <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
+      <div class="col-span-3  lg:rounded-md ">
         <swiper
           :style="{
             '--swiper-navigation-color': '#fff',
@@ -20,7 +20,7 @@
             <div class="swiper-zoom-container max-w-[500px]">
               <img
                 src="/default-product.jpg"
-                class="!object-cover !h-[550px] !rounded-md"
+                class="!object-cover !h-[550px] lg:!rounded-md"
               />
             </div>
           </swiper-slide>
@@ -42,7 +42,7 @@
           </swiper>
         </div>
       </div>
-      <div class="col-span-3 responsive-space px-x-mobil">
+      <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
         <h1 class="text-xl font-bold border-b pb-2">
           Bordo Renk Siyah İpli Deri Erkek Bileklik
         </h1>
@@ -50,8 +50,8 @@
         <div class="my-minimal">
           <p class="font-medium text-sm">Renk</p>
           <swiper
-            :spaceBetween="10"
-            :slidesPerView="8"
+          :breakpoints="breakpoints"
+            :spaceBetween="5"
             :freeMode="true"
             :modules="modules"
             class="mySwiper2"
@@ -59,7 +59,7 @@
             <swiper-slide v-for="item in 16"
               ><img
                 src="/default-product.jpg"
-                class="object-cover rounded-md border border-transparent hover:border-secondary-500"
+                class="object-cover  rounded-md border border-transparent hover:border-secondary-500"
             /></swiper-slide>
           </swiper>
         </div>
@@ -107,7 +107,7 @@
           </div>
           <UiButtonsBaseButton
             color="secondary"
-            class="!rounded-full text-sm font-bold !h-12 px-8 h-full items-center flex space-x-2 md:space-x-4"
+            class="!rounded-full text-sm font-bold !h-12 px-4 lg:px-8 h-full items-center flex space-x-2 md:space-x-4"
           >
             <Icon name="material-symbols:shopping-bag" class="w-5 h-5"></Icon>
             <p>SEPETE EKLE</p>
@@ -126,7 +126,6 @@
           </ul>
         </div>
       </div>
-      <div class="bg-slate-50 rounded-md col-span-2"></div>
     </div>
   </div>
 </template>
@@ -140,6 +139,36 @@ const thumbsSwiper = ref(null);
 const setThumbsSwiper = (swiper) => {
   thumbsSwiper.value = swiper;
 };
+
+const breakpoints = {
+  // when window width is >= 320px
+  220: {
+    slidesPerView: 5,
+    spaceBetween: 20,
+  },
+  // when window width is >= 420px (200px + 20px + 200px)
+  420: {
+    slidesPerView: 6,
+    spaceBetween: 20,
+  },
+  // when window width is >= 640px (3 kart için)
+  640: {
+    slidesPerView: 8,
+    spaceBetween: 20,
+  },
+  // when window width is >= 860px (4 kart için)
+
+  1024: {
+    slidesPerView: 6,
+    spaceBetween: 20,
+  },
+  1300: {
+    slidesPerView: 10,
+    spaceBetween: 20,
+  },
+  // Daha fazla breakpoint ekleyebilirsiniz...
+};
+
 </script>
 
 <style>

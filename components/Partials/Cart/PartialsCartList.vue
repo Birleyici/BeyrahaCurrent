@@ -32,7 +32,7 @@
             <b>Toplam:</b>
             <p class="text-secondary-500">1590.00 TL</p>
           </div>
-          <div class="grid">
+          <div class="grid gap-2 mt-2">
             <UiButtonsBaseButton color="slate">Sepete Git</UiButtonsBaseButton>
             <UiButtonsBaseButton color="secondary">Ödeme</UiButtonsBaseButton>
           </div>
