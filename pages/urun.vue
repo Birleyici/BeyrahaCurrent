@@ -175,7 +175,10 @@
     </div>
 
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
-      <p class="mb-2 font-bold">Yorumlar</p>
+      <div class="mb-2 font-bold flex items-end space-x-2">
+      <p>Yorumlar</p>
+      </div>
+      <div class="text-xl my-minimal font-medium flex space-x-2"><p class="text-secondary-500">3.8</p> <p>(253 değerlendirme)</p></div>
 
       <div class="grid gap-4 border-b border-dotted pb-3">
         <PartialsCommentItem></PartialsCommentItem>
