@@ -1,7 +1,7 @@
 <template>
   <div class="lg:px-x-desktop max-w-full">
     <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
-      <div class="col-span-3  lg:rounded-md ">
+      <div class="col-span-3 lg:rounded-md">
         <swiper
           :style="{
             '--swiper-navigation-color': '#fff',
@@ -50,7 +50,7 @@
         <div class="my-minimal">
           <p class="font-medium text-sm">Renk</p>
           <swiper
-          :breakpoints="breakpoints"
+            :breakpoints="breakpoints"
             :spaceBetween="5"
             :freeMode="true"
             :modules="modules"
@@ -59,7 +59,7 @@
             <swiper-slide v-for="item in 16"
               ><img
                 src="/default-product.jpg"
-                class="object-cover  rounded-md border border-transparent hover:border-secondary-500"
+                class="object-cover rounded-md border border-transparent hover:border-secondary-500"
             /></swiper-slide>
           </swiper>
         </div>
@@ -126,6 +126,26 @@
           </ul>
         </div>
       </div>
+      <div></div>
+    </div>
+    <div class="px-x-mobil lg:px-0">
+      <div class="border rounded-xl">
+        <div class="bg-tertiary-100 p-minimal w-full rounded-t-xl">
+          <b>Ürün açıklaması ve özellikleri</b>
+        </div>
+        <div class="p-minimal">
+          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus ullam expedita
+          adipisci hic molestiae minima? Pariatur dolor quisquam id cumque? Est architecto
+          incidunt esse, magnam placeat corrupti cumque veniam atque.
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal">
+            <div class="bg-tertiary-100  p-4 w-full rounded-sm" v-for="item in 8">
+              <p class="text-xs">Materyal</p>
+              <p class="font-medium">Timsah derisi</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -168,7 +188,6 @@ const breakpoints = {
   },
   // Daha fazla breakpoint ekleyebilirsiniz...
 };
-
 </script>
 
 <style>
