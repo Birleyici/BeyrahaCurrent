@@ -1,7 +1,7 @@
 <template>
   <div :class="bgColor" class=" items-stretch rounded-md flex items-center">
     <div :class="iconBgColor" class=" rounded-l-md flex items-center p-2">
-      <Icon :name="icon" class="w-8 h-8 mx-auto"></Icon>
+      <Icon :name="icon" class="w-8 h-8 mx-auto" :class="iconColor"></Icon>
     </div>
     <div class="p-4"><slot></slot></div>
   </div>
@@ -10,12 +10,31 @@
 <script setup>
 const { type } = defineProps(["type"]);
 const bgColor = computed(()=>{
-    return type == 'info' && 'bg-tertiary-100'
+    if(type == 'info') return  'bg-tertiary-100'
+    if(type == 'success') return  'bg-secondary-100'
+    return ''; // Varsayılan değer
+     
 })
 const iconBgColor = computed(()=>{
-    return type == 'info' && 'bg-tertiary-200'
+  if(type == 'info') return  'bg-tertiary-200'
+  if(type == 'success') return  'bg-secondary-200'
+  return ''; // Varsayılan değer
+
+    
 })
 const icon = computed(()=>{
-    return type == 'info' && 'ph:info'
+    
+    if(type == 'info') return  'ph:info'
+    if(type == 'success') return  'material-symbols:fitbit-check-small-rounded'
+    return ''; // Varsayılan değer
+
+})
+
+const iconColor = computed(()=>{
+    
+    if(type == 'info') return  'text-dark-800'
+    if(type == 'success') return  '!text-secondary-500'
+    return ''; // Varsayılan değer
+
 })
 </script>

@@ -99,22 +99,40 @@
         <div class="my-orta">
           <b>Ödeme yöntemleri</b>
           <div class="my-minimal space-y-4">
-            <div class="border rounded-md p-minimal bg-slate-50">
-              <UiFormRadio id="cod" name="paymentMethod">
+            <div
+              class="border rounded-md p-minimal"
+              :class="selectedPaymentMethod == 'cod' && 'bg-slate-50'"
+            >
+              <UiFormRadio
+                v-model="selectedPaymentMethod"
+                value="cod"
+                id="cod"
+                name="paymentMethod"
+              >
                 <div class="ml-2">
                   <b>Kapıda ödeme</b>
-                  <p v-if="true">
-                    Teslimat anında kuryeye ödeme yapabilirsiniz. Bu seçeneğin +20.00 TL hizmet bedeli mevcuttur.
+                  <p>
+                    Teslimat anında kuryeye ödeme yapabilirsiniz. Bu seçeneğin +20.00 TL
+                    hizmet bedeli mevcuttur.
                   </p>
                 </div>
               </UiFormRadio>
             </div>
-            <div class="border rounded-md p-minimal">
-              <UiFormRadio  id="bacs" name="paymentMethod">
+            <div
+              class="border rounded-md p-minimal"
+              :class="selectedPaymentMethod == 'bacs' && 'bg-slate-50'"
+            >
+              <UiFormRadio
+                v-model="selectedPaymentMethod"
+                value="bacs"
+                id="bacs"
+                name="paymentMethod"
+              >
                 <div class="ml-2">
                   <b>Havale / EFT ile ödeme</b>
-                  <p v-if="true">
-                    Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam tutarını havale veya EFT yoluyla gönderebilirsiniz.
+                  <p>
+                    Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam
+                    tutarını havale veya EFT yoluyla gönderebilirsiniz.
                   </p>
                 </div>
               </UiFormRadio>
@@ -124,39 +142,51 @@
       </div>
       <div class="col-span-1">
         <div class="sticky top-4 w-full">
-            <div class="bg-tertiary-50 w-full rounded-md p-minimal space-y-3">
-              <b>Sipariş özeti</b>
+          <div class="bg-tertiary-50 w-full rounded-md p-minimal space-y-3">
+            <b>Sipariş özeti</b>
 
-              <div class="flex justify-between">
-                <p>Ürün toplam:</p>
-                <p class="text-medium text-secondary-500">129.00 TL</p>
-              </div>
-              <div class="flex justify-between pb-2">
-                <p>Kargo ücreti:</p>
-                <p class="text-medium text-secondary-500">39.00 TL</p>
-              </div>
+            <div class="flex justify-between">
+              <p>Ürün toplam:</p>
+              <p class="text-medium text-secondary-500">129.00 TL</p>
             </div>
-            <div
-              class="mt-minimal flex justify-between items-center fixed lg:relative bottom-0 right-0 left-0 bottom-0 bg-white py-3 px-3 lg:px-0 lg:border-t-0 border-t"
+            <div class="flex justify-between pb-2">
+              <p>Kargo ücreti:</p>
+              <p class="text-medium text-secondary-500">39.00 TL</p>
+            </div>
+          </div>
+          <div class="mt-minimal">
+            <UiFormCheckbox>
+              <a href="#" class="text-blue-500">Mesafeli satış sözleşmesi</a>ni okudum
+              kabul ediyorum.
+            </UiFormCheckbox>
+          </div>
+          <div
+            class="mt-minimal flex justify-between items-center fixed lg:relative bottom-0 right-0 left-0 bottom-0 bg-white px-3 lg:px-0 lg:border-t-0 border-t"
+          >
+            <div class="flex justify-start space-x-4 text-lg">
+              <p>Toplam:</p>
+              <p class="text-medium text-secondary-500 font-bold">168.00 TL</p>
+            </div>
+
+            <UiButtonsBaseButton color="secondary" class="font-semibold px-8"
+              >Siparişi Onayla</UiButtonsBaseButton
             >
-              <div class="flex justify-start space-x-4 text-lg">
-                <p>Toplam:</p>
-                <p class="text-medium text-secondary-500 font-bold">168.00 TL</p>
-              </div>
-
-              <UiButtonsBaseButton color="secondary" class="font-semibold px-8"
-                >Siparişi Onayla</UiButtonsBaseButton
-              >
-            </div>
           </div>
-          </div>
+        </div>
+      </div>
     </div>
 
     <div v-if="isOpen">
       <div
         class="p-minimal lg:rounded-md space-y-4 fixed top-0 bottom-0 right-0 left-0 h-full lg:h-5/6 w-full mx-auto my-auto bg-white z-10 max-w-[500px] overflow-scroll-y"
       >
-        <b>Yeni adres</b>
+        <div class="flex justify-between items-center">
+          <b>Yeni adres</b>
+
+          <button @click="isOpen = false">
+            <Icon name="mdi:close" class="w-5 h-5"></Icon>
+          </button>
+        </div>
 
         <div class="grid gap-4 grid-cols-2">
           <div>
@@ -207,9 +237,7 @@
           >Adresi kaydet</UiButtonsBaseButton
         >
       </div>
-      <button class="fixed right-0 top-0 z-[10]" @click="isOpen = false">
-        <Icon name="mdi:close" class="text-tertiary-50 w-20 h-20"></Icon>
-      </button>
+
       <div
         @click="isOpen = false"
         class="fixed left-0 right-0 bottom-0 left-0 bg-black w-full h-full z-[4] opacity-30"
@@ -221,4 +249,5 @@
 <script setup>
 const isOpen = ref(false);
 const isOpenOtherAddress = ref(false);
+const selectedPaymentMethod = ref("cod");
 </script>

@@ -9,7 +9,7 @@ body{
 }
 
 
-a{
+ footer a{
     @apply hover:text-secondary-500 duration-300 hover:ml-2
 }
 
