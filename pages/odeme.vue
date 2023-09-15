@@ -37,17 +37,60 @@
             <div v-else>Henüz kayıtlı adresiniz bulunmuyor.</div>
           </div>
 
+          <div v-if="isOpenOtherAddress" class="p-minimal rounded-t-md flex items-center">
+            <UiFormRadio :checked="false">
+              <div class="lg:flex items-center space-x-4">
+                <div></div>
+
+                <div class="space-y-1">
+                  <div class="flex space-x-2">
+                    <p>
+                      <span class="font-medium !bg-transparent">İsim:</span> Muhammet
+                      Çağrı Yılmaz
+                    </p>
+                  </div>
+                  <div class="flex space-x-2">
+                    <p>
+                      <span class="font-medium !bg-transparent">Adres:</span> Yaylapınar
+                      mh. Mükerrem sk. No 13A/2 Meram Konya
+                    </p>
+                  </div>
+                  <div class="flex space-x-2">
+                    <p>
+                      <span class="font-medium !bg-transparent">Telefon:</span>
+                      (546) 602 48 12
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </UiFormRadio>
+          </div>
+
           <div class="flex justify-between border-t">
-            <div class="p-3 flex items-center space-x-2 text-secondary-500 text-sm">
-              <button @click="isOpen = true" class="font-semibold">Yeni adres</button>
-              <Icon name="mdi:plus" class="font-semibold w-4 h-4"></Icon>
+            <div class="flex h-full items-center space-x-2 text-secondary-500 text-sm">
+              <button
+                @click="isOpen = true"
+                class="flex h-full items-center font-semibold p-3"
+              >
+                Yeni adres
+                <Icon name="mdi:plus" class="font-semibold w-4 h-4"></Icon>
+              </button>
             </div>
-            <div class="flex justify-center space-x-2 p-3 flex items-center">
-              <p class="text-sm font-semibold">Diğer adresleri gör</p>
-              <Icon
-                name="material-symbols:keyboard-arrow-down"
-                class="font-medium w-5 h-5"
-              ></Icon>
+            <div class="flex justify-center space-x-2 flex items-center">
+              <button
+                @click="isOpenOtherAddress = !isOpenOtherAddress"
+                class="text-sm font-semibold p-3 h-full"
+              >
+                Diğer adresleri {{ !isOpenOtherAddress ? 'gör':'kapat' }}
+                <Icon v-if="isOpenOtherAddress"
+                  name="material-symbols:keyboard-arrow-up"
+                  class="font-medium w-5 h-5"
+                ></Icon>
+                <Icon v-else
+                  name="material-symbols:keyboard-arrow-down"
+                  class="font-medium w-5 h-5"
+                ></Icon>
+              </button>
             </div>
           </div>
         </div>
@@ -123,4 +166,5 @@
 
 <script setup>
 const isOpen = ref(false);
+const isOpenOtherAddress = ref(false);
 </script>
