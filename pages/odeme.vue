@@ -1,6 +1,6 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop">
-    <div class="grid lg:grid-cols-3 gap-16">
+    <div class="lg:grid lg:grid-cols-3 gap-16">
       <div class="col-span-2 my-minimal">
         <div class="text-center lg:text-left">
           <b>Sipariş oluştur</b>
@@ -104,10 +104,7 @@
                 <div class="ml-2">
                   <b>Kapıda ödeme</b>
                   <p v-if="true">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias
-                    molestiae, perspiciatis corporis ipsam eius facere quisquam ullam
-                    assumenda sed a quasi rem eveniet aperiam, officiis nisi est sit
-                    labore voluptatem!
+                    Teslimat anında kuryeye ödeme yapabilirsiniz. Bu seçeneğin +20.00 TL hizmet bedeli mevcuttur.
                   </p>
                 </div>
               </UiFormRadio>
@@ -117,10 +114,7 @@
                 <div class="ml-2">
                   <b>Havale / EFT ile ödeme</b>
                   <p v-if="true">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias
-                    molestiae, perspiciatis corporis ipsam eius facere quisquam ullam
-                    assumenda sed a quasi rem eveniet aperiam, officiis nisi est sit
-                    labore voluptatem!
+                    Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam tutarını havale veya EFT yoluyla gönderebilirsiniz.
                   </p>
                 </div>
               </UiFormRadio>
@@ -128,7 +122,34 @@
           </div>
         </div>
       </div>
-      <div class="col-span-1">1</div>
+      <div class="col-span-1">
+        <div class="sticky top-4 w-full">
+            <div class="bg-tertiary-50 w-full rounded-md p-minimal space-y-3">
+              <b>Sipariş özeti</b>
+
+              <div class="flex justify-between">
+                <p>Ürün toplam:</p>
+                <p class="text-medium text-secondary-500">129.00 TL</p>
+              </div>
+              <div class="flex justify-between pb-2">
+                <p>Kargo ücreti:</p>
+                <p class="text-medium text-secondary-500">39.00 TL</p>
+              </div>
+            </div>
+            <div
+              class="mt-minimal flex justify-between items-center fixed lg:relative bottom-0 right-0 left-0 bottom-0 bg-white py-3 px-3 lg:px-0 lg:border-t-0 border-t"
+            >
+              <div class="flex justify-start space-x-4 text-lg">
+                <p>Toplam:</p>
+                <p class="text-medium text-secondary-500 font-bold">168.00 TL</p>
+              </div>
+
+              <UiButtonsBaseButton color="secondary" class="font-semibold px-8"
+                >Siparişi Onayla</UiButtonsBaseButton
+              >
+            </div>
+          </div>
+          </div>
     </div>
 
     <div v-if="isOpen">
