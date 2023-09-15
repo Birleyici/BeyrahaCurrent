@@ -1,7 +1,7 @@
 <template>
   <div class="relative inline-flex items-center">
-    <input :checked="checked" type="radio" class="hidden" id="customCheckbox" />
-    <label for="customCheckbox" class="flex items-center space-x-2 cursor-pointer">
+    <input :checked="checked&&checked" :name="name" type="radio" class="hidden" :id="id" />
+    <label  :for="id" class="flex items-center space-x-2 cursor-pointer">
      <div>
         <span class="block w-5 h-5 border-2 border-gray-300 rounded-full relative">
         <Icon
@@ -13,17 +13,19 @@
       <span class="text-gray-700 no-select text-sm"><slot></slot></span>
     </label>
   </div>
+
 </template>
 
 <script setup>
-const { checked } = defineProps(["checked"]);
+const { name, id } = defineProps(["name", "id"]);
 </script>
 <style>
-#customCheckbox:checked + label span:first-child svg {
+input[type="radio"]:checked ~ label div span:first-child svg {
   opacity: 1;
 }
 
-#customCheckbox:checked + label span:first-child {
+input[type="radio"]:checked ~ label div span:first-child {
   background-color: #f97316; /* bg-secondary-500 */
 }
+
 </style>

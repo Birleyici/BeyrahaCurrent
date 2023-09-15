@@ -1,14 +1,14 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop">
     <div class="grid lg:grid-cols-3 gap-16">
-      <div class="col-span-2">
+      <div class="col-span-2 my-minimal">
         <div class="text-center lg:text-left">
           <b>Sipariş oluştur</b>
         </div>
 
         <div class="border rounded-md mt-minimal">
-          <div class="bg-slate-50 p-minimal rounded-t-md flex items-center">
-            <UiFormRadio v-if="true" :checked="true">
+          <div class="bg-tertiary-50 p-minimal rounded-t-md flex items-center">
+            <UiFormRadio v-if="true" :checked="true" id="address" name="address">
               <div class="lg:flex items-center space-x-4">
                 <div></div>
 
@@ -79,18 +79,51 @@
             <div class="flex justify-center space-x-2 flex items-center">
               <button
                 @click="isOpenOtherAddress = !isOpenOtherAddress"
-                class="text-sm font-semibold p-3 h-full"
+                class="text-sm font-medium p-3 h-full"
               >
-                Diğer adresleri {{ !isOpenOtherAddress ? 'gör':'kapat' }}
-                <Icon v-if="isOpenOtherAddress"
+                Diğer adresleri {{ !isOpenOtherAddress ? "gör" : "kapat" }}
+                <Icon
+                  v-if="isOpenOtherAddress"
                   name="material-symbols:keyboard-arrow-up"
                   class="font-medium w-5 h-5"
                 ></Icon>
-                <Icon v-else
+                <Icon
+                  v-else
                   name="material-symbols:keyboard-arrow-down"
                   class="font-medium w-5 h-5"
                 ></Icon>
               </button>
+            </div>
+          </div>
+        </div>
+        <div class="my-orta">
+          <b>Ödeme yöntemleri</b>
+          <div class="my-minimal space-y-4">
+            <div class="border rounded-md p-minimal bg-slate-50">
+              <UiFormRadio id="cod" name="paymentMethod">
+                <div class="ml-2">
+                  <b>Kapıda ödeme</b>
+                  <p v-if="true">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias
+                    molestiae, perspiciatis corporis ipsam eius facere quisquam ullam
+                    assumenda sed a quasi rem eveniet aperiam, officiis nisi est sit
+                    labore voluptatem!
+                  </p>
+                </div>
+              </UiFormRadio>
+            </div>
+            <div class="border rounded-md p-minimal">
+              <UiFormRadio  id="bacs" name="paymentMethod">
+                <div class="ml-2">
+                  <b>Havale / EFT ile ödeme</b>
+                  <p v-if="true">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias
+                    molestiae, perspiciatis corporis ipsam eius facere quisquam ullam
+                    assumenda sed a quasi rem eveniet aperiam, officiis nisi est sit
+                    labore voluptatem!
+                  </p>
+                </div>
+              </UiFormRadio>
             </div>
           </div>
         </div>
