@@ -17,14 +17,16 @@
           <label class="text-sm">E-mail / Kullanıcı adı</label>
           <UiFormInput />
         </div>
-        <label class="text-sm" for="">Şifre</label>
-
-        <UiFormPasswordInput />
-        <button
-          class="rounded-md bg-secondary-500 hover:bg-orange-400 text-white duration-300 px-3 py-2"
-        >
-          Giriş Yap
-        </button>
+        <div>
+          <label class="text-sm" for="">Şifre</label>
+          <UiFormPasswordInput />
+        </div>
+        <div class="flex justify-between !mt-orta">
+          <UiButtonsBaseButton color="secondary">Giriş yap</UiButtonsBaseButton>
+          <div v-if="nextNotRegister" class="flex items-center space-x-2">
+            <a href="#">Üye olmadan devam et</a>
+            <Icon name="material-symbols:keyboard-arrow-right"></Icon>
+          </div></div>
       </div>
       <div class="mt-12 space-y-4 min-w-full">
         <div>
@@ -42,16 +44,19 @@
 
           <UiFormPasswordInput />
         </div>
-        <button
-          class="rounded-md bg-secondary-500 hover:bg-orange-400 text-white duration-300 px-3 py-2"
-        >
-          Kaydol
-        </button>
+        <div class="flex justify-between !mt-orta">
+          <UiButtonsBaseButton color="secondary">Kaydol</UiButtonsBaseButton>
+          <div v-if="nextNotRegister" class="flex items-center space-x-2">
+            <a href="#">Üye olmadan devam et</a>
+            <Icon name="material-symbols:keyboard-arrow-right"></Icon>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+const { nextNotRegister } = defineProps(["nextNotRegister"]);
 const type = ref(false);
 </script>

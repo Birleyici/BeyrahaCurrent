@@ -1,5 +1,5 @@
 <template>
-  <div class="relative inline-flex items-center">
+  <div class=" items-center">
     <input
       :checked="modelValue === value"
       @change="onChange"
@@ -8,7 +8,7 @@
       class="hidden"
       :id="id"
     />
-    <label :for="id" class="flex items-center space-x-2 cursor-pointer">
+    <label :for="id" class="flex items-center space-x-2 cursor-pointer " :class="labelClass">
       <div>
         <span class="block w-5 h-5 border-2 border-gray-300 rounded-full relative">
           <Icon
@@ -24,7 +24,7 @@
 </template>
 
 <script setup>
-const { name, id, value, modelValue } = defineProps(['name', 'id', 'value', 'modelValue']);
+const {labelClass, name, id, value, modelValue } = defineProps(['name', 'id', 'value', 'modelValue', 'labelClass']);
 const emit = defineEmits(['update:modelValue']);
 
 const onChange = () => {

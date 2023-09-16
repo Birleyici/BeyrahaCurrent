@@ -100,10 +100,11 @@
           <b>Ödeme yöntemleri</b>
           <div class="my-minimal space-y-4">
             <div
-              class="border rounded-md p-minimal"
-              :class="selectedPaymentMethod == 'cod' && 'bg-slate-50'"
+              class="border rounded-md"
+              :class="selectedPaymentMethod == 'cod' && 'bg-slate-50 duration-300'"
             >
               <UiFormRadio
+                label-class="p-minimal"
                 v-model="selectedPaymentMethod"
                 value="cod"
                 id="cod"
@@ -119,10 +120,11 @@
               </UiFormRadio>
             </div>
             <div
-              class="border rounded-md p-minimal"
-              :class="selectedPaymentMethod == 'bacs' && 'bg-slate-50'"
+              class="border rounded-md duration-300"
+              :class="selectedPaymentMethod == 'bacs' && 'bg-slate-50  duration-300'"
             >
               <UiFormRadio
+                label-class="p-minimal"
                 v-model="selectedPaymentMethod"
                 value="bacs"
                 id="bacs"
