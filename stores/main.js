@@ -5,8 +5,12 @@ export const useMainStore = defineStore({
     state: () => ({
         isMobile: false,
         isOpenSearch: false,
-        isLoaded:false
+        isLoaded: false
     }),
-    actions: {
-    }
+ 
 });
+
+
+
+
+

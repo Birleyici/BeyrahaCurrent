@@ -1,7 +1,8 @@
 <template>
   <div class="lg:px-x-desktop max-w-full">
     <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
-      <div class="col-span-3 lg:rounded-md">
+      <!-- useMain().isLoaded -->
+      <div class="col-span-3 lg:rounded-md" v-if="useMain().isLoaded">
         <swiper
           :style="{
             '--swiper-navigation-color': '#fff',
@@ -42,6 +43,8 @@
           </swiper>
         </div>
       </div>
+      <SkeletonProductGallery v-else></SkeletonProductGallery>
+
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
         <h1 class="text-xl font-semibold border-b border-dotted pb-2">
           Bordo Renk Siyah İpli Deri Erkek Bileklik
@@ -50,6 +53,7 @@
         <div class="my-minimal">
           <p class="font-medium text-sm">Renk</p>
           <swiper
+            v-if="useMain().isLoaded"
             :breakpoints="breakpoints"
             :spaceBetween="5"
             :freeMode="true"
@@ -62,6 +66,9 @@
                 class="object-cover rounded-md border border-transparent hover:border-secondary-500"
             /></swiper-slide>
           </swiper>
+          <div class="flex space-x-2" v-else>
+          <SkeletonUiThumb v-for="item in 4"></SkeletonUiThumb>
+          </div>
         </div>
 
         <div class="my-medium">
@@ -176,9 +183,12 @@
 
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
       <div class="mb-2 font-bold flex items-end space-x-2">
-      <p>Yorumlar</p>
+        <p>Yorumlar</p>
       </div>
-      <div class="text-xl my-minimal font-medium flex space-x-2"><p class="text-secondary-500">3.8</p> <p>(253 değerlendirme)</p></div>
+      <div class="text-xl my-minimal font-medium flex space-x-2">
+        <p class="text-secondary-500">3.8</p>
+        <p>(253 değerlendirme)</p>
+      </div>
 
       <div class="grid gap-4 border-b border-dotted pb-3">
         <PartialsCommentItem></PartialsCommentItem>
