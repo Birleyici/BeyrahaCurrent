@@ -1,11 +1,14 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop my-minimal">
     <b>Adreslerim</b>
+   
     <div class="lg:grid lg:grid-cols-4 mt-minimal lg:mt-orta gap-10 space-y-minimal">
+
       <div class="col-span-1">
         <PartialsAccountMenu></PartialsAccountMenu>
       </div>
       <div class="col-span-3">
+        <UiButtonsBaseButton @click="newAddressModal = true" color="secondary" class="mb-minimal">Yeni adres</UiButtonsBaseButton>
         <div class="grid lg:grid-cols-2 gap-10">
           <div
             v-for="item in 4"
@@ -79,11 +82,20 @@
             @status-change="(e) => (confirmDefaultModal = e)"
           >
             <p class="font-bold">Varsayılan yap</p>
-            <p>Adresi varsayılan adres yapmak istediğinize eminmisiniz?</p>
+            <p>Adres varsayılan adres yapılsınmı?</p>
             <div class="space-x-4 mt-minimal flex items-end">
-              <UiButtonsBaseButton color="red">Onayla</UiButtonsBaseButton>
-              <UiButtonsBaseButton color="slate">Vazgeç</UiButtonsBaseButton>
+              <UiButtonsBaseButton color="secondary">Onayla</UiButtonsBaseButton>
+              <UiButtonsBaseButton @click="confirmDefaultModal = false" color="slate">Vazgeç</UiButtonsBaseButton>
             </div>
+          </UiModal>
+
+
+          <UiModal
+            :isOpen="newAddressModal"
+            @status-change="(e) => (newAddressModal = e)"
+          >
+          <b>Yeni adres</b>
+            <PartialsFormAddressForm></PartialsFormAddressForm>
           </UiModal>
         </div>
       </div>
@@ -94,5 +106,6 @@
 <script setup>
 const onayla = ref(false);
 const confirmDefaultModal = ref(false);
+const newAddressModal = ref(false);
 const isOpen = ref(false);
 </script>

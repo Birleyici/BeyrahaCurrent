@@ -74,9 +74,6 @@ const leave = (el, done) => {
     el.addEventListener('transitionend', done);
 }
 
-onBeforeUnmount(() => {
-    el.removeEventListener('transitionend', done);
-});
 
 
 </script>
