@@ -5,7 +5,7 @@
     >
       <NuxtLink to="/hesap/siparislerim">
         <div
-          class="flex items-center space-x-2 cursor-pointer  lg:rounded-r-full duration-300 hover:bg-slate-100 p-2"
+        class="flex items-center space-x-2 cursor-pointer  lg:rounded-r-full duration-300 hover:bg-slate-100 p-2 rounded-full lg:rounded-l-none "
           :class="{'bg-slate-100': useRoute().fullPath == '/hesap/siparislerim'}"
         
         >

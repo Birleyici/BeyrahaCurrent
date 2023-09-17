@@ -4,7 +4,8 @@ export const useMainStore = defineStore({
     id: 'main',
     state: () => ({
         isMobile: false,
-        isOpenSearch: false
+        isOpenSearch: false,
+        isLoaded:false
     }),
     actions: {
     }

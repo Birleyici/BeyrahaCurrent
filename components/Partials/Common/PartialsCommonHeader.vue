@@ -1,14 +1,14 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
-    <UiMenuSideBarMenu :status="menuStatus" @change-status="(e) => (menuStatus = e)">
+    <LazyUiMenuSideBarMenu :status="menuStatus" @change-status="(e) => (menuStatus = e)">
       <PartialsMenuNestedSlideMenu :menu="kategoriler"></PartialsMenuNestedSlideMenu>
-    </UiMenuSideBarMenu>
+    </LazyUiMenuSideBarMenu>
     <UiMenuSideBarMenu
       position="true"
       :status="accountStatus"
       @change-status="(e) => (accountStatus = e)"
     >
-      <div class="p-8" v-if="false">
+      <div class="p-8" v-if="true">
         <PartialsFormLoginRegisterForm />
       </div>
       <div v-else>

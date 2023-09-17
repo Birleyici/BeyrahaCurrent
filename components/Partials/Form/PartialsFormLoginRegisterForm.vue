@@ -16,6 +16,9 @@
         <div>
           <label class="text-sm">E-mail / Kullanıcı adı</label>
           <UiFormInput />
+          <NuxtLink to="/sifremi-unuttum"
+                ><p class="font-medium text-sm mt-1">Şifremi unuttum</p></NuxtLink
+              >
         </div>
         <div>
           <label class="text-sm" for="">Şifre</label>
@@ -32,6 +35,7 @@
         <div>
           <label class="text-sm">E-mail </label>
           <UiFormInput />
+          
         </div>
 
         <div>

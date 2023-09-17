@@ -36,14 +36,14 @@
             :modules="modules"
             class="mySwiper"
           >
-            <swiper-slide v-for="item in 8"
+            <swiper-slide v-for="item in 3"
               ><img src="/default-product.jpg" class="h-32 rounded-md"
             /></swiper-slide>
           </swiper>
         </div>
       </div>
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
-        <h1 class="text-xl font-bold border-b pb-2">
+        <h1 class="text-xl font-semibold border-b border-dotted pb-2">
           Bordo Renk Siyah İpli Deri Erkek Bileklik
         </h1>
 
