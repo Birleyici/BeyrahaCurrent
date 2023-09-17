@@ -15,5 +15,8 @@ const colorClasses = computed(() => {
   if (color == "slate") {
     return ["bg-slate-200", "hover:bg-slate-300"];
   }
+  if (color == "red") {
+    return ["bg-red-500", "hover:bg-red-400", 'text-white'];
+  }
 });
 </script>

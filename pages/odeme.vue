@@ -163,7 +163,7 @@
             </UiFormCheckbox>
           </div>
           <div
-            class="mt-minimal flex justify-between items-center fixed lg:relative bottom-0 right-0 left-0 bottom-0 bg-white px-3 lg:px-0 lg:border-t-0 border-t"
+            class="mt-minimal py-2 flex justify-between items-center fixed lg:relative bottom-0 right-0 left-0 bottom-0 bg-white px-3 lg:px-0 lg:border-t-0 border-t"
           >
             <div class="flex justify-start space-x-4 text-lg">
               <p>Toplam:</p>
@@ -178,73 +178,12 @@
       </div>
     </div>
 
-    <div v-if="isOpen">
-      <div
-        class="p-minimal lg:rounded-md space-y-4 fixed top-0 bottom-0 right-0 left-0 h-full lg:h-5/6 w-full mx-auto my-auto bg-white z-10 max-w-[500px] overflow-scroll-y"
-      >
-        <div class="flex justify-between items-center">
-          <b>Yeni adres</b>
+    <UiModal :isOpen="isOpen" @status-change="(e) => (isOpen = e)">
+    <p>Yeni adres</p>
+      <PartialsFormAddressForm></PartialsFormAddressForm>
+    </UiModal>
 
-          <button @click="isOpen = false">
-            <Icon name="mdi:close" class="w-5 h-5"></Icon>
-          </button>
-        </div>
-
-        <div class="grid gap-4 grid-cols-2">
-          <div>
-            <label for="" class="text-sm">Ad* </label>
-            <UiFormInput></UiFormInput>
-          </div>
-          <div>
-            <label for="" class="text-sm">Soyad*</label>
-            <UiFormInput></UiFormInput>
-          </div>
-        </div>
-        <div class="grid gap-4 grid-cols-2">
-          <div>
-            <label for="" class="text-sm">Telefon* </label>
-            <UiFormInput></UiFormInput>
-          </div>
-          <div>
-            <label for="" class="text-sm">İl*</label>
-            <UiFormSelect>
-              <option value="">İl seçin</option>
-            </UiFormSelect>
-          </div>
-        </div>
-        <div class="grid gap-4 grid-cols-2">
-          <div>
-            <label for="" class="text-sm">İlçe* </label>
-            <UiFormSelect>
-              <option value="">İlçe seçin</option>
-            </UiFormSelect>
-          </div>
-          <div>
-            <label for="" class="text-sm">Mahalle*</label>
-            <UiFormSelect>
-              <option value="">Mahalle seçin</option>
-            </UiFormSelect>
-          </div>
-        </div>
-        <div>
-          <label for="" class="text-sm">Adres* </label>
-          <UiFormTextarea></UiFormTextarea>
-        </div>
-        <div>
-          <label for="" class="text-sm">Adres başlığı* </label>
-          <UiFormInput></UiFormInput>
-        </div>
-
-        <UiButtonsBaseButton color="secondary" class="px-6 font-medium"
-          >Adresi kaydet</UiButtonsBaseButton
-        >
-      </div>
-
-      <div
-        @click="isOpen = false"
-        class="fixed left-0 right-0 bottom-0 left-0 bg-black w-full h-full z-[4] opacity-30"
-      ></div>
-    </div>
+   
   </div>
 </template>
 
