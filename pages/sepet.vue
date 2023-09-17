@@ -31,7 +31,7 @@ import { UiSlidesProductSlide } from '#build/components';
       </div>
       <div class="lg:col-span-1 w-full lg:grid gap-2">
         <div class="w-full">
-          <div class="sticky top-4 w-full">
+          <div class="sticky top-4 w-full z-[2]">
             <div class="bg-tertiary-50 w-full rounded-md p-minimal space-y-3">
               <b>Sipariş özeti</b>
 

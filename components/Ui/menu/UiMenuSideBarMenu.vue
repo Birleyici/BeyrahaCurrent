@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      class="fixed bottom-0 top-0 flex z-[11] duration-300"
+      class="fixed bottom-0 left-0 right-0 top-0 flex z-[11] duration-300"
       :class="{
         '-translate-x-full': !status && !position,
         'translate-x-full': !status && position,

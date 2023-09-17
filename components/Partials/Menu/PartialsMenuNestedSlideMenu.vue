@@ -1,9 +1,9 @@
 <template>
   <div class="relative overflow-hidden">
     <div
-      @click="activeIndex != 0 ? activeIndex-- : ''"
+      @click="activeIndex > 0 ? activeIndex-- : ''"
       class="py-3 px-2 border-b flex items-center space-x-3"
-      v-if="activeIndex != 0"
+      v-if="activeIndex > 0"
     >
       <Icon name="solar:alt-arrow-left-line-duotone" class="w-5 h-5"></Icon>
       <p class="font-medium">Geri</p>
@@ -15,18 +15,18 @@
     <!-- Ana Menü -->
     <div class="flex overflow-hidden">
       <div
-        v-for="(item, index) in 3"
+        v-for="(currentMenu, index) in nestedMenus"
         :style="'transform:translateX(-' + activeIndex * 100 + '%)'"
-        class="duration-300 min-w-full"
+        class="min-w-full"
       >
         <div
-          class="border-b py-3 pl-4 grid grid-cols-3 items-center"
-          v-for="(item, index2) in 8"
-          @click="index != 2 ? activeIndex++ : ''"
-          :key="index2"
+          class="border-b py-3 pl-4 grid grid-cols-3 items-center duration-300 "
+          v-for="item in currentMenu"
+          @click="item.children ? navigateToSubMenu(index + 1, item.children) : ''"
+          :key="item.name"
         >
-          <a to="/kategori" class="col-span-2">Menü Link {{ index2 }}</a>
-          <div class="flex justify-end pr-4">
+          <a to="/kategori" class="col-span-2">{{ item.name }}</a>
+          <div class="flex justify-end pr-4" v-if="item.children">
             <Icon name="ic:baseline-keyboard-arrow-right"></Icon>
           </div>
         </div>
@@ -36,5 +36,18 @@
 </template>
 
 <script setup>
+const { menu } = defineProps(['menu']);
 const activeIndex = ref(0);
+const nestedMenus = ref([menu]);
+
+const navigateToSubMenu = (index, subMenu) => {
+  activeIndex.value = index;
+  nestedMenus.value.push(subMenu);
+};
+
+watch(activeIndex, (newIndex) => {
+  if (newIndex < nestedMenus.value.length - 1) {
+    nestedMenus.value = nestedMenus.value.slice(0, newIndex + 1);
+  }
+});
 </script>

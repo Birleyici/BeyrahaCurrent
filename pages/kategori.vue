@@ -35,7 +35,7 @@
       v-if="isOpenFilters && useMain().isMobile"
       class="absolute left-0 right-0 bottom-0 top-0 bg-black opacity-20 w-full h-full z-[0]"
     ></div>
-    <div class="col-span-8 space-y-minimal">
+    <div class="col-span-8 space-y-minimal ">
       <div class="space-y-minimal lg:flex justify-between items-center">
         <div class="flex space-x-4 items-center">
           <div class="flex items-center space-x-2">
@@ -45,7 +45,7 @@
             <UiBadgesBadge>Marka 1</UiBadgesBadge>
           </div>
         </div>
-        <UiFormSelect>
+        <UiFormSelect class="lg:w-72">
           <option value="">Akıllı sıralama</option>
           <option value="">En çok satanlar</option>
           <option value="">Azalan fiyat</option>
