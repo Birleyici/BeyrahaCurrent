@@ -9,7 +9,7 @@
         <PartialsAccountMenu></PartialsAccountMenu>
       </div>
       <div class="col-span-3 lg:grid lg:grid-cols-2 gap-10">
-        <div class="p-minimal relative border">
+        <div class="p-minimal relative border rounded-md">
           <p class="text-secondary-500 font-medium">Hesap bilgileri</p>
           <div class="grid gap-4 py-minimal">
             <div class="grid grid-cols-2 gap-4">
@@ -69,7 +69,7 @@
             >
           </div>
         </div>
-        <div class="p-minimal relative border">
+        <div class="p-minimal relative border rounded-md my-minimal lg:my-0">
           <p class="text-secondary-500 font-medium">Şifre değiştirme</p>
 
           <div class="grid gap-4 py-minimal">

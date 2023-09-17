@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="useMain().isLoaded">
     <swiper
       :breakpoints="breakpoints"
       :pagination="{
@@ -8,9 +8,14 @@
       class="mySwiper"
     >
       <swiper-slide v-for="item in 12">
-      <PartialsProductCard :key="item"></PartialsProductCard>
+        <PartialsProductCard :key="item"></PartialsProductCard>
       </swiper-slide>
     </swiper>
+  </div>
+  <div v-else class="flex max-w-full overflow-hidden space-x-4">
+    <div v-for="item in 5">
+      <SkeletonProductCard></SkeletonProductCard>
+    </div>
   </div>
 </template>
 
@@ -51,6 +56,3 @@ const breakpoints = {
   // Daha fazla breakpoint ekleyebilirsiniz...
 };
 </script>
-
-
-

@@ -2,7 +2,7 @@
   <div class="px-x-mobil lg:px-x-desktop my-minimal">
     <b>Adreslerim</b>
    
-    <div class="lg:grid lg:grid-cols-4 mt-minimal lg:mt-orta gap-10 space-y-minimal">
+    <div class="lg:grid lg:grid-cols-4 mt-minimal lg:mt-orta gap-10 ">
 
       <div class="col-span-1">
         <PartialsAccountMenu></PartialsAccountMenu>

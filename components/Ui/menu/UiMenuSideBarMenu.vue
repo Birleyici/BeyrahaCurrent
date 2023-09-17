@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="useMain().isLoaded">
     <div
       class="fixed bottom-0 left-0 right-0 top-0 flex z-[11] duration-300"
       :class="{
