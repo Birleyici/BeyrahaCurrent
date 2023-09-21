@@ -1,12 +1,14 @@
 <template>
-  <button :class="colorClasses" class="rounded-md duration-300 px-3 py-2">
-    <slot />
+  <button :class="colorClasses" class="rounded-md space-x-2 duration-300 flex justify-center items-center px-3 py-2"> 
+    <p><slot /></p>
+
+    <Icon v-if="loading" name="mdi:loading" class="animate-spin"></Icon>
   </button>
   
 </template>
 
 <script setup>
-const { color } = defineProps(["color"]);
+const { color,loading } = defineProps(["color","loading"]);
 
 const colorClasses = computed(() => {
   if (color == "secondary") {

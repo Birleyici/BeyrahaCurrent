@@ -20,12 +20,15 @@
         class="min-w-full"
       >
         <div
-          class="border-b py-3 pl-4 grid grid-cols-3 items-center duration-300 "
+          class="border-b py-3 pl-4 grid grid-cols-3 items-center duration-300"
           v-for="item in currentMenu"
           @click="item.children ? navigateToSubMenu(index + 1, item.children) : ''"
           :key="item.name"
         >
-          <a to="/kategori" class="col-span-2">{{ item.name }}</a>
+          <a to="/kategori" class="col-span-2 flex items-center space-x-2"
+            ><Icon v-if="item.icon != null" :name="item.icon"></Icon>
+            <p>{{ item.name }}</p>
+          </a>
           <div class="flex justify-end pr-4" v-if="item.children">
             <Icon name="ic:baseline-keyboard-arrow-right"></Icon>
           </div>
@@ -36,7 +39,7 @@
 </template>
 
 <script setup>
-const { menu } = defineProps(['menu']);
+const { menu } = defineProps(["menu"]);
 const activeIndex = ref(0);
 const nestedMenus = ref([menu]);
 

@@ -5,8 +5,6 @@
 </template>
 
 <script setup>
-  console.log(useMain().isLoaded)
-
 onMounted(() => {
   useMain().isLoaded = true;
 });
