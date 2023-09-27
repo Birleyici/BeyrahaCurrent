@@ -4,13 +4,13 @@
       <PartialsMenuNestedSlideMenu :menu="kategoriler"></PartialsMenuNestedSlideMenu>
     </LazyUiMenuSideBarMenu>
 
-    <div class="p-minimal">
+    <div class="p-minimal bg-tertiary-100">
       <button @click="menuStatus = true">
         <Icon name="mdi:menu" class="w-6 h-6"></Icon>
       </button>
     </div>
 
-    <div class="bg-50 p-minimal lg:p-maximal">
+    <div class="bg-tertiary-5 p-minimal lg:p-maximal">
       <NuxtPage></NuxtPage>
     </div>
     <footer class="text-center py-2 text-sm">Beyraha - Admin Managemenet</footer>

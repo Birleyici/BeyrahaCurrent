@@ -12,12 +12,14 @@ const { type } = defineProps(["type"]);
 const bgColor = computed(()=>{
     if(type == 'info') return  'bg-tertiary-100'
     if(type == 'success') return  'bg-secondary-100'
+    if(type == 'error') return  'bg-red-100'
     return ''; // Varsayılan değer
      
 })
 const iconBgColor = computed(()=>{
   if(type == 'info') return  'bg-tertiary-200'
   if(type == 'success') return  'bg-secondary-200'
+  if(type == 'error') return  'bg-red-200'
   return ''; // Varsayılan değer
 
     
@@ -26,6 +28,7 @@ const icon = computed(()=>{
     
     if(type == 'info') return  'ph:info'
     if(type == 'success') return  'material-symbols:fitbit-check-small-rounded'
+    if(type == 'error') return  'mdi:alert-outline'
     return ''; // Varsayılan değer
 
 })

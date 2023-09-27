@@ -45,3 +45,9 @@ body{
 
     @apply my-12 lg:my-0
   }
+
+
+  select + .select2-container {
+    width: 100% !important;
+  }
+

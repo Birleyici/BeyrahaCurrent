@@ -29,17 +29,18 @@ const form = reactive({
   email: null,
 });
 
-const loading = ref(false)
-
+const loading = ref(false);
 const login = async () => {
+  loading.value = true;
   const { data, pending, refresh, error } = await useJsonPlaceholderData("admin-login", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(form),
+    cache: false,
   });
-
+  loading.value = pending;
   if (error.value == null) {
     await navigateTo("/management/dashboard");
   }

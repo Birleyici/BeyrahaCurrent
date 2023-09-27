@@ -25,6 +25,7 @@
     "@vueup/vue-quill": "^1.2.0",
     "mobile-detect": "^1.4.5",
     "nuxt-swiper": "^1.2.2",
+    "nuxt3-select2": "^0.1.29",
     "pinia": "^2.1.6"
   },
   "overrides": {
