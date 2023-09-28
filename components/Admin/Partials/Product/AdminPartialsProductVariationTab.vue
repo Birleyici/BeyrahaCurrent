@@ -17,44 +17,49 @@
         headerClass="flex justify-between bg-tertiary-50 mt-2 border rounded-md text-sm px-minimal items-center"
         :isOpen="item.isOpen"
         @change-status="(e) => (item.isOpen = e)"
-        v-for="item in variations.variations"
+        v-for="item in useAttrsAndVariations().variations"
       >
         <template v-slot:header>
           <div class="flex text-sm">
-            <p class="border-r last:border-r-0 px-2" v-for="term in item.terms">
-              {{
-                findValueInAttrs(
-                  attributes,
-                  term.product_term_id,
-                  term.product_term.product_attribute_id,
-                  item
-                )
-              }}
-            </p>
+            <template v-for="term in item.terms">
+              <p class="border-r last:border-r-0 px-2">
+                {{
+                  findValueInAttrs(
+                    useAttrsAndVariations().attributes,
+                    term.product_term_id,
+                    term.product_term.product_attribute_id,
+                    item
+                  )
+                }}
+              </p>
+            </template>
           </div>
         </template>
 
         <div class="grid lg:grid-cols-2 gap-4 bg-white border border-t-0 p-minimal">
           <div class="lg:col-span-2 flex space-x-4 justify-between">
-            <UiFormSelect v-model="term.product_term_id" v-for="term in item.terms">
-              <option value="null">
-                Herhangi Bir
-                {{
-                  attributes.find(
+            <template v-for="term in item.terms">
+              <UiFormSelect v-model="term.product_term_id">
+                <option value="null">
+                  Herhangi Bir
+                  {{
+                    useAttrsAndVariations().attributes.find(
+                      (e) =>
+                        e.product_attribute_id == term.product_term.product_attribute_id
+                    ).attribute_name
+                  }}
+                </option>
+                <option
+                  :value="opt.product_term_id"
+                  v-for="opt in useAttrsAndVariations().attributes.find(
                     (e) =>
                       e.product_attribute_id == term.product_term.product_attribute_id
-                  ).attribute_name
-                }}
-              </option>
-              <option
-                :value="opt.product_term_id"
-                v-for="opt in attributes.find(
-                  (e) => e.product_attribute_id == term.product_term.product_attribute_id
-                ).product_terms"
-              >
-                {{ opt.term_name }}
-              </option>
-            </UiFormSelect>
+                  ).product_terms"
+                >
+                  {{ opt.term_name }}
+                </option>
+              </UiFormSelect>
+            </template>
           </div>
 
           <div class="bg-tertiary-50 border p-2 rounded-md flex space-x-4 items-center">
@@ -88,8 +93,7 @@
       </UiAccordion>
     </div>
     <div v-if="errorMessage" class="my-4">
-    <UiNotificationBar type="error">{{ errorMessage }}</UiNotificationBar>
-      
+      <UiNotificationBar type="error">{{ errorMessage }}</UiNotificationBar>
     </div>
     <div class="flex justify-end">
       <UiButtonsBaseButton
@@ -103,19 +107,12 @@
 </template>
 
 <script setup>
+import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
+await useAttrsAndVariations().fetchAttributes();
+await useAttrsAndVariations().fetchVariations();
+
 const addedType = ref(1);
 const errorMessage = ref(null);
-const {
-  data: attributes,
-  pending: pending2,
-  refresh: refresh2,
-  error: error2,
-} = await useJsonPlaceholderData("products/1/attributes", {
-  cache: false,
-  query: {
-    isForVariation: true,
-  },
-});
 
 const variationHandle = () => {
   console.log(addedType.value);
@@ -125,6 +122,14 @@ const variationHandle = () => {
 };
 
 const createOneVariation = async () => {
+  // Öncelikle, useForVariation değeri 1 olan herhangi bir attribute olup olmadığını kontrol edin.
+  const hasAttributesForVariation = useAttrsAndVariations().attributes.some(attribute => attribute.useForVariation == 1);
+
+  // Eğer hiç attribute yoksa, fonksiyonu burada sonlandırın.
+  if (!hasAttributesForVariation) {
+    return;
+  }
+
   const newVariation = {
     isOpen: true,
     price: null,
@@ -134,7 +139,7 @@ const createOneVariation = async () => {
     stockAmount: 0,
     isStockManagement: false,
     product_id: 1,
-    terms: [], // Bu kısmı ekledik. Yeni varyasyon için boş bir terms dizisi oluşturduk.
+    terms: [],
   };
 
   const { data, pending, refresh, error } = await useJsonPlaceholderData("/variations", {
@@ -146,14 +151,16 @@ const createOneVariation = async () => {
     cache: false,
   });
 
-  if (error.value == null) {
-    // Yeni varyasyonu listeye ekleyin:
-    variations.value.variations.unshift(data.value.variation);
+  console.log(data);
 
+  if (error.value == null) {
     // Şimdi, yeni oluşturulan varyasyon için şablon term'leri oluşturalım:
     const createdVariation = data.value.variation;
     createdVariation.terms = [];
-    attributes.value.forEach((attribute) => {
+    useAttrsAndVariations().attributes.forEach((attribute) => {
+      if (attribute.useForVariation == 0) {
+        return;
+      }
       const templateTerm = {
         product_variation_id: createdVariation.id,
         product_term_id: "null",
@@ -164,50 +171,14 @@ const createOneVariation = async () => {
       };
       createdVariation.terms.push(templateTerm);
     });
+
+    // Eğer term'ler oluşturulduysa, varyasyonu listeye ekleyin.
+    if (createdVariation.terms.length > 0) {
+      useAttrsAndVariations().variations.unshift(createdVariation);
+    }
   }
 };
 
-const { data: variations, pending, refresh, error } = await useJsonPlaceholderData(
-  "/products/1/variations",
-  {
-    cache: false,
-  }
-);
-
-const updateVariations = () => {
-  // Eğer variations verisi başarıyla alındıysa ve hata yoksa:
-  if (!error.value) {
-    // Her bir varyasyon için:
-    variations.value.variations.forEach((variation) => {
-      // Eğer bu varyasyonun terms dizisi attributes dizisinin uzunluğundan daha kısa ise:
-      if (!variation.terms || variation.terms.length < attributes.value.length) {
-        // Her bir özellik (attribute) için kontrol edelim:
-        attributes.value.forEach((attribute) => {
-          // Eğer bu attribute için bir term zaten eklenmemişse:
-          if (
-            !variation.terms.some(
-              (term) =>
-                term.product_term.product_attribute_id === attribute.product_attribute_id
-            )
-          ) {
-            // Şablon term'i oluşturun:
-            const templateTerm = {
-              product_variation_id: variation.id,
-              product_term_id: "null", // Bu değeri null olarak bırakıyoruz çünkü henüz bir term seçilmedi.
-              product_term: {
-                product_attribute_id: attribute.product_attribute_id,
-                term_id: null, // Bu değeri de null olarak bırakıyoruz.
-              },
-            };
-            // Bu şablon term'i varyasyonun terms dizisine ekleyin:
-            variation.terms.push(templateTerm);
-          }
-        });
-      }
-    });
-  }
-};
-updateVariations();
 
 const loadingVariationUpdate = ref(false);
 const saveVariations = async () => {
@@ -223,7 +194,7 @@ const saveVariations = async () => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(variations.value.variations),
+    body: JSON.stringify(useAttrsAndVariations().variations),
     cache: false,
   });
   loadingVariationUpdate.value = pending3.value;
@@ -231,10 +202,8 @@ const saveVariations = async () => {
   if (error3.value == null) {
     console.log(data3.value);
 
-    await refresh();
-    updateVariations();
+    await useAttrsAndVariations().fetchVariations();
     errorMessage.value = null;
-
   } else {
     errorMessage.value = error3.value.data.message;
   }
@@ -251,18 +220,16 @@ const findValueInAttrs = (data, product_term_id, attribute_id, attribute_name) =
         data.find((e) => e.product_attribute_id == attribute_id).attribute_name;
 };
 
-
 const deleteVariation = async (id) => {
-  const { data:data4, pending:pending4, refresh:refresh4, error:error4 } = await useJsonPlaceholderData(
-    "variations/" + id,
-    {
-      method: "DELETE",
-    }
-  );
+  const {
+    data: data4,
+    pending: pending4,
+    refresh: refresh4,
+    error: error4,
+  } = await useJsonPlaceholderData("variations/" + id, {
+    method: "DELETE",
+  });
 
-  console.log(data4, error4);
-  await refresh();
-  updateVariations();
-
+  await useAttrsAndVariations().deleteVariation(id);
 };
 </script>

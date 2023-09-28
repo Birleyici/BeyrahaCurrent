@@ -4,7 +4,7 @@
       <Select2 class="w-full" v-model="attrId" :options="options" />
       <UiButtonsBaseButton @click="addAttr()" color="secondary">Ekle</UiButtonsBaseButton>
     </div>
-    <div v-for="item in attributes" class="my-4">
+    <div v-for="item in useAttrsAndVariations().attributes" class="my-4">
       <UiAccordion
         @is-delete="deleteAttr(item.product_attribute_id)"
         :isOpen="item.isOpen"
@@ -56,27 +56,36 @@
         </div>
       </UiAccordion>
     </div>
-    <div v-if="attributes.length > 0" class="flex justify-end mt-4">
-      <UiButtonsBaseButton :loading="pending2" @click="saveAttrs()" color="secondary"
+    <div
+      v-if="useAttrsAndVariations().attributes.length > 0"
+      class="flex justify-end mt-4"
+    >
+      <UiButtonsBaseButton :loading="loadingSaveAttrs" @click="saveAttrs()" color="secondary"
         >Nitelikleri kaydet</UiButtonsBaseButton
       >
-    </div>
+    </div> 
+
   </div>
 </template>
 
 <script setup>
+import { storeToRefs } from 'pinia'
+import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
+await useAttrsAndVariations().fetchAttributes();
+
+
 const attrId = ref("1");
 const addAttr = () => {
   const item = options.value.find((option) => option.id === parseInt(attrId.value));
 
   // attributes içerisinde bu attribute_id'ye sahip bir öğe olup olmadığını kontrol ediyoruz.
-  const isAttributeExists = attributes.value.some(
+  const isAttributeExists = useAttrsAndVariations().attributes.some(
     (attr) => attr.attribute_id === item.id
   );
 
   // Eğer bu ID'ye sahip bir öğe zaten varsa veya attributes uzunluğu 30'dan fazla ise, yeni bir öğe eklemiyoruz.
-  if (!isAttributeExists && attributes.value.length < 30) {
-    attributes.value.push({
+  if (!isAttributeExists && useAttrsAndVariations().attributes.length < 30) {
+    useAttrsAndVariations().attributes.unshift({
       attribute_id: item.id,
       attribute_name: item.text,
       isOpen: true,
@@ -89,22 +98,18 @@ const addAttr = () => {
 };
 
 const addTerm = (term) => {
-
   if (
     term.termWord &&
     term.termWord.length <= 25 &&
-    !term.product_terms.some(t => t.term_name === term.termWord)  
+    !term.product_terms.some((t) => t.term_name === term.termWord)
   ) {
     term.product_terms.push({ term_name: term.termWord });
     term.termWord = "";
   }
-
 };
 
-
 const removeTerm = async (term, terms) => {
- 
-    const { data, pending, refresh, error } = await useJsonPlaceholderData(
+  const { data, pending, refresh, error } = await useJsonPlaceholderData(
     "/product-terms/" + term.product_term_id,
     {
       method: "DELETE",
@@ -117,7 +122,9 @@ const removeTerm = async (term, terms) => {
   }
 };
 
+const loadingSaveAttrs = ref(false);
 const saveAttrs = async () => {
+  loadingSaveAttrs.value = true;
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
     "/products/1/attributes",
     {
@@ -125,15 +132,19 @@ const saveAttrs = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(attributes.value),
-      cache:false
-
+      body: JSON.stringify(useAttrsAndVariations().attributes),
+      cache: false,
     }
   );
-  await refresh2(); //bununla güncellemesi lazım
+  loadingSaveAttrs.value = pending.value;
+
+  await useAttrsAndVariations().fetchAttributes();
+  await useAttrsAndVariations().fetchVariations();
 };
 
 const deleteAttr = async (id) => {
+
+
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
     "product-attributes/" + id,
     {
@@ -141,20 +152,10 @@ const deleteAttr = async (id) => {
     }
   );
 
-  console.log(data, error);
-  await refresh2();
+  useAttrsAndVariations().deleteAttr(id);
 };
 
 const { data: options, pending, refresh, error } = await useJsonPlaceholderData(
   "attributes/global"
 );
-
-const {
-  data: attributes,
-  pending: pending2,
-  refresh: refresh2,
-  error: error2,
-} = await useJsonPlaceholderData("products/1/attributes", {
-  cache: false,
-});
 </script>
