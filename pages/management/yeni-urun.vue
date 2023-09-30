@@ -63,7 +63,6 @@
       </div>
     </div>
 
-    <AdminDeneme></AdminDeneme>
   </div>
 </template>
 

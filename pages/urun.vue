@@ -37,7 +37,7 @@
             :modules="modules"
             class="mySwiper"
           >
-            <swiper-slide v-for="item in 3"
+            <swiper-slide v-for="item in 6"
               ><img src="/default-product.jpg" class="h-32 rounded-md"
             /></swiper-slide>
           </swiper>
@@ -60,7 +60,7 @@
             :modules="modules"
             class="mySwiper2"
           >
-            <swiper-slide v-for="item in 8"
+            <swiper-slide v-for="item in 5"
               ><img
                 src="/default-product.jpg"
                 class="object-cover rounded-md border border-transparent hover:border-secondary-500"
@@ -71,38 +71,16 @@
           </div>
         </div>
 
-        <div class="my-medium">
-          <p class="font-medium text-sm">Beden</p>
-          <div class="flex space-x-2">
-            <button
-              class="bg-tertiary-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
-            >
-              M
-            </button>
-            <button
-              class="bg-tertiary-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
-            >
-              L
-            </button>
-            <button
-              class="bg-tertiary-50 border rounded-md p-2 min-w-[40px] focus:bg-secondary-500 focus:text-white duration-300"
-            >
-              XL
-            </button>
-          </div>
-        </div>
+        <PartialsProductVariations></PartialsProductVariations>
 
-        <div class="my-minimal">
-          <p class="text-secondary-500 text-3xl font-bold">129.00 TL</p>
-        </div>
-
+      
         <div class="flex space-x-4 lg:space-x-8">
           <div class="inline-block">
             <UiFormCounter></UiFormCounter>
           </div>
           <UiButtonsBaseButton
             color="secondary"
-            class="!rounded-full text-sm font-bold !h-12 px-4 lg:px-8 h-full items-center flex space-x-2 md:space-x-4"
+            class="!rounded-full font-bold !flex text-sm px-12"
           >
             <Icon name="material-symbols:shopping-bag" class="w-5 h-5"></Icon>
             <p>SEPETE EKLE</p>

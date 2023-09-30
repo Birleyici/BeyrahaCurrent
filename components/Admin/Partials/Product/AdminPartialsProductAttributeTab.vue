@@ -140,6 +140,8 @@ const saveAttrs = async () => {
   );
   loadingSaveAttrs.value = pending.value;
 
+  console.log(data.value)
+
   await useAttrsAndVariations().fetchAttributes();
   await useAttrsAndVariations().fetchVariations();
 };

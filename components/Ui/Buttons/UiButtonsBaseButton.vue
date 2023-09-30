@@ -1,6 +1,6 @@
 <template>
   <button :class="colorClasses" class="rounded-md space-x-2 duration-300 flex justify-center items-center px-3 py-2"> 
-    <p><slot /></p>
+    <slot />
 
     <Icon v-if="loading" name="mdi:loading" class="animate-spin"></Icon>
   </button>

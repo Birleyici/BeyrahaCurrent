@@ -9,7 +9,9 @@
             color="slate"
             v-for="option in attribute.options"
             :key="option"
-            :class="{ '!bg-secondary-500 text-white': isSelected(attribute.name, option) }"
+            :class="{
+              '!bg-secondary-500 text-white': isSelected(attribute.name, option),
+            }"
             :disabled="!isActive(attribute.name, option)"
             @click="selectOption(attribute.name, option)"
           >
