@@ -17,15 +17,18 @@
         headerClass="flex justify-between bg-tertiary-50 mt-2 border rounded-md text-sm px-minimal items-center"
         :isOpen="item.isOpen"
         @change-status="(e) => (item.isOpen = e)"
-        v-for="item in useAttrsAndVariations().variations"
+        v-for="item in store.variations"
       >
         <template v-slot:header>
           <div class="flex text-sm">
             <template v-for="term in item.terms">
-              <p class="border-r last:border-r-0 px-2">
+              <p
+                class="border-r last:border-r-0 px-2"
+                v-if="isAttributeExists(term.product_term.product_attribute_id)"
+              >
                 {{
                   findValueInAttrs(
-                    useAttrsAndVariations().attributes,
+                    store.attributes,
                     term.product_term_id,
                     term.product_term.product_attribute_id,
                     item
@@ -39,22 +42,29 @@
         <div class="grid lg:grid-cols-2 gap-4 bg-white border border-t-0 p-minimal">
           <div class="lg:col-span-2 flex space-x-4 justify-between">
             <template v-for="term in item.terms">
-              <UiFormSelect v-model="term.product_term_id">
+              <UiFormSelect
+                v-model="term.product_term_id"
+                v-if="isAttributeExists(term.product_term.product_attribute_id)"
+              >
                 <option value="null">
                   Herhangi Bir
                   {{
-                    useAttrsAndVariations().attributes.find(
-                      (e) =>
-                        e.product_attribute_id == term.product_term.product_attribute_id
-                    ).attribute_name
+                    (
+                      store.attributes.find(
+                        (e) =>
+                          e.product_attribute_id == term.product_term.product_attribute_id
+                      ) || {}
+                    ).attribute_name || ""
                   }}
                 </option>
                 <option
                   :value="opt.product_term_id"
-                  v-for="opt in useAttrsAndVariations().attributes.find(
-                    (e) =>
-                      e.product_attribute_id == term.product_term.product_attribute_id
-                  ).product_terms"
+                  v-for="opt in (
+                    store.attributes.find(
+                      (e) =>
+                        e.product_attribute_id == term.product_term.product_attribute_id
+                    ) || {}
+                  ).product_terms || []"
                 >
                   {{ opt.term_name }}
                 </option>
@@ -108,8 +118,11 @@
 
 <script setup>
 import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
-await useAttrsAndVariations().fetchAttributes();
-await useAttrsAndVariations().fetchVariations();
+
+const store = useAttrsAndVariations()
+
+await store.fetchAttributes();
+await store.fetchVariations();
 
 const addedType = ref(1);
 const errorMessage = ref(null);
@@ -121,9 +134,17 @@ const variationHandle = () => {
   }
 };
 
+const isAttributeExists = (attributeId) => {
+  return !!store.attributes.find(
+    (e) => e.product_attribute_id === attributeId
+  );
+};
+
 const createOneVariation = async () => {
   // Öncelikle, useForVariation değeri 1 olan herhangi bir attribute olup olmadığını kontrol edin.
-  const hasAttributesForVariation = useAttrsAndVariations().attributes.some(attribute => attribute.useForVariation == 1);
+  const hasAttributesForVariation = store.attributes.some(
+    (attribute) => attribute.useForVariation == 1
+  );
 
   // Eğer hiç attribute yoksa, fonksiyonu burada sonlandırın.
   if (!hasAttributesForVariation) {
@@ -157,7 +178,7 @@ const createOneVariation = async () => {
     // Şimdi, yeni oluşturulan varyasyon için şablon term'leri oluşturalım:
     const createdVariation = data.value.variation;
     createdVariation.terms = [];
-    useAttrsAndVariations().attributes.forEach((attribute) => {
+    store.attributes.forEach((attribute) => {
       if (attribute.useForVariation == 0) {
         return;
       }
@@ -172,13 +193,17 @@ const createOneVariation = async () => {
       createdVariation.terms.push(templateTerm);
     });
 
+    // createdVariation.terms'i product_attribute_id'ye göre sıralayın
+    createdVariation.terms.sort(
+      (a, b) => a.product_term.product_attribute_id - b.product_term.product_attribute_id
+    );
+
     // Eğer term'ler oluşturulduysa, varyasyonu listeye ekleyin.
     if (createdVariation.terms.length > 0) {
-      useAttrsAndVariations().variations.unshift(createdVariation);
+      store.variations.unshift(createdVariation);
     }
   }
 };
-
 
 const loadingVariationUpdate = ref(false);
 const saveVariations = async () => {
@@ -194,7 +219,7 @@ const saveVariations = async () => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(useAttrsAndVariations().variations),
+    body: JSON.stringify(store.variations),
     cache: false,
   });
   loadingVariationUpdate.value = pending3.value;
@@ -202,7 +227,7 @@ const saveVariations = async () => {
   if (error3.value == null) {
     console.log(data3.value);
 
-    await useAttrsAndVariations().fetchVariations();
+    await store.fetchVariations();
     errorMessage.value = null;
   } else {
     errorMessage.value = error3.value.data.message;
@@ -210,14 +235,14 @@ const saveVariations = async () => {
 };
 
 const findValueInAttrs = (data, product_term_id, attribute_id, attribute_name) => {
-  const term_name = data
-    .find((e) => e.product_attribute_id == attribute_id)
-    .product_terms.find((d) => d.product_term_id == product_term_id)?.term_name;
+  const attribute = data.find((e) => e.product_attribute_id == attribute_id);
 
-  return term_name
-    ? term_name
-    : "Herhangi Bir " +
-        data.find((e) => e.product_attribute_id == attribute_id).attribute_name;
+  // Eğer belirli bir attribute_id'ye sahip öğe bulunmazsa, hemen bir default değer döndürelim.
+  if (!attribute) return `Herhangi Bir ${attribute_name}`;
+
+  const term = attribute.product_terms?.find((d) => d.product_term_id == product_term_id);
+
+  return term?.term_name || `Herhangi Bir ${attribute.attribute_name}`;
 };
 
 const deleteVariation = async (id) => {
@@ -230,6 +255,6 @@ const deleteVariation = async (id) => {
     method: "DELETE",
   });
 
-  await useAttrsAndVariations().deleteVariation(id);
+  await store.deleteVariation(id);
 };
 </script>

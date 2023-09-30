@@ -62,6 +62,8 @@
         <UiButtonsBaseButton color="secondary" class="px-6">Yayınla</UiButtonsBaseButton>
       </div>
     </div>
+
+    <AdminDeneme></AdminDeneme>
   </div>
 </template>
 

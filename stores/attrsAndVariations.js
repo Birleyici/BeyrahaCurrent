@@ -9,59 +9,46 @@ export const useAttrsAndVariations = defineStore({
     }),
 
     actions: {
-
         async fetchVariations() {
-
-            const { data: variations, pending, refresh, error } = await useJsonPlaceholderData(
-                "/products/1/variations",
-                {
-                    cache: false,
-                }
-            );
-
-            // Eğer variations verisi başarıyla alındıysa ve hata yoksa:
+            const { data: variations, pending, refresh, error } = await useJsonPlaceholderData("/products/1/variations", {
+                cache: false,
+            });
+        
             if (!error.value) {
-                // Her bir varyasyon için:
                 variations.value.variations.forEach((variation) => {
-                    // Eğer bu varyasyonun terms dizisi attributes dizisinin uzunluğundan daha kısa ise:
                     if (!variation.terms || variation.terms.length < this.attributes.length) {
-                        // Her bir özellik (attribute) için kontrol edelim:
+                        let missingTerms = [];
+        
                         this.attributes.forEach((attribute) => {
-
-                            if(attribute.useForVariation==0){
+                            if (attribute.useForVariation == 0) {
                                 return;
                             }
-
-                            console.log("buraya geldi")
-
-
-                            // Eğer bu attribute için bir term zaten eklenmemişse:
-                            if (
-                                !variation.terms.some(
-                                    (term) =>
-                                        term.product_term.product_attribute_id === attribute.product_attribute_id
-                                )
-                            ) {
-                                // Şablon term'i oluşturun:
+        
+                            if (!variation.terms.some((term) => term.product_term.product_attribute_id === attribute.product_attribute_id)) {
                                 const templateTerm = {
                                     product_variation_id: variation.id,
                                     useForVariation: attribute.useForVariation,
-                                    product_term_id: "null", // Bu değeri null olarak bırakıyoruz çünkü henüz bir term seçilmedi.
+                                    product_term_id: "null",
                                     product_term: {
                                         product_attribute_id: attribute.product_attribute_id,
-                                        term_id: null, // Bu değeri de null olarak bırakıyoruz.
+                                        term_id: null,
                                     },
                                 };
-                                // Bu şablon term'i varyasyonun terms dizisine ekleyin:
-                                variation.terms.push(templateTerm);
+                                missingTerms.push(templateTerm);
                             }
                         });
+        
+                        variation.terms = missingTerms.concat(variation.terms);
                     }
+        
+                    // Gerçek ve şablon term'lerini product_attribute_id'ye göre sıralayın
+                    variation.terms.sort((a, b) => a.product_term.product_attribute_id - b.product_term.product_attribute_id);
                 });
             }
-
-            this.variations = variations.value.variations
+        
+            this.variations = variations.value.variations;
         },
+                
 
         async fetchAttributes() {
 

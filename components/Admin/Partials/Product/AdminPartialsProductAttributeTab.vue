@@ -4,7 +4,7 @@
       <Select2 class="w-full" v-model="attrId" :options="options" />
       <UiButtonsBaseButton @click="addAttr()" color="secondary">Ekle</UiButtonsBaseButton>
     </div>
-    <div v-for="item in useAttrsAndVariations().attributes" class="my-4">
+    <div v-for="item in useAttrsAndVariations().attributes" :key="item.attribute_id" class="my-4">
       <UiAccordion
         @is-delete="deleteAttr(item.product_attribute_id)"
         :isOpen="item.isOpen"
@@ -60,19 +60,20 @@
       v-if="useAttrsAndVariations().attributes.length > 0"
       class="flex justify-end mt-4"
     >
-      <UiButtonsBaseButton :loading="loadingSaveAttrs" @click="saveAttrs()" color="secondary"
+      <UiButtonsBaseButton
+        :loading="loadingSaveAttrs"
+        @click="saveAttrs()"
+        color="secondary"
         >Nitelikleri kaydet</UiButtonsBaseButton
       >
-    </div> 
-
+    </div>
   </div>
 </template>
 
 <script setup>
-import { storeToRefs } from 'pinia'
+import { storeToRefs } from "pinia";
 import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
 await useAttrsAndVariations().fetchAttributes();
-
 
 const attrId = ref("1");
 const addAttr = () => {
@@ -109,6 +110,7 @@ const addTerm = (term) => {
 };
 
 const removeTerm = async (term, terms) => {
+  console.log(terms);
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
     "/product-terms/" + term.product_term_id,
     {
@@ -143,16 +145,14 @@ const saveAttrs = async () => {
 };
 
 const deleteAttr = async (id) => {
-
-
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
     "product-attributes/" + id,
     {
       method: "DELETE",
     }
   );
-
-  useAttrsAndVariations().deleteAttr(id);
+  await useAttrsAndVariations().fetchVariations();
+  await useAttrsAndVariations().deleteAttr(id);
 };
 
 const { data: options, pending, refresh, error } = await useJsonPlaceholderData(
