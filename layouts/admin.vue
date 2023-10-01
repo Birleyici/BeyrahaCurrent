@@ -11,7 +11,7 @@
     </div>
 
     <div class="bg-tertiary-5 p-minimal lg:p-maximal">
-      <LazyNuxtPage></LazyNuxtPage>
+      <NuxtPage></NuxtPage>
     </div>
     <footer class="text-center py-2 text-sm">Beyraha - Admin Managemenet</footer>
   </div>
