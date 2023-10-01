@@ -19,10 +19,16 @@
         >
           <swiper-slide v-for="item in 8">
             <div class="swiper-zoom-container max-w-[500px]">
+              <NuxtImg
+                format="webp" 
+                src="/default-product.jpg"
+                sizes="100vw sm:50vw md:800px"
+              />
+              <!-- 
               <img
                 src="/default-product.jpg"
                 class="!object-cover !h-[550px] lg:!rounded-md"
-              />
+              /> -->
             </div>
           </swiper-slide>
         </swiper>
@@ -67,13 +73,12 @@
             /></swiper-slide>
           </swiper>
           <div class="flex space-x-2" v-else>
-          <SkeletonUiThumb v-for="item in 4"></SkeletonUiThumb>
+            <SkeletonUiThumb v-for="item in 4"></SkeletonUiThumb>
           </div>
         </div>
 
         <PartialsProductVariations></PartialsProductVariations>
 
-      
         <div class="flex space-x-4 lg:space-x-8">
           <div class="inline-block">
             <UiFormCounter></UiFormCounter>

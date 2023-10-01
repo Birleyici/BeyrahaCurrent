@@ -21,7 +21,9 @@ export default defineNuxtConfig({
       }
     }],
     'nuxt-icon',
-    'nuxt-api-party'
+    'nuxt-api-party',
+    '@nuxt/image',
+
 
   ],
   apiParty: {

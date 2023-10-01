@@ -6,7 +6,7 @@
         <option value="2">Tüm niteliklerden varyasyonlar oluştur</option>
         <option value="3">Tüm varyasyonları sil</option>
       </UiFormSelect>
-      <UiButtonsBaseButton @click="createOneVariation()" color="secondary"
+      <UiButtonsBaseButton @click="variationHandle()" color="secondary"
         >Git</UiButtonsBaseButton
       >
     </div>
@@ -19,6 +19,10 @@
         @change-status="(e) => (item.isOpen = e)"
         v-for="item in store.variations"
       >
+        <UiModal header="Galeri" className="lg:!max-w-[800px] max-h-[500px]" :isOpen="isOpenGalleryModal" @status-change="(e) => (isOpenGalleryModal = e)">
+        <AdminPartialsMediaModal></AdminPartialsMediaModal>
+        </UiModal>
+
         <template v-slot:header>
           <div class="flex text-sm">
             <template v-for="term in item.terms">
@@ -73,7 +77,7 @@
           </div>
 
           <div class="bg-tertiary-50 border p-2 rounded-md flex space-x-4 items-center">
-            <img src="/img-placeholder.jpg" class="w-16 rounded-md" alt="" />
+            <img @click="isOpenGalleryModal=true" src="/img-placeholder.jpg" class="cursor-pointer w-16 rounded-md" alt="" />
             <p class="text-sm text-center">Görsel seçilmedi...</p>
           </div>
           <div></div>
@@ -119,8 +123,8 @@
 <script setup>
 import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
 
-const store = useAttrsAndVariations()
-
+const store = useAttrsAndVariations();
+const isOpenGalleryModal = ref(false)
 await store.fetchAttributes();
 await store.fetchVariations();
 
@@ -132,12 +136,16 @@ const variationHandle = () => {
   if (addedType.value == 1) {
     createOneVariation();
   }
+  if (addedType.value == 2) {
+    createAllVariation();
+  }
+  if (addedType.value == 3) {
+    deleteAllVariations();
+  }
 };
 
 const isAttributeExists = (attributeId) => {
-  return !!store.attributes.find(
-    (e) => e.product_attribute_id === attributeId
-  );
+  return !!store.attributes.find((e) => e.product_attribute_id === attributeId);
 };
 
 const createOneVariation = async () => {
@@ -205,6 +213,62 @@ const createOneVariation = async () => {
   }
 };
 
+async function createAllVariation() {
+  // Tüm nitelikleri ve bu niteliklere ait termleri alalım.
+  const attributesWithTerms = store.attributes.filter(
+    (attribute) => attribute.product_terms && attribute.product_terms.length > 0
+  );
+
+  // Tüm kombinasyonları oluşturmak için bir yardımcı fonksiyon
+  function generateCombinations(arrays) {
+    return arrays.reduce(
+      (acc, curr) => acc.map((a) => curr.map((c) => a.concat([c]))).flat(),
+      [[]]
+    );
+  }
+
+  // Tüm termleri bir diziye alalım.
+  const termsArrays = attributesWithTerms.map((attribute) =>
+    attribute.product_terms.map((term) => term.product_term_id)
+  );
+
+  // Tüm kombinasyonları oluşturalım.
+  const allCombinations = generateCombinations(termsArrays);
+
+  // Oluşturulan kombinasyonları kullanarak varyasyonları oluşturalım.
+  const allVariations = allCombinations.map((combination) => ({
+    isOpen: false,
+    price: null,
+    sale_price: null,
+    coast: null,
+    stockCode: "",
+    stockAmount: 0,
+    isStockManagement: false,
+    product_id: 1,
+    terms: combination.map((termId, index) => ({
+      product_variation_id: null, // Bu değer varyasyon oluşturulduktan sonra atanacak.
+      product_term_id: termId,
+      product_term: {
+        product_attribute_id: attributesWithTerms[index].product_attribute_id,
+        term_id: termId,
+      },
+    })),
+  }));
+
+  const { data, pending, refresh, error } = await useJsonPlaceholderData("/variations", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(allVariations),
+    cache: false,
+  });
+
+  if (error.data == null) {
+    await store.fetchVariations();
+  }
+}
+
 const loadingVariationUpdate = ref(false);
 const saveVariations = async () => {
   loadingVariationUpdate.value = true;
@@ -256,5 +320,16 @@ const deleteVariation = async (id) => {
   });
 
   await store.deleteVariation(id);
+};
+
+const deleteAllVariations = async (productId) => {
+  const { data, pending, refresh, error } = await useJsonPlaceholderData(
+    "products/1/variations/",
+    {
+      method: "DELETE",
+    }
+  );
+
+  await store.fetchVariations();
 };
 </script>
