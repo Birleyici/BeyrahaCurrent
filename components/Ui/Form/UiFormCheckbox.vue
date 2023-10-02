@@ -1,8 +1,8 @@
 <template>
-  <div class="items-center">
+  <div class="items-center" :class="[absolute && 'relative']">
     <input
-      :checked="isChecked"
-      @change="onChange"
+      :checked="modelValueIsArray ? modelValue.includes(value) : modelValue == value"
+      @change="onChange($event)"
       :name="name"
       type="checkbox"
       class="hidden"
@@ -11,12 +11,12 @@
     <label
       :for="id"
       class="flex items-center space-x-2 cursor-pointer"
-      :class="labelClass"
+      :class="[labelClass, absolute && '!space-x-0']"
     >
-      <div>
+      <div :class="absolute && 'absolute top-2 left-2'">
         <span class="block w-5 h-5 border-2 border-gray-300 rounded-md relative">
           <Icon
-            v-if="isChecked"
+            v-if="modelValueIsArray ? modelValue.includes(value) : modelValue == value"
             name="material-symbols:fitbit-check-small-rounded"
             class="text-white w-5 h-5 absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2"
           ></Icon>
@@ -28,24 +28,35 @@
 </template>
 
 <script setup>
-const { name, id, modelValue, value, labelClass } = defineProps([
+const { name, id, modelValue, value, labelClass, absolute } = defineProps([
   "name",
   "id",
   "modelValue",
   "value",
   "labelClass",
+  "absolute",
 ]);
+
 const emit = defineEmits(["update:modelValue"]);
 
-const isChecked = ref(modelValue == value);
+const modelValueIsArray = Array.isArray(modelValue);
 
-const onChange = () => {
-  if (isChecked.value) {
-    emit("update:modelValue", false);
+const onChange = (event) => {
+  if (modelValueIsArray) {
+    const index = modelValue.indexOf(value);
+    if (index > -1) {
+      modelValue.splice(index, 1);
+    } else {
+      modelValue.push(value);
+    }
+    emit("update:modelValue", [...modelValue]);
   } else {
-    emit("update:modelValue", value);
+    if (event.target.checked) {
+      emit("update:modelValue", value);
+    } else {
+      emit("update:modelValue", null);
+    }
   }
-  isChecked.value = !isChecked.value;
 };
 </script>
 

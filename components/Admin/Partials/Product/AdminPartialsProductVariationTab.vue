@@ -19,8 +19,16 @@
         @change-status="(e) => (item.isOpen = e)"
         v-for="item in store.variations"
       >
-        <UiModal header="Galeri" className="lg:!max-w-[800px] max-h-[500px]" :isOpen="isOpenGalleryModal" @status-change="(e) => (isOpenGalleryModal = e)">
-        <AdminPartialsMediaModal></AdminPartialsMediaModal>
+        <UiModal
+          header="Galeri"
+          className="lg:!max-w-[800px] max-h-[500px]"
+          :isOpen="isOpenGalleryModal"
+          @status-change="(e) => (isOpenGalleryModal = e)"
+        >
+          <AdminPartialsMediaModal
+            :selecteds="item.variation_image"
+            @selecteds="(e) => (item.variation_image = e)"
+          ></AdminPartialsMediaModal>
         </UiModal>
 
         <template v-slot:header>
@@ -76,9 +84,29 @@
             </template>
           </div>
 
-          <div class="bg-tertiary-50 border p-2 rounded-md flex space-x-4 items-center">
-            <img @click="isOpenGalleryModal=true" src="/img-placeholder.jpg" class="cursor-pointer w-16 rounded-md" alt="" />
-            <p class="text-sm text-center">Görsel seçilmedi...</p>
+          <div class="inline-block">
+            <div
+              class="bg-tertiary-50 border p-2 rounded-md inline-block space-x-4 items-center"
+              :class="!item.variation_image && 'flex'"
+            >
+              <NuxtImg
+                v-if="item.variation_image"
+                @click="isOpenGalleryModal = true"
+                :src="item.variation_image"
+                class="cursor-pointer w-16 rounded-md"
+                alt=""
+              />
+              <img
+                @click="isOpenGalleryModal = true"
+                v-else
+                src="/img-placeholder.jpg"
+                alt=""
+                class="cursor-pointer w-16 rounded-md"
+              />
+              <p v-if="!item.variation_image" class="text-sm text-center">
+                Görsel seçilmedi...
+              </p>
+            </div>
           </div>
           <div></div>
 
@@ -93,7 +121,7 @@
           <div class="grid gap-4">
             <UiFormCheckbox
               v-model="item.isStockManagement"
-              id="stock"
+              :id="item.id"
               name="stock"
               :value="true"
               >Stok yönetimini etkinleştir</UiFormCheckbox
@@ -124,7 +152,7 @@
 import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
 
 const store = useAttrsAndVariations();
-const isOpenGalleryModal = ref(false)
+const isOpenGalleryModal = ref(false);
 await store.fetchAttributes();
 await store.fetchVariations();
 
