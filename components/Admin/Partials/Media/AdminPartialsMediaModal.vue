@@ -32,12 +32,14 @@
           v-for="img in images.data"
         >
           <div>
+
             <UiFormCheckbox
               v-model="selectedImage"
               :id="Math.random()"
-              :value="img.path"
+              :value="JSON.stringify({path:img.path, id:img.id})"
               :absolute="true"
             >
+          
               <NuxtImg
                 height="200"
                 :src="img.path"
@@ -149,6 +151,7 @@ const saveImagePaths = async (paths) => {
 };
 
 watch(selectedImage, () => {
+  console.log(selectedImage)
   emit("selecteds", selectedImage.value);
 });
 </script>

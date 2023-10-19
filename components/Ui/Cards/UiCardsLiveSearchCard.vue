@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-md pt-minimal w-full">
+    <div class="rounded-md pt-minimal w-full ">
           <div
             @click="isOpen = !isOpen"
             :class="isOpen ? 'rounded-t-md' : 'rounded-md'"
@@ -18,16 +18,37 @@
             ></Icon>
           </div>
           <div
-            :class="isOpen ? 'border-l border-r border-b max-h-[200px] p-4' : 'max-h-0'"
-            class="duration-300 bg-white rounded-b-md grid gap-2 overflow-hidden overflow-y-scroll"
-          >
-            <UiFormInput placeholder="Marka ara"></UiFormInput>
-            <UiFormCheckbox v-for="item in 12">Marka {{ item }}</UiFormCheckbox>
-          </div>
+      :class="isOpen ? 'border-l border-r border-b max-h-[200px] p-4' : 'max-h-0'"
+      class="duration-300 bg-white rounded-b-md grid gap-2 overflow-hidden overflow-y-scroll"
+    >
+      <UiFormInput v-model="searchQuery" placeholder="Marka ara"></UiFormInput>
+      <UiFormCheckbox
+        v-for="item in filteredData"
+        v-model="selecteds"
+        :id="item.id"
+        name="stock"
+        :value="item.id"
+      >{{ item.name }}</UiFormCheckbox>
+      <p class="text-sm" v-if="filteredData.length ==0">Sonuç bulunamadı...</p>
+    </div>
         </div>
 </template>
 
 <script setup>
 const isOpen = ref(true);
-const {title} = defineProps(['title'])
+const { title, data } = defineProps(['title', 'data']);
+const emit = defineEmits(['selecteds'])
+const selecteds = ref([]);
+const searchQuery = ref("");
+
+const filteredData = computed(() => {
+  if (searchQuery.value) {
+    return data.filter(item => item.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+  }
+  return data;
+});
+
+watch(selecteds, ()=>{
+  emit('selecteds', selecteds)
+})
 </script>

@@ -39,6 +39,8 @@ const { name, id, modelValue, value, labelClass, absolute } = defineProps([
 
 const emit = defineEmits(["update:modelValue"]);
 
+
+
 const modelValueIsArray = Array.isArray(modelValue);
 
 const onChange = (event) => {

@@ -20,13 +20,14 @@
         v-for="item in store.variations"
       >
         <UiModal
+          ok-button="true"
           header="Galeri"
           className="lg:!max-w-[800px] max-h-[500px]"
           :isOpen="isOpenGalleryModal"
           @status-change="(e) => (isOpenGalleryModal = e)"
         >
           <AdminPartialsMediaModal
-            :selecteds="item.variation_image"
+            :selecteds="pathParse(item.variation_image)"
             @selecteds="(e) => (item.variation_image = e)"
           ></AdminPartialsMediaModal>
         </UiModal>
@@ -87,12 +88,12 @@
           <div class="inline-block">
             <div
               class="bg-tertiary-50 border p-2 rounded-md inline-block space-x-4 items-center"
-              :class="!item.variation_image && 'flex'"
+              :class="!pathParse(item.variation_image) && 'flex'"
             >
               <NuxtImg
-                v-if="item.variation_image"
+                v-if="pathParse(item.variation_image)"
                 @click="isOpenGalleryModal = true"
-                :src="item.variation_image"
+                :src="pathParse(item.variation_image)"
                 class="cursor-pointer w-16 rounded-md"
                 alt=""
               />
@@ -103,7 +104,7 @@
                 alt=""
                 class="cursor-pointer w-16 rounded-md"
               />
-              <p v-if="!item.variation_image" class="text-sm text-center">
+              <p v-if="!pathParse(item.variation_image)" class="text-sm text-center">
                 Görsel seçilmedi...
               </p>
             </div>
@@ -158,6 +159,14 @@ await store.fetchVariations();
 
 const addedType = ref(1);
 const errorMessage = ref(null);
+
+const pathParse = (obj) => {
+  if (!obj) {
+    return null;
+  }
+
+  return JSON.parse(obj)?.path;
+};
 
 const variationHandle = () => {
   console.log(addedType.value);

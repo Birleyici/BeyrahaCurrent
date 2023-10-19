@@ -12,7 +12,8 @@
       <div class="my-minimal overflow-y-auto" :class="className">
         <slot></slot>
       </div>
-    <div class="flex justify-end">
+      
+    <div v-if="okButton"  class="flex justify-end">
       <UiButtonsBaseButton
         @click="$emit('status-change', false)"
         color="secondary"
@@ -30,5 +31,5 @@
 </template>
 
 <script setup>
-const { header, isOpen, className } = defineProps(["isOpen", "className", "header"]);
+const { header, isOpen, className, okButton } = defineProps(["isOpen", "className", "header", "okButton"]);
 </script>
