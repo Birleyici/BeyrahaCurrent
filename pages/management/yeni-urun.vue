@@ -18,7 +18,7 @@
   <div class="lg:grid space-y-4 lg:space-y-0 lg:grid-cols-3 gap-10">
     <div class="col-span-2 space-y-4">
       <UiFormInput
-        v-model="product.title"
+        v-model="product.name"
         placeholder="Ürün adı"
         class="font-medium"
       ></UiFormInput>
@@ -75,7 +75,7 @@
     </div>
     <div class="col-span-1 flex flex-col-reverse lg:block">
       <div class="bg-tertiary-100 border rounded-md p-minimal space-y-4">
-        <UiButtonsBaseButton color="secondary" class="px-6">Yayınla</UiButtonsBaseButton>
+        <UiButtonsBaseButton :loading="product.loading" @click="product.saveProduct" color="secondary" class="px-6">Yayınla</UiButtonsBaseButton>
       </div>
 
       <div class="bg-tertiary-100 rounded-md p-minimal border space-y-4 my-minimal">
@@ -127,6 +127,7 @@
 import { useNewProductStore } from "~/stores/newProduct.js";
 const product = useNewProductStore();
 
+
 import {
   LazyAdminPartialsProductGeneralTab,
   LazyAdminPartialsProductAttributeTab,
@@ -153,17 +154,7 @@ const { data: categories, pending, error, refresh } = await useJsonPlaceholderDa
   }
 );
 
-const saveProduct = async ()=>{
-  const { data, pending, refresh, error } = await useJsonPlaceholderData("/products", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(product),
-      cache: false,
-    });
-    console.log(data);
-}
+
 
 watch(
   () => product.selectedImages,

@@ -11,9 +11,13 @@
           v-model="form.password"
           placeholder="Şifre"
         ></UiFormPasswordInput>
-        <UiButtonsBaseButton :loading="loading" @click.stop="login" color="secondary"
+        <UiButtonsBaseButton
+          :loading="loading"
+          @click.stop="mySignInHandler({ ...form })"
+          color="secondary"
           >Giriş</UiButtonsBaseButton
         >
+        <p v-if="errorStatus" class="text-red-500 text-sm">Giriş bilgileri hatalı</p>
       </div>
     </div>
   </div>
@@ -23,26 +27,53 @@
 definePageMeta({
   layout: "empty",
 });
+const { status, data, signIn, signOut } = useAuth();
 
+console.log(data)
 const form = reactive({
   password: null,
   email: null,
 });
 
+const errorStatus = ref(false);
 const loading = ref(false);
-const login = async () => {
+
+const mySignInHandler = async ({ email, password }) => {
   loading.value = true;
-  const { data, pending, refresh, error } = await useJsonPlaceholderData("admin-login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(form),
-    cache: false,
+
+  const { error, url } = await signIn("credentials", {
+    email,
+    password,
+    redirect: false,
+    callbackUrl: "/management/dashboard",
   });
-  loading.value = pending;
-  if (error.value == null) {
-    await navigateTo("/management/dashboard");
+
+  loading.value = false;
+
+  if (error) {
+    errorStatus.value = true;
+  } else {
+    errorStatus.value = false;
+
+    // No error, continue with the sign in, e.g., by following the returned redirect:
+    return navigateTo(url, { external: true });
   }
 };
+
+// const loading = ref(false);
+// const login = async () => {
+//   loading.value = true;
+//   const { data, pending, refresh, error } = await useJsonPlaceholderData("admin-login", {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json",
+//     },
+//     body: JSON.stringify(form),
+//     cache: false,
+//   });
+//   loading.value = pending;
+//   if (error.value == null) {
+//     await navigateTo("/management/dashboard");
+//   }
+// };
 </script>

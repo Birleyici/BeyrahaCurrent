@@ -25,9 +25,13 @@ export default defineNuxtConfig({
     'nuxt-icon',
     'nuxt-api-party',
     '@nuxt/image',
-
+    '@sidebase/nuxt-auth'
 
   ],
+  auth: {
+    globalAppMiddleware: false,
+    
+   },
   apiParty: {
     endpoints: {
       jsonPlaceholder: {

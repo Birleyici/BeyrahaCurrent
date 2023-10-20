@@ -360,10 +360,12 @@ const deleteVariation = async (id) => {
 };
 
 const deleteAllVariations = async (productId) => {
+
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
     "products/1/variations/",
     {
       method: "DELETE",
+      cache:false
     }
   );
 

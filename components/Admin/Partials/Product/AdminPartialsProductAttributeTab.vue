@@ -71,14 +71,15 @@
 </template>
 
 <script setup>
-import { storeToRefs } from "pinia";
+import { useNewProductStore } from "~/stores/newProduct.js";
+const product = useNewProductStore();
+
 import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
-await useAttrsAndVariations().fetchAttributes();
+await useAttrsAndVariations().fetchAttributes(product.id);
 
 const attrId = ref("1");
 const addAttr = () => {
   const item = options.value.find((option) => option.id === parseInt(attrId.value));
-
   // attributes içerisinde bu attribute_id'ye sahip bir öğe olup olmadığını kontrol ediyoruz.
   const isAttributeExists = useAttrsAndVariations().attributes.some(
     (attr) => attr.attribute_id === item.id
@@ -126,9 +127,16 @@ const removeTerm = async (term, terms) => {
 
 const loadingSaveAttrs = ref(false);
 const saveAttrs = async () => {
+   
+  if(product.id==null){
+
+    await product.saveProduct()
+
+  }
+
   loadingSaveAttrs.value = true;
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
-    "/products/1/attributes",
+    "/products/"+ product.id +"/attributes",
     {
       method: "POST",
       headers: {
@@ -140,9 +148,7 @@ const saveAttrs = async () => {
   );
   loadingSaveAttrs.value = pending.value;
 
-  console.log(data.value)
-
-  await useAttrsAndVariations().fetchAttributes();
+  await useAttrsAndVariations().fetchAttributes(product.id);
   await useAttrsAndVariations().fetchVariations();
 };
 

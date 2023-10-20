@@ -50,14 +50,17 @@ export const useAttrsAndVariations = defineStore({
         },
                 
 
-        async fetchAttributes() {
+        async fetchAttributes(id) {
+
+            if(id==null)
+            return
 
             const {
                 data,
                 pending,
                 refresh,
                 error,
-            } = await useJsonPlaceholderData("products/1/attributes", {
+            } = await useJsonPlaceholderData("products/"+ id +"/attributes", {
                 cache: false,
 
             });
