@@ -37,11 +37,6 @@ export default defineNuxtConfig({
       jsonPlaceholder: {
         url: process.env.API_BASE_URL,
         cookies: true,
-
-        // // Global headers sent with each request
-        // headers: {
-        //   Authorization: `Bearer ${process.env.JSON_PLACEHOLDER_API_TOKEN}`
-        // }
       }
     }
   },

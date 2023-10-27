@@ -1,7 +1,9 @@
-
 import { NuxtAuthHandler } from '#auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+
+
 export default NuxtAuthHandler({
+  secret: 'gS2v4jn3Rc2qkV5u36vbaW6iYL1805YVIHh2VtiP8HVvXlbM0VKv6MRn4VOKg7A3',
   pages: {
     // Change the default behavior to use `/login` as the path for the sign-in page
     signIn: '../../management/login'
@@ -9,7 +11,10 @@ export default NuxtAuthHandler({
   callbacks: {
     // Callback when the JWT is created / updated, see https://next-auth.js.org/configuration/callbacks#jwt-callback
     jwt: async ({ token, user }) => {
+
+
       const isSignIn = user ? true : false;
+
       if (isSignIn) {
         token.jwt = user ? user.access_token || '' : '';
         token.id = user ? user.id || '' : '';
@@ -19,6 +24,7 @@ export default NuxtAuthHandler({
     },
     // Callback whenever session is checked, see https://next-auth.js.org/configuration/callbacks#session-callback
     session: async ({ session, token }) => {
+
       session.role = token.role;
       session.uid = token.id;
       return Promise.resolve(session);
@@ -37,9 +43,8 @@ export default NuxtAuthHandler({
         password: { label: "Password", type: "password" }
       },
       async authorize(credentials, req) {
-
         try {
-          const response = await $jsonPlaceholder("admin-login", {
+          const response = await $jsonPlaceholder("auth/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
@@ -48,8 +53,7 @@ export default NuxtAuthHandler({
             cache: false,
           });
 
-          console.log(response)
-          return response.user
+          return response
 
         }
         catch (error) {
@@ -61,5 +65,5 @@ export default NuxtAuthHandler({
 
       }
     })
-  ]
+  ],
 })

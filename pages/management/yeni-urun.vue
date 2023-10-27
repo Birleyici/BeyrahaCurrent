@@ -1,4 +1,6 @@
 <template>
+
+  
   <!-- Ürün resimleri Modal -->
   <UiModal
     :okButton="true"
@@ -126,6 +128,9 @@
 <script setup>
 import { useNewProductStore } from "~/stores/newProduct.js";
 const product = useNewProductStore();
+
+const headers = useRequestHeaders(['cookie']) 
+const { data: token } = await useFetch('/api/token', { headers })
 
 
 import {

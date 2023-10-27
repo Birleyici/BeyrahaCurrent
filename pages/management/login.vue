@@ -1,4 +1,8 @@
 <template>
+
+
+
+
   <div class="w-screen h-screen bg-tertiary-500">
     <Icon name="mdi:lock" class="w-72 h-72 opacity-20"></Icon>
     <div
@@ -26,10 +30,13 @@
 <script setup>
 definePageMeta({
   layout: "empty",
+  auth: {
+    unauthenticatedOnly: true,
+  },
 });
-const { status, data, signIn, signOut } = useAuth();
+const { status, data, signIn, signOut, lastRefreshedAt } = useAuth();
 
-console.log(data)
+
 const form = reactive({
   password: null,
   email: null,
@@ -49,6 +56,8 @@ const mySignInHandler = async ({ email, password }) => {
   });
 
   loading.value = false;
+
+  console.log(error)
 
   if (error) {
     errorStatus.value = true;
