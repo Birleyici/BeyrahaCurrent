@@ -27,7 +27,7 @@
           @status-change="(e) => (isOpenGalleryModal = e)"
         >
           <AdminPartialsMediaModal
-            :selecteds="pathParse(item.variation_image)"
+            :selecteds="item.variation_image"
             @selecteds="(e) => (item.variation_image = e)"
           ></AdminPartialsMediaModal>
         </UiModal>
@@ -88,12 +88,12 @@
           <div class="inline-block">
             <div
               class="bg-tertiary-50 border p-2 rounded-md inline-block space-x-4 items-center"
-              :class="!pathParse(item.variation_image) && 'flex'"
+              :class="!item.variation_image && 'flex'"
             >
               <NuxtImg
-                v-if="pathParse(item.variation_image)"
+                v-if="item.variation_image"
                 @click="isOpenGalleryModal = true"
-                :src="pathParse(item.variation_image)"
+                :src="item.variation_image.path"
                 class="cursor-pointer w-16 rounded-md"
                 alt=""
               />
@@ -104,7 +104,7 @@
                 alt=""
                 class="cursor-pointer w-16 rounded-md"
               />
-              <p v-if="!pathParse(item.variation_image)" class="text-sm text-center">
+              <p v-if="!item.variation_image" class="text-sm text-center">
                 Görsel seçilmedi...
               </p>
             </div>
@@ -151,25 +151,19 @@
 
 <script setup>
 import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
+let productId = useRoute().params.id;
 
 const store = useAttrsAndVariations();
 const isOpenGalleryModal = ref(false);
-await store.fetchAttributes();
-await store.fetchVariations();
+await store.fetchAttributes(productId);
+await store.fetchVariations(productId);
 
 const addedType = ref(1);
 const errorMessage = ref(null);
 
-const pathParse = (obj) => {
-  if (!obj) {
-    return null;
-  }
 
-  return JSON.parse(obj)?.path;
-};
 
 const variationHandle = () => {
-  console.log(addedType.value);
   if (addedType.value == 1) {
     createOneVariation();
   }
@@ -186,6 +180,7 @@ const isAttributeExists = (attributeId) => {
 };
 
 const createOneVariation = async () => {
+
   // Öncelikle, useForVariation değeri 1 olan herhangi bir attribute olup olmadığını kontrol edin.
   const hasAttributesForVariation = store.attributes.some(
     (attribute) => attribute.useForVariation == 1
@@ -204,24 +199,24 @@ const createOneVariation = async () => {
     stockCode: "",
     stockAmount: 0,
     isStockManagement: false,
-    product_id: 1,
+    product_id: productId,
     terms: [],
   };
 
-  const { data, pending, refresh, error } = await useJsonPlaceholderData("/variations", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(newVariation),
-    cache: false,
-  });
 
-  console.log(data);
+  try {
+    const { data, pending, refresh, error } = await useJsonPlaceholderData("/variations", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newVariation),
+      cache: false,
+    });
 
-  if (error.value == null) {
-    // Şimdi, yeni oluşturulan varyasyon için şablon term'leri oluşturalım:
-    const createdVariation = data.value.variation;
+ 
+  // Şimdi, yeni oluşturulan varyasyon için şablon term'leri oluşturalım:
+  const createdVariation = data.value.variation;
     createdVariation.terms = [];
     store.attributes.forEach((attribute) => {
       if (attribute.useForVariation == 0) {
@@ -247,7 +242,14 @@ const createOneVariation = async () => {
     if (createdVariation.terms.length > 0) {
       store.variations.unshift(createdVariation);
     }
+
+  } catch (e) {
+
+    console.error("Beklenmedik bir hata oluştu:", e);
   }
+
+
+ 
 };
 
 async function createAllVariation() {
@@ -255,6 +257,8 @@ async function createAllVariation() {
   const attributesWithTerms = store.attributes.filter(
     (attribute) => attribute.product_terms && attribute.product_terms.length > 0
   );
+
+  
 
   // Tüm kombinasyonları oluşturmak için bir yardımcı fonksiyon
   function generateCombinations(arrays) {
@@ -272,6 +276,8 @@ async function createAllVariation() {
   // Tüm kombinasyonları oluşturalım.
   const allCombinations = generateCombinations(termsArrays);
 
+
+
   // Oluşturulan kombinasyonları kullanarak varyasyonları oluşturalım.
   const allVariations = allCombinations.map((combination) => ({
     isOpen: false,
@@ -281,7 +287,7 @@ async function createAllVariation() {
     stockCode: "",
     stockAmount: 0,
     isStockManagement: false,
-    product_id: 1,
+    product_id: productId,
     terms: combination.map((termId, index) => ({
       product_variation_id: null, // Bu değer varyasyon oluşturulduktan sonra atanacak.
       product_term_id: termId,
@@ -292,6 +298,7 @@ async function createAllVariation() {
     })),
   }));
 
+
   const { data, pending, refresh, error } = await useJsonPlaceholderData("/variations", {
     method: "POST",
     headers: {
@@ -301,8 +308,9 @@ async function createAllVariation() {
     cache: false,
   });
 
+
   if (error.data == null) {
-    await store.fetchVariations();
+    await store.fetchVariations(productId);
   }
 }
 
@@ -315,7 +323,7 @@ const saveVariations = async () => {
     pending: pending3,
     refresh: refresh3,
     error: error3,
-  } = await useJsonPlaceholderData("/products/1/variations/update", {
+  } = await useJsonPlaceholderData("products/" + productId + "/variations/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -326,9 +334,7 @@ const saveVariations = async () => {
   loadingVariationUpdate.value = pending3.value;
 
   if (error3.value == null) {
-    console.log(data3.value);
-
-    await store.fetchVariations();
+    await store.fetchVariations(productId);
     errorMessage.value = null;
   } else {
     errorMessage.value = error3.value.data.message;
@@ -352,23 +358,25 @@ const deleteVariation = async (id) => {
     pending: pending4,
     refresh: refresh4,
     error: error4,
-  } = await useJsonPlaceholderData("variations/" + id, {
+  } = await useJsonPlaceholderData(  "variations/" + id, {
     method: "DELETE",
+    cache:false
   });
 
   await store.deleteVariation(id);
+  await  store.fetchVariations(productId);
 };
 
 const deleteAllVariations = async (productId) => {
-
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
-    "products/1/variations/",
+  "products/"+productId+"/variations/",
     {
       method: "DELETE",
-      cache:false
+      cache: false,
+  
     }
   );
 
-  await store.fetchVariations();
+  await store.fetchVariations(productId);
 };
 </script>

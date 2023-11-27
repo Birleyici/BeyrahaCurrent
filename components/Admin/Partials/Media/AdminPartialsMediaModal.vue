@@ -26,27 +26,26 @@
         >
           <Icon name="mdi:loading" class="w-12 h-12 animate-spin"></Icon>
         </div>
+
         <div
           class="w-32 h-32 border rounded-md overflow-hidden"
           :key="Math.random()"
           v-for="img in images.data"
         >
           <div>
-
-            <UiFormCheckbox
+            <UiFormImageCheckbox
               v-model="selectedImage"
               :id="Math.random()"
-              :value="JSON.stringify({path:img.path, id:img.id})"
+              :value="{ path: img.path, id: img.id }"
               :absolute="true"
             >
-          
               <NuxtImg
                 height="200"
                 :src="img.path"
                 class="object-cover w-32 h-32"
                 alt=""
               />
-            </UiFormCheckbox>
+            </UiFormImageCheckbox>
           </div>
         </div>
       </div>
@@ -68,8 +67,8 @@
         <UiButtonsBaseButton class="w-10 bg-primary-400" color="slate">
           {{ images.current_page }}
         </UiButtonsBaseButton>
-
         <!-- Next button -->
+
         <UiButtonsBaseButton
           :disabled="!images.next_page_url"
           @click="changePage(images.current_page + 1)"
@@ -88,6 +87,9 @@ const query = reactive({
   page: 1,
 });
 
+const headers = useRequestHeaders(["cookie"]);
+const { data: token } = await useFetch("/api/token", { headers });
+
 const emit = defineEmits(["selecteds"]);
 const { selecteds } = defineProps(["selecteds"]);
 
@@ -98,7 +100,7 @@ const { data: images, pending, error, refresh } = await useJsonPlaceholderData(
   {
     method: "GET",
     query,
-    cache: false,
+    cache: "no-cache",
   }
 );
 
@@ -123,7 +125,10 @@ const uploadImages = async (e) => {
     query: {
       vendorId: 1,
     },
-    cache: false,
+    cache: "no-cache",
+    headers: {
+      Authorization: `Bearer ${token.value.jwt}`,
+    },
   });
 
   if (error.value == null) {
@@ -133,17 +138,17 @@ const uploadImages = async (e) => {
 };
 
 const saveImagePaths = async (paths) => {
-  console.log(paths, "burda");
-  const {
-    data,
-    pending,
-    error,
-    refresh: refreshSavePaths,
-  } = await useJsonPlaceholderData("vendor/images", {
-    method: "POST",
-    body: paths,
-    cache: false,
-  });
+  const { data, pending, error, refresh: refreshSavePaths } = await useFetch(
+    useBaseUrl() + "vendor/images",
+    {
+      method: "POST",
+      body: paths,
+      cache: "no-cache",
+      headers: {
+        Authorization: `Bearer ${token.value.jwt}`,
+      },
+    }
+  );
 
   if (error.value == null) {
     refresh();
@@ -151,7 +156,6 @@ const saveImagePaths = async (paths) => {
 };
 
 watch(selectedImage, () => {
-  console.log(selectedImage)
   emit("selecteds", selectedImage.value);
 });
 </script>

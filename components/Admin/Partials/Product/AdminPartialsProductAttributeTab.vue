@@ -4,7 +4,11 @@
       <Select2 class="w-full" v-model="attrId" :options="options" />
       <UiButtonsBaseButton @click="addAttr()" color="secondary">Ekle</UiButtonsBaseButton>
     </div>
-    <div v-for="item in useAttrsAndVariations().attributes" :key="item.attribute_id" class="my-4">
+    <div
+      v-for="item in useAttrsAndVariations().attributes"
+      :key="item.attribute_id"
+      class="my-4"
+    >
       <UiAccordion
         @is-delete="deleteAttr(item.product_attribute_id)"
         :isOpen="item.isOpen"
@@ -75,7 +79,10 @@ import { useNewProductStore } from "~/stores/newProduct.js";
 const product = useNewProductStore();
 
 import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
-await useAttrsAndVariations().fetchAttributes(product.id);
+
+let productId = useRoute().params.id;
+
+await useAttrsAndVariations().fetchAttributes(productId);
 
 const attrId = ref("1");
 const addAttr = () => {
@@ -111,9 +118,8 @@ const addTerm = (term) => {
 };
 
 const removeTerm = async (term, terms) => {
-  console.log(terms);
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
-    "/product-terms/" + term.product_term_id,
+    "product-terms/" + term.product_term_id,
     {
       method: "DELETE",
     }
@@ -127,16 +133,13 @@ const removeTerm = async (term, terms) => {
 
 const loadingSaveAttrs = ref(false);
 const saveAttrs = async () => {
-   
-  if(product.id==null){
-
-    await product.saveProduct()
-
+  if (product.id == null) {
+    await product.saveProduct(productId);
   }
 
   loadingSaveAttrs.value = true;
   const { data, pending, refresh, error } = await useJsonPlaceholderData(
-    "/products/"+ product.id +"/attributes",
+    "products/" + product.id + "/attributes",
     {
       method: "POST",
       headers: {
@@ -148,8 +151,8 @@ const saveAttrs = async () => {
   );
   loadingSaveAttrs.value = pending.value;
 
-  await useAttrsAndVariations().fetchAttributes(product.id);
-  await useAttrsAndVariations().fetchVariations();
+  await useAttrsAndVariations().fetchAttributes(productId);
+  await useAttrsAndVariations().fetchVariations(productId);
 };
 
 const deleteAttr = async (id) => {
@@ -157,10 +160,13 @@ const deleteAttr = async (id) => {
     "product-attributes/" + id,
     {
       method: "DELETE",
+      headers: {
+        ...useMain().returnHeader(),
+      },
     }
   );
-  await useAttrsAndVariations().fetchVariations();
   await useAttrsAndVariations().deleteAttr(id);
+  await useAttrsAndVariations().fetchVariations(productId);
 };
 
 const { data: options, pending, refresh, error } = await useJsonPlaceholderData(

@@ -1,8 +1,5 @@
 <template>
 
-
-
-
   <div class="w-screen h-screen bg-tertiary-500">
     <Icon name="mdi:lock" class="w-72 h-72 opacity-20"></Icon>
     <div

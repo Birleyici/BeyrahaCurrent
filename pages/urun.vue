@@ -2,7 +2,7 @@
   <div class="lg:px-x-desktop max-w-full">
     <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
       <!-- useMain().isLoaded -->
-      <div class="col-span-3 lg:rounded-md" v-if="useMain().isLoaded">
+      <div class="col-span-3 lg:rounded-md border p-2" v-if="useMain().isLoaded">
         <swiper
           :style="{
             '--swiper-navigation-color': '#fff',
@@ -17,13 +17,9 @@
           :modules="modules"
           class="mySwiper2 max-w-[500px]"
         >
-          <swiper-slide v-for="item in 8">
+          <swiper-slide v-for="thumb in product.selectedImages">
             <div class="swiper-zoom-container max-w-[500px]">
-              <NuxtImg
-                format="webp" 
-                src="/default-product.jpg"
-                sizes="100vw sm:50vw md:800px"
-              />
+              <NuxtImg format="webp" quality="90" loading="lazy" :src="thumb.path" sizes="100vw sm:50vw md:1600px" />
               <!-- 
               <img
                 src="/default-product.jpg"
@@ -43,8 +39,8 @@
             :modules="modules"
             class="mySwiper"
           >
-            <swiper-slide v-for="item in 6"
-              ><img src="/default-product.jpg" class="h-32 rounded-md"
+            <swiper-slide v-for="thumb in product.selectedImages" class="border rounded-md overflow-hidden"
+              ><NuxtImg :src="thumb.path" format="webp" quality="90" sizes="150px"
             /></swiper-slide>
           </swiper>
         </div>
@@ -53,7 +49,7 @@
 
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
         <h1 class="text-xl font-semibold border-b border-dotted pb-2">
-          Bordo Renk Siyah İpli Deri Erkek Bileklik
+          {{ product.name }}
         </h1>
 
         <div class="my-minimal">
@@ -95,11 +91,7 @@
           <p class="font-medium">Öne çıkan bilgiler</p>
           <ul class="list-disc p-4 !pl-5 text-sm">
             <li>15 gün içerisinde ücretsiz iade</li>
-            <li>
-              – Ürünlerin özelliklerini kaybetmeden daha uzun süre kullanılabilmesi için,
-              parfüm, su, deterjan, dezenfektan gibi sıvı kimyasallardan uzak tutularak
-              kullanılması tavsiye edilir. Dikkatli kullanımda kararma yapmaz- Sağlıklı ve
-              mutlu günlerde kullanmanız dileğiyle..
+            <li v-html="product.description">
             </li>
           </ul>
         </div>
@@ -108,15 +100,9 @@
 
     <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
       <UiCardsSectionCard title="Ürün açıklaması ve özellikleri">
-        <img
-          src="/default-product.jpg"
-          class="w-full h-72 object-cover mb-4 rounded-md"
-          alt=""
-        />
-
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Natus ullam expedita
-        adipisci hic molestiae minima? Pariatur dolor quisquam id cumque? Est architecto
-        incidunt esse, magnam placeat corrupti cumque veniam atque.
+     
+ 
+        <div v-html="product.additional_info"></div>
 
         <div
           class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal"
@@ -182,6 +168,11 @@
 
 <script setup>
 import { Pagination, Zoom, FreeMode, Navigation, Thumbs } from "swiper/modules";
+
+import { useNewProductStore } from "~/stores/newProduct.js";
+useNewProductStore().getProduct(58);
+const product = useNewProductStore().$state;
+
 // import "swiper/css/zoom";
 const modules = [Pagination, Zoom, FreeMode, Navigation, Thumbs];
 const thumbsSwiper = ref(null);

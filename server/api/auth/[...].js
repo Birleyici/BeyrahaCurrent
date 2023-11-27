@@ -15,17 +15,63 @@ export default NuxtAuthHandler({
 
       const isSignIn = user ? true : false;
 
+          // Şu anki zamanı Unix zaman damgası olarak al
+          const now = Math.floor(Date.now() / 1000);
+
+          // Token bitiş zamanını 5
+          const adjustedExpiration = token.bitis;
+
       if (isSignIn) {
+
+
         token.jwt = user ? user.access_token || '' : '';
         token.id = user ? user.id || '' : '';
         token.role = user ? user.role || '' : '';
+        token.bitis = user ? user.exp || '' : '';
+
+
+      } else if(now >= adjustedExpiration) {
+
+    
+         //tokenın süresi doldu yenileme yap
+
+         try {
+          const response = await $jsonPlaceholder("auth/refresh", {
+              method: "POST",
+              headers: {
+                  "Content-Type": "application/json",
+              },
+              body: JSON.stringify({ token: token.jwt}),
+              cache: "no-cache",
+          });
+
+          token.jwt = response ? response.access_token || '' : '';
+          token.id = response ? response.id || '' : '';
+          token.role = response ? response.role || '' : '';
+          token.bitis = response ? response.exp || '' : '';
+
+          setCookie('token', token.jwt)
+
+          Promise.resolve(token);
+
       }
+      catch (error) {
+
+       return null
+
+      }
+
+      } else {
+
+        console.log("token hala geçerli")
+      }
+
       return Promise.resolve(token);
     },
     // Callback whenever session is checked, see https://next-auth.js.org/configuration/callbacks#session-callback
     session: async ({ session, token }) => {
 
-      session.role = token.role;
+        session.role = token.role;
       session.uid = token.id;
       return Promise.resolve(session);
     },
@@ -44,19 +90,20 @@ export default NuxtAuthHandler({
       },
       async authorize(credentials, req) {
         try {
-          const response = await $jsonPlaceholder("auth/login", {
+          const response = await $fetch(process.env.API_BASE_URL + "auth/login", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
             body: JSON.stringify(credentials),
-            cache: false,
+            cache: 'no-cache',
           });
-
           return response
 
         }
         catch (error) {
+          console.log(error)
+
           if (error && error.data) {
             return null
           }

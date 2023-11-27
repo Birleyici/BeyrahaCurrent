@@ -4,6 +4,12 @@ export default defineNuxtConfig({
   image: {
     dir: 'assets/images'
   },
+  //runtime public base url tanımlayacağız
+  runtimeConfig: {
+    public: {
+      apiBase: process.env.API_BASE_URL
+    }
+  },
   modules: [
     'nuxt-swiper',
     '@pinia/nuxt',
@@ -21,7 +27,7 @@ export default defineNuxtConfig({
           ital: [100]
         },
       }
-    }],
+    }], 
     'nuxt-icon',
     'nuxt-api-party',
     '@nuxt/image',
@@ -31,12 +37,14 @@ export default defineNuxtConfig({
   auth: {
     globalAppMiddleware: false,
     
+    
    },
   apiParty: {
     endpoints: {
       jsonPlaceholder: {
         url: process.env.API_BASE_URL,
         cookies: true,
+        
       }
     }
   },
@@ -48,5 +56,11 @@ export default defineNuxtConfig({
     },
   },
 
-
+  nitro: {
+    '/server/*': {
+       headers: {
+          "Access-Control-Allow-Origin": "*"
+       }
+    }
+ }
 })

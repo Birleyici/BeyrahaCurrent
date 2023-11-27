@@ -9,8 +9,8 @@ export const useAttrsAndVariations = defineStore({
     }),
 
     actions: {
-        async fetchVariations() {
-            const { data: variations, pending, refresh, error } = await useJsonPlaceholderData("/products/1/variations", {
+        async fetchVariations(id) {
+            const { data: variations, pending, refresh, error } = await useJsonPlaceholderData("products/"+id+"/variations", {
                 cache: false,
             });
         
@@ -36,16 +36,25 @@ export const useAttrsAndVariations = defineStore({
                                 };
                                 missingTerms.push(templateTerm);
                             }
+
                         });
         
                         variation.terms = missingTerms.concat(variation.terms);
+                    }
+                    
+                    if (variation.variation_image && typeof variation.variation_image === 'string') {
+                        try {
+                            variation.variation_image = JSON.parse(variation.variation_image);
+                        } catch (e) {
+                            console.error('JSON parse error:', e);
+                            // Hatalı parse işlemi için hata işleme
+                        }
                     }
         
                     // Gerçek ve şablon term'lerini product_attribute_id'ye göre sıralayın
                     variation.terms.sort((a, b) => a.product_term.product_attribute_id - b.product_term.product_attribute_id);
                 });
             }
-        
             this.variations = variations.value.variations;
         },
                 
@@ -61,7 +70,7 @@ export const useAttrsAndVariations = defineStore({
                 refresh,
                 error,
             } = await useJsonPlaceholderData("products/"+ id +"/attributes", {
-                cache: false,
+                cache: false
 
             });
 

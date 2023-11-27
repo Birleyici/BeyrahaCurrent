@@ -25,7 +25,7 @@
 
     <div class="my-minimal">
       <p class="text-secondary-500 text-3xl font-bold">
-        {{ getSelectedVariation()?.price || "0" }} TL
+        {{ getSelectedVariation()?.sale_price ? getSelectedVariation()?.sale_price : getSelectedVariation()?.price || "0" }} TL
       </p>
     </div>
   </div>
@@ -33,7 +33,7 @@
 
 <script setup>
 const { data: variations, pending, refresh, error } = await useJsonPlaceholderData(
-  "/page/products/1/variations",
+  "/page/products/58/variations",
   {
     cache: false,
   }
@@ -43,7 +43,7 @@ const {
   data: attributes,
   refresh: refreshAttrs,
   error: errorAttrs,
-} = await useJsonPlaceholderData("/products/1/attributes", {
+} = await useJsonPlaceholderData("/products/58/attributes", {
   cache: false,
 });
 

@@ -31,14 +31,20 @@
       >{{ item.name }}</UiFormCheckbox>
       <p class="text-sm" v-if="filteredData.length ==0">Sonuç bulunamadı...</p>
     </div>
-        </div>
+
+
+      </div>
 </template>
 
 <script setup>
 const isOpen = ref(true);
-const { title, data } = defineProps(['title', 'data']);
+const { title, data, selectedInit } = defineProps(['title', 'data', 'selectedInit']);
 const emit = defineEmits(['selecteds'])
-const selecteds = ref([]);
+
+const selecteds = ref(selectedInit);
+
+
+
 const searchQuery = ref("");
 
 const filteredData = computed(() => {
@@ -49,6 +55,6 @@ const filteredData = computed(() => {
 });
 
 watch(selecteds, ()=>{
-  emit('selecteds', selecteds)
+  emit('selecteds', selecteds.value)
 })
 </script>

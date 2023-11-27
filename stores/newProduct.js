@@ -13,22 +13,25 @@ export const useNewProductStore = defineStore({
         price: null,
         sale_price: null,
         sku: null,
-        stock_management: 0,
+        stock_management: false,
         stock: 0,
         loading: false
     }),
 
     actions: {
 
-        async saveProduct() {
+        async saveProduct(productId) {
+
+            
             this.loading = true
-            const { data, pending, refresh, error } = await useJsonPlaceholderData("/products", {
+            this.id = productId != 'yeni' ? productId : null
+            const { data, pending, refresh, error } = await useJsonPlaceholderData("products", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(this.$state),
-                cache: false,
+                cache: 'no-cache',
             });
             this.loading = false
 
@@ -36,7 +39,37 @@ export const useNewProductStore = defineStore({
                 this.id = data.value.id
             }
 
+        },
+
+        async getProduct(productId){
+            
+            const { data, error } = await useJsonPlaceholderData( "product/" + productId, {
+                method: "GET",
+                cache: false,
+            });
+
+
+            console.log(error)
+
+            if (data.value.selectedImages) {
+                data.value.selectedImages = data.value.selectedImages.map(image => {
+                    if (typeof image === 'string') {
+                        return JSON.parse(image);
+                    }
+                    return image;
+                });
+            }
+
+
+            this.$state = data.value
+
+
+            if (error.value == null) {
+                this.id = data.value.id
+            }
+
         }
+        
 
     }
 
