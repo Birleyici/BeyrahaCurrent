@@ -100,7 +100,7 @@ const { data: images, pending, error, refresh } = await useJsonPlaceholderData(
   {
     method: "GET",
     query,
-    cache: "no-cache",
+    cache: false,
   }
 );
 
@@ -125,10 +125,7 @@ const uploadImages = async (e) => {
     query: {
       vendorId: 1,
     },
-    cache: "no-cache",
-    headers: {
-      Authorization: `Bearer ${token.value.jwt}`,
-    },
+    cache:false
   });
 
   if (error.value == null) {
@@ -138,15 +135,11 @@ const uploadImages = async (e) => {
 };
 
 const saveImagePaths = async (paths) => {
-  const { data, pending, error, refresh: refreshSavePaths } = await useFetch(
-    useBaseUrl() + "vendor/images",
+  const { data, pending, error, refresh: refreshSavePaths } = await useJsonPlaceholderData("vendor/images",
     {
       method: "POST",
       body: paths,
-      cache: "no-cache",
-      headers: {
-        Authorization: `Bearer ${token.value.jwt}`,
-      },
+      cache: false,
     }
   );
 
