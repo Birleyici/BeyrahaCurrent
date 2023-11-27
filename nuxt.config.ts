@@ -56,11 +56,5 @@ export default defineNuxtConfig({
     },
   },
 
-  nitro: {
-    '/server/*': {
-       headers: {
-          "Access-Control-Allow-Origin": "*"
-       }
-    }
- }
+
 })

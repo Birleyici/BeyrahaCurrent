@@ -163,8 +163,7 @@ const tabs = {
   AttributeTab: LazyAdminPartialsProductAttributeTab,
 };
 
-const { data: categories, pending, error, refresh } = await useFetch(
-  useBaseUrl() + "categories",
+const { data: categories, pending, error, refresh } = await useJsonPlaceholderData("categories",
   {
     method: "GET",
     cache: false,
