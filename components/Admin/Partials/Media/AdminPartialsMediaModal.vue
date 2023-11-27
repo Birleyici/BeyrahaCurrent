@@ -87,16 +87,13 @@ const query = reactive({
   page: 1,
 });
 
-const headers = useRequestHeaders(["cookie"]);
-const { data: token } = await useFetch("/api/token", { headers });
 
 const emit = defineEmits(["selecteds"]);
 const { selecteds } = defineProps(["selecteds"]);
 
 const selectedImage = ref(selecteds);
 
-const { data: images, pending, error, refresh } = await useJsonPlaceholderData(
-  "vendor/images",
+const { data: images, pending, error, refresh } = await useJsonPlaceholderData("vendor/images",
   {
     method: "GET",
     query,
@@ -119,7 +116,7 @@ const uploadImages = async (e) => {
     formData.append("files[]", files[i]);
   }
 
-  const { data, pending, error, refresh } = await useFetch("/api/upload", {
+  const { data, pending, error, refresh } = await useJsonPlaceholderData("/api/upload", {
     method: "post",
     body: formData,
     query: {
