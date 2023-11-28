@@ -1,7 +1,7 @@
 import {getToken} from '#auth'
 
 export default defineEventHandler(async (event) => {
-    console.log(event, "event")
+    console.log(getToken, "gettoken")
 
     let token = await getToken({ event })
     console.log(token, "burda")
