@@ -116,7 +116,7 @@ const uploadImages = async (e) => {
     formData.append("files[]", files[i]);
   }
 
-  const { data, pending, error, refresh } = await useJsonPlaceholderData("/api/upload", {
+  const { data, pending, error, refresh } = await useFetch("/api/upload", {
     method: "post",
     body: formData,
     query: {
