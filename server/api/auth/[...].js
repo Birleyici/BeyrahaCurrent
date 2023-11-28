@@ -57,7 +57,7 @@ export default NuxtAuthHandler({
       }
       catch (error) {
 
-       return null
+      //  return null
 
       }
 
@@ -105,7 +105,7 @@ export default NuxtAuthHandler({
           console.log(error)
 
           if (error && error.data) {
-            return null
+            // return null
           }
 
         }
