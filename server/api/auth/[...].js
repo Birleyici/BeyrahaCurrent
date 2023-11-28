@@ -13,6 +13,8 @@ export default NuxtAuthHandler({
     jwt: async ({ token, user }) => {
 
 
+      console.log(token, "jwt")
+
       const isSignIn = user ? true : false;
 
           // Şu anki zamanı Unix zaman damgası olarak al
@@ -25,6 +27,8 @@ export default NuxtAuthHandler({
 
 
         token.jwt = user ? user.access_token || '' : '';
+
+        console.log(token.jwt, "token jwt in is sign in")
         token.id = user ? user.id || '' : '';
         token.role = user ? user.role || '' : '';
         token.bitis = user ? user.exp || '' : '';
@@ -32,7 +36,7 @@ export default NuxtAuthHandler({
 
       } else if(now >= adjustedExpiration) {
 
-    
+    console.log("token süresi doldu")
          //tokenın süresi doldu yenileme yap
 
          try {
@@ -71,6 +75,7 @@ export default NuxtAuthHandler({
     // Callback whenever session is checked, see https://next-auth.js.org/configuration/callbacks#session-callback
     session: async ({ session, token }) => {
 
+      console.log(token, "token in session")
         session.role = token.role;
       session.uid = token.id;
       return Promise.resolve(session);
@@ -100,7 +105,6 @@ export default NuxtAuthHandler({
           });
 
 
-          console.log(response, "response [...]")
 
           return response
 
