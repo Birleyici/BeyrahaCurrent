@@ -57,7 +57,7 @@ export default NuxtAuthHandler({
       }
       catch (error) {
 
-      //  return null
+       return null
 
       }
 
@@ -98,6 +98,10 @@ export default NuxtAuthHandler({
             body: JSON.stringify(credentials),
             cache: 'no-cache',
           });
+
+
+          console.log(response, "response [...]")
+
           return response
 
         }
@@ -105,7 +109,7 @@ export default NuxtAuthHandler({
           console.log(error)
 
           if (error && error.data) {
-            // return null
+            return null
           }
 
         }
