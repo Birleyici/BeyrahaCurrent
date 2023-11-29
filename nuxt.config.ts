@@ -7,7 +7,8 @@ export default defineNuxtConfig({
   //runtime public base url tanımlayacağız
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL
+      apiBase: process.env.API_BASE_URL,
+      nuxtSecret: process.env.NUXT_SECRET
     }
   },
   modules: [
