@@ -7,23 +7,21 @@ export default NuxtAuthHandler({
   pages: {
     // Change the default behavior to use `/login` as the path for the sign-in page
     signIn: '../../management/login'
-  },
+  },  
   callbacks: {
     // Callback when the JWT is created / updated, see https://next-auth.js.org/configuration/callbacks#jwt-callback
     jwt: async ({ token, user }) => {
 
-
-      console.log(token, "jwt")
-
       const isSignIn = user ? true : false;
 
-          // Şu anki zamanı Unix zaman damgası olarak al
-          const now = Math.floor(Date.now() / 1000);
+      // Şu anki zamanı Unix zaman damgası olarak al
+      const now = Math.floor(Date.now() / 1000);
 
-          // Token bitiş zamanını 5
-          const adjustedExpiration = token.bitis;
+      // Token bitiş zamanını 5
+      const adjustedExpiration = token.bitis;
 
       if (isSignIn) {
+
 
 
         token.jwt = user ? user.access_token || '' : '';
@@ -34,19 +32,18 @@ export default NuxtAuthHandler({
         token.bitis = user ? user.exp || '' : '';
 
 
-      } else if(now >= adjustedExpiration) {
+      } else if (now >= adjustedExpiration) {
 
-    console.log("token süresi doldu")
-         //tokenın süresi doldu yenileme yap
+        //tokenın süresi doldu yenileme yap
 
-         try {
+        try {
           const response = await $jsonPlaceholder("auth/refresh", {
-              method: "POST",
-              headers: {
-                  "Content-Type": "application/json",
-              },
-              body: JSON.stringify({ token: token.jwt}),
-              cache: "no-cache",
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ token: token.jwt }),
+            cache: "no-cache",
           });
 
           token.jwt = response ? response.access_token || '' : '';
@@ -54,16 +51,15 @@ export default NuxtAuthHandler({
           token.role = response ? response.role || '' : '';
           token.bitis = response ? response.exp || '' : '';
 
-          setCookie('token', token.jwt)
 
           Promise.resolve(token);
 
-      }
-      catch (error) {
+        }
+        catch (error) {
 
-       return null
+          return null
 
-      }
+        }
 
       } else {
 
@@ -75,9 +71,10 @@ export default NuxtAuthHandler({
     // Callback whenever session is checked, see https://next-auth.js.org/configuration/callbacks#session-callback
     session: async ({ session, token }) => {
 
-      console.log(token, "token in session")
-        session.role = token.role;
+      session.role = token.role;
       session.uid = token.id;
+      session.token = token.jwt
+
       return Promise.resolve(session);
     },
   },
@@ -103,7 +100,6 @@ export default NuxtAuthHandler({
             body: JSON.stringify(credentials),
             cache: 'no-cache',
           });
-
 
 
           return response

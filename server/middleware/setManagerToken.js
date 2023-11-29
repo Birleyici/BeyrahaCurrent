@@ -1,10 +1,8 @@
 import {getToken} from '#auth'
 
 export default defineEventHandler(async (event) => {
-    // console.log(getToken, "gettoken")
 
-    // let token = await getToken({ event })
-    // console.log(token, "burda")
-    // setCookie(event, 'token', token?.jwt, { httpOnly: true })
+    let token = await getToken({ event })
+    setCookie(event, 'token', token?.jwt, { httpOnly: true })
 
 });

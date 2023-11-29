@@ -31,7 +31,8 @@ export default defineNuxtConfig({
     'nuxt-icon',
     'nuxt-api-party',
     '@nuxt/image',
-    '@sidebase/nuxt-auth'
+    '@sidebase/nuxt-auth',
+
 
   ],
   auth: {
