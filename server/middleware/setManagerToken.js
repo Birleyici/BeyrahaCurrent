@@ -7,7 +7,7 @@ export default defineEventHandler(async (event) => {
 
 const token = await decode({
     token: jwtEncodedToken,
-    secret: process.env.NUXT_SECRET,
+    secret: 'gS2v4jn3Rc2qkV5u36vbaW6iYL1805YVIHh2VtiP8HVvXlbM0VKv6MRn4VOKg7A3',
   });
 
 
