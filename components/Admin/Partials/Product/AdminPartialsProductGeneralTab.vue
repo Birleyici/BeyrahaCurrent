@@ -28,6 +28,5 @@
 <script setup>
 import { useNewProductStore } from "~/stores/newProduct.js";
 const product = useNewProductStore();
-console.log(product)
 const isStockManagement = ref(false);
 </script>

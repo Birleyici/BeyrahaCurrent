@@ -4,7 +4,7 @@ export default defineEventHandler(async (event) => {
 
     let jwtEncodedToken
 
-    if(useRuntimeConfig().public.isDevelopment){
+    if(process.env.NODE_ENV === 'production'){
 
     jwtEncodedToken = getCookie(event, '__Secure-next-auth.session-token') || 0
 

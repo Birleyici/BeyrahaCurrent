@@ -22,7 +22,7 @@ export const useNewProductStore = defineStore({
 
         async saveProduct(productId) {
 
-            
+
             this.loading = true
             this.id = productId != 'yeni' ? productId : null
             const { data, pending, refresh, error } = await useJsonPlaceholderData("products", {
@@ -41,35 +41,36 @@ export const useNewProductStore = defineStore({
 
         },
 
-        async getProduct(productId){
-            
-            const { data, error } = await useJsonPlaceholderData( "product/" + productId, {
-                method: "GET",
-                cache: false,
-            });
+        async getProduct(productId) {
 
-
-            console.log(error)
-
-            if (data.value.selectedImages) {
-                data.value.selectedImages = data.value.selectedImages.map(image => {
-                    if (typeof image === 'string') {
-                        return JSON.parse(image);
-                    }
-                    return image;
+            try {
+                const { data, error } = await useJsonPlaceholderData("product/" + productId, {
+                    method: "GET",
+                    cache: false,
                 });
-            }
 
 
-            this.$state = data.value
+                if (data.value.selectedImages) {
+                    data.value.selectedImages = data.value.selectedImages.map(image => {
+                        if (typeof image === 'string') {
+                            return JSON.parse(image);
+                        }
+                        return image;
+                    });
+                }
 
 
-            if (error.value == null) {
+                this.$state = data.value
+
+            } catch (error) {
+
                 this.id = data.value.id
+
             }
+
 
         }
-        
+
 
     }
 
