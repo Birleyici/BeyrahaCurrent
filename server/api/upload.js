@@ -1,83 +1,68 @@
-import { writeFile } from 'fs/promises';
-import { existsSync, mkdirSync } from 'fs';
+import { defineEventHandler, readBody, getQuery } from 'h3';
+import AWS from 'aws-sdk';
 
-
-
-
+const s3 = new AWS.S3({
+    accessKeyId: 'AKIAWLDWQFPDVBAVF6FR',
+    secretAccessKey: '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',
+    region: 'eu-central-1'
+});
 
 export default defineEventHandler(async (event) => {
 
-    const files = await readMultipartFormData(event);
 
-    
+    const files = await readMultipartFormData(event);
     const req = getRequestURL(event);
     const vendorId = req.searchParams.get('vendorId');
 
+    
+
     if (!files || files.length === 0) {
-        throw createError({
-            statusCode: 400,
-            statusMessage: 'Image Not Found',
-        });
+        throw new Error('Image Not Found');
     }
 
-    const uploadedFilesPaths = []; // Yüklenen dosyaların yollarını bu dizide saklayacağız.
+    const uploadedFilesPaths = [];
 
     try {
+        for (const file of files) {
+            const fileExtension = file.filename.split('.').pop().toLowerCase();
+            const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'jfif'];
 
 
-        for (let i = 0; i < files.length; i++) {
-            if (files[i].name === 'files[]') {
-
-
-                const fileExtension = files[i].filename.split('.').pop().toLowerCase(); // Dosya uzantısını al
-
-                // Sadece belirli resim formatlarını kabul edelim
-                const allowedExtensions = ['jpg', 'jpeg', 'png', 'gif', 'bmp', 'webp', 'jfif'];
-
-
-                if (!allowedExtensions.includes(fileExtension)) {
-                    throw createError({
-                        statusCode: 400,
-                        statusMessage: 'Invalid File Format',
-                    });
+            if (!allowedExtensions.includes(fileExtension)) {
+                throw new Error('Invalid File Format');
             }
 
+            const originalFilename = file.filename.split('.').slice(0, -1).join('.');
+            const uniqueFilename = `${originalFilename}-${Date.now()}.${fileExtension}`;
 
-                const originalFilename = files[i].filename.split('.').slice(0, -1).join('.'); // Dosya adını al (uzantı hariç)
-                const uniqueFilename = `${originalFilename}-${Date.now()}.${fileExtension}`; // Benzersiz dosya adını oluştur
+            // S3'e dosya yükleme
+            const s3Params = {
+                Bucket: 'beyraha',
+                Key: `images/products/${vendorId}/${uniqueFilename}`,
+                Body: file.data,
+                ContentType: file.type
+            };
 
-                const data = files[i].data;
-
-
-
-                // Dosyanın yazılacağı klasörün var olup olmadığını kontrol edelim.
-                const dir = './assets/images/products/' + vendorId;
-
-
-                if (!existsSync(dir)) {
-                    mkdirSync(dir, { recursive: true }); // recursive: true ile alt klasörleri de oluşturur.
-                }
-                
-                const filePath = dir + '/' + uniqueFilename;
-
-                await writeFile(filePath, data);
-                
-                const relativePath = filePath.replace('./assets/images', ''); // Başındaki noktayı kaldır
-                uploadedFilesPaths.push(relativePath); // Dosyanın yolunu dizimize ekleyelim.
-                
-            }
+            const uploadResult = await s3.upload(s3Params).promise();
+            uploadedFilesPaths.push(uploadResult.Location);
         }
     } catch (error) {
-        console.log(error, "error in upload.js")
-        throw createError({
-            statusCode: 500,
-            statusMessage: 'File Upload Failed',
-            details: error.message,
-        });
+        console.error(error, "error in upload handler");
+        throw new Error('File Upload Failed');
     }
+
+
+    function removeBaseUrls(urls) {
+        return urls.map(url => {
+          return url.replace('https://beyraha.s3.eu-central-1.amazonaws.com/images', '');
+        });
+      }
+
+      let imagesPaths = removeBaseUrls(uploadedFilesPaths);
+
 
     return {
         message: 'success',
-        uploadedFiles: uploadedFilesPaths, // Yüklenen dosyaların yollarını döndürelim.
+        uploadedFiles: imagesPaths,
     };
 });

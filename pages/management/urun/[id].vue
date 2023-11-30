@@ -95,7 +95,7 @@
                 }"
                 class="w-16 h-16 object-cover rounded-md cursor-pointer"
                 @click="product.coverImage = item.id"
-                :src="item.path"
+                :src="'aws' + item.path"
               ></NuxtImg>
 
               <span

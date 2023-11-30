@@ -41,7 +41,7 @@
             >
               <NuxtImg
                 height="200"
-                :src="img.path"
+                :src="'aws' + img.path"
                 class="object-cover w-32 h-32"
                 alt=""
               />
@@ -124,6 +124,10 @@ const uploadImages = async (e) => {
     },
     cache:false
   });
+
+
+  console.log(data.value)
+
 
   if (error.value == null) {
     await saveImagePaths(data.value);

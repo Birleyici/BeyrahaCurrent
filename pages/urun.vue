@@ -19,7 +19,7 @@
         >
           <swiper-slide v-for="thumb in product.selectedImages">
             <div class="swiper-zoom-container max-w-[500px]">
-              <NuxtImg format="webp" quality="90" loading="lazy" :src="thumb.path" sizes="100vw sm:50vw md:1600px" />
+              <NuxtImg format="webp" quality="90" loading="lazy" :src="'aws' + thumb.path" sizes="100vw sm:50vw md:1600px" />
               <!-- 
               <img
                 src="/default-product.jpg"
@@ -40,7 +40,7 @@
             class="mySwiper"
           >
             <swiper-slide v-for="thumb in product.selectedImages" class="border rounded-md overflow-hidden"
-              ><NuxtImg :src="thumb.path" format="webp" quality="90" sizes="150px"
+              ><NuxtImg :src="'aws' + thumb.path" format="webp" quality="90" sizes="150px"
             /></swiper-slide>
           </swiper>
         </div>

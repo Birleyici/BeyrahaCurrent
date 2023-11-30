@@ -2,7 +2,14 @@
 export default defineNuxtConfig({
   css: ['~/assets/css/main.css'],
   image: {
-    dir: 'assets/images'
+    dir: '/images',
+    domains: [
+      'https://beyraha.s3.eu-central-1.amazonaws.com'
+    ],
+    alias: {
+      aws: 'https://beyraha.s3.eu-central-1.amazonaws.com/images'
+    }
+
   },
   //runtime public base url tanımlayacağız
   runtimeConfig: {
@@ -23,14 +30,14 @@ export default defineNuxtConfig({
         'Josefin+Sans': true,
         Lato: [100, 300],
         'Bebas+Neue': [100, 400, 700],
-        Urbanist:[400,500,700],
-        Montserrat:[400,500],
+        Urbanist: [400, 500, 700],
+        Montserrat: [400, 500],
         Raleway: {
           wght: [100, 400],
           ital: [100]
         },
       }
-    }], 
+    }],
     'nuxt-icon',
     'nuxt-api-party',
     '@nuxt/image',
@@ -40,15 +47,15 @@ export default defineNuxtConfig({
   ],
   auth: {
     globalAppMiddleware: false,
-    
-    
-   },
+
+
+  },
   apiParty: {
     endpoints: {
       jsonPlaceholder: {
         url: process.env.API_BASE_URL,
         cookies: true,
-        
+
       }
     }
   },

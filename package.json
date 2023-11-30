@@ -24,6 +24,7 @@
     "@nuxt/image": "^1.0.0-rc.2",
     "@pinia/nuxt": "^0.4.11",
     "@vueup/vue-quill": "^1.2.0",
+    "aws-sdk": "^2.1508.0",
     "jsonwebtoken": "^9.0.2",
     "mobile-detect": "^1.4.5",
     "next-auth": "^4.21.1",
