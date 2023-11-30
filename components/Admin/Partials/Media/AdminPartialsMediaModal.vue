@@ -126,8 +126,6 @@ const uploadImages = async (e) => {
   });
 
 
-  console.log(data.value)
-
 
   if (error.value == null) {
     await saveImagePaths(data.value);
@@ -136,6 +134,7 @@ const uploadImages = async (e) => {
 };
 
 const saveImagePaths = async (paths) => {
+try {
   const { data, pending, error, refresh: refreshSavePaths } = await useJsonPlaceholderData("vendor/images",
     {
       method: "POST",
@@ -144,9 +143,14 @@ const saveImagePaths = async (paths) => {
     }
   );
 
-  if (error.value == null) {
-    refresh();
-  }
+  await refresh();
+
+
+} catch (error) {
+  console.log(error,"error")
+}
+
+
 };
 
 watch(selectedImage, () => {
