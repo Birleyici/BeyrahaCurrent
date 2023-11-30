@@ -68,6 +68,7 @@ export default defineEventHandler(async (event) => {
             }
         }
     } catch (error) {
+        console.log(error, "error in upload.js")
         throw createError({
             statusCode: 500,
             statusMessage: 'File Upload Failed',
