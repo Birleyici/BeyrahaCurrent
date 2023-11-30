@@ -2,9 +2,18 @@ import { decode } from 'next-auth/jwt';
 
 export default defineEventHandler(async (event) => {
 
-    // let jwtEncodedToken = getCookie(event, '__Secure-next-auth.session-token') || 0
+    let jwtEncodedToken
 
-    let jwtEncodedToken = getCookie(event, 'next-auth.session-token') || 0
+    if(useRuntimeConfig().public.isDevelopment){
+
+    jwtEncodedToken = getCookie(event, '__Secure-next-auth.session-token') || 0
+
+    } else {
+
+    jwtEncodedToken = getCookie(event, 'next-auth.session-token') || 0
+
+    }
+
 
     const token = await decode({
         token: jwtEncodedToken,
