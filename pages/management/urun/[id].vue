@@ -142,8 +142,6 @@ if (productId != "yeni") {
 
 const product = useNewProductStore();
 
-const headers = useRequestHeaders(["cookie"]);
-const { data: token } = await useFetch("/api/token", { headers });
 
 import {
   LazyAdminPartialsProductGeneralTab,

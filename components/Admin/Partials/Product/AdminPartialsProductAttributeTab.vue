@@ -5,7 +5,7 @@
       <UiButtonsBaseButton @click="addAttr()" color="secondary">Ekle</UiButtonsBaseButton>
     </div>
     <div
-      v-for="item in useAttrsAndVariations().attributes"
+      v-for="item in attrsAndVariations.attributes"
       :key="item.attribute_id"
       class="my-4"
     >
@@ -61,7 +61,7 @@
       </UiAccordion>
     </div>
     <div
-      v-if="useAttrsAndVariations().attributes.length > 0"
+      v-if="attrsAndVariations.attributes.length > 0"
       class="flex justify-end mt-4"
     >
       <UiButtonsBaseButton
@@ -77,24 +77,25 @@
 <script setup>
 import { useNewProductStore } from "~/stores/newProduct.js";
 const product = useNewProductStore();
+const attrsAndVariations = useAttrsAndVariations()
 
 import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
 
 let productId = useRoute().params.id;
 
-await useAttrsAndVariations().fetchAttributes(productId);
+await attrsAndVariations.fetchAttributes(productId);
 
 const attrId = ref("1");
 const addAttr = () => {
   const item = options.value.find((option) => option.id === parseInt(attrId.value));
   // attributes içerisinde bu attribute_id'ye sahip bir öğe olup olmadığını kontrol ediyoruz.
-  const isAttributeExists = useAttrsAndVariations().attributes.some(
+  const isAttributeExists = attrsAndVariations.attributes.some(
     (attr) => attr.attribute_id === item.id
   );
 
   // Eğer bu ID'ye sahip bir öğe zaten varsa veya attributes uzunluğu 30'dan fazla ise, yeni bir öğe eklemiyoruz.
-  if (!isAttributeExists && useAttrsAndVariations().attributes.length < 30) {
-    useAttrsAndVariations().attributes.unshift({
+  if (!isAttributeExists && attrsAndVariations.attributes.length < 30) {
+    attrsAndVariations.attributes.unshift({
       attribute_id: item.id,
       attribute_name: item.text,
       isOpen: true,
@@ -145,14 +146,14 @@ const saveAttrs = async () => {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(useAttrsAndVariations().attributes),
+      body: JSON.stringify(attrsAndVariations.attributes),
       cache: false,
     }
   );
   loadingSaveAttrs.value = pending.value;
 
-  await useAttrsAndVariations().fetchAttributes(productId);
-  await useAttrsAndVariations().fetchVariations(productId);
+  await attrsAndVariations.fetchAttributes(productId);
+  await attrsAndVariations.fetchVariations(productId);
 };
 
 const deleteAttr = async (id) => {
@@ -165,8 +166,8 @@ const deleteAttr = async (id) => {
       },
     }
   );
-  await useAttrsAndVariations().deleteAttr(id);
-  await useAttrsAndVariations().fetchVariations(productId);
+  await attrsAndVariations.deleteAttr(id);
+  await attrsAndVariations.fetchVariations(productId);
 };
 
 const { data: options, pending, refresh, error } = await useJsonPlaceholderData(

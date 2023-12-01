@@ -101,7 +101,7 @@ const { data: images, pending, error, refresh } = await useJsonPlaceholderData("
   }
 );
 
-console.log(images, error)
+console.log(images)
 
 
 const changePage = (page) => {
