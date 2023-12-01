@@ -74,7 +74,8 @@ export const useAttrsAndVariations = defineStore({
 
             });
 
-            this.attributes = data.value
+                this.attributes = typeof data.value === 'string' ? JSON.parse(data.value) : data.value
+
         },
 
         deleteVariation(id) {
