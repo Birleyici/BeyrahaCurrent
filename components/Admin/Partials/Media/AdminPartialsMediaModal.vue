@@ -93,15 +93,18 @@ const { selecteds } = defineProps(["selecteds"]);
 
 const selectedImage = ref(selecteds);
 
-const { data: images, pending, error, refresh } = await useJsonPlaceholderData("vendor/images",
+const { data: images, pending, error, refresh } = await useFetch(useBaseUrl() + "vendor/images",
   {
     method: "GET",
     query,
-    cache: false,
+    cache: 'no-cache',
+headers:{
+  token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJodHRwczovL2JpcmxleWljaS50ZWNoL2FwaS9hdXRoL3JlZnJlc2giLCJpYXQiOjE3MDE0MDc3ODIsImV4cCI6MTcwMTQxNTM3OSwibmJmIjoxNzAxNDExNzc5LCJqdGkiOiIySEpMYTdIMFZLQkhkc0RZIiwic3ViIjoiMSIsInBydiI6IjIzYmQ1Yzg5NDlmNjAwYWRiMzllNzAxYzQwMDg3MmRiN2E1OTc2ZjcifQ.vYVO3hz7EIpJcJzxCeB4ca3ABJL59PZ4dWgMcy11HtE'
+}    
   }
 );
 
-console.log(images)
+console.log(error)
 
 
 const changePage = (page) => {
