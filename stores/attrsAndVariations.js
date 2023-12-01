@@ -68,11 +68,12 @@ export const useAttrsAndVariations = defineStore({
                 data,
                 error,
             } = await useJsonPlaceholderData("products/"+ id +"/attributes", {
+                method: 'GET',
                 cache: false
 
             });
 
-                this.attributes = typeof data.value === 'string' ? JSON.parse(data.value) : data.value
+                this.attributes = data.value
 
         },
 
