@@ -93,15 +93,19 @@ const { selecteds } = defineProps(["selecteds"]);
 
 const selectedImage = ref(selecteds);
 
-const images = await $jsonPlaceholder("vendor/images",
+const { data: images, pending, error, refresh } = await useFetch( useBaseUrl() + "vendor/images",
   {
     method: "GET",
     query,
     cache: false,
+    credentials: 'include',
+    headers:{
+      'Access-Control-Allow-Credentials': true
+    } 
   }
 );
 
-console.log(images)
+console.log(error)
 
 
 const changePage = (page) => {
