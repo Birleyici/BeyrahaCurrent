@@ -3,7 +3,7 @@ export const useBaseUrl =  () => {
 
     if(process.env.NODE_ENV === 'production'){
 
-        return 'http://birleyici.tech/api/';
+        return 'https://birleyici.tech/api/';
 
     
         } else {
