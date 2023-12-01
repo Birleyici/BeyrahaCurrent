@@ -99,9 +99,9 @@ const { data: images, pending, error, refresh } = await useFetch( useBaseUrl() +
     query,
     cache: false,
     credentials: 'include',
-    headers:{
-      'Access-Control-Allow-Credentials': true
-    } 
+    // headers:{
+    //   'Access-Control-Allow-Credentials': true
+    // } 
   }
 );
 
