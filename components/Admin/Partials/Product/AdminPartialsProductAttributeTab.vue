@@ -76,11 +76,12 @@
 
 <script setup>
 import { useNewProductStore } from "~/stores/newProduct.js";
+import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
+
 const product = useNewProductStore();
 const attrsAndVariations = useAttrsAndVariations()
 
-import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
-
+console.log(attrsAndVariations, "kljljk")
 let productId = useRoute().params.id;
 
 await attrsAndVariations.fetchAttributes(productId);

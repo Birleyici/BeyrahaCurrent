@@ -142,7 +142,6 @@ if (productId != "yeni") {
 
 const product = useNewProductStore();
 
-console.log(product)
 import {
   LazyAdminPartialsProductGeneralTab,
   LazyAdminPartialsProductAttributeTab,
