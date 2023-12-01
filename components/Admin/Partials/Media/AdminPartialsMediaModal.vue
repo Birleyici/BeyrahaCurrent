@@ -93,7 +93,7 @@ const { selecteds } = defineProps(["selecteds"]);
 
 const selectedImage = ref(selecteds);
 
-const { data, pending, error, refresh } = await useJsonPlaceholderData("vendor/images",
+const { data: images, pending, error, refresh } = await useJsonPlaceholderData("vendor/images",
   {
     method: "GET",
     query,
@@ -101,7 +101,7 @@ const { data, pending, error, refresh } = await useJsonPlaceholderData("vendor/i
   }
 );
 
-console.log(data)
+console.log(images)
 
 
 const changePage = (page) => {

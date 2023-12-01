@@ -66,8 +66,6 @@ export const useAttrsAndVariations = defineStore({
 
             const {
                 data,
-                pending,
-                refresh,
                 error,
             } = await useJsonPlaceholderData("products/"+ id +"/attributes", {
                 cache: false
