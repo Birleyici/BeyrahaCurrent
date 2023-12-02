@@ -6,20 +6,7 @@ export const useMainStore = defineStore({
         isMobile: false,
         isOpenSearch: false,
         isLoaded: false,
-        headers: {
-            Authorization: null
-        }
     }),
-    actions: {
-        async returnHeader() {
-
-            const headers = useRequestHeaders(['cookie'])
-            const { data } = await useFetch('/api/token', { headers, cache: 'no-cache' })
-
-            return { Authorization: `Bearer ${data.token}`  };
-        },
-
-    }
 
 
 });

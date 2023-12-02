@@ -82,6 +82,7 @@
   </div>
 </template>
 <script setup>
+const headers = useRequestHeaders(['cookie']) 
 const query = reactive({
   limit: 20,
   page: 1,
@@ -97,11 +98,9 @@ const { data: images, pending, error, refresh } = await useFetch( useBaseUrl() +
   {
     method: "GET",
     query,
-    cache: false,
+    cache: 'no-cache',
     credentials: 'include',
-    headers:{
-      'Access-Control-Allow-Credentials': true
-    } 
+    headers
   }
 );
 
