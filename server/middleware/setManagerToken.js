@@ -2,6 +2,7 @@ import { decode } from 'next-auth/jwt';
 
 export default defineEventHandler(async (event) => {
 
+
     let jwtEncodedToken
 
     if(process.env.NODE_ENV === 'production'){

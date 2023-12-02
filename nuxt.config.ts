@@ -39,7 +39,6 @@ export default defineNuxtConfig({
       }
     }],
     'nuxt-icon',
-    'nuxt-api-party',
     '@nuxt/image',
     '@sidebase/nuxt-auth',
 
@@ -50,15 +49,7 @@ export default defineNuxtConfig({
 
 
   },
-  apiParty: {
-    endpoints: {
-      jsonPlaceholder: {
-        url: process.env.API_BASE_URL,
-        cookies: true,
 
-      }
-    }
-  },
   devtools: { enabled: true },
   postcss: {
     plugins: {

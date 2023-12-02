@@ -82,30 +82,27 @@
   </div>
 </template>
 <script setup>
-const headers = useRequestHeaders(['cookie']) 
 const query = reactive({
   limit: 20,
   page: 1,
 });
-
 
 const emit = defineEmits(["selecteds"]);
 const { selecteds } = defineProps(["selecteds"]);
 
 const selectedImage = ref(selecteds);
 
-const { data: images, pending, error, refresh } = await useFetch( useBaseUrl() + "vendor/images",
+const { data: images, pending, error, refresh } = await useFetch(
+  useBaseUrl() + "vendor/images",
   {
     method: "GET",
     query,
-    cache: 'no-cache',
-    credentials: 'include',
-    headers
+    cache: "no-cache",
+    headers: { Authorization : await useMain().returnHeader()},
   }
 );
 
-console.log(error)
-
+console.log(error);
 
 const changePage = (page) => {
   query.page = page;
@@ -128,10 +125,8 @@ const uploadImages = async (e) => {
     query: {
       vendorId: 1,
     },
-    cache:false
+    cache: false,
   });
-
-
 
   if (error.value == null) {
     await saveImagePaths(data.value);
@@ -140,23 +135,22 @@ const uploadImages = async (e) => {
 };
 
 const saveImagePaths = async (paths) => {
-try {
-  const { data, pending, error, refresh: refreshSavePaths } = await useJsonPlaceholderData("vendor/images",
-    {
+  try {
+    const {
+      data,
+      pending,
+      error,
+      refresh: refreshSavePaths,
+    } = await useJsonPlaceholderData("vendor/images", {
       method: "POST",
       body: paths,
       cache: false,
-    }
-  );
+    });
 
-  await refresh();
-
-
-} catch (error) {
-  console.log(error,"error")
-}
-
-
+    await refresh();
+  } catch (error) {
+    console.log(error, "error");
+  }
 };
 
 watch(selectedImage, () => {
