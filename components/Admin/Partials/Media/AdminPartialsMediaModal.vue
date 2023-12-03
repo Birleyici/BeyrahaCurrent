@@ -92,6 +92,10 @@ const { selecteds } = defineProps(["selecteds"]);
 
 const selectedImage = ref(selecteds);
 
+const token = useCookie('token')
+
+console.log(token)
+
 const { data: images, pending, error, refresh } = await useFetch(
   useBaseUrl() + "vendor/images",
   {
@@ -102,7 +106,6 @@ const { data: images, pending, error, refresh } = await useFetch(
   }
 );
 
-console.log(error);
 
 const changePage = (page) => {
   query.page = page;

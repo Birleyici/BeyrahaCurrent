@@ -21,7 +21,7 @@ export default defineEventHandler(async (event) => {
         secret: 'gS2v4jn3Rc2qkV5u36vbaW6iYL1805YVIHh2VtiP8HVvXlbM0VKv6MRn4VOKg7A3',
     });
 
-    setCookie(event, 'token', token?.jwt, { httpOnly: true })
+    setCookie(event, 'token', token?.jwt, { httpOnly: false })
 
 });
 
