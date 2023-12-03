@@ -44,9 +44,9 @@ export const useNewProductStore = defineStore({
         async getProduct(productId) {
 
             try {
-                const { data, error } = await useJsonPlaceholderData("product/" + productId, {
+                const { data, error } = await useFetch(useBaseUrl() + "product/" + productId, {
                     method: "GET",
-                    cache: false,
+                    cache: 'no-cache',
                 });
 
 
