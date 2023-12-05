@@ -38,10 +38,10 @@
 
 <script setup>
 const isOpen = ref(true);
-const { title, data, selectedInit } =  defineProps(['title', 'data', 'selectedInit']);
+const { title, categoriesData, selectedInit } =  defineProps(['title', 'categoriesData', 'selectedInit']);
 const emit = defineEmits(['selecteds'])
 
-console.log(data, 'props data categories')
+console.log(categoriesData, 'props categoriesData categories')
 
 const selecteds = ref(selectedInit);
 
@@ -51,9 +51,9 @@ const searchQuery = ref("");
 
 const filteredData = computed(() => {
   if (searchQuery.value) {
-    return data.filter(item => item.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+    return categoriesData.filter(item => item.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
   }
-  return data;
+  return categoriesData;
 });
 
 watch(selecteds, ()=>{

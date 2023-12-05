@@ -122,7 +122,7 @@
         <div class="my-minimal">
           <UiCardsLiveSearchCard
             @selecteds="(e) => (product.selectedCategories = e)"
-            :data="categories"
+            :categoriesData="categories"
             :selectedInit="product.selectedCategories"
             title="Ürün kategorileri"
           ></UiCardsLiveSearchCard>
