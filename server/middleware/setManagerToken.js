@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
 
     
 
-    setCookie(event, 'token', token?.jwt, { httpOnly: false })
+    setCookie(event, 'token', token?.jwt, { httpOnly: false, domain: '.birleyici.tech'  })
 
 });
 
