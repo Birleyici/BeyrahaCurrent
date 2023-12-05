@@ -136,6 +136,8 @@
 import { useNewProductStore } from "~/stores/newProduct.js";
 const productId = useRoute().params.id;
 
+
+
 if (productId != "yeni") {
   useNewProductStore().getProduct(productId);
 }
@@ -160,10 +162,9 @@ const tabs = {
   AttributeTab: LazyAdminPartialsProductAttributeTab,
 };
 
-const { data: categories, pending, error, refresh } = await useFetch(useBaseUrl() +  "categories",
+const { data: categories, pending, error, refresh } = await useBaseFetch("categories",
   {
     method: "GET",
-    cache: false,
   }
 );
 

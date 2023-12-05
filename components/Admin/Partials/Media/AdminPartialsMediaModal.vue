@@ -89,20 +89,15 @@ const query = reactive({
 
 const emit = defineEmits(["selecteds"]);
 const { selecteds } = defineProps(["selecteds"]);
-
 const selectedImage = ref(selecteds);
 
-const token = useCookie('token')
 
-console.log(token)
-
-const { data: images, pending, error, refresh } = await useFetch(
-  useBaseUrl() + "vendor/images",
+const { data: images, pending, error, refresh } = await useBaseFetch("vendor/images",
   {
     method: "GET",
     query,
     cache: "no-cache",
-    headers: { Authorization : await useMain().returnHeader()},
+
   }
 );
 
@@ -144,19 +139,24 @@ const saveImagePaths = async (paths) => {
       pending,
       error,
       refresh: refreshSavePaths,
-    } = await useJsonPlaceholderData("vendor/images", {
+    } = await useBaseFetch("vendor/images", {
       method: "POST",
       body: paths,
-      cache: false,
+      cache: 'no-cache',
     });
 
     await refresh();
+
   } catch (error) {
+    
     console.log(error, "error");
+  
   }
 };
 
 watch(selectedImage, () => {
   emit("selecteds", selectedImage.value);
 });
+
+
 </script>

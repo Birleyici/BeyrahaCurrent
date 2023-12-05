@@ -25,13 +25,12 @@ export const useNewProductStore = defineStore({
 
             this.loading = true
             this.id = productId != 'yeni' ? productId : null
-            const { data, pending, refresh, error } = await useJsonPlaceholderData("products", {
+            const { data, pending, refresh, error } = await useBaseFetch("products", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(this.$state),
-                cache: 'no-cache',
             });
             this.loading = false
 
@@ -44,9 +43,8 @@ export const useNewProductStore = defineStore({
         async getProduct(productId) {
 
             try {
-                const { data, error } = await useFetch(useBaseUrl() + "product/" + productId, {
+                const { data, error } = await useBaseFetch("product/" + productId, {
                     method: "GET",
-                    cache: 'no-cache',
                 });
 
 
