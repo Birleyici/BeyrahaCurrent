@@ -47,18 +47,6 @@ export const useNewProductStore = defineStore({
                     method: "GET",
                 });
 
-console.log(data)
-
-
-                if (data.value.selectedImages) {
-                    data.value.selectedImages = data.value.selectedImages.map(image => {
-                        if (typeof image === 'string') {
-                            return JSON.parse(image);
-                        }
-                        return image;
-                    });
-                }
-
 
                 this.$state = data.value
 
