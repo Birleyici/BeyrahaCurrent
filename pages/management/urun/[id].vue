@@ -122,7 +122,7 @@
         <div class="my-minimal">
           <UiCardsLiveSearchCard
             @selecteds="(e) => (product.selectedCategories = e)"
-            :categoriesData="categories"
+            :categoriesData="categories??[]"
             :selectedInit="product.selectedCategories"
             title="Ürün kategorileri"
           ></UiCardsLiveSearchCard>
@@ -147,7 +147,6 @@ const { data: categories, pending, error, refresh } = await useBaseFetch("catego
   }
 );
 
-console.log(categories, 'kategoriler burda')
 
 const productId = useRoute().params.id;
 

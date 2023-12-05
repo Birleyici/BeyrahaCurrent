@@ -41,8 +41,6 @@ const isOpen = ref(true);
 const { title, categoriesData, selectedInit } =  defineProps(['title', 'categoriesData', 'selectedInit']);
 const emit = defineEmits(['selecteds'])
 
-console.log(categoriesData, 'props categoriesData categories')
-
 const selecteds = ref(selectedInit);
 
 
