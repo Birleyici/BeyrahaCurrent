@@ -169,6 +169,8 @@ const { data: categories, pending, error, refresh } = await useBaseFetch("catego
 );
 
 
+console.log(categories, error)
+
 watch(
   () => product.selectedImages,
   (newVal) => {
