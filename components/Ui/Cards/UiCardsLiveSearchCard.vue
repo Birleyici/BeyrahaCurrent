@@ -43,7 +43,10 @@ const emit = defineEmits(['selecteds'])
 
 const selecteds = ref(selectedInit);
 
-
+setTimeout(() => {
+  
+  console.log(categoriesData)
+}, 4000);
 
 const searchQuery = ref("");
 
