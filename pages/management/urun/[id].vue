@@ -126,7 +126,6 @@
             :selectedInit="product.selectedCategories"
             title="Ürün kategorileri"
           ></UiCardsLiveSearchCard>
-          {{ categories }}
         </div>
       </div>
     </div>
