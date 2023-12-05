@@ -62,7 +62,7 @@ export const useNewProductStore = defineStore({
 
             } catch (error) {
 
-                this.id = data.value.id
+                console.log(error)
 
             }
 
