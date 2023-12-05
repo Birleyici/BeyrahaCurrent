@@ -5,7 +5,7 @@
             :class="isOpen ? 'rounded-t-md' : 'rounded-md'"
             class="no-select cursor-pointer border py-2 px-4 bg-tertiary-100 font-medium flex justify-between items-center"
           >
-            <p>{{ title }}</p>
+            <p>{{ props.title }}</p>
             <Icon
               v-if="isOpen"
               name="material-symbols:keyboard-arrow-down"
@@ -38,23 +38,30 @@
 
 <script setup>
 const isOpen = ref(true);
-const { title, categoriesData, selectedInit } =  defineProps(['title', 'categoriesData', 'selectedInit']);
+
+const props = defineProps({
+  categoriesData: Array,
+  title: String,
+  selectedInit: Array
+})
+
+
 const emit = defineEmits(['selecteds'])
 
-const selecteds = ref(selectedInit);
+const selecteds = ref(props.selectedInit);
 
 setTimeout(() => {
   
-  console.log(categoriesData)
+  console.log(props.categoriesData)
 }, 4000);
 
 const searchQuery = ref("");
 
 const filteredData = computed(() => {
   if (searchQuery.value) {
-    return categoriesData.filter(item => item.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
+    return props.categoriesData.filter(item => item.name.toLowerCase().includes(searchQuery.value.toLowerCase()));
   }
-  return categoriesData;
+  return props.categoriesData;
 });
 
 watch(selecteds, ()=>{
