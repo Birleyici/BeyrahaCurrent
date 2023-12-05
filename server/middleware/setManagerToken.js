@@ -25,7 +25,7 @@ export default defineEventHandler(async (event) => {
     console.log("bura çalıştı")
     
 
-    setCookie(event, 'token', token?.jwt, { httpOnly: false})
+    setCookie(event, 'token', token?.jwt, { httpOnly: false, domain: '.beyraha.vercel.app'})
 
 });
 

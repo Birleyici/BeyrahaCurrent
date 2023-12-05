@@ -1,7 +1,10 @@
-export const useBaseFetch = async (url, options = {}) => {
-    const token = useCookie('token', {watch: true});
 
-    console.log(token, "dis tokın")
+
+
+
+export const useBaseFetch = async (url, options = {}) => {
+    
+    const token = useCookie('token', {watch: true});
 
     // Varsayılan headers ile options içindeki headers'ı birleştirin
     const headers = {
