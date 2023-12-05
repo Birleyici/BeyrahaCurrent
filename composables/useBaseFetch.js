@@ -1,5 +1,5 @@
 export const useBaseFetch = async (url, options = {}) => {
-    const token = useCookie('token');
+    const token = useCookie('token', {watch: true});
 
     console.log(token, "dis tokın")
 
