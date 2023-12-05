@@ -126,6 +126,7 @@
             :selectedInit="product.selectedCategories"
             title="Ürün kategorileri"
           ></UiCardsLiveSearchCard>
+          {{ categories }}
         </div>
       </div>
     </div>
@@ -134,8 +135,21 @@
 
 <script setup>
 import { useNewProductStore } from "~/stores/newProduct.js";
-const productId = useRoute().params.id;
+import {
+  LazyAdminPartialsProductGeneralTab,
+  LazyAdminPartialsProductAttributeTab,
+  LazyAdminPartialsProductVariationTab,
+} from "#components";
 
+const { data: categories, pending, error, refresh } = await useBaseFetch("categories",
+  {
+    method: "GET",
+  }
+);
+
+console.log(categories, 'kategoriler burda')
+
+const productId = useRoute().params.id;
 
 
 if (productId != "yeni") {
@@ -143,12 +157,6 @@ if (productId != "yeni") {
 }
 
 const product = useNewProductStore();
-
-import {
-  LazyAdminPartialsProductGeneralTab,
-  LazyAdminPartialsProductAttributeTab,
-  LazyAdminPartialsProductVariationTab,
-} from "#components";
 
 const isOpenMediaModal = ref(false);
 const currentTab = ref("GeneralTab");
@@ -162,14 +170,7 @@ const tabs = {
   AttributeTab: LazyAdminPartialsProductAttributeTab,
 };
 
-const { data: categories, pending, error, refresh } = await useBaseFetch("categories",
-  {
-    method: "GET",
-  }
-);
 
-
-console.log(categories, error)
 
 watch(
   () => product.selectedImages,
