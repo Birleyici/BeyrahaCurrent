@@ -47,6 +47,8 @@ export const useNewProductStore = defineStore({
                     method: "GET",
                 });
 
+console.log(data)
+
 
                 if (data.value.selectedImages) {
                     data.value.selectedImages = data.value.selectedImages.map(image => {
