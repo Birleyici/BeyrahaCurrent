@@ -1,5 +1,5 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop lg:grid grid-cols-10 gap-10">
+  <!-- <div class="px-x-mobil lg:px-x-desktop lg:grid grid-cols-10 gap-10">
     <button
       @click="isOpenFilters = !isOpenFilters"
       v-if="useMain().isMobile"
@@ -58,7 +58,7 @@
         <PartialsProductCard v-for="item in 15"></PartialsProductCard>
       </div>
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script setup>

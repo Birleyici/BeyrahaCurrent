@@ -1,5 +1,5 @@
 <template>
-Hoşgeldiniz...  
+<div>deneme</div>
 </template>
 
 <script setup>
