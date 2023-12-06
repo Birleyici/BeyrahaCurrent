@@ -2,49 +2,7 @@
   <div class="lg:px-x-desktop max-w-full">
     <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
       <!-- useMain().isLoaded -->
-      <div class="col-span-3 lg:rounded-md border p-2" v-if="useMain().isLoaded">
-        <swiper
-          :style="{
-            '--swiper-navigation-color': '#fff',
-            '--swiper-pagination-color': '#fff',
-          }"
-          :pagination="useMain().isMobile ? true : false"
-          :loop="true"
-          :spaceBetween="10"
-          :navigation="true"
-          :zoom="true"
-          :thumbs="{ swiper: thumbsSwiper }"
-          :modules="modules"
-          class="mySwiper2 max-w-[500px]"
-        >
-          <swiper-slide v-for="thumb in product.selectedImages">
-            <div class="swiper-zoom-container max-w-[500px]">
-              <NuxtImg format="webp" quality="90" loading="lazy" :src="'aws' + thumb.path" sizes="100vw sm:50vw md:1600px" />
-              <!-- 
-              <img
-                src="/default-product.jpg"
-                class="!object-cover !h-[550px] lg:!rounded-md"
-              /> -->
-            </div>
-          </swiper-slide>
-        </swiper>
-        <div v-if="!useMain().isMobile" class="mt-2">
-          <swiper
-            @swiper="setThumbsSwiper"
-            :loop="true"
-            :spaceBetween="10"
-            :slidesPerView="7"
-            :freeMode="true"
-            :watchSlidesProgress="true"
-            :modules="modules"
-            class="mySwiper"
-          >
-            <swiper-slide v-for="thumb in product.selectedImages" class="border rounded-md overflow-hidden"
-              ><NuxtImg :src="'aws' + thumb.path" format="webp" quality="90" sizes="150px"
-            /></swiper-slide>
-          </swiper>
-        </div>
-      </div>
+    
       <SkeletonProductGallery v-else></SkeletonProductGallery>
 
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
