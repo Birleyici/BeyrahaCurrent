@@ -10,14 +10,11 @@ export const useBaseFetch = async (url, options = {}) => {
 
     // options.headers varsa, varsayılan headers ile birleştirin
     // Yoksa, sadece varsayılan headers kullanın
-    const headers = options.headers 
-        ? { ...defaultHeaders, ...options.headers } 
-        : defaultHeaders;
+    options.headers = options.headers = { ...defaultHeaders, ...options.headers } 
 
     // options nesnesini güncelleyin
     const fetchOptions = {
         ...options,
-        headers: headers,
         credentials: 'include',
         cache: options.cache || 'no-cache'
     };
