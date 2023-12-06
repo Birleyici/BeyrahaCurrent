@@ -33,7 +33,7 @@
 
 <script setup>
 const { data: variations, pending, refresh, error } = await useBaseFetch(
-  "/page/products/58/variations",
+  "/products/58/variations",
   {
     cache: false,
   }
