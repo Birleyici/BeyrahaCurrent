@@ -9,8 +9,6 @@ onMounted(() => {
   useMain().isLoaded = true;
 });
 
-
-
 const headers = useRequestHeaders(["cookie"]);
 const { data: token } = await useFetch("/api/token", { headers });
 
