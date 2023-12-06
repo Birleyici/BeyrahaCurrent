@@ -3,7 +3,6 @@
     <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
       <!-- useMain().isLoaded -->
     
-      <SkeletonProductGallery v-else></SkeletonProductGallery>
 
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
         <h1 class="text-xl font-semibold border-b border-dotted pb-2">
