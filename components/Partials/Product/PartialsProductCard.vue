@@ -2,9 +2,10 @@
   <!-- useMain().isLoaded -->
   <div class="border rounded-md" >
     <div class="relative overflow-hidden cursor-pointer">
-      <img
-        src="https://www.beyraha.com/wp-content/uploads/2023/08/1677065829_EB3579-600x900.jpg"
-        alt=""
+      <NuxtImg
+        :src="'aws/products/1/8662%2520copy-1701368897957.webp'"
+        format="webp" quality="90" loading="lazy" 
+        height="300"
         class="rounded-t-sm object-cover sm:object-cover duration-200 h-[250px] w-full hover:scale-110"
       />
     </div>

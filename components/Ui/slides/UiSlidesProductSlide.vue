@@ -1,5 +1,5 @@
 <template>
-  <div v-if="useMain().isLoaded">
+  <div v-if="useMain().isLoaded">dfgdf
     <swiper
       :breakpoints="breakpoints"
       :pagination="{
