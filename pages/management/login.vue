@@ -49,7 +49,7 @@ const mySignInHandler = async ({ email, password }) => {
     email,
     password,
     redirect: false,
-    callbackUrl: "/management/dashboard",
+    callbackUrl: "/management/urun/58",
   });
 
   loading.value = false;
