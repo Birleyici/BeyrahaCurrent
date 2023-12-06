@@ -5,7 +5,9 @@ export default defineNuxtConfig({
     vercel: {
       regions: ['fra1'],
     },
+
   },
+
   css: ['~/assets/css/main.css'],
   image: {
     dir: '/images',
