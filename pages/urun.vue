@@ -72,11 +72,11 @@
           </div>
         </div>
 
-        <PartialsProductVariations></PartialsProductVariations>
+        <LazyPartialsProductVariations></LazyPartialsProductVariations>
 
         <div class="flex space-x-4 lg:space-x-8">
           <div class="inline-block">
-            <UiFormCounter></UiFormCounter>
+            <LazyUiFormCounter></LazyUiFormCounter>
           </div>
           <UiButtonsBaseButton
             color="secondary"
@@ -98,7 +98,7 @@
     </div>
 
     <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
-      <UiCardsSectionCard title="Ürün açıklaması ve özellikleri">
+      <LazyUiCardsSectionCard title="Ürün açıklaması ve özellikleri">
      
  
         <div v-html="product.additional_info"></div>
@@ -114,19 +114,19 @@
             <p class="font-medium">Timsah derisi</p>
           </div>
         </div>
-      </UiCardsSectionCard>
+      </LazyUiCardsSectionCard>
     </div>
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
       <p class="mb-2 font-bold">Benzer ürünler</p>
-      <UiSlidesProductSlide></UiSlidesProductSlide>
+      <LazyUiSlidesProductSlide></LazyUiSlidesProductSlide>
     </div>
 
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
       <p class="mb-2 font-bold">Yorum yap</p>
 
-      <UiNotificationBar type="info"
+      <LazyUiNotificationBar type="info"
         >Ürüne yalnızca ürünü satın alan oturum açmış kullanıcılar yorum yapabilir.
-      </UiNotificationBar>
+      </LazyUiNotificationBar>
 
       <UiFormTextarea
         class="h-60 my-minimal border-quaternary-300"
@@ -159,7 +159,7 @@
       </div>
 
       <div class="grid gap-4 border-b border-dotted pb-3">
-        <PartialsCommentItem></PartialsCommentItem>
+        <LazyPartialsCommentItem></LazyPartialsCommentItem>
       </div>
     </div>
   </div>
