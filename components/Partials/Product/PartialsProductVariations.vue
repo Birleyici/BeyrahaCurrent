@@ -33,18 +33,21 @@
 
 <script setup>
 const { data: variations, pending, refresh, error } = await useBaseFetch(
-  "/products/58/variations",
+  "page/products/58/variations",
   {
-    cache: false,
+    method: 'GET',
+    cache: 'no-cache',
   }
 );
+
 
 const {
   data: attributes,
   refresh: refreshAttrs,
   error: errorAttrs,
 } = await useBaseFetch("/products/58/attributes", {
-  cache: false,
+  method: 'GET',
+  cache: 'no-cache',
 });
 
 function transform(attributes) {

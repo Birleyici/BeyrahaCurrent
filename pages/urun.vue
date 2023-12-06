@@ -167,6 +167,7 @@
 </template>
 
 <script setup>
+console.log("burda")
 import { Pagination, Zoom, FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 import { useNewProductStore } from "~/stores/newProduct.js";
