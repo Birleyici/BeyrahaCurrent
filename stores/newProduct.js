@@ -30,6 +30,7 @@ export const useNewProductStore = defineStore({
                 headers: {
                     "Content-Type": "application/json",
                 },
+                cache:'no-cache',
                 body: JSON.stringify(this.$state),
             });
             this.loading = false

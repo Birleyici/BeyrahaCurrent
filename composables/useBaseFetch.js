@@ -1,26 +1,29 @@
 import { useMainStore } from '~/stores/main.js'
 
-
 export const useBaseFetch = async (url, options = {}) => {
-    
-    const token = useCookie('token', {watch: true});
+    const token = useCookie('token', { watch: true });
 
-
-    // Varsayılan headers ile options içindeki headers'ı birleştirin
-    const headers = {
-        Authorization: 'Bearer ' + token.value,
-        ...options.headers // options içindeki mevcut headers, varsa üzerine yazılır
+    // Varsayılan headers oluşturun
+    const defaultHeaders = {
+        Authorization: `Bearer ${token.value}`
     };
 
-    const response = await useFetch(
-        useBaseUrl() + url,
-        {
-          credentials: 'include',
-          headers: headers,
-          ...options, // headers dışındaki diğer seçenekleri koruyun
-          cache: options.cache ? options.cache : 'no-cache'
-        }
-    );
+    // options.headers varsa, varsayılan headers ile birleştirin
+    // Yoksa, sadece varsayılan headers kullanın
+    const headers = options.headers 
+        ? { ...defaultHeaders, ...options.headers } 
+        : defaultHeaders;
+
+    // options nesnesini güncelleyin
+    const fetchOptions = {
+        ...options,
+        headers: headers,
+        credentials: 'include',
+        cache: options.cache || 'no-cache'
+    };
+
+    // useFetch ile isteği yapın
+    const response = await useFetch(useBaseUrl() + url, fetchOptions);
 
     return response;
 };
