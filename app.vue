@@ -16,6 +16,6 @@ const { data: token } = await useFetch("/api/token", { headers });
 
 if (process.server) {
   const counter = useCookie("token");
-  counter.value = token?.value.jwt;
+  counter.value = token?.value || null;
 }
 </script>
