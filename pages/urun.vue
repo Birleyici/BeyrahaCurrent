@@ -24,7 +24,7 @@
                 src="/default-product.jpg"
                 class="!object-cover !h-[550px] lg:!rounded-md"
               /> -->
-            <!-- </div>
+      <!-- </div>
           </swiper-slide>
         </swiper>
         <div v-if="!useMain().isMobile" class="mt-2">
@@ -43,7 +43,8 @@
             /></swiper-slide>
           </swiper>
         </div> -->
-      <!-- </div> --> -->
+      <!-- </div> -->
+      -->
       <!-- <SkeletonProductGallery v-else></SkeletonProductGallery> -->
 
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
@@ -62,8 +63,12 @@
             class="mySwiper2"
           >
             <swiper-slide v-for="item in 5"
-              ><img
-                src="/default-product.jpg"
+              ><NuxtImg
+                src="aws/products/1/1-1701881316795.jpg"
+                format="webp"
+                quality="90"
+                loading="lazy"
+                height="300"
                 class="object-cover rounded-md border border-transparent hover:border-secondary-500"
             /></swiper-slide>
           </swiper>
@@ -90,8 +95,7 @@
           <p class="font-medium">Öne çıkan bilgiler</p>
           <ul class="list-disc p-4 !pl-5 text-sm">
             <li>15 gün içerisinde ücretsiz iade</li>
-            <li v-html="product.description">
-            </li>
+            <li v-html="product.description"></li>
           </ul>
         </div>
       </div>
@@ -99,8 +103,6 @@
 
     <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
       <LazyUiCardsSectionCard title="Ürün açıklaması ve özellikleri">
-     
- 
         <div v-html="product.additional_info"></div>
 
         <div
@@ -166,7 +168,6 @@
 </template>
 
 <script setup>
-
 import { Pagination, Zoom, FreeMode, Navigation, Thumbs } from "swiper/modules";
 
 import { useNewProductStore } from "~/stores/newProduct.js";
