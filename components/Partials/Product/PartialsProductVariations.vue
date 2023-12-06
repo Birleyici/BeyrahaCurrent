@@ -32,7 +32,7 @@
 </template>
 
 <script setup>
-const { data: variations, pending, refresh, error } = await useJsonPlaceholderData(
+const { data: variations, pending, refresh, error } = await useBaseFetch(
   "/page/products/58/variations",
   {
     cache: false,
@@ -43,7 +43,7 @@ const {
   data: attributes,
   refresh: refreshAttrs,
   error: errorAttrs,
-} = await useJsonPlaceholderData("/products/58/attributes", {
+} = await useBaseFetch("/products/58/attributes", {
   cache: false,
 });
 
