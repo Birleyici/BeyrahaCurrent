@@ -1,10 +1,10 @@
-
-
+import { useMainStore } from '~/stores/main.js'
 
 
 export const useBaseFetch = async (url, options = {}) => {
     
     const token = useCookie('token', {watch: true});
+
 
     // Varsayılan headers ile options içindeki headers'ı birleştirin
     const headers = {

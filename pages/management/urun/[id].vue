@@ -90,8 +90,7 @@
             <div class="relative" v-for="(item, index) in product.selectedImages">
               <NuxtImg
                 :class="{
-                  'border-2 border-secondary-500':
-                    item.id == product.coverImage,
+                  'border-2 border-secondary-500': item.id == product.coverImage,
                 }"
                 class="w-16 h-16 object-cover rounded-md cursor-pointer"
                 @click="product.coverImage = item.id"
@@ -122,7 +121,7 @@
         <div class="my-minimal">
           <UiCardsLiveSearchCard
             @selecteds="(e) => (product.selectedCategories = e)"
-            :categoriesData="categories??[]"
+            :categoriesData="categories ?? []"
             :selectedInit="product.selectedCategories"
             title="Ürün kategorileri"
           ></UiCardsLiveSearchCard>
@@ -140,15 +139,20 @@ import {
   LazyAdminPartialsProductVariationTab,
 } from "#components";
 
-const { data: categories, pending, error, refresh } = await useBaseFetch("categories",
-  {
-    method: "GET",
-  }
-);
+const headers = useRequestHeaders(["cookie"]);
+const { data: token } = await useFetch("/api/token", { headers });
 
+if (process.server) {
+  const counter = useCookie("token");
+  counter.value = token?.value.jwt;
+}
+
+
+const { data: categories, pending, error, refresh } = await useBaseFetch("categories", {
+  method: "GET",
+});
 
 const productId = useRoute().params.id;
-
 
 if (productId != "yeni") {
   useNewProductStore().getProduct(productId);
@@ -168,8 +172,6 @@ const tabs = {
   AttributeTab: LazyAdminPartialsProductAttributeTab,
 };
 
-
-
 watch(
   () => product.selectedImages,
   (newVal) => {
@@ -182,18 +184,17 @@ watch(
   { immediate: true }
 ); // Bu, watcher'ın hemen çalışması için. Böylece ilk değer ataması da kontrol edilir.
 
-
 watch(
-  () => product.id, // İzlenecek değer  (product.id)  
-   (newVal) => {
+  () => product.id, // İzlenecek değer  (product.id)
+  (newVal) => {
     // Eğer product.id değişirse
     if (newVal) {
-    //ürün id sinin düzenleme linkine yönlendirilmesi. yönlendirmeyi nuxtun navigateTo ile yap
-        if(process.client){
-          navigateTo('/management/urun/'+newVal, {top:false})
-        }
+      //ürün id sinin düzenleme linkine yönlendirilmesi. yönlendirmeyi nuxtun navigateTo ile yap
+      if (process.client) {
+        navigateTo("/management/urun/" + newVal, { top: false });
+      }
     }
   },
   { immediate: false }
-); 
+);
 </script>

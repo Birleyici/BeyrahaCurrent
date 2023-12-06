@@ -3,29 +3,27 @@ import { decode } from 'next-auth/jwt';
 export default defineEventHandler(async (event) => {
 
 
-    let jwtEncodedToken
+    // let jwtEncodedToken
 
-    if(process.env.NODE_ENV === 'production'){
+    // if(process.env.NODE_ENV === 'production'){
 
-    jwtEncodedToken = getCookie(event, '__Secure-next-auth.session-token') || 0
+    // jwtEncodedToken = getCookie(event, '__Secure-next-auth.session-token') || 0
 
-    } else {
+    // } else {
 
-    jwtEncodedToken = getCookie(event, 'next-auth.session-token') || 0
+    // jwtEncodedToken = getCookie(event, 'next-auth.session-token') || 0
 
-    }
-
-
-    const token = await decode({
-        token: jwtEncodedToken,
-        secret: 'gS2v4jn3Rc2qkV5u36vbaW6iYL1805YVIHh2VtiP8HVvXlbM0VKv6MRn4VOKg7A3',
-    });
+    // }
 
 
-    console.log("bura çalıştı")
-    
+    // const token = await decode({
+    //     token: jwtEncodedToken,
+    //     secret: 'gS2v4jn3Rc2qkV5u36vbaW6iYL1805YVIHh2VtiP8HVvXlbM0VKv6MRn4VOKg7A3',
+    // });
 
-    setCookie(event, 'token', token?.jwt, { httpOnly: false, domain: '.beyraha.vercel.app'})
+
+
+    // setCookie(event, 'token', token?.jwt, { httpOnly: false})
 
 });
 
