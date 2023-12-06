@@ -139,14 +139,6 @@ import {
   LazyAdminPartialsProductVariationTab,
 } from "#components";
 
-const headers = useRequestHeaders(["cookie"]);
-const { data: token } = await useFetch("/api/token", { headers });
-
-if (process.server) {
-  const counter = useCookie("token");
-  counter.value = token?.value.jwt;
-}
-
 
 const { data: categories, pending, error, refresh } = await useBaseFetch("categories", {
   method: "GET",
