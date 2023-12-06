@@ -22,11 +22,7 @@ export default NuxtAuthHandler({
 
       if (isSignIn) {
 
-
-
         token.jwt = user ? user.access_token || '' : '';
-
-        console.log(token.jwt, "token jwt in is sign in")
         token.id = user ? user.id || '' : '';
         token.role = user ? user.role || '' : '';
         token.bitis = user ? user.exp || '' : '';
