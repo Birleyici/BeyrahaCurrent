@@ -68,7 +68,7 @@
                 format="webp"
                 quality="90"
                 loading="lazy"
-                height="300"
+                height="200"
                 class="object-cover rounded-md border border-transparent hover:border-secondary-500"
             /></swiper-slide>
           </swiper>
