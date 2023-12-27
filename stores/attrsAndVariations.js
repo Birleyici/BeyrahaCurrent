@@ -10,7 +10,7 @@ export const useAttrsAndVariations = defineStore({
 
     actions: {
         async fetchVariations(id) {
-            const { data: variations, pending, refresh, error } = await useJsonPlaceholderData("products/"+id+"/variations", {
+            const { data: variations, pending, refresh, error } = await useBaseFetch("products/"+id+"/variations", {
                 cache: false,
             });
         
@@ -67,7 +67,7 @@ export const useAttrsAndVariations = defineStore({
             const {
                 data,
                 error,
-            } = await useJsonPlaceholderData("products/"+ id +"/attributes", {
+            } = await useBaseFetch("products/"+ id +"/attributes", {
                 method: 'GET',
                 cache: false
 
