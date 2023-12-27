@@ -205,7 +205,7 @@ const createOneVariation = async () => {
 
 
   try {
-    const { data, pending, refresh, error } = await useJsonPlaceholderData("/variations", {
+    const { data, pending, refresh, error } = await useBaseFetch("/variations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -299,7 +299,7 @@ async function createAllVariation() {
   }));
 
 
-  const { data, pending, refresh, error } = await useJsonPlaceholderData("/variations", {
+  const { data, pending, refresh, error } = await useBaseFetch("/variations", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -323,7 +323,7 @@ const saveVariations = async () => {
     pending: pending3,
     refresh: refresh3,
     error: error3,
-  } = await useJsonPlaceholderData("products/" + productId + "/variations/update", {
+  } = await useBaseFetch("products/" + productId + "/variations/update", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -358,7 +358,7 @@ const deleteVariation = async (id) => {
     pending: pending4,
     refresh: refresh4,
     error: error4,
-  } = await useJsonPlaceholderData(  "variations/" + id, {
+  } = await useBaseFetch(  "variations/" + id, {
     method: "DELETE",
     cache:false
   });
@@ -368,7 +368,7 @@ const deleteVariation = async (id) => {
 };
 
 const deleteAllVariations = async (productId) => {
-  const { data, pending, refresh, error } = await useJsonPlaceholderData(
+  const { data, pending, refresh, error } = await useBaseFetch(
   "products/"+productId+"/variations/",
     {
       method: "DELETE",

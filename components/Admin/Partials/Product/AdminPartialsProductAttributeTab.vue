@@ -119,7 +119,7 @@ const addTerm = (term) => {
 };
 
 const removeTerm = async (term, terms) => {
-  const { data, pending, refresh, error } = await useJsonPlaceholderData(
+  const { data, pending, refresh, error } = await useBaseFetch(
     "product-terms/" + term.product_term_id,
     {
       method: "DELETE",
@@ -139,7 +139,7 @@ const saveAttrs = async () => {
   }
 
   loadingSaveAttrs.value = true;
-  const { data, pending, refresh, error } = await useJsonPlaceholderData(
+  const { data, pending, refresh, error } = await useBaseFetch(
     "products/" + product.id + "/attributes",
     {
       method: "POST",
@@ -157,7 +157,7 @@ const saveAttrs = async () => {
 };
 
 const deleteAttr = async (id) => {
-  const { data, pending, refresh, error } = await useJsonPlaceholderData(
+  const { data, pending, refresh, error } = await useBaseFetch(
     "product-attributes/" + id,
     {
       method: "DELETE",
@@ -170,7 +170,7 @@ const deleteAttr = async (id) => {
   await attrsAndVariations.fetchVariations(productId);
 };
 
-const { data: options, pending, refresh, error } = await useJsonPlaceholderData(
+const { data: options, pending, refresh, error } = await useBaseFetch(
   "attributes/global"
 );
 </script>
