@@ -4,6 +4,6 @@
   </header>
   <NuxtPage></NuxtPage>
   <footer>
-    <PartialsCommonFooter></PartialsCommonFooter>
+    <LazyPartialsCommonFooter></LazyPartialsCommonFooter>
   </footer>
 </template>
