@@ -11,7 +11,7 @@
     </div>
     <div class="text-center py-4">
       <p class="text-sm px-2 py-2 font-medium">
-        <b>Beyraha</b> Bordo Renk Siyah İpli Deri Erkek Bileklikk
+        <b>Beyraha</b> Bordo Renk Siyah İpli Deri Erkek Bileklikkk
       </p>
       <div class="md:flex justify-center space-x-2 items-center">
         <del class="text-sm text-slate-400">450.00 TL</del>
