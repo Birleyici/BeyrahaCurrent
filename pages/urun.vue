@@ -73,7 +73,7 @@
           </div>
         </div>
 
-        <LazyPartialsProductVariations></LazyPartialsProductVariations>
+        <PartialsProductVariations></PartialsProductVariations>
 
         <div class="flex space-x-4 lg:space-x-8">
           <div class="inline-block">

@@ -161,9 +161,7 @@ const deleteAttr = async (id) => {
     "product-attributes/" + id,
     {
       method: "DELETE",
-      headers: {
-        ...useMain().returnHeader(),
-      },
+ 
     }
   );
   await attrsAndVariations.deleteAttr(id);

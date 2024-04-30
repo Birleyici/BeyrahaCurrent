@@ -132,6 +132,7 @@
 </template>
 
 <script setup>
+
 import { useNewProductStore } from "~/stores/newProduct.js";
 import {
   LazyAdminPartialsProductGeneralTab,

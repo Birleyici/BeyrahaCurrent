@@ -9,8 +9,8 @@ export default defineNuxtRouteMiddleware(async (to) => {
 
         // Return immediately if user is already authenticated
         if (status.value === 'unauthenticated') {
+            return navigateTo(process.env.AUTH_ORIGIN + '/management/login', {external:true})
 
-            await callWithNuxt(nuxtApp, signIn, [undefined, { callbackUrl: to.path }])
 
         }
     }

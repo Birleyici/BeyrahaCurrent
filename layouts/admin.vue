@@ -20,6 +20,7 @@
 <script setup>
 const menuStatus = ref(false);
 
+
 const kategoriler = reactive([
   {
     name: "Genel görünüm",

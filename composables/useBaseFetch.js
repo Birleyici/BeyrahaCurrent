@@ -1,11 +1,11 @@
 import { useMainStore } from '~/stores/main.js'
 
 export const useBaseFetch = async (url, options = {}) => {
-    const token = useCookie('token', { watch: true });
+    const token = useCookie('auth:token', { watch: true });
 
     // Varsayılan headers oluşturun
     const defaultHeaders = {
-        Authorization: `Bearer ${token.value}`
+        Authorization: 'Bearer ' + token.value
     };
 
     // options.headers varsa, varsayılan headers ile birleştirin

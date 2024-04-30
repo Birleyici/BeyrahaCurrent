@@ -205,7 +205,7 @@ const createOneVariation = async () => {
 
 
   try {
-    const { data, pending, refresh, error } = await useBaseFetch("/variations", {
+    const { data, pending, refresh, error } = await useBaseFetch("variations", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -299,7 +299,7 @@ async function createAllVariation() {
   }));
 
 
-  const { data, pending, refresh, error } = await useBaseFetch("/variations", {
+  const { data, pending, refresh, error } = await useBaseFetch("variations", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",

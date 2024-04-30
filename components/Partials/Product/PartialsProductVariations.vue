@@ -45,7 +45,7 @@ const {
   data: attributes,
   refresh: refreshAttrs,
   error: errorAttrs,
-} = await useBaseFetch("/products/58/attributes", {
+} = await useBaseFetch("products/58/attributes", {
   method: 'GET',
   cache: 'no-cache',
 });

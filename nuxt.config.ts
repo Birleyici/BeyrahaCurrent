@@ -2,7 +2,7 @@ import vsharp from 'vite-plugin-vsharp';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  
+
   nitro: {
     vercel: {
       regions: ['fra1'],
@@ -56,8 +56,45 @@ export default defineNuxtConfig({
 
 
   ],
+
+
   auth: {
     globalAppMiddleware: false,
+    baseURL: process.env.API_BASE_URL + 'auth',
+
+    provider: {
+      type: 'refresh',
+      endpoints: {
+        signIn: { path: '/login', method: 'post' },
+        signOut: { path: '/logout', method: 'post' },
+        signUp: { path: '/register', method: 'post' },
+        getSession: { path: '/me', method: 'get' },
+        refresh: { path: '/refresh', method: 'post' }
+      },
+
+      pages: {
+        login: '/deneme',
+      },
+
+      token: {
+        signInResponseTokenPointer: '/accessToken',
+        type: 'Bearer',
+        cookieName: 'token',
+        headerName: 'Authorization',
+        maxAgeInSeconds: 1800,
+        sameSiteAttribute: 'lax',
+        cookieDomain: ''
+      },
+      refreshToken: {
+        signInResponseRefreshTokenPointer: '/refreshToken',
+        refreshRequestTokenPointer: '/refreshToken',
+        cookieName: 'baken',
+        maxAgeInSeconds: 1800,
+        cookieDomain: ''
+      },
+
+    },
+
 
 
   },
@@ -67,10 +104,10 @@ export default defineNuxtConfig({
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
-     cssnano:
-       process.env.NODE_ENV === 'production'
-         ? { preset: ['default', { discardComments: { removeAll: true } }] }
-         : false, // disable cssnano when not in production
+      cssnano:
+        process.env.NODE_ENV === 'production'
+          ? { preset: ['default', { discardComments: { removeAll: true } }] }
+          : false, // disable cssnano when not in production
     },
   },
 

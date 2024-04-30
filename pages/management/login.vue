@@ -25,7 +25,9 @@
 </template>
 
 <script setup>
+
 definePageMeta({
+  
   layout: "empty",
   auth: {
     unauthenticatedOnly: true,
@@ -42,44 +44,22 @@ const form = reactive({
 const errorStatus = ref(false);
 const loading = ref(false);
 
-const mySignInHandler = async ({ email, password }) => {
+const mySignInHandler = async ({password, email}) => {
+
   loading.value = true;
 
-  const { error, url } = await signIn("credentials", {
+ const response =  await signIn("credentials", {
     email,
     password,
-    redirect: false,
     callbackUrl: "/management/urun/58",
   });
 
+
+
   loading.value = false;
 
-  console.log(error)
 
-  if (error) {
-    errorStatus.value = true;
-  } else {
-    errorStatus.value = false;
-
-    // No error, continue with the sign in, e.g., by following the returned redirect:
-    return navigateTo(url, { external: true });
-  }
 };
 
-// const loading = ref(false);
-// const login = async () => {
-//   loading.value = true;
-//   const { data, pending, refresh, error } = await useJsonPlaceholderData("admin-login", {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     body: JSON.stringify(form),
-//     cache: false,
-//   });
-//   loading.value = pending;
-//   if (error.value == null) {
-//     await navigateTo("/management/dashboard");
-//   }
-// };
+
 </script>
