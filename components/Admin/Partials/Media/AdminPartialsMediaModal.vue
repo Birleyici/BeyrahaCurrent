@@ -82,6 +82,8 @@
   </div>
 </template>
 <script setup>
+const headers = useRequestHeaders(['cookie'])
+
 const query = reactive({
   limit: 20,
   page: 1,
@@ -99,6 +101,7 @@ const {
 } = await useFetch(useBaseUrl() + "vendor/images", {
   method: "GET",
   query,
+  headers,
   credentials: "include",
 });
 
