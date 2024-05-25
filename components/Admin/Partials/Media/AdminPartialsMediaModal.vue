@@ -98,6 +98,7 @@ const {
   refresh,
 } = await useFetch(useBaseUrl() + "vendor/images", {
   method: "GET",
+  headers: useRequestHeaders(['cookies']),
   query,
   credentials: "include",
 });

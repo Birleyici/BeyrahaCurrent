@@ -27,7 +27,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL,
-      apiUrl: 'https://birleyici.online/api',
+      apiUrl: 'http://localhost/laravel-api/public/api',
       nuxtSecret: process.env.NUXT_SECRET,
       isDevelopment: process.env.NODE_ENV !== 'production' ? true : false,
 
