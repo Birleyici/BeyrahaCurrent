@@ -7,16 +7,16 @@
       <b>Giriş</b>
       <div class="mt-minimal grid gap-4">
         <UiFormInput
-          v-model="form.email"
+          v-model="email"
           placeholder="Kullanıcı adı"
         ></UiFormInput>
         <UiFormPasswordInput
-          v-model="form.password"
+          v-model="password"
           placeholder="Şifre"
         ></UiFormPasswordInput>
         <UiButtonsBaseButton
           :loading="loading"
-          @click.stop="mySignInHandler({ ...form })"
+          @click.stop="login()"
           color="secondary"
           >Giriş</UiButtonsBaseButton
         >
@@ -29,36 +29,26 @@
 </template>
 
 <script setup>
+import { useStore } from '~/stores/store';
+
 definePageMeta({
   layout: "empty",
 });
 
-const form = reactive({
-  password: null,
-  email: null,
-});
-
-const errorStatus = ref(false);
-const loading = ref(false);
-
-const mySignInHandler = async ({ password, email }) => {
-  loading.value = true;
-  await useFetch(
-    useBaseUrl() + "auth/login",
-    {
-      body: {
-        ...form,
-      },
-      method: "POST",
-      onResponse({ request, response, options }) {
-        const token = useCookie("token");
-        const user = useCookie("user");
-        token.value = response._data.token
-        user.value = response._data.user
-         navigateTo('/management/urun/58')
-
-      },
+const email = ref('')
+const password = ref('')
+const authService = useAuthService()
+const store = useStore()
+const router = useRouter()
+async function login() {
+    try {
+        const res = await authService.login(email.value, password.value)
+        const user = await authService.getUser()
+        console.log(res)
+        store.setUser(user)
+        router.push('/')
+    } catch (e) {
+        console.log(e)
     }
-  );
-};
+}
 </script>
