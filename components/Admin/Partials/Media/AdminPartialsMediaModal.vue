@@ -91,16 +91,16 @@ const emit = defineEmits(["selecteds"]);
 const { selecteds } = defineProps(["selecteds"]);
 const selectedImage = ref(selecteds);
 
-
-const { data: images, pending, error, refresh } = await useBaseFetch("vendor/images",
-  {
-    method: "GET",
-    query,
-    cache: "no-cache",
-
-  }
-);
-
+const {
+  data: images,
+  pending,
+  error,
+  refresh,
+} = await useFetch(useBaseUrl() + "vendor/images", {
+  method: "GET",
+  query,
+  credentials: "include",
+});
 
 const changePage = (page) => {
   query.page = page;
@@ -142,21 +142,16 @@ const saveImagePaths = async (paths) => {
     } = await useBaseFetch("vendor/images", {
       method: "POST",
       body: paths,
-      cache: 'no-cache',
+      cache: "no-cache",
     });
 
     await refresh();
-
   } catch (error) {
-    
     console.log(error, "error");
-  
   }
 };
 
 watch(selectedImage, () => {
   emit("selecteds", selectedImage.value);
 });
-
-
 </script>
