@@ -37,12 +37,14 @@
           name="ph:magnifying-glass"
           class="w-7 h-7"
         />
+        <NuxtLink href="/">
         <img
           v-if="!useMain().isMobile"
           src="/logo.jpg"
           class="min-w-[100px] max-w-[100px]"
           alt=""
         />
+        </NuxtLink>
       </p>
 
       <img
@@ -59,7 +61,7 @@
           <p
             @mouseover="changeAccountStatusFewSecond()"
             @mouseout="mouseOutAccount = true"
-            class="cursor-pointer font-primary text-heading-4 border-r border-r pr-minimal"
+            class="cursor-pointer font-primary text-heading-4  pr-minimal"
           >
             HESAP
           </p>

@@ -80,8 +80,8 @@ module.exports = {
         'heading-3': '1.25rem', // Başlık 3 için yazı boyutu
       },
       fontFamily: {
-        'primary': ['Urbanist'], // İlk yazı tipi olarak Bebas Neue
-        'secondary': ['Open Sans', 'sans-serif'], // İkinci yazı tipi olarak Open Sans
+        // 'primary': ['ui-sans-serif'], // İlk yazı tipi olarak Bebas Neue
+        // 'secondary': ['Open Sans', 'sans-serif'], // İkinci yazı tipi olarak Open Sans
       },
     },
   },

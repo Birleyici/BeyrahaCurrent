@@ -1,0 +1,86 @@
+<script setup lang="ts">
+defineProps(["images"]);
+const clicked = ref(false);
+
+const toggleZoom = (e: MouseEvent) => {
+  const target = e.target as HTMLElement;
+  if (target) {
+    const rect = target.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+    if (clicked.value) {
+      target.style.transform = "scale(1)";
+      clicked.value = false;
+    } else {
+      target.style.transformOrigin = `${x}% ${y}%`;
+      target.style.transform = "scale(1.5)";
+      clicked.value = true;
+    }
+  }
+};
+
+const addZoomListeners = (img: HTMLElement) => {
+  img.addEventListener("click", toggleZoom);
+};
+
+const removeZoomListeners = (img: HTMLElement) => {
+  img.removeEventListener("click", toggleZoom);
+};
+
+onMounted(() => {
+  const imgs = document.querySelectorAll(".zoomable");
+  imgs.forEach((img) => addZoomListeners(img as HTMLElement));
+});
+
+onUnmounted(() => {
+  const imgs = document.querySelectorAll(".zoomable");
+  imgs.forEach((img) => removeZoomListeners(img as HTMLElement));
+});
+</script>
+
+<template>
+  <UCarousel
+    :items="images"
+    :ui="{
+      item: 'basis-full',
+      container: 'rounded-none lg:rounded-lg',
+      indicators: {
+        wrapper: 'relative bottom-0 mt-4',
+      },
+    }"
+    :prev-button="{
+      color: 'gray',
+      icon: 'i-heroicons-arrow-left-20-solid',
+      class: 'absolute',
+    }"
+    :next-button="{
+      color: 'gray',
+      icon: 'i-heroicons-arrow-right-20-solid',
+      class: 'absolute',
+    }"
+    indicators
+    arrows
+    class="w-full mx-auto"
+  >
+    <template #default="{ item }">
+      <NuxtImg
+        :src="'aws' + item.path"
+        class="w-full zoomable transition-transform duration-300 border lg:rounded-lg"
+        draggable="false"
+        loading="lazy"
+      />
+    </template>
+
+    <template #indicator="{ onClick, page, active }">
+      <NuxtImg
+        :src="'aws' + images[page - 1]?.path"
+        class="w-12 border-2 rounded-md cursor-pointer"
+        :class="active ? 'border-orange-500' : ''"
+        @click="onClick(page)"
+        size="2xs"
+      />
+    </template>
+  </UCarousel>
+</template>
+

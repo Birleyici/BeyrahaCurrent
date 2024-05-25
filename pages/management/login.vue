@@ -1,5 +1,4 @@
 <template>
-
   <div class="w-screen h-screen bg-tertiary-500">
     <Icon name="mdi:lock" class="w-72 h-72 opacity-20"></Icon>
     <div
@@ -7,7 +6,10 @@
     >
       <b>Giriş</b>
       <div class="mt-minimal grid gap-4">
-        <UiFormInput v-model="form.email" placeholder="Kullanıcı adı"></UiFormInput>
+        <UiFormInput
+          v-model="form.email"
+          placeholder="Kullanıcı adı"
+        ></UiFormInput>
         <UiFormPasswordInput
           v-model="form.password"
           placeholder="Şifre"
@@ -18,23 +20,18 @@
           color="secondary"
           >Giriş</UiButtonsBaseButton
         >
-        <p v-if="errorStatus" class="text-red-500 text-sm">Giriş bilgileri hatalı</p>
+        <p v-if="errorStatus" class="text-red-500 text-sm">
+          Giriş bilgileri hatalı
+        </p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-
 definePageMeta({
-  
   layout: "empty",
-  auth: {
-    unauthenticatedOnly: true,
-  },
 });
-const { status, data, signIn, signOut, lastRefreshedAt } = useAuth();
-
 
 const form = reactive({
   password: null,
@@ -44,22 +41,24 @@ const form = reactive({
 const errorStatus = ref(false);
 const loading = ref(false);
 
-const mySignInHandler = async ({password, email}) => {
-
+const mySignInHandler = async ({ password, email }) => {
   loading.value = true;
+  await useFetch(
+    useBaseUrl() + "auth/login",
+    {
+      body: {
+        ...form,
+      },
+      method: "POST",
+      onResponse({ request, response, options }) {
+        const token = useCookie("token");
+        const user = useCookie("user");
+        token.value = response._data.token
+        user.value = response._data.user
+         navigateTo('/management/urun/58')
 
- const response =  await signIn("credentials", {
-    email,
-    password,
-    callbackUrl: "/management/urun/58",
-  });
-
-
-
-  loading.value = false;
-
-
+      },
+    }
+  );
 };
-
-
 </script>

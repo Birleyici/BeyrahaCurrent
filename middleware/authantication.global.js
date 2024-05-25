@@ -1,21 +1,7 @@
-import { callWithNuxt, useNuxtApp } from '#app'
-export default defineNuxtRouteMiddleware(async (to) => {
-    // It's important to do this as early as possible
-    const nuxtApp = useNuxtApp()
-
-    if (useRoute().fullPath.startsWith('/management') && !useRoute().fullPath.startsWith('/management/login')) {
-
-        const { status, signIn } = useAuth()
-
-        // Return immediately if user is already authenticated
-        if (status.value === 'unauthenticated') {
-            return navigateTo(process.env.AUTH_ORIGIN + '/management/login', {external:true})
-
-
-        }
+export default defineNuxtRouteMiddleware((to, from) => {
+    const token = useCookie('token')
+    if (!token.value && !to.fullPath.startsWith('/management/login') && useRoute().fullPath.startsWith('/management')) {
+      return navigateTo('/management/login')
     }
-
-
-
-
-})
+  })
+  

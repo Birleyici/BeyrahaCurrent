@@ -8,7 +8,7 @@
         class="!font-semibold"
         @mouseout="mouseOut = true"
       >
-        <a href="#" class="border-r px-minimal font-primary !font-medium text-heading-4"
+        <a href="#" class=" px-minimal font-primary !font-medium text-heading-4"
           >GİYİM</a
         >
         <a href="#" class="px-minimal font-primary text-heading-4 !font-medium"

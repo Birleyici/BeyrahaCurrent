@@ -5,7 +5,7 @@ export const useBaseFetch = async (url, options = {}) => {
 
     // Varsayılan headers oluşturun
     const defaultHeaders = {
-        Authorization: 'Bearer ' + token.value
+        // Authorization: 'Bearer ' + token.value
     };
 
     // options.headers varsa, varsayılan headers ile birleştirin

@@ -52,7 +52,9 @@
           </div>
         </template>
 
-        <div class="grid lg:grid-cols-2 gap-4 bg-white border border-t-0 p-minimal">
+        <div
+          class="grid lg:grid-cols-2 gap-4 bg-white border border-t-0 p-minimal"
+        >
           <div class="lg:col-span-2 flex space-x-4 justify-between">
             <template v-for="term in item.terms">
               <UiFormSelect
@@ -65,7 +67,8 @@
                     (
                       store.attributes.find(
                         (e) =>
-                          e.product_attribute_id == term.product_term.product_attribute_id
+                          e.product_attribute_id ==
+                          term.product_term.product_attribute_id
                       ) || {}
                     ).attribute_name || ""
                   }}
@@ -75,7 +78,8 @@
                   v-for="opt in (
                     store.attributes.find(
                       (e) =>
-                        e.product_attribute_id == term.product_term.product_attribute_id
+                        e.product_attribute_id ==
+                        term.product_term.product_attribute_id
                     ) || {}
                   ).product_terms || []"
                 >
@@ -111,8 +115,14 @@
           </div>
           <div></div>
 
-          <UiFormInput v-model="item.stockCode" placeholder="Stok kodu"></UiFormInput>
-          <UiFormInput v-model="item.price" placeholder="Normal fiyat"></UiFormInput>
+          <UiFormInput
+            v-model="item.stockCode"
+            placeholder="Stok kodu"
+          ></UiFormInput>
+          <UiFormInput
+            v-model="item.price"
+            placeholder="Normal fiyat"
+          ></UiFormInput>
           <UiFormInput
             v-model="item.sale_price"
             placeholder="İndirimli fiyat"
@@ -161,8 +171,6 @@ await store.fetchVariations(productId);
 const addedType = ref(1);
 const errorMessage = ref(null);
 
-
-
 const variationHandle = () => {
   if (addedType.value == 1) {
     createOneVariation();
@@ -180,7 +188,6 @@ const isAttributeExists = (attributeId) => {
 };
 
 const createOneVariation = async () => {
-
   // Öncelikle, useForVariation değeri 1 olan herhangi bir attribute olup olmadığını kontrol edin.
   const hasAttributesForVariation = store.attributes.some(
     (attribute) => attribute.useForVariation == 1
@@ -203,7 +210,6 @@ const createOneVariation = async () => {
     terms: [],
   };
 
-
   try {
     const { data, pending, refresh, error } = await useBaseFetch("variations", {
       method: "POST",
@@ -214,9 +220,10 @@ const createOneVariation = async () => {
       cache: false,
     });
 
- 
-  // Şimdi, yeni oluşturulan varyasyon için şablon term'leri oluşturalım:
-  const createdVariation = data.value.variation;
+    console.log(data,error)
+
+    // Şimdi, yeni oluşturulan varyasyon için şablon term'leri oluşturalım:
+    const createdVariation = data.value.variation;
     createdVariation.terms = [];
     store.attributes.forEach((attribute) => {
       if (attribute.useForVariation == 0) {
@@ -235,21 +242,18 @@ const createOneVariation = async () => {
 
     // createdVariation.terms'i product_attribute_id'ye göre sıralayın
     createdVariation.terms.sort(
-      (a, b) => a.product_term.product_attribute_id - b.product_term.product_attribute_id
+      (a, b) =>
+        a.product_term.product_attribute_id -
+        b.product_term.product_attribute_id
     );
 
     // Eğer term'ler oluşturulduysa, varyasyonu listeye ekleyin.
     if (createdVariation.terms.length > 0) {
       store.variations.unshift(createdVariation);
     }
-
   } catch (e) {
-
     console.error("Beklenmedik bir hata oluştu:", e);
   }
-
-
- 
 };
 
 async function createAllVariation() {
@@ -257,8 +261,6 @@ async function createAllVariation() {
   const attributesWithTerms = store.attributes.filter(
     (attribute) => attribute.product_terms && attribute.product_terms.length > 0
   );
-
-  
 
   // Tüm kombinasyonları oluşturmak için bir yardımcı fonksiyon
   function generateCombinations(arrays) {
@@ -275,8 +277,6 @@ async function createAllVariation() {
 
   // Tüm kombinasyonları oluşturalım.
   const allCombinations = generateCombinations(termsArrays);
-
-
 
   // Oluşturulan kombinasyonları kullanarak varyasyonları oluşturalım.
   const allVariations = allCombinations.map((combination) => ({
@@ -298,7 +298,6 @@ async function createAllVariation() {
     })),
   }));
 
-
   const { data, pending, refresh, error } = await useBaseFetch("variations", {
     method: "POST",
     headers: {
@@ -308,7 +307,6 @@ async function createAllVariation() {
     cache: false,
   });
 
-
   if (error.data == null) {
     await store.fetchVariations(productId);
   }
@@ -316,6 +314,7 @@ async function createAllVariation() {
 
 const loadingVariationUpdate = ref(false);
 const saveVariations = async () => {
+  console.log("burada")
   loadingVariationUpdate.value = true;
 
   const {
@@ -341,13 +340,20 @@ const saveVariations = async () => {
   }
 };
 
-const findValueInAttrs = (data, product_term_id, attribute_id, attribute_name) => {
+const findValueInAttrs = (
+  data,
+  product_term_id,
+  attribute_id,
+  attribute_name
+) => {
   const attribute = data.find((e) => e.product_attribute_id == attribute_id);
 
   // Eğer belirli bir attribute_id'ye sahip öğe bulunmazsa, hemen bir default değer döndürelim.
   if (!attribute) return `Herhangi Bir ${attribute_name}`;
 
-  const term = attribute.product_terms?.find((d) => d.product_term_id == product_term_id);
+  const term = attribute.product_terms?.find(
+    (d) => d.product_term_id == product_term_id
+  );
 
   return term?.term_name || `Herhangi Bir ${attribute.attribute_name}`;
 };
@@ -358,25 +364,29 @@ const deleteVariation = async (id) => {
     pending: pending4,
     refresh: refresh4,
     error: error4,
-  } = await useBaseFetch(  "variations/" + id, {
+  } = await useBaseFetch("variations/" + id, {
     method: "DELETE",
-    cache:false
+    cache: false,
   });
 
   await store.deleteVariation(id);
-  await  store.fetchVariations(productId);
+  await store.fetchVariations(productId);
 };
 
 const deleteAllVariations = async (productId) => {
-  const { data, pending, refresh, error } = await useBaseFetch(
-  "products/"+productId+"/variations/",
-    {
+  try {
+    const { data, pending, refresh, error } = await useBaseFetch("products/58/variations", {
       method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
       cache: false,
-  
-    }
-  );
-
-  await store.fetchVariations(productId);
+    });
+    console.log(data, error);
+    await store.fetchVariations(productId);
+  } catch (e) {
+    console.error("Beklenmedik bir hata oluştu:", e);
+  }
 };
+
 </script>

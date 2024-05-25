@@ -35,69 +35,11 @@ export default defineNuxtConfig({
   modules: [
     'nuxt-swiper',
     '@pinia/nuxt',
-    ['@nuxtjs/google-fonts', {
-      families: {
-        Roboto: true,
-        Inter: [400, 700],
-        'Josefin+Sans': true,
-        Lato: [100, 300],
-        'Bebas+Neue': [100, 400, 700],
-        Urbanist: [400, 500, 700],
-        Montserrat: [400, 500],
-        Raleway: {
-          wght: [100, 400],
-          ital: [100]
-        },
-      }
-    }],
     'nuxt-icon',
     '@nuxt/image',
-    '@sidebase/nuxt-auth',
-
+    '@nuxt/ui'
 
   ],
-
-
-  auth: {
-    globalAppMiddleware: false,
-    baseURL: process.env.API_BASE_URL + 'auth',
-
-    provider: {
-      type: 'refresh',
-      endpoints: {
-        signIn: { path: '/login', method: 'post' },
-        signOut: { path: '/logout', method: 'post' },
-        signUp: { path: '/register', method: 'post' },
-        getSession: { path: '/me', method: 'get' },
-        refresh: { path: '/refresh', method: 'post' }
-      },
-
-      pages: {
-        login: '/deneme',
-      },
-
-      token: {
-        signInResponseTokenPointer: '/accessToken',
-        type: 'Bearer',
-        cookieName: 'token',
-        headerName: 'Authorization',
-        maxAgeInSeconds: 1800,
-        sameSiteAttribute: 'lax',
-        cookieDomain: ''
-      },
-      refreshToken: {
-        signInResponseRefreshTokenPointer: '/refreshToken',
-        refreshRequestTokenPointer: '/refreshToken',
-        cookieName: 'baken',
-        maxAgeInSeconds: 1800,
-        cookieDomain: ''
-      },
-
-    },
-
-
-
-  },
 
   devtools: { enabled: true },
   postcss: {
