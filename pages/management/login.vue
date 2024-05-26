@@ -7,16 +7,16 @@
       <b>Giriş</b>
       <div class="mt-minimal grid gap-4">
         <UiFormInput
-          v-model="email"
+          v-model="form.email"
           placeholder="Kullanıcı adı"
         ></UiFormInput>
         <UiFormPasswordInput
-          v-model="password"
+          v-model="form.password"
           placeholder="Şifre"
         ></UiFormPasswordInput>
         <UiButtonsBaseButton
           :loading="loading"
-          @click.stop="login()"
+          @click.stop="mySignInHandler()"
           color="secondary"
           >Giriş</UiButtonsBaseButton
         >
@@ -29,26 +29,34 @@
 </template>
 
 <script setup>
-import { useStore } from '~/stores/store';
-
 definePageMeta({
   layout: "empty",
 });
 
-const email = ref('')
-const password = ref('')
-const authService = useAuthService()
-const store = useStore()
-const router = useRouter()
-async function login() {
-    try {
-        const res = await authService.login(email.value, password.value)
-        const user = await authService.getUser()
-        console.log(res)
-        store.setUser(user)
-        router.push('/')
-    } catch (e) {
-        console.log(e)
+const form = reactive({
+  password: null,
+  email: null,
+});
+
+const errorStatus = ref(false);
+const loading = ref(false);
+
+const mySignInHandler = async () => {
+  loading.value = true;
+  await useFetch(
+    useBaseUrl() + "auth/login",
+    {
+      body: {
+        ...form,
+      },
+      method: "POST",
+      onResponse({ request, response, options }) {
+        const token = useCookie("auth.token");
+        token.value = response._data.token
+         navigateTo('/management/urun/58')
+
+      },
     }
-}
+  );
+};
 </script>

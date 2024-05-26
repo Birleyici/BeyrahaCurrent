@@ -27,7 +27,6 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL,
-      apiUrl: 'http://localhost/laravel-api/public/api',
       nuxtSecret: process.env.NUXT_SECRET,
       isDevelopment: process.env.NODE_ENV !== 'production' ? true : false,
 
@@ -38,11 +37,11 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icon',
     '@nuxt/image',
-    '@nuxt/ui'
-
+    '@nuxt/ui',
+    // "@sidebase/nuxt-auth"
   ],
 
-  devtools: { enabled: true },
+  devtools: { enabled: false },
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -54,6 +53,24 @@ export default defineNuxtConfig({
     },
   },
 
+  // auth: {
+  //   baseURL: 'http://localhost/laravel-api/public/api/auth',
+  //   provider: {
+  //     type: 'local',
+  //     endpoints: {
+  //       signIn: { path: '/login', method: 'post' },
+  //       signOut: { path: '/logout', method: 'post' },
+  //       signUp: { path: '/register', method: 'post' },
+  //       getSession: false
 
+  //     },
+  //     token: {
+  //       signInResponseTokenPointer: '/token',
+  //     },
+
+  //   },
+
+
+  // }
 
 })

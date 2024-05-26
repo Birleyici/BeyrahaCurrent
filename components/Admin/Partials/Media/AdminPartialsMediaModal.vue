@@ -91,12 +91,17 @@ const emit = defineEmits(["selecteds"]);
 const { selecteds } = defineProps(["selecteds"]);
 const selectedImage = ref(selecteds);
 
-const res =  useApi().get( "/vendor/images", {
+const {
+  data: images,
+  pending,
+  error,
+  refresh,
+} = await useBaseFetch("vendor/images", {
+  method: "GET",
   query,
-  credentials: "include",
+  credentials: 'include',
+  cache: "no-cache",
 });
-
-console.log(res)
 
 const changePage = (page) => {
   query.page = page;
