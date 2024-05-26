@@ -74,11 +74,20 @@ onUnmounted(() => {
 
     <template #indicator="{ onClick, page, active }">
       <NuxtImg
+        v-if="!useMain().isMobile"
         :src="'aws' + images[page - 1]?.path"
         class="w-12 border-2 rounded-md cursor-pointer"
         :class="active ? 'border-orange-500' : ''"
         @click="onClick(page)"
         size="2xs"
+      />
+      <UButton
+        v-else
+        :variant="active ? 'solid' : 'outline'"
+        color="orange"
+        size="2xs"
+        class="rounded-full min-w-6 justify-center"
+        @click="onClick(page)"
       />
     </template>
   </UCarousel>
