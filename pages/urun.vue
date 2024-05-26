@@ -8,9 +8,10 @@
       <SkeletonProductGallery v-else></SkeletonProductGallery>
 
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
-        <h1 class="text-xl font-semibold border-b border-dotted pb-2">
+        <h1 class="text-2xl font-semibold pb-2">
           {{ product.name }}
         </h1>
+        <UDivider class="my-2" type="dashed" />
 
         <div class="my-minimal">
           <p class="font-medium text-sm">Renk:</p>
@@ -20,7 +21,11 @@
             :items="product.selectedImages"
             :ui="{ item: 'snap-end' }"
           >
-            <NuxtImg :src="'aws' + item.path" width="60" class="m-1 rounded-md border" />
+            <NuxtImg
+              :src="'aws' + item.path"
+              width="60"
+              class="m-1 rounded-md border"
+            />
           </UCarousel>
           <div class="flex space-x-2" v-else>
             <SkeletonUiThumb v-for="item in 4" :key="item"></SkeletonUiThumb>
@@ -35,7 +40,7 @@
           </div>
           <UiButtonsBaseButton
             color="secondary"
-            class="!rounded-full font-bold !flex text-sm !px-12"
+            class="!rounded-full font-bold !flex text-sm lg:!px-12"
           >
             <Icon name="material-symbols:shopping-bag" class="w-5 h-5"></Icon>
             <p>SEPETE EKLE</p>
@@ -63,6 +68,7 @@
           <div
             class="flex lg:block items-center space-x-4 lg:space-x-0 bg-tertiary-100 p-3 lg:p-4 w-full rounded-sm"
             v-for="item in 8"
+            :key="item"
           >
             <p class="text-xs">Materyal</p>
             <p class="font-medium">Timsah derisi</p>
@@ -72,6 +78,7 @@
     </div>
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
       <p class="mb-2 font-bold">Benzer ürünler</p>
+      <UiSlidesProductSlide></UiSlidesProductSlide>
     </div>
 
     <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">

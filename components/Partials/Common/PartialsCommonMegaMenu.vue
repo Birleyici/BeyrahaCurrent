@@ -1,7 +1,6 @@
 <template>
   <div class="py-minimal relative inline-block" v-if="!useMain().isMobile">
     <div class="flex items-center">
-      
       <div
         @mouseover="changeStatusFewSecond()"
         class="!font-semibold"

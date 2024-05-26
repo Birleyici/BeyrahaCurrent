@@ -1,6 +1,6 @@
 <template>
   <div class="relative w-full h-full overflow-hidden">
-    <div class="sticky top-0 left-0 p-4 bg-gray-100 z-10">
+    <div class="sticky top-0 left-0 right-0 p-4 bg-gray-100 z-10">
       <button v-if="currentLevel > 0" @click="goBack" class="p-2 bg-gray-200 rounded">
         Geri
       </button>
