@@ -1,27 +1,20 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
-    <LazyUiMenuSideBarMenu :status="menuStatus" @change-status="(e) => (menuStatus = e)">
-      <PartialsMenuNestedSlideMenu :menu="kategoriler"></PartialsMenuNestedSlideMenu>
-    </LazyUiMenuSideBarMenu>
-    <UiMenuSideBarMenu
-      position="true"
-      :status="accountStatus"
-      @change-status="(e) => (accountStatus = e)"
-    >
-      <div class="p-8" v-if="true">
+    <USlideover v-model="menuStatus">
+      <PartialsMenuNestedSlideMenu
+        :menu="kategoriler"
+      ></PartialsMenuNestedSlideMenu>
+    </USlideover>
+
+    <USlideover v-model="accountStatus">
+      <div class="p-8">
         <PartialsFormLoginRegisterForm />
       </div>
-      <div v-else>
-        <PartialsMenuNestedSlideMenu :menu="menu"></PartialsMenuNestedSlideMenu>
-      </div>
-    </UiMenuSideBarMenu>
-    <UiMenuSideBarMenu
-      position="true"
-      :status="cartStatus"
-      @change-status="(e) => (cartStatus = e)"
-    >
+    </USlideover>
+
+    <USlideover v-model="cartStatus">
       <PartialsCartList></PartialsCartList>
-    </UiMenuSideBarMenu>
+    </USlideover>
     <div class="flex justify-between items-center">
       <p class="font-primary text-heading-1 flex items-center space-x-3">
         <Icon
@@ -38,12 +31,12 @@
           class="w-7 h-7"
         />
         <NuxtLink href="/">
-        <img
-          v-if="!useMain().isMobile"
-          src="/logo.jpg"
-          class="min-w-[100px] max-w-[100px]"
-          alt=""
-        />
+          <img
+            v-if="!useMain().isMobile"
+            src="/logo.jpg"
+            class="min-w-[100px] max-w-[100px]"
+            alt=""
+          />
         </NuxtLink>
       </p>
 
@@ -61,22 +54,30 @@
           <p
             @mouseover="changeAccountStatusFewSecond()"
             @mouseout="mouseOutAccount = true"
-            class="cursor-pointer font-primary text-heading-4  pr-minimal"
+            class="cursor-pointer font-primary text-heading-4 pr-4"
           >
             HESAP
           </p>
           <p
             @mouseover="changeCartStatusFewSecond()"
             @mouseout="mouseOutCart = true"
-            class="cursor-pointer font-primary text-heading-4 px-minimal"
+            class="cursor-pointer font-primary text-heading-4 px-4"
           >
             SEPET
             <span class="text-secondary-500">2</span>
           </p>
         </div>
         <div class="flex items-center space-x-4 font-medium" v-else>
-          <Icon @click="accountStatus = true" name="ph:user" class="w-8 h-8"></Icon>
-          <Icon @click="cartStatus = true" name="ph:bag-simple" class="w-8 h-8"></Icon>
+          <Icon
+            @click="accountStatus = true"
+            name="ph:user"
+            class="w-8 h-8"
+          ></Icon>
+          <Icon
+            @click="cartStatus = true"
+            name="ph:bag-simple"
+            class="w-8 h-8"
+          ></Icon>
         </div>
       </div>
     </div>
@@ -113,6 +114,18 @@ const kategoriler = reactive([
       {
         name: "Tesettür",
         icon: null,
+        children: [
+          {
+            name: "alt alt",
+            icon: null,
+            children: [
+              {
+                name: "alt alt alt",
+                icon: null,
+              },
+            ],
+          },
+        ],
       },
     ],
   },

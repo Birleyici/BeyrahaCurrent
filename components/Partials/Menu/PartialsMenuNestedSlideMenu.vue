@@ -1,56 +1,66 @@
 <template>
-  <div class="relative overflow-hidden">
-    <div
-      @click="activeIndex > 0 ? activeIndex-- : ''"
-      class="py-3 px-2 border-b flex items-center space-x-3"
-      v-if="activeIndex > 0"
-    >
-      <Icon name="solar:alt-arrow-left-line-duotone" class="w-5 h-5"></Icon>
-      <p class="font-medium">Geri</p>
-    </div>
-    <div class="py-3 px-4 border-b flex items-center space-x-3" v-else>
-      <p class="font-medium">Menü</p>
-    </div>
+  <div class="relative w-full h-full overflow-hidden">
+    <div class="sticky top-0 left-0 p-4 bg-gray-100 z-10">
+      <button v-if="currentLevel > 0" @click="goBack" class="p-2 bg-gray-200 rounded">
+        Geri
+      </button>
+      <p class="p-2" v-else >Menü</p>
 
-    <!-- Ana Menü -->
-    <div class="flex overflow-hidden">
-      <div
-        v-for="(currentMenu, index) in nestedMenus"
-        :style="'transform:translateX(-' + activeIndex * 100 + '%)'"
-        class="min-w-full"
-      >
-        <div
-          class="border-b py-3 pl-4 grid grid-cols-3 items-center duration-300"
-          v-for="item in currentMenu"
-          @click="item.children ? navigateToSubMenu(index + 1, item.children) : ''"
-          :key="item.name"
+    </div>
+    <div
+      v-for="(level, index) in nestedMenus"
+      :key="index"
+      class="mt-16"
+      :class="{
+        'absolute top-0 left-0 w-full h-full ': true,
+        'translate-x-full': index > currentLevel,
+        'translate-x-0': index === currentLevel,
+        '-translate-x-full': index < currentLevel,
+      }"
+    >
+      <ul class="list-none p-4">
+        <li
+          v-for="(item, idx) in level"
+          :key="idx"
+          @click="() => handleClick(item, idx, index)"
+          class="flex items-center p-4 mb-2 bg-white rounded shadow cursor-pointer"
         >
-          <a to="/kategori" class="col-span-2 flex items-center space-x-2"
-            ><Icon v-if="item.icon != null" :name="item.icon"></Icon>
-            <p>{{ item.name }}</p>
-          </a>
-          <div class="flex justify-end pr-4" v-if="item.children">
-            <Icon name="ic:baseline-keyboard-arrow-right"></Icon>
-          </div>
-        </div>
-      </div>
+          <i :class="item.icon"></i>
+          <span class="ml-2">{{ item.name }}</span>
+          <i v-if="item.children" class="mdi mdi-chevron-right ml-auto"></i>
+        </li>
+      </ul>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref } from "vue";
+
 const { menu } = defineProps(["menu"]);
-const activeIndex = ref(0);
 const nestedMenus = ref([menu]);
 
-const navigateToSubMenu = (index, subMenu) => {
-  activeIndex.value = index;
-  nestedMenus.value.push(subMenu);
+const currentLevel = ref(0);
+
+const handleClick = (item, idx, levelIndex) => {
+  if (item.children) {
+    nestedMenus.value = [
+      ...nestedMenus.value.slice(0, levelIndex + 1),
+      item.children,
+    ];
+    currentLevel.value++;
+  }
 };
 
-watch(activeIndex, (newIndex) => {
-  if (newIndex < nestedMenus.value.length - 1) {
-    nestedMenus.value = nestedMenus.value.slice(0, newIndex + 1);
+const goBack = () => {
+  if (currentLevel.value > 0) {
+    currentLevel.value--;
   }
-});
+};
 </script>
+
+<style scoped>
+.mdi-chevron-right {
+  margin-left: auto;
+}
+</style>
