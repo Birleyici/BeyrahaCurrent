@@ -160,7 +160,7 @@
 </template>
 
 <script setup>
-import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
+import { useAttrsAndVariations } from "~/store/attrsAndVariations.js";
 let productId = useRoute().params.id;
 
 const store = useAttrsAndVariations();

@@ -37,9 +37,11 @@ export default defineNuxtConfig({
     '@pinia/nuxt',
     'nuxt-icon',
     '@nuxt/image',
-    '@nuxt/ui',
     // "@sidebase/nuxt-auth"
+    '@nuxt/ui',
   ],
+
+  
 
   devtools: { enabled: false },
   postcss: {

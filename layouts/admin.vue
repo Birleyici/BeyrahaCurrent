@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="bg-tertiary-5 p-minimal lg:p-maximal">
+    <div class="bg-tertiary-5 py-12 px-[3%]">
       <LazyNuxtPage></LazyNuxtPage>
     </div>
     <footer class="text-center py-2 text-sm">
@@ -36,18 +36,16 @@ const menuStatus = ref(false);
 
 const kategoriler = reactive([
   {
-    name: "Genel görünüm",
+    name: "Ürünler",
     icon: "mdi:view-dashboard",
+    url: null,
     children: [
       {
-        name: "Tesettür",
+        name: "Ürün listesi",
         icon: null,
+        url: "urunler",
       },
     ],
-  },
-  {
-    name: "Ayarlar",
-    icon: "mdi:settings",
   },
 ]);
 </script>

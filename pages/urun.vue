@@ -129,7 +129,7 @@
 </template>
 
 <script setup>
-import { useNewProductStore } from "~/stores/newProduct.js";
+import { useNewProductStore } from "~/store/newProduct.js";
 useNewProductStore().getProduct(58);
 const product = useNewProductStore().$state;
 </script>

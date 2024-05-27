@@ -53,7 +53,7 @@ const mySignInHandler = async () => {
       onResponse({ request, response, options }) {
         const token = useCookie("auth.token");
         token.value = response._data.token
-         navigateTo('/management/urun/58')
+         navigateTo('/management/urunler/58')
 
       },
     }

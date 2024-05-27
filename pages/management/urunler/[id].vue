@@ -30,12 +30,11 @@
         <div class="relative mb-24">
           <label for="" class="text-sm">Detaylı ürün açıklaması</label>
           <div class="bg-tertiary-50">
-            <quill-editor
+            <QuillEditor
               contentType="html"
               v-model:content="product.additional_info"
               style="height: 300px"
               theme="snow"
-              v-if="useMain().isLoaded"
             />
           </div>
         </div>
@@ -70,7 +69,9 @@
             </button>
           </div>
           <div class="content p-minimal border">
-            <KeepAlive> <component :is="tabs[currentTab]"></component></KeepAlive>
+            <KeepAlive>
+              <component :is="tabs[currentTab]"></component
+            ></KeepAlive>
           </div>
         </div>
       </div>
@@ -85,12 +86,19 @@
           >
         </div>
 
-        <div class="bg-tertiary-100 rounded-md p-minimal border space-y-4 my-minimal">
+        <div
+          class="bg-tertiary-100 rounded-md p-minimal border space-y-4 my-minimal"
+        >
           <div class="flex flex-auto flex-wrap gap-4">
-            <div class="relative" v-for="(item, index) in product.selectedImages">
+            <div
+              class="relative"
+              v-for="(item, index) in product.selectedImages"
+              :key="index"
+            >
               <NuxtImg
                 :class="{
-                  'border-2 border-secondary-500': item.id == product.coverImage,
+                  'border-2 border-secondary-500':
+                    item.id == product.coverImage,
                 }"
                 class="w-16 h-16 object-cover rounded-md cursor-pointer"
                 @click="product.coverImage = item.id"
@@ -113,6 +121,7 @@
               name="mdi:image"
               class="absolute left-0 opacity-10 w-20 h-20 -top-2"
               v-for="item in 3"
+              :key="item"
             ></Icon>
 
             Ürün görsellerini seç
@@ -121,7 +130,7 @@
         <div class="my-minimal">
           <UiCardsLiveSearchCard
             @selecteds="(e) => (product.selectedCategories = e)"
-            :categoriesData="categories ?? []"
+            :categoriesData="kategoriler ?? []"
             :selectedInit="product.selectedCategories"
             title="Ürün kategorileri"
           ></UiCardsLiveSearchCard>
@@ -132,38 +141,37 @@
 </template>
 
 <script setup>
+definePageMeta({
+  layout: "admin",
+});
+import { useNewProductStore } from "~/store/newProduct.js";
+import { useCategories } from "~/store/product/kategoriler.js";
 
-import { useNewProductStore } from "~/stores/newProduct.js";
 import {
   LazyAdminPartialsProductGeneralTab,
   LazyAdminPartialsProductAttributeTab,
   LazyAdminPartialsProductVariationTab,
 } from "#components";
 
-
-const { data: categories, pending, error, refresh } = await useBaseFetch("categories", {
-  method: "GET",
-});
-
-const productId = useRoute().params.id;
-
-if (productId != "yeni") {
-  useNewProductStore().getProduct(productId);
-}
-
-const product = useNewProductStore();
-
-const isOpenMediaModal = ref(false);
-const currentTab = ref("GeneralTab");
-definePageMeta({
-  layout: "admin",
-});
-
 const tabs = {
   GeneralTab: LazyAdminPartialsProductGeneralTab,
   VariationTab: LazyAdminPartialsProductVariationTab,
   AttributeTab: LazyAdminPartialsProductAttributeTab,
 };
+const currentTab = ref("GeneralTab");
+
+const product = useNewProductStore();
+const route = useRoute();
+await useCategories().kategorileriGetir();
+const kategoriler = useCategories().urunKategorileri;
+
+if (route.params.id != "yeni") {
+  product.getProduct(route.params.id);
+} else {
+  product.$reset();
+}
+
+const isOpenMediaModal = ref(false);
 
 watch(
   () => product.selectedImages,

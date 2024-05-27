@@ -1,5 +1,5 @@
 import { defineNuxtPlugin } from '#app'
-import { useMainStore } from '~/stores/main.js'
+import { useMainStore } from '~/store/main.js'
 import MobileDetect from 'mobile-detect'
 
 

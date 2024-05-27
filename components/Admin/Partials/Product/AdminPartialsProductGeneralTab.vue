@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { useNewProductStore } from "~/stores/newProduct.js";
+import { useNewProductStore } from "~/store/newProduct.js";
 const product = useNewProductStore();
 const isStockManagement = ref(false);
 </script>

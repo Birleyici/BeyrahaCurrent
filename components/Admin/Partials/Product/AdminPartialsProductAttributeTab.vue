@@ -75,8 +75,8 @@
 </template>
 
 <script setup>
-import { useNewProductStore } from "~/stores/newProduct.js";
-import { useAttrsAndVariations } from "~/stores/attrsAndVariations.js";
+import { useNewProductStore } from "~/store/newProduct.js";
+import { useAttrsAndVariations } from "~/store/attrsAndVariations.js";
 
 const product = useNewProductStore();
 const attrsAndVariations = useAttrsAndVariations()

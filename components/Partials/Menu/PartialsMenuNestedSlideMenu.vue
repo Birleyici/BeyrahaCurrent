@@ -1,11 +1,14 @@
 <template>
   <div class="relative w-full h-full overflow-hidden">
     <div class="sticky top-0 left-0 right-0 p-4 bg-gray-100 z-10">
-      <button v-if="currentLevel > 0" @click="goBack" class="p-2 bg-gray-200 rounded">
+      <button
+        v-if="currentLevel > 0"
+        @click="goBack"
+        class="p-2 bg-gray-200 rounded"
+      >
         Geri
       </button>
-      <p class="p-2" v-else >Menü</p>
-
+      <p class="p-2" v-else>Menü</p>
     </div>
     <div
       v-for="(level, index) in nestedMenus"
@@ -25,9 +28,11 @@
           @click="() => handleClick(item, idx, index)"
           class="flex items-center p-4 mb-2 bg-white rounded shadow cursor-pointer"
         >
-          <i :class="item.icon"></i>
-          <span class="ml-2">{{ item.name }}</span>
-          <i v-if="item.children" class="mdi mdi-chevron-right ml-auto"></i>
+          <NuxtLink :href="item.url && '/management/' + item.url">
+            <i :class="item.icon"></i>
+            <span class="ml-2">{{ item.name }}</span>
+            <i v-if="item.children" class="mdi mdi-chevron-right ml-auto"></i>
+          </NuxtLink>
         </li>
       </ul>
     </div>
