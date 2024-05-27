@@ -68,7 +68,10 @@ onUnmounted(() => {
         :src="'aws' + item.path"
         class="w-full zoomable transition-transform duration-300 border lg:rounded-lg"
         draggable="false"
+        width="600"
+        format="webp"
         loading="lazy"
+         quality="80"
       />
     </template>
 
