@@ -83,10 +83,11 @@ onUnmounted(() => {
       />
       <UButton
         v-else
-        :variant="active ? 'solid' : 'outline'"
-        color="orange"
+        variant="solid"
+        :color="active ? 'orange' : 'gray'"
         size="2xs"
-        class="rounded-full min-w-6 justify-center"
+        class="rounded-full duration-200 w-[10px] h-[10px] justify-center -mt-20"
+        :class="active && 'w-4'"
         @click="onClick(page)"
       />
     </template>

@@ -4,14 +4,17 @@
       <div v-for="attribute in attributes" :key="attribute.name">
         <!-- Öznitelik Adı -->
         <div class="mb-4">
-          <p class="font-medium text-sm">{{ attribute.name }}:</p>
+          <p class="font-medium text-sm">{{ attribute.name }}</p>
           <div class="flex space-x-2">
             <UiButtonsBaseButton
               color="slate"
               v-for="option in attribute.options"
               :key="option"
               :class="{
-                '!bg-secondary-500 text-white': isSelected(attribute.name, option),
+                '!bg-secondary-500 text-white': isSelected(
+                  attribute.name,
+                  option
+                ),
               }"
               :disabled="!isActive(attribute.name, option)"
               @click="selectOption(attribute.name, option)"
@@ -25,29 +28,35 @@
 
     <div class="my-minimal">
       <p class="text-secondary-500 text-3xl font-bold">
-        {{ getSelectedVariation()?.sale_price ? getSelectedVariation()?.sale_price : getSelectedVariation()?.price || "0" }} TL
+        {{
+          getSelectedVariation()?.sale_price
+            ? getSelectedVariation()?.sale_price
+            : getSelectedVariation()?.price || "0"
+        }}
+        TL
       </p>
     </div>
   </div>
 </template>
 
 <script setup>
-const { data: variations, pending, refresh, error } = await useBaseFetch(
-  "page/products/58/variations",
-  {
-    method: 'GET',
-    cache: 'no-cache',
-  }
-);
-
+const {
+  data: variations,
+  pending,
+  refresh,
+  error,
+} = await useBaseFetch("page/products/58/variations", {
+  method: "GET",
+  cache: "no-cache",
+});
 
 const {
   data: attributes,
   refresh: refreshAttrs,
   error: errorAttrs,
 } = await useBaseFetch("products/58/attributes", {
-  method: 'GET',
-  cache: 'no-cache',
+  method: "GET",
+  cache: "no-cache",
 });
 
 function transform(attributes) {

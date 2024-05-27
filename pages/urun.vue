@@ -14,7 +14,7 @@
         <UDivider class="my-2" type="dashed" />
 
         <div class="my-minimal">
-          <p class="font-medium text-sm">Renk:</p>
+          <p class="font-medium text-sm">Renk</p>
           <UCarousel
             v-if="useMain().isLoaded"
             v-slot="{ item }"
@@ -24,7 +24,7 @@
             <NuxtImg
               :src="'aws' + item.path"
               width="60"
-              class="m-1 rounded-md border"
+              class="m-1 rounded-full p-[2px] border w-16 h-16 object-cover object-top"
             />
           </UCarousel>
           <div class="flex space-x-2" v-else>
@@ -34,15 +34,17 @@
 
         <PartialsProductVariations></PartialsProductVariations>
 
-        <div class="flex space-x-4 lg:space-x-8">
+        <div
+          class="flex justify-between lg:justify-start space-x-4 lg:space-x-8"
+        >
           <div class="inline-block">
             <LazyUiFormCounter></LazyUiFormCounter>
           </div>
           <UiButtonsBaseButton
             color="secondary"
-            class="!rounded-full font-bold !flex text-sm lg:!px-12"
+            class="!rounded-full font-bold !flex relative text-sm lg:!px-12 px-6 overflow-hidden"
           >
-            <Icon name="material-symbols:shopping-bag" class="w-5 h-5"></Icon>
+            <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30"></Icon>
             <p>SEPETE EKLE</p>
           </UiButtonsBaseButton>
         </div>
