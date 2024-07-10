@@ -19,9 +19,7 @@ export const useCategories = defineStore({
         }
     },
 
-    getters: {
-
-    },
+  
 });
 
 

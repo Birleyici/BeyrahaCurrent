@@ -1,23 +1,24 @@
 <template>
+  
   <div class="grid grid-cols-2 gap-4">
-    <UiFormInput v-model="product.price" placeholder="Normal fiyat"></UiFormInput>
+    <UiFormInput v-model="productState.price" placeholder="Normal fiyat"></UiFormInput>
     <UiFormInput
-      v-model="product.sale_price"
+      v-model="productState.sale_price"
       placeholder="İndirimli fiyat"
     ></UiFormInput>
     <div class="grid gap-4">
-      <UiFormInput v-model="product.sku" placeholder="Stok kodu"></UiFormInput>
+      <UiFormInput v-model="productState.sku" placeholder="Stok kodu"></UiFormInput>
       <UiFormCheckbox
-        v-model="product.stock_management"
+        v-model="productState.stock_management"
         id="stock"
         name="stock"
         :value="true"
         >Stok yönetimini etkinleştir</UiFormCheckbox
       >
 
-      <div v-if="product.stock_management != 0">
+      <div v-if="productState.stock_management != 0">
         <UiFormInput
-          v-model="product.stock"
+          v-model="productState.stock"
           placeholder="Stok miktarı"
         ></UiFormInput>
       </div>
@@ -26,7 +27,6 @@
 </template>
 
 <script setup>
-import { useNewProductStore } from "~/store/newProduct.js";
-const product = useNewProductStore();
+const { productState } = useProductCreate();
 const isStockManagement = ref(false);
 </script>

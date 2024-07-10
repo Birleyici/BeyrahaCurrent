@@ -5,7 +5,7 @@
       :class="isOpen ? 'rounded-t-md' : 'rounded-md'"
       class="no-select cursor-pointer border py-2 px-4 bg-tertiary-100 font-medium flex justify-between items-center"
     >
-      <p>{{ props.title }}</p>
+      <p>{{ title }}</p>
       <Icon
         v-if="isOpen"
         name="material-symbols:keyboard-arrow-down"
@@ -18,9 +18,10 @@
       class="duration-300 bg-white rounded-b-md grid gap-2 overflow-hidden overflow-y-scroll"
     >
       <UiFormInput v-model="searchQuery" placeholder="Marka ara"></UiFormInput>
+      
       <UiFormCheckbox
         v-for="item in filteredData"
-        v-model="selecteds"
+        v-model="productState.selectedCategories"
         :id="item.id"
         name="stock"
         :value="item.id"
@@ -32,30 +33,20 @@
 </template>
 
 <script setup>
+const {title} =  defineProps(['title'])
 const isOpen = ref(true);
-
-const props = defineProps({
-  categoriesData: Array,
-  title: String,
-  selectedInit: Array,
-});
-
-const emit = defineEmits(["selecteds"]);
-
-const selecteds = ref(props.selectedInit);
+const { productState } = useProductCreate();
 
 const searchQuery = ref("");
 
 const filteredData = computed(() => {
   if (searchQuery.value) {
-    return props.categoriesData.filter((item) =>
+    return productState.categories.filter((item) =>
       item.name.toLowerCase().includes(searchQuery.value.toLowerCase())
     );
   }
-  return props.categoriesData;
+  return productState.categories;
 });
 
-watch(selecteds, () => {
-  emit("selecteds", selecteds.value);
-});
+
 </script>

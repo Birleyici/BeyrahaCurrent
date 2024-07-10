@@ -51,6 +51,7 @@ const mySignInHandler = async () => {
       },
       method: "POST",
       onResponse({ request, response, options }) {
+
         const token = useCookie("auth.token");
         token.value = response._data.token
          navigateTo('/management/urunler/58')

@@ -5,6 +5,7 @@ export async function useBaseFetch<T>(
   url: string,
   options: UseFetchOptions<T> = {}
 ) {
+  
   const accessToken = useCookie("auth.token");
 
   const defaults: UseFetchOptions<T> = {
@@ -16,23 +17,22 @@ export async function useBaseFetch<T>(
     onResponse: async ({ response, options }) => {
 
       if (response.status === 401) {
-        try {
-          const newToken = await refreshToken();
-          accessToken.value = newToken;
-          options.headers = { Authorization: `Bearer ${newToken}` };
-          useFetch(url, options as UseFetchOptions<T>);
-        } catch (error) {
-          console.error("Token refresh failed:", error);
-        }
+          try {
+            const newToken = await refreshToken();
+            accessToken.value = newToken;
+            options.headers = { Authorization: `Bearer ${newToken}` };
+            useFetch(url, options as UseFetchOptions<T>);
+          } catch (error) {
+            console.error("Token refresh failed:", error);
+          }
       }
     },
-    onResponseError: ()=>{
-
+    onResponseError: (error) => {
+      console.log("onresponseerror", error);
     },
-    onRequestError: ()=>{
-
+    onRequestError: () => {
+      console.log("onrequesterror");
     }
-
   };
 
   const params = defu(options, defaults);
@@ -41,13 +41,14 @@ export async function useBaseFetch<T>(
 }
 
 async function refreshToken() {
+
   const refreshToken = useCookie("auth.token");
 
-  const { data, status, error } = await useFetch<{ token: string }>(
+  const { data, error } = await useFetch<{ token: string }>(
     useBaseUrl() + "auth/refresh",
     {
       method: "POST",
-      headers : { Authorization: `Bearer ${refreshToken.value}` }
+      headers: { Authorization: `Bearer ${refreshToken.value}` }
     }
   );
 

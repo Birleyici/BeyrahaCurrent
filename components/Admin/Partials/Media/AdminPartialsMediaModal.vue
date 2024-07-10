@@ -99,8 +99,6 @@ const {
 } = await useBaseFetch("vendor/images", {
   method: "GET",
   query,
-  credentials: 'include',
-  cache: "no-cache",
 });
 
 const changePage = (page) => {

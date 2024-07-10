@@ -1,30 +1,33 @@
-import { defineStore } from 'pinia';
+// import { defineStore } from 'pinia';
 
-export const useProduct = defineStore({
-    id: 'products',
-    state: () => ({
+// export const useProduct = defineStore({
+//     id: 'products',
+//     state: () => ({
 
-        vendorProducts: []
-    }),
+//         vendorProducts: []
+//     }),
 
-    actions: {
+//     actions: {
 
-         async getVendorProducts() {
+//         async getVendorProducts() {
 
-            const { data, pending, refresh, error } = await useBaseFetch("vendor/products", {
-                method: "GET"
-            });
+//             const { data, pending, refresh, error } = await useBaseFetch("vendor/products", {
+//                 method: "GET",
+//                 credentials:'include'
+//             });
 
-            this.vendorProducts = data
 
-        }
+//             if (data?.value?.products) {
 
-    },
+//                 Object.assign(vendorProducts, data.value.products)
 
-    getters: {
+//             }
 
-    },
-});
+//         }
+
+//     },
+
+// });
 
 
 

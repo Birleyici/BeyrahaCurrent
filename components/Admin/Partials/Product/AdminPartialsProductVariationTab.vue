@@ -314,7 +314,6 @@ async function createAllVariation() {
 
 const loadingVariationUpdate = ref(false);
 const saveVariations = async () => {
-  console.log("burada")
   loadingVariationUpdate.value = true;
 
   const {
@@ -327,7 +326,7 @@ const saveVariations = async () => {
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify(store.variations),
+    body: JSON.stringify({variations:store.variations}),
     cache: false,
   });
   loadingVariationUpdate.value = pending3.value;

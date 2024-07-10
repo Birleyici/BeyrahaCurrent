@@ -3,11 +3,15 @@ import vsharp from 'vite-plugin-vsharp';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 
-  nitro: {
-    vercel: {
-      regions: ['fra1'],
-    },
+  imports: {
+    dirs: [
+      'composables/**'
+    ]
+  },
 
+  routeRules: {
+    // Render these routes with SPA
+    '/management/**': { ssr: false },
   },
   vite: {
     plugins: [vsharp()],
@@ -39,9 +43,14 @@ export default defineNuxtConfig({
     '@nuxt/image',
     // "@sidebase/nuxt-auth"
     '@nuxt/ui',
+    '@nuxtjs/tailwindcss'
   ],
 
-  
+  tailwindcss: {
+    exposeConfig: true,
+    viewer: true,
+    // and more...
+  },
 
   devtools: { enabled: false },
   postcss: {
@@ -55,24 +64,6 @@ export default defineNuxtConfig({
     },
   },
 
-  // auth: {
-  //   baseURL: 'http://localhost/laravel-api/public/api/auth',
-  //   provider: {
-  //     type: 'local',
-  //     endpoints: {
-  //       signIn: { path: '/login', method: 'post' },
-  //       signOut: { path: '/logout', method: 'post' },
-  //       signUp: { path: '/register', method: 'post' },
-  //       getSession: false
 
-  //     },
-  //     token: {
-  //       signInResponseTokenPointer: '/token',
-  //     },
-
-  //   },
-
-
-  // }
 
 })
