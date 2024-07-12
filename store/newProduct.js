@@ -7,7 +7,7 @@ export const useNewProductStore = defineStore({
         name: "",
         description: "",
         additional_info: "",
-        coverImage: 0,
+        coverImageId: 0,
         selectedImages: [],
         selectedCategories: [],
         price: null,
@@ -16,7 +16,8 @@ export const useNewProductStore = defineStore({
         stock_management: false,
         stock: 0,
         loading: false,
-        categories: []
+        categories: [],
+        featured_infos: []
 
     }),
 

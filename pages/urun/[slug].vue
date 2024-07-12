@@ -48,16 +48,18 @@
             </div>
         </div>
 
-        <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
+        <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0" >
             <LazyUiCardsSectionCard title="Ürün açıklaması ve özellikleri">
                 <div v-html="productState.additional_info"></div>
 
-                <div
+                <div v-if="!isEmpty(attrsAndVarsState.attributes)"
                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal">
                     <div class="flex lg:block items-center space-x-4 lg:space-x-0 bg-tertiary-100 p-3 lg:p-4 w-full rounded-sm"
-                        v-for="item in 8" :key="item">
-                        <p class="text-xs">Materyal</p>
-                        <p class="font-medium">Timsah derisi</p>
+                        v-for="attr in attrsAndVarsState.attributes || []" :key="attr.name">
+                        <p class="font-medium">{{attr.name}}</p>
+                        <span class="text-xs" v-for="(term, index) in attr.options" :key="index">
+                            {{ term }}<span v-if="index < attr.options.length - 1">, </span>
+                          </span>
                     </div>
                 </div>
             </LazyUiCardsSectionCard>
@@ -107,6 +109,8 @@
 </template>
 
 <script setup>
+import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
+const attrsAndVarsState = useAttrsAndVarsState()
 const { productState, getProduct } = useProductCreate();
 const slug = useRoute().params.slug
 await getProduct(slug);

@@ -41,34 +41,37 @@
       <UiButtonsBaseButton :loading="loadingSaveAttrs" @click="saveAttrs()" color="secondary">Nitelikleri kaydet
       </UiButtonsBaseButton>
     </div>
+    
   </div>
 </template>
 
 <script setup>
-const { productState, saveProduct } = useProductCreate();
+import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
+const { productState } = useProductCreate();
+const attrsAndVarsState = useAttrsAndVarsState()
 
 const {
   fetchVariations,
-  attrsAndVarsState,
-  deleteAttr,
+} = useVariations()
+
+const {
   fetchAttributes,
+  deleteAttr,
   addAttr,
   addTerm,
   removeTerm,
-  fetchGlobalAttrs
-} = useAttrsAndVariations()
+  fetchGlobalAttrs,
 
-let productId = useRoute().params.id;
-await fetchAttributes(productId);
+} = useAttributes()
+
+
+await fetchAttributes(productState.id);
 await fetchGlobalAttrs()
-
-
-
 
 const saveAttrs = async () => {
 
   if (productState.id == null) {
-    await saveProduct(productId);
+    await saveProduct(productState.id);
   }
 
   await useBaseFetch(
@@ -81,8 +84,8 @@ const saveAttrs = async () => {
       body: JSON.stringify(attrsAndVarsState.attributes),
     }
   );
-  await fetchAttributes(productId);
-  await fetchVariations(productId);
+  await fetchAttributes(productState.id);
+  await fetchVariations(productState.id);
 };
 
 

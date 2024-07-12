@@ -6,42 +6,25 @@
         <option value="2">Tüm niteliklerden varyasyonlar oluştur</option>
         <option value="3">Tüm varyasyonları sil</option>
       </UiFormSelect>
-      <UiButtonsBaseButton @click="variationHandle()" color="secondary"
-        >Git</UiButtonsBaseButton
-      >
+      <UiButtonsBaseButton @click="variationHandle()" color="secondary">Git</UiButtonsBaseButton>
     </div>
     <div class="rounded-md gap-4">
-      <UiAccordion
-        :key="item.id"
-        @is-delete="deleteVariation(item.id)"
+      <UiAccordion :key="item.id" @is-delete="deleteVariation(item.id)"
         headerClass="flex justify-between bg-tertiary-50 mt-2 border rounded-md text-sm px-minimal items-center"
-        :isOpen="item.isOpen"
-        @change-status="(e) => (item.isOpen = e)"
-        v-for="item in store.variations"
-      >
-        <UiModal
-          ok-button="true"
-          header="Galeri"
-          className="lg:!max-w-[800px] max-h-[500px]"
-          :isOpen="isOpenGalleryModal"
-          @status-change="(e) => (isOpenGalleryModal = e)"
-        >
-          <AdminPartialsMediaModal
-            :selecteds="item.variation_image"
-            @selecteds="(e) => (item.variation_image = e)"
-          ></AdminPartialsMediaModal>
+        :isOpen="item.isOpen" @change-status="(e) => (item.isOpen = e)" v-for="item in attrsAndVarsState.variations">
+        <UiModal ok-button="true" header="Galeri" className="lg:!max-w-[800px] max-h-[500px]"
+          :isOpen="isOpenGalleryModal" @status-change="(e) => (isOpenGalleryModal = e)">
+          <AdminPartialsMediaModal :selecteds="item.variation_image" @selecteds="(e) => (item.variation_image = e)">
+          </AdminPartialsMediaModal>
         </UiModal>
 
         <template v-slot:header>
           <div class="flex text-sm">
             <template v-for="term in item.terms">
-              <p
-                class="border-r last:border-r-0 px-2"
-                v-if="isAttributeExists(term.product_term.product_attribute_id)"
-              >
+              <p class="border-r last:border-r-0 px-2" v-if="isAttributeExists(term.product_term.product_attribute_id)">
                 {{
                   findValueInAttrs(
-                    store.attributes,
+                    attrsAndVarsState.attributes,
                     term.product_term_id,
                     term.product_term.product_attribute_id,
                     item
@@ -52,20 +35,16 @@
           </div>
         </template>
 
-        <div
-          class="grid lg:grid-cols-2 gap-4 bg-white border border-t-0 p-minimal"
-        >
+        <div class="grid lg:grid-cols-2 gap-4 bg-white border border-t-0 p-minimal">
           <div class="lg:col-span-2 flex space-x-4 justify-between">
             <template v-for="term in item.terms">
-              <UiFormSelect
-                v-model="term.product_term_id"
-                v-if="isAttributeExists(term.product_term.product_attribute_id)"
-              >
+              <UiFormSelect v-model="term.product_term_id"
+                v-if="isAttributeExists(term.product_term.product_attribute_id)">
                 <option value="null">
                   Herhangi Bir
                   {{
                     (
-                      store.attributes.find(
+                      attrsAndVarsState.attributes.find(
                         (e) =>
                           e.product_attribute_id ==
                           term.product_term.product_attribute_id
@@ -73,16 +52,13 @@
                     ).attribute_name || ""
                   }}
                 </option>
-                <option
-                  :value="opt.product_term_id"
-                  v-for="opt in (
-                    store.attributes.find(
-                      (e) =>
-                        e.product_attribute_id ==
-                        term.product_term.product_attribute_id
-                    ) || {}
-                  ).product_terms || []"
-                >
+                <option :value="opt.product_term_id" v-for="opt in (
+                  attrsAndVarsState.attributes.find(
+                    (e) =>
+                      e.product_attribute_id ==
+                      term.product_term.product_attribute_id
+                  ) || {}
+                ).product_terms || []">
                   {{ opt.term_name }}
                 </option>
               </UiFormSelect>
@@ -90,24 +66,12 @@
           </div>
 
           <div class="inline-block">
-            <div
-              class="bg-tertiary-50 border p-2 rounded-md inline-block space-x-4 items-center"
-              :class="!item.variation_image && 'flex'"
-            >
-              <NuxtImg
-                v-if="item.variation_image"
-                @click="isOpenGalleryModal = true"
-                :src="item.variation_image.path"
-                class="cursor-pointer w-16 rounded-md"
-                alt=""
-              />
-              <img
-                @click="isOpenGalleryModal = true"
-                v-else
-                src="/img-placeholder.jpg"
-                alt=""
-                class="cursor-pointer w-16 rounded-md"
-              />
+            <div class="bg-tertiary-50 border p-2 rounded-md inline-block space-x-4 items-center"
+              :class="!item.variation_image && 'flex'">
+              <NuxtImg v-if="item.variation_image" @click="isOpenGalleryModal = true" :src="item.variation_image.path"
+                class="cursor-pointer w-16 rounded-md" alt="" />
+              <img @click="isOpenGalleryModal = true" v-else src="/img-placeholder.jpg" alt=""
+                class="cursor-pointer w-16 rounded-md" />
               <p v-if="!item.variation_image" class="text-sm text-center">
                 Görsel seçilmedi...
               </p>
@@ -115,28 +79,14 @@
           </div>
           <div></div>
 
-          <UiFormInput
-            v-model="item.stockCode"
-            placeholder="Stok kodu"
-          ></UiFormInput>
-          <UiFormInput
-            v-model="item.price"
-            placeholder="Normal fiyat"
-          ></UiFormInput>
-          <UiFormInput
-            v-model="item.sale_price"
-            placeholder="İndirimli fiyat"
-          ></UiFormInput>
+          <UiFormInput v-model="item.stockCode" placeholder="Stok kodu"></UiFormInput>
+          <UiFormInput v-model="item.price" placeholder="Normal fiyat"></UiFormInput>
+          <UiFormInput v-model="item.sale_price" placeholder="İndirimli fiyat"></UiFormInput>
           <UiFormInput v-model="item.coast" placeholder="Maliyet"></UiFormInput>
 
           <div class="grid gap-4">
-            <UiFormCheckbox
-              v-model="item.isStockManagement"
-              :id="item.id"
-              name="stock"
-              :value="true"
-              >Stok yönetimini etkinleştir</UiFormCheckbox
-            >
+            <UiFormCheckbox v-model="item.isStockManagement" :id="item.id" name="stock" :value="true">Stok yönetimini
+              etkinleştir</UiFormCheckbox>
 
             <div v-show="item.isStockManagement">
               <UiFormInput placeholder="Stok miktarı"></UiFormInput>
@@ -149,24 +99,32 @@
       <UiNotificationBar type="error">{{ errorMessage }}</UiNotificationBar>
     </div>
     <div class="flex justify-end">
-      <UiButtonsBaseButton
-        :loading="loadingVariationUpdate"
-        @click="saveVariations()"
-        color="secondary"
-        >Varyasyonları kaydet</UiButtonsBaseButton
-      >
+      <UiButtonsBaseButton  @click="saveVariations()" color="secondary">Varyasyonları
+        kaydet</UiButtonsBaseButton>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useAttrsAndVariations } from "~/store/attrsAndVariations.js";
-let productId = useRoute().params.id;
+import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
+const { productState } = useProductCreate();
+const attrsAndVarsState = useAttrsAndVarsState()
+const {
+  fetchVariations,
+  createOneVariation,
+  createAllVariation,
+  saveVariations,
+  findValueInAttrs,
+  deleteVariation
+} = useVariations()
+const {
+  fetchAttributes,
+} = useAttributes()
 
-const store = useAttrsAndVariations();
+
 const isOpenGalleryModal = ref(false);
-await store.fetchAttributes(productId);
-await store.fetchVariations(productId);
+await fetchAttributes(productState.id);
+await fetchVariations(productState.id);
 
 const addedType = ref(1);
 const errorMessage = ref(null);
@@ -184,208 +142,9 @@ const variationHandle = () => {
 };
 
 const isAttributeExists = (attributeId) => {
-  return !!store.attributes.find((e) => e.product_attribute_id === attributeId);
+  return !!attrsAndVarsState.attributes.find((e) => e.product_attribute_id === attributeId);
 };
 
-const createOneVariation = async () => {
-  // Öncelikle, useForVariation değeri 1 olan herhangi bir attribute olup olmadığını kontrol edin.
-  const hasAttributesForVariation = store.attributes.some(
-    (attribute) => attribute.useForVariation == 1
-  );
 
-  // Eğer hiç attribute yoksa, fonksiyonu burada sonlandırın.
-  if (!hasAttributesForVariation) {
-    return;
-  }
-
-  const newVariation = {
-    isOpen: true,
-    price: null,
-    sale_price: null,
-    coast: null,
-    stockCode: "",
-    stockAmount: 0,
-    isStockManagement: false,
-    product_id: productId,
-    terms: [],
-  };
-
-  try {
-    const { data, pending, refresh, error } = await useBaseFetch("variations", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newVariation),
-      cache: false,
-    });
-
-    console.log(data,error)
-
-    // Şimdi, yeni oluşturulan varyasyon için şablon term'leri oluşturalım:
-    const createdVariation = data.value.variation;
-    createdVariation.terms = [];
-    store.attributes.forEach((attribute) => {
-      if (attribute.useForVariation == 0) {
-        return;
-      }
-      const templateTerm = {
-        product_variation_id: createdVariation.id,
-        product_term_id: "null",
-        product_term: {
-          product_attribute_id: attribute.product_attribute_id,
-          term_id: null,
-        },
-      };
-      createdVariation.terms.push(templateTerm);
-    });
-
-    // createdVariation.terms'i product_attribute_id'ye göre sıralayın
-    createdVariation.terms.sort(
-      (a, b) =>
-        a.product_term.product_attribute_id -
-        b.product_term.product_attribute_id
-    );
-
-    // Eğer term'ler oluşturulduysa, varyasyonu listeye ekleyin.
-    if (createdVariation.terms.length > 0) {
-      store.variations.unshift(createdVariation);
-    }
-  } catch (e) {
-    console.error("Beklenmedik bir hata oluştu:", e);
-  }
-};
-
-async function createAllVariation() {
-  // Tüm nitelikleri ve bu niteliklere ait termleri alalım.
-  const attributesWithTerms = store.attributes.filter(
-    (attribute) => attribute.product_terms && attribute.product_terms.length > 0
-  );
-
-  // Tüm kombinasyonları oluşturmak için bir yardımcı fonksiyon
-  function generateCombinations(arrays) {
-    return arrays.reduce(
-      (acc, curr) => acc.map((a) => curr.map((c) => a.concat([c]))).flat(),
-      [[]]
-    );
-  }
-
-  // Tüm termleri bir diziye alalım.
-  const termsArrays = attributesWithTerms.map((attribute) =>
-    attribute.product_terms.map((term) => term.product_term_id)
-  );
-
-  // Tüm kombinasyonları oluşturalım.
-  const allCombinations = generateCombinations(termsArrays);
-
-  // Oluşturulan kombinasyonları kullanarak varyasyonları oluşturalım.
-  const allVariations = allCombinations.map((combination) => ({
-    isOpen: false,
-    price: null,
-    sale_price: null,
-    coast: null,
-    stockCode: "",
-    stockAmount: 0,
-    isStockManagement: false,
-    product_id: productId,
-    terms: combination.map((termId, index) => ({
-      product_variation_id: null, // Bu değer varyasyon oluşturulduktan sonra atanacak.
-      product_term_id: termId,
-      product_term: {
-        product_attribute_id: attributesWithTerms[index].product_attribute_id,
-        term_id: termId,
-      },
-    })),
-  }));
-
-  const { data, pending, refresh, error } = await useBaseFetch("variations", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(allVariations),
-    cache: false,
-  });
-
-  if (error.data == null) {
-    await store.fetchVariations(productId);
-  }
-}
-
-const loadingVariationUpdate = ref(false);
-const saveVariations = async () => {
-  loadingVariationUpdate.value = true;
-
-  const {
-    data: data3,
-    pending: pending3,
-    refresh: refresh3,
-    error: error3,
-  } = await useBaseFetch("products/" + productId + "/variations/update", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({variations:store.variations}),
-    cache: false,
-  });
-  loadingVariationUpdate.value = pending3.value;
-
-  if (error3.value == null) {
-    await store.fetchVariations(productId);
-    errorMessage.value = null;
-  } else {
-    errorMessage.value = error3.value.data.message;
-  }
-};
-
-const findValueInAttrs = (
-  data,
-  product_term_id,
-  attribute_id,
-  attribute_name
-) => {
-  const attribute = data.find((e) => e.product_attribute_id == attribute_id);
-
-  // Eğer belirli bir attribute_id'ye sahip öğe bulunmazsa, hemen bir default değer döndürelim.
-  if (!attribute) return `Herhangi Bir ${attribute_name}`;
-
-  const term = attribute.product_terms?.find(
-    (d) => d.product_term_id == product_term_id
-  );
-
-  return term?.term_name || `Herhangi Bir ${attribute.attribute_name}`;
-};
-
-const deleteVariation = async (id) => {
-  const {
-    data: data4,
-    pending: pending4,
-    refresh: refresh4,
-    error: error4,
-  } = await useBaseFetch("variations/" + id, {
-    method: "DELETE",
-    cache: false,
-  });
-
-  await store.deleteVariation(id);
-  await store.fetchVariations(productId);
-};
-
-const deleteAllVariations = async (productId) => {
-  try {
-    const { data, pending, refresh, error } = await useBaseFetch("products/58/variations", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      cache: false,
-    });
-    console.log(data, error);
-    await store.fetchVariations(productId);
-  } catch (e) {
-    console.error("Beklenmedik bir hata oluştu:", e);
-  }
-};
 
 </script>

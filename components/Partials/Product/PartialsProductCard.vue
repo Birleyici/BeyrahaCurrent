@@ -1,16 +1,18 @@
 <template>
-  <!-- useMain().isLoaded -->
   <div class="border rounded-md">
-    <div class="relative overflow-hidden cursor-pointer w-72">
+    <div class="relative overflow-hidden cursor-pointer ">
+     <NuxtLink :to="`/urun/${product.slug}`">
       <NuxtImg
-        :src="product.coverImage ? 'aws' + product.coverImage : 'aws/products/1/woocommerce-placeholder-1720570041745.webp'"
-        format="webp" quality="90" loading="lazy" width="200"
-        class="rounded-t-sm duration-200 h-[350px] object-contain w-full hover:scale-110" />
+      :src="product.coverImage ? 'aws' + product.coverImage : 'aws/products/1/woocommerce-placeholder-1720570041745.webp'"
+      format="webp" quality="90" loading="lazy" width="200"
+      class="rounded-t-sm duration-200 h-[350px] object-contain w-full hover:scale-110" />
+
+     </NuxtLink>
     </div>
-    <div class="text-center py-4  ">
+    <div class="text-center py-4  w-64">
       <p class="text-sm px-2 py-2 font-medium">
-        <b>Beyraha</b> <NuxtLink :to="'/urun/' + product.slug">
-          {{ product.name }}
+         <NuxtLink :to="'/urun/' + product.slug">
+          <b>Beyraha</b> {{ product.name }}
         </NuxtLink>
       </p>
       <div class="md:flex justify-center space-x-2 items-center">

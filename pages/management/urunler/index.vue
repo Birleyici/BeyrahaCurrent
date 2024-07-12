@@ -14,7 +14,7 @@
       ui: { rounded: 'rounded-full' },
     }" class="w-full" :columns="columns" :rows="rows" v-model="selected">
       <template #name-data="{ row }">
-        <NuxtLink :href="'/management/urunler/' + row.id" class="text-blue-500 font-bold">{{ row.name }}</NuxtLink>
+        <NuxtLink :href="'/management/urunler/' + row.id" class="text-blue-500 font-bold" :class="{'!text-red-500 !font-medium' : !row.name}">{{ row.name ||  `Taslak ürün #${row.id}`  }}</NuxtLink>
       </template>
       <template #delete-data="{ row }">
         <UButton @click="openDeleteModal(row.id)" icon="i-heroicons-trash" size="2xs" color="red" variant="solid"

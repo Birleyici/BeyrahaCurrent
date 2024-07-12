@@ -43,6 +43,13 @@
               <Icon name="mdi:package" class="w-5 h-5"></Icon>
               <p>Varyasyonlar</p>
             </button>
+
+            <button @click="currentTab = 'FeaturedTab'"
+              :class="{ ' border-secondary-500': currentTab == 'FeaturedTab' }"
+              class="flex items-center space-x-2 border-b-2 py-2 hover:border-secondary-500 duration-300">
+              <Icon name="mdi:format-list-group" class="w-5 h-5"></Icon>
+              <p>Öne Çıkanlar</p>
+            </button>
           </div>
           <div class="content p-minimal border">
             <KeepAlive>
@@ -53,7 +60,7 @@
       </div>
       <div class="col-span-1 flex flex-col-reverse lg:block">
         <div class="bg-tertiary-100 border rounded-md p-minimal space-y-4">
-          <UiButtonsBaseButton :loading="productState.loading" @click="saveProduct(useRoute().params.id)"
+          <UiButtonsBaseButton :loading="productState.loading" @click="saveProduct(productState.id, true)"
             color="secondary" class="px-6">Yayınla</UiButtonsBaseButton>
         </div>
 
@@ -62,11 +69,12 @@
             <div class="relative" v-for="(item, index) in productState.selectedImages" :key="index">
               <NuxtImg :class="{
                 'border-2 border-secondary-500':
-                  item.id == productState.coverImage,
-              }" class="w-16 h-16 object-cover rounded-md cursor-pointer" @click="productState.coverImage = item.id"
-                :src="'aws' + item.path"></NuxtImg>
+                  item.id == productState.coverImageId,
+              }" class="w-16 h-16 object-cover rounded-md cursor-pointer" @click="productState.coverImageId = item.id"
+                :src="'aws' + item.path">
+              </NuxtImg>
 
-              <span v-if="item.id == productState.coverImage"
+              <span v-if="item.id == productState.coverImageId"
                 class="absolute w-full bg-secondary-500 text-[10px] bottom-0 rounded-b-md text-white px-1 text-center">Kapak</span>
             </div>
           </div>
@@ -94,9 +102,8 @@ definePageMeta({
   layout: "admin",
 });
 const { productState, tabs, saveProduct, getProduct, getCategories } = useProductCreate();
-
+const isOpenMediaModal = ref(false);
 const currentTab = ref("GeneralTab");
-
 const route = useRoute();
 
 if (route.params.id != "yeni") {
@@ -107,33 +114,7 @@ if (route.params.id != "yeni") {
 
 }
 
-const isOpenMediaModal = ref(false);
 
 
-watch(
-        () => productState.selectedImages,
-        (newVal) => {
-            // Eğer coverImage henüz ayarlanmamışsa VE selectedImages'ta eleman varsa
-            if (!productState.coverImage && newVal.length > 0) {
-                // selectedImages'in ilk elemanının id'sini coverImage olarak ayarla
-                productState.coverImage = newVal[0].id;
-            }
-        },
-        { immediate: true }
-    ); // Bu, watcher'ın hemen çalışması için. Böylece ilk değer ataması da kontrol edilir.
-
-    watch(
-        () => productState.id, // İzlenecek değer  (productState.id)
-        (newVal) => {
-            // Eğer productState.id değişirse
-            if (newVal) {
-                //ürün id sinin düzenleme linkine yönlendirilmesi. yönlendirmeyi nuxtun navigateTo ile yap
-                if (process.client) {
-                    navigateTo("/management/urunler/" + newVal, { top: false });
-                }
-            }
-        },
-        { immediate: false }
-    );
 
 </script>

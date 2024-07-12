@@ -1,8 +1,9 @@
 import { useNewProductStore } from "~/store/newProduct.js";
 import {
-    LazyAdminPartialsProductGeneralTab,
-    LazyAdminPartialsProductAttributeTab,
-    LazyAdminPartialsProductVariationTab,
+    AdminPartialsProductGeneralTab,
+    AdminPartialsProductAttributeTab,
+    AdminPartialsProductVariationTab,
+    AdminPartialsProductFeaturedInfos,
 } from "#components";
 
 
@@ -11,12 +12,13 @@ export function useProductCreate() {
 
     const productState = useNewProductStore()
     const tabs = {
-        GeneralTab: LazyAdminPartialsProductGeneralTab,
-        VariationTab: LazyAdminPartialsProductVariationTab,
-        AttributeTab: LazyAdminPartialsProductAttributeTab,
+        GeneralTab: AdminPartialsProductGeneralTab,
+        VariationTab: AdminPartialsProductVariationTab,
+        AttributeTab: AdminPartialsProductAttributeTab,
+        FeaturedTab: AdminPartialsProductFeaturedInfos
     };
 
-    const saveProduct = async (productId) => {
+    const saveProduct = async (productId, isAllSave = false) => {
 
         productState.loading = true
         productState.id = productId != 'yeni' ? productId : null
@@ -32,6 +34,11 @@ export function useProductCreate() {
 
         if (error.value == null) {
             productState.id = data.value.id
+
+            if (isAllSave) {
+
+                navigateTo('/management/urunler/' + productState.id)
+            }
         }
 
     }
@@ -39,7 +46,7 @@ export function useProductCreate() {
     const getProduct = async (productIdOrSlug) => {
 
         try {
-            const { data, error } = await useBaseFetch(`product/${productIdOrSlug}` , {
+            const { data, error } = await useBaseFetch(`product/${productIdOrSlug}`, {
                 method: "GET",
             });
 
