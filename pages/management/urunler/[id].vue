@@ -8,10 +8,12 @@
       </AdminPartialsMediaModal>
     </UiModal>
 
-    <!-- Ürün resimleri Modal bitiş -->
-    <h1 class="text-2xl my-4">Yeni ürün</h1>
+    <UBreadcrumb class="mb-4" :links="links" />
+    
+
     <div class="lg:grid space-y-4 lg:space-y-0 lg:grid-cols-3 gap-10">
       <div class="col-span-2 space-y-4">
+
         <UiFormInput v-model="productState.name" placeholder="Ürün adı" class="font-medium"></UiFormInput>
         <UiFormInput v-model="productState.description" placeholder="Ürün açıklaması"></UiFormInput>
         <div class="relative mb-24">
@@ -58,11 +60,14 @@
           </div>
         </div>
       </div>
+      
+
       <div class="col-span-1 flex flex-col-reverse lg:block">
-        <div class="bg-tertiary-100 border rounded-md p-minimal space-y-4">
-          <UiButtonsBaseButton :loading="productState.loading" @click="saveProduct(productState.id, true)"
-            color="secondary" class="px-6">Yayınla</UiButtonsBaseButton>
-        </div>
+        
+       
+          <UiButtonsBaseButton  :loading="productState.loading" @click="saveProduct(productState.id, true)"
+            color="secondary" class="px-6 w-full">Yayınla</UiButtonsBaseButton>
+    
 
         <div class="bg-tertiary-100 rounded-md p-minimal border space-y-4 my-minimal">
           <div class="flex flex-auto flex-wrap gap-4">
@@ -88,9 +93,15 @@
           </button>
         </div>
         <div class="my-minimal">
-          <UiCardsLiveSearchCard 
-            title="Ürün kategorileri">
-          </UiCardsLiveSearchCard>
+
+          <div class="h-[300px] overflow-y-scroll bg-slate-50 p-2 rounded-md">
+            <UCommandPalette :emptyState="{
+              queryLabel: 'Sonuç bulunamadı...'
+            }" placeholder="Kategorilerde ara..." v-model="productState.selectedCategories" multiple nullable
+              :autoselect="false" :groups="[{ key: 'label', commands: productState.categories }]"
+              :fuse="{ resultLimit: -1 }" />
+          </div>
+
         </div>
       </div>
     </div>
@@ -101,20 +112,29 @@
 definePageMeta({
   layout: "admin",
 });
-const { productState, tabs, saveProduct, getProduct, getCategories } = useProductCreate();
+const { useNewProductStore } = useStateIndex()
+const productState = useNewProductStore()
+
+const { tabs, saveProduct, getProduct, getCategories } = useProductCreate();
 const isOpenMediaModal = ref(false);
 const currentTab = ref("GeneralTab");
 const route = useRoute();
-
-if (route.params.id != "yeni") {
-   getProduct(route.params.id);
-} else {
+if (route.params.id == "yeni") {
   productState.$reset();
-  getCategories()
-
+} else {
+  await getProduct(route.params.id);
 }
+await getCategories()
 
 
 
+const links = [{
+  label: 'Ürünler',
+  icon: 'i-heroicons-squares-2x2',
+  to: '/management/urunler'
+}, {
+  label: 'Yeni ürün',
+  icon: 'i-heroicons-squares-plus'
+}]
 
 </script>

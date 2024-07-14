@@ -1,6 +1,7 @@
 export function useProduct() {
 
     const products = ref([])
+    const categoryProducts = ref([])
 
     const getProducts = async (piece) => {
 
@@ -12,16 +13,37 @@ export function useProduct() {
 
         })
 
-        if(data.value && !error.value){
-            console.log(data)
+        if (data.value && !error.value) {
 
             products.value = data.value
         }
 
     }
 
+
+    const getProductsByCatId = async (catIds) => {
+
+
+         catIds = catIds.map(cat => cat.id);
+
+
+        const { data, error } = await useBaseFetch(`products/category`, {
+            params: {
+                catIds: catIds.join(','),
+                limit: 5
+            }
+        })
+
+        if (data.value && !error.value) {
+            categoryProducts.value = data.value
+        }
+
+    }
+
     return {
         getProducts,
-        products
+        getProductsByCatId,
+        products,
+        categoryProducts
     }
 }

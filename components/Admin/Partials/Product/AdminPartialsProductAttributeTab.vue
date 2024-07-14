@@ -46,8 +46,8 @@
 </template>
 
 <script setup>
-import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
-const { productState } = useProductCreate();
+const { useAttrsAndVarsState, useNewProductStore } = useStateIndex()
+const productState  = useNewProductStore();
 const attrsAndVarsState = useAttrsAndVarsState()
 
 const {

@@ -1,4 +1,5 @@
 <template>
+  
   <div class="border rounded-md">
     <div class="relative overflow-hidden cursor-pointer ">
      <NuxtLink :to="`/urun/${product.slug}`">

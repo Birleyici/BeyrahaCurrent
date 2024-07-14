@@ -6,8 +6,6 @@ import {
     AdminPartialsProductFeaturedInfos,
 } from "#components";
 
-
-
 export function useProductCreate() {
 
     const productState = useNewProductStore()
@@ -22,7 +20,7 @@ export function useProductCreate() {
 
         productState.loading = true
         productState.id = productId != 'yeni' ? productId : null
-        const { data, pending, refresh, error } = await useBaseFetch("products", {
+        const { data, error } = await useBaseFetch("products", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -43,45 +41,45 @@ export function useProductCreate() {
 
     }
 
-    const getProduct = async (productIdOrSlug) => {
+    const getCategories = async () => {
 
-        try {
-            const { data, error } = await useBaseFetch(`product/${productIdOrSlug}`, {
-                method: "GET",
+        const { data, error } = await useBaseFetch("categories");
+
+        if (data.value && !error.value) {
+
+            // productState.categories güncelle
+            productState.categories = data.value;
+
+            // Seçilen kategorileri en başa al
+            const selectedIds = productState.selectedCategories.map(cat => cat.id);
+            const sortedCategories = productState.categories.sort((a, b) => {
+                if (selectedIds.includes(a.id) && !selectedIds.includes(b.id)) {
+                    return -1;
+                }
+                if (!selectedIds.includes(a.id) && selectedIds.includes(b.id)) {
+                    return 1;
+                }
+                return 0;
             });
 
-            if (data.value && !error.value) {
-                // reactive objeyi güncelleyin
-                Object.assign(productState, data.value);
-            }
-
-            getCategories()
-
-        } catch (error) {
-
-            console.log(error)
+            // Güncellenen kategoriler listesiyle state'i kaydet
+            productState.categories = sortedCategories;
 
         }
-
-
     }
 
 
-    const getCategories = async () => {
+    const getProduct = async (productIdOrSlug) => {
 
-        const { data, pending, error, refresh } = await useBaseFetch("categories", {
-            method: "GET",
-        });
-
+        const { data, error } = await useBaseFetch(`product/${productIdOrSlug}`);
 
         if (data.value && !error.value) {
             // reactive objeyi güncelleyin
-            productState.categories = data.value;
+
+            productState.$patch({ ...data.value })
         }
+
     }
-
-
-
 
 
 

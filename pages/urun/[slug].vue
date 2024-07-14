@@ -42,13 +42,15 @@
                     <p class="font-medium">Öne çıkan bilgiler</p>
                     <ul class="list-disc p-4 !pl-5 text-sm">
                         <li>15 gün içerisinde ücretsiz iade</li>
-                        <li v-html="productState.description"></li>
+                        <li v-for="feature in productState.featured_infos">
+                            {{ feature.content }}
+                        </li>
                     </ul>
                 </div>
             </div>
         </div>
 
-        <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0" >
+        <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
             <LazyUiCardsSectionCard title="Ürün açıklaması ve özellikleri">
                 <div v-html="productState.additional_info"></div>
 
@@ -56,17 +58,17 @@
                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal">
                     <div class="flex lg:block items-center space-x-4 lg:space-x-0 bg-tertiary-100 p-3 lg:p-4 w-full rounded-sm"
                         v-for="attr in attrsAndVarsState.attributes || []" :key="attr.name">
-                        <p class="font-medium">{{attr.name}}</p>
+                        <p class="font-medium">{{ attr.name }}</p>
                         <span class="text-xs" v-for="(term, index) in attr.options" :key="index">
                             {{ term }}<span v-if="index < attr.options.length - 1">, </span>
-                          </span>
+                        </span>
                     </div>
                 </div>
             </LazyUiCardsSectionCard>
         </div>
-        <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
+        <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal" v-if="categoryProducts.length > 0">
             <p class="mb-2 font-bold">Benzer ürünler</p>
-            <UiSlidesProductSlide></UiSlidesProductSlide>
+            <UiSlidesProductSlide :products="categoryProducts"></UiSlidesProductSlide>
         </div>
 
         <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
@@ -105,16 +107,19 @@
                 <LazyPartialsCommentItem></LazyPartialsCommentItem>
             </div>
         </div>
+
     </div>
 </template>
 
 <script setup>
-import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
+const { useAttrsAndVarsState, useNewProductStore } = useStateIndex()
+const { getProduct } = useProductCreate();
+const productState = useNewProductStore()
 const attrsAndVarsState = useAttrsAndVarsState()
-const { productState, getProduct } = useProductCreate();
+const { categoryProducts, getProductsByCatId } = useProduct()
 const slug = useRoute().params.slug
 await getProduct(slug);
-
+await getProductsByCatId(productState.selectedCategories)
 
 if (!productState.id) {
     navigateTo('/')

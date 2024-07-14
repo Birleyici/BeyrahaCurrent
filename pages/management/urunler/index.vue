@@ -17,8 +17,10 @@
         <NuxtLink :href="'/management/urunler/' + row.id" class="text-blue-500 font-bold" :class="{'!text-red-500 !font-medium' : !row.name}">{{ row.name ||  `Taslak ürün #${row.id}`  }}</NuxtLink>
       </template>
       <template #delete-data="{ row }">
+      <div class="flex justify-end">
         <UButton @click="openDeleteModal(row.id)" icon="i-heroicons-trash" size="2xs" color="red" variant="solid"
-          :trailing="false" />
+        :trailing="false" />
+      </div>
         <UModal v-model="isOpenDeleteModal" :transition="true" :overlay="false">
           <div class="p-4 grid gap-4">
             <p>Ürünü silmek istediğinizden emin misiniz?</p>

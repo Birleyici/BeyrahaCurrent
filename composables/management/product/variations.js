@@ -68,6 +68,7 @@ export const useVariations = () => {
                                 product_variation_id: variation.id,
                                 useForVariation: attribute.useForVariation,
                                 product_term_id: "null",
+                                product_images:variation.product_images,
                                 product_term: {
                                     product_attribute_id: attribute.product_attribute_id,
                                     term_id: null,

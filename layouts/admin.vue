@@ -22,7 +22,7 @@
       </div>
     </div>
 
-    <div class="bg-tertiary-5 py-12 px-[3%]">
+    <div class="bg-tertiary-5 py-8 px-[3%]">
       <LazyNuxtPage></LazyNuxtPage>
     </div>
     <footer class="text-center py-2 text-sm">

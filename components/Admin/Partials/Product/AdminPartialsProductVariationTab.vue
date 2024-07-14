@@ -14,7 +14,7 @@
         :isOpen="item.isOpen" @change-status="(e) => (item.isOpen = e)" v-for="item in attrsAndVarsState.variations">
         <UiModal ok-button="true" header="Galeri" className="lg:!max-w-[800px] max-h-[500px]"
           :isOpen="isOpenGalleryModal" @status-change="(e) => (isOpenGalleryModal = e)">
-          <AdminPartialsMediaModal :selecteds="item.variation_image" @selecteds="(e) => (item.variation_image = e)">
+          <AdminPartialsMediaModal :selecteds="item.variation_images" @selecteds="(e) => (item.variation_images = e)">
           </AdminPartialsMediaModal>
         </UiModal>
 
@@ -65,14 +65,17 @@
             </template>
           </div>
 
+         <pre>
+          {{ item  }}
+         </pre>
           <div class="inline-block">
             <div class="bg-tertiary-50 border p-2 rounded-md inline-block space-x-4 items-center"
-              :class="!item.variation_image && 'flex'">
-              <NuxtImg v-if="item.variation_image" @click="isOpenGalleryModal = true" :src="item.variation_image.path"
+              :class="!item.variation_images && 'flex'">
+              <NuxtImg v-if="item.variation_images.length >0" @click="isOpenGalleryModal = true" :src="item.variation_images"
                 class="cursor-pointer w-16 rounded-md" alt="" />
               <img @click="isOpenGalleryModal = true" v-else src="/img-placeholder.jpg" alt=""
                 class="cursor-pointer w-16 rounded-md" />
-              <p v-if="!item.variation_image" class="text-sm text-center">
+              <p v-if="!item.variation_images" class="text-sm text-center">
                 Görsel seçilmedi...
               </p>
             </div>
@@ -99,16 +102,17 @@
       <UiNotificationBar type="error">{{ errorMessage }}</UiNotificationBar>
     </div>
     <div class="flex justify-end">
-      <UiButtonsBaseButton  @click="saveVariations()" color="secondary">Varyasyonları
+      <UiButtonsBaseButton @click="saveVariations()" color="secondary">Varyasyonları
         kaydet</UiButtonsBaseButton>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
-const { productState } = useProductCreate();
+const { useNewProductStore, useAttrsAndVarsState } = useStateIndex()
+const  productState  = useNewProductStore();
 const attrsAndVarsState = useAttrsAndVarsState()
+
 const {
   fetchVariations,
   createOneVariation,
