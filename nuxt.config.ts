@@ -15,6 +15,12 @@ export default defineNuxtConfig({
   },
   vite: {
     plugins: [vsharp()],
+    vue: {
+      script: {
+          defineModel: true,
+          propsDestructure: true
+      }
+  }
   },
   css: ['~/assets/css/main.css'],
   image: {

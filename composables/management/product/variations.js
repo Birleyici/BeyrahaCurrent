@@ -3,7 +3,7 @@ import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
 
 export const useVariations = () => {
 
-    const productState = useNewProductStore()
+    const {product:productState} = useNewProductStore()
     const attrsAndVarsState = useAttrsAndVarsState()
 
 
@@ -154,6 +154,7 @@ export const useVariations = () => {
 
         const newVariation = {
             isOpen: true,
+            isOpenModal: true,
             price: null,
             sale_price: null,
             coast: null,

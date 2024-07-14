@@ -1,15 +1,23 @@
 <template>
   <div>
-    <!-- Ürün resimleri Modal -->
-    <UiModal :okButton="true" header="Galeri" className="lg:!max-w-[800px] max-h-[500px]" :isOpen="isOpenMediaModal"
-      @status-change="(e) => (isOpenMediaModal = e)">
-      <AdminPartialsMediaModal :selecteds="productState.selectedImages"
-        @selecteds="(e) => (productState.selectedImages = e)">
-      </AdminPartialsMediaModal>
-    </UiModal>
+
+    <UModal v-model="isOpenMediaModal" fullscreen>
+      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+              Media
+            </h3>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+              @click="isOpenMediaModal = false" />
+          </div>
+        </template>
+        <AdminPartialsMedia v-model="productState.selectedImages" />
+      </UCard>
+    </UModal>
+
 
     <UBreadcrumb class="mb-4" :links="links" />
-    
 
     <div class="lg:grid space-y-4 lg:space-y-0 lg:grid-cols-3 gap-10">
       <div class="col-span-2 space-y-4">
@@ -60,14 +68,14 @@
           </div>
         </div>
       </div>
-      
+
 
       <div class="col-span-1 flex flex-col-reverse lg:block">
-        
-       
-          <UiButtonsBaseButton  :loading="productState.loading" @click="saveProduct(productState.id, true)"
-            color="secondary" class="px-6 w-full">Yayınla</UiButtonsBaseButton>
-    
+
+
+        <UiButtonsBaseButton :loading="productState.loading" @click="saveProduct(productState.id, true)"
+          color="secondary" class="px-6 w-full">Yayınla</UiButtonsBaseButton>
+
 
         <div class="bg-tertiary-100 rounded-md p-minimal border space-y-4 my-minimal">
           <div class="flex flex-auto flex-wrap gap-4">
