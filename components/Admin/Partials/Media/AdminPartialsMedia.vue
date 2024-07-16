@@ -12,7 +12,7 @@
         <div class="w-32 h-32 border rounded-md overflow-hidden" :key="img.id" v-for="img in images.data">
 
           <div>
-            <UiFormImageCheckbox v-model="model" :id="img.id" :value="{ path: img.path, id: img.id }" :absolute="true">
+            <UiFormImageCheckbox v-model="model" :id="img.id" :value="{  id: img.id, path: img.path }" :absolute="true">
               <NuxtImg height="200" :src="'aws' + img.path" class="object-cover w-32 h-32" />
             </UiFormImageCheckbox>
           </div>

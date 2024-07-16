@@ -47,9 +47,8 @@ export const useVariations = () => {
 
 
     const fetchVariations = async (id) => {
-        const { data, error } = await useBaseFetch("products/" + id + "/variations", {
-            cache: false,
-        });
+        
+        const { data, error } = await useBaseFetch("products/" + id + "/variations");
 
         attrsAndVarsState.variations = data.value
 
@@ -68,7 +67,7 @@ export const useVariations = () => {
                                 product_variation_id: variation.id,
                                 useForVariation: attribute.useForVariation,
                                 product_term_id: "null",
-                                product_images:variation.product_images,
+                                product_images: variation.product_images,
                                 product_term: {
                                     product_attribute_id: attribute.product_attribute_id,
                                     term_id: null,
@@ -267,22 +266,23 @@ export const useVariations = () => {
             await fetchVariations(productState.id);
         }
     }
+    
     const saveVariations = async () => {
 
-       const  {error} =  await useBaseFetch("products/" + productState.id + "/variations/update", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ variations: attrsAndVarsState.variations }),
-            cache: false,
-        });
+        try {
+            await useBaseOFetch(`products/${productState.id}/variations/update`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({ variations: attrsAndVarsState.variations }),
+            });
 
-        if (error.value == null) {
             await fetchVariations(productState.id);
-            errorMessage.value = null;
-        } else {
-            errorMessage.value = error.value.data.message;
+
+        } catch (error) {
+
+            console.log(error)
         }
     };
 
