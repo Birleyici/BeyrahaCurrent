@@ -20,23 +20,28 @@ export function useProductCreate() {
 
         productState.loading = true
         productState.id = productId != 'yeni' ? productId : null
-        const { data, error } = await useBaseFetch("products", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            cache: 'no-cache',
-            body: JSON.stringify(productState),
-        });
-        productState.loading = false
+       
+        try {
+            
+            const response = await useBaseOFetch("products", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(productState),
+            });
+            productState.loading = false
+    
+                productState.id = response.id
+    
+                if (isAllSave) {
+    
+                    navigateTo('/management/urunler/' + productState.id)
+                }
 
-        if (error.value == null) {
-            productState.id = data.value.id
-
-            if (isAllSave) {
-
-                navigateTo('/management/urunler/' + productState.id)
-            }
+        } catch (error) {
+            
+            console.log('Productsave error: ', error)
         }
 
     }

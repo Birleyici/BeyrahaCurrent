@@ -135,7 +135,6 @@ if (route.params.id == "yeni") {
 await getCategories()
 
 
-
 const links = [{
   label: 'Ürünler',
   icon: 'i-heroicons-squares-2x2',

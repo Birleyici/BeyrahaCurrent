@@ -1,7 +1,7 @@
 <template>
     <UiAccordion :key="item.id" @is-delete="deleteVariation(item.id)"
         headerClass="flex justify-between bg-tertiary-50 mt-2 border rounded-md text-sm px-minimal items-center"
-        :isOpen="item.isOpen" @change-status="(e) => (item.isOpen = e)" >
+        :isOpen="item.isOpen" @change-status="(e) => (item.isOpen = e)">
 
         <UModal v-model="isOpen" fullscreen>
             <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
@@ -14,7 +14,6 @@
                             @click="isOpen = false" />
                     </div>
                 </template>
-                {{ item }}
                 <AdminPartialsMedia v-model="item.variation_images" />
             </UCard>
         </UModal>
@@ -67,19 +66,19 @@
                 </template>
             </div>
 
-            <div class="inline-block">
-                <div class="bg-tertiary-50 border p-2 rounded-md inline-block space-x-4 items-center"
-                    :class="!item.variation_images && 'flex'">
-                    <NuxtImg v-if="item.variation_images.length > 0" @click="isOpen = true"
-                        :src="item.variation_images" class="cursor-pointer w-16 rounded-md" alt="" />
-                    <img @click="isOpen = true" v-else :src="'/img-placeholder.jpg'" alt=""
-                        class="cursor-pointer w-16 rounded-md" />
-                    <p v-if="!item.variation_images" class="text-sm text-center">
+            <div class="inline-block col-span-2">
+                <div class="bg-tertiary-50 border p-2 rounded-md flex space-x-2 items-center">
+
+
+                    <img @click="isOpen = true" :src="placeholderImg" alt="" class="cursor-pointer w-16 rounded-md" />
+                    <p v-if="item.variation_images.length == 0" class="text-sm text-center">
                         Görsel seçilmedi...
                     </p>
+                    <div v-else v-for="variation_image in item.variation_images">
+                        <NuxtImg :src="'aws/' + variation_image.path" width="42px" class="rounded-md" />
+                    </div>
                 </div>
             </div>
-            <div></div>
 
             <UiFormInput v-model="item.stockCode" placeholder="Stok kodu"></UiFormInput>
             <UiFormInput v-model="item.price" placeholder="Normal fiyat"></UiFormInput>
@@ -100,11 +99,11 @@
 </template>
 
 <script setup>
-const {item} = defineProps(['item'])
+const { item } = defineProps(['item'])
 
 const { useAttrsAndVarsState } = useStateIndex()
 const attrsAndVarsState = useAttrsAndVarsState()
-
+const placeholderImg = '/img-placeholder.jpg'
 const {
     findValueInAttrs,
     deleteVariation

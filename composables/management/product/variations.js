@@ -3,7 +3,7 @@ import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
 
 export const useVariations = () => {
 
-    const {product:productState} = useNewProductStore()
+    const productState = useNewProductStore()
     const attrsAndVarsState = useAttrsAndVarsState()
 
 
