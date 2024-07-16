@@ -1,8 +1,11 @@
 import { defu } from "defu";
 const apiBaseUrl = useBaseUrl();
-const token = useCookie("auth.token", { watch: true });
 
 export async function useBaseOFetch(url, options = {}) {
+  
+const token = useCookie("auth.token", { watch: true });
+
+
   console.log("Fetching with $fetch", url);
 
   const defaults = {
@@ -20,7 +23,7 @@ export async function useBaseOFetch(url, options = {}) {
     if (error.response && error.response.status === 401) {
       console.log("401 bloğunda");
       try {
-        const newToken = await refreshToken();
+        const newToken = await refreshToken(token);
         token.value = newToken;
         params.headers.Authorization = `Bearer ${newToken}`;
 
@@ -39,7 +42,10 @@ export async function useBaseOFetch(url, options = {}) {
   }
 }
 
-async function refreshToken() {
+async function refreshToken(token) {
+
+
+
   const response = await $fetch(apiBaseUrl + "auth/refresh", {
     method: "POST",
     headers: { Authorization: `Bearer ${token.value}` },

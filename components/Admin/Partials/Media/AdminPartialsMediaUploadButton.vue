@@ -13,7 +13,7 @@
 </template>
 
 <script setup>
-
+const emit  = defineEmits(['uploadedImages'])
 const loading = ref(false);
 const uploadImages = async (e) => {
   loading.value = true;
@@ -24,7 +24,7 @@ const uploadImages = async (e) => {
     formData.append("files[]", files[i]);
   }
 
-  const { data, pending, error, refresh } = await useFetch("/api/upload", {
+  const { data, error } = await useFetch("/api/upload", {
     method: "post",
     body: formData,
     query: {
@@ -35,17 +35,20 @@ const uploadImages = async (e) => {
   if (error.value == null) {
     await saveImagePaths(data.value);
   }
-  loading.value = pending.value;
+  loading.value = false;
 };
 
 const saveImagePaths = async (paths) => {
   try {
-    await useBaseFetch("vendor/images", {
+    const response = await useBaseOFetch("vendor/images", {
       method: "POST",
       body: paths,
     });
 
-    await refresh();
+
+    console.log(response)
+
+    emit('uploadedImages', response.data[0])
     
   } catch (error) {
     console.log(error, "error");

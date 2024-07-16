@@ -94,7 +94,7 @@
 
           <button @click="isOpenMediaModal = true"
             class="w-full border-2 border-tertiary-300 p-minimal relative text-center overflow-hidden rounded-md border-dashed text-sm">
-            <Icon name="mdi:image" class="absolute left-0 opacity-10 w-20 h-20 -top-2" v-for="item in 3" :key="item">
+            <Icon name="mdi:image" class="absolute left-0 opacity-30 w-20 h-20 -top-2">
             </Icon>
 
             Ürün görsellerini seç

@@ -32,8 +32,7 @@ export default defineEventHandler(async (event) => {
                 throw new Error('Invalid File Format');
             }
 
-            const originalFilename = file.filename.split('.').slice(0, -1).join('.');
-            const uniqueFilename = `${originalFilename}-${Date.now()}.${fileExtension}`;
+            const uniqueFilename = `${Date.now()}.${fileExtension}`;
 
             // S3'e dosya yükleme
             const s3Params = {

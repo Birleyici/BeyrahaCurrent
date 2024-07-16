@@ -12,7 +12,7 @@
       size: '2xs',
       square: false,
       ui: { rounded: 'rounded-full' },
-    }" class="w-full" :columns="columns" :rows="rows" v-model="selected">
+    }" class="w-full" :columns="columns" :rows="rows" >
       <template #name-data="{ row }">
         <NuxtLink :href="'/management/urunler/' + row.id" class="text-blue-500 font-bold" :class="{'!text-red-500 !font-medium' : !row.name}">{{ row.name ||  `Taslak ürün #${row.id}`  }}</NuxtLink>
       </template>

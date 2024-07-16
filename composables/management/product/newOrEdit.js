@@ -20,6 +20,13 @@ export function useProductCreate() {
 
         productState.loading = true
         productState.id = productId != 'yeni' ? productId : null
+
+
+        const isCoverSelected = productState.selectedImages.find(i => i.id == productState.coverImageId)
+
+        if(!isCoverSelected){
+         productState.coverImageId = 0
+        }
        
         try {
             
