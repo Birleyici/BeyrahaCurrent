@@ -14,7 +14,7 @@
                             @click="isOpen = false" />
                     </div>
                 </template>
-                <AdminPartialsMedia v-model="item.variation_images" />
+                <AdminPartialsMedia v-model="item.image" />
             </UCard>
         </UModal>
 
@@ -71,12 +71,10 @@
 
 
                     <img @click="isOpen = true" :src="placeholderImg" alt="" class="cursor-pointer w-16 rounded-md" />
-                    <p v-if="item.variation_images.length == 0" class="text-sm text-center">
+                    <p v-if="!item.image" class="text-sm text-center">
                         Görsel seçilmedi...
                     </p>
-                    <div v-else v-for="variation_image in item.variation_images">
-                        <NuxtImg :src="'aws/' + variation_image.path" width="42px" class="rounded-md" />
-                    </div>
+                    <NuxtImg v-else :src="'aws/' + item?.image?.path" width="42px" class="rounded-md" />
                 </div>
             </div>
 

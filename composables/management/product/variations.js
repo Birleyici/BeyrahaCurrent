@@ -111,6 +111,8 @@ export const useVariations = () => {
             });
         });
 
+        
+
         // Eğer tam eşleşen bir varyasyon bulamazsanız, "any" durumunu da dikkate al.
         if (!selectedVariation) {
             selectedVariation = attrsAndVarsState.variations.find((variation) => {
@@ -132,6 +134,17 @@ export const useVariations = () => {
     const selectOption = (attributeName, option) => {
 
         selectedOptions.value = { ...selectedOptions.value, [attributeName]: option };
+
+
+        console.log(getSelectedVariation.value.image)
+        
+        // if(getSelectedVariation.value.images.length > 0) {
+
+        //     productState.selectedImages = getSelectedVariation.value.images
+        //     window.scrollTo(0, 0)
+
+        // } 
+
     };
 
 
