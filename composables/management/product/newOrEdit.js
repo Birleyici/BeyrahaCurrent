@@ -35,7 +35,7 @@ export function useProductCreate() {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(productState),
+                body: JSON.stringify(productState.$state),
             });
             productState.loading = false
     
