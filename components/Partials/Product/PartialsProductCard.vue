@@ -23,9 +23,7 @@
         <p class="text-secondary-500 font-medium">345.00 TL</p>
       </div>
     </div>
-    <pre>
-
-  </pre>
+  
   </div>
 </template>
 

@@ -1,7 +1,7 @@
 import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
 
 
-export const useAttributes = ()=>{
+export const useAttributes = () => {
 
     const attrsAndVarsState = useAttrsAndVarsState()
 
@@ -54,18 +54,13 @@ export const useAttributes = ()=>{
 
         const {
             data,
-            error,
-        } = await useBaseFetch("products/" + id + "/attributes", {
-            method: 'GET',
-            cache: false
-
-        });
+        } = await useBaseFetch("products/" + id + "/attributes");
 
         attrsAndVarsState.attributes = data.value
 
     }
 
-    
+
     const removeTerm = async (term, terms) => {
         const { data, error } = await useBaseFetch(
             "product-terms/" + term.product_term_id,
@@ -89,7 +84,7 @@ export const useAttributes = ()=>{
     }
 
 
-    
+
 
 
     const fetchGlobalAttrs = async () => {
@@ -105,7 +100,7 @@ export const useAttributes = ()=>{
     }
 
 
-     return {
+    return {
         deleteAttr,
         fetchAttributes,
         addAttr,

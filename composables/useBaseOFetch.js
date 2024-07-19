@@ -6,7 +6,6 @@ export async function useBaseOFetch(url, options = {}) {
 const token = useCookie("auth.token", { watch: true });
 
 
-  console.log("Fetching with $fetch", url);
 
   const defaults = {
     baseURL: apiBaseUrl,
