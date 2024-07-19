@@ -40,7 +40,6 @@
 </template>
 
 <script setup>
-const thumbsSwiper = ref(null);
 const isOpen = ref(false);
 
 const items = [

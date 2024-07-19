@@ -43,7 +43,6 @@ export default defineNuxtConfig({
     }
   },
   modules: [
-    'nuxt-swiper',
     '@pinia/nuxt',
     'nuxt-icon',
     '@nuxt/image',

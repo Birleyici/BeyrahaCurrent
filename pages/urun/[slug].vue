@@ -2,7 +2,7 @@
     <div class="lg:px-x-desktop max-w-full">
         <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
             <div class="col-span-3" v-if="useMain().isLoaded">
-                <PartialsProductImageGallery
+                <LazyPartialsProductImageGallery
                     :images="selectedImages" />
             </div>
 
@@ -42,7 +42,7 @@
         </div>
 
         <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
-            <LazyUiCardsSectionCard title="Ürün açıklaması ve özellikleri">
+            <UiCardsSectionCard title="Ürün açıklaması ve özellikleri">
                 <div v-html="productState.additional_info"></div>
 
                 <div v-if="!isEmpty(attrsAndVarsState.attributes)"
@@ -51,11 +51,11 @@
                         v-for="attr in attrsAndVarsState.attributes || []" :key="attr.name">
                         <p class="font-medium">{{ attr.name }}</p>
                         <span class="text-xs" v-for="(term, index) in attr.options" :key="index">
-                            {{ term }}<span v-if="index < attr.options.length - 1">, </span>
+                            {{ term.term_name }}<span v-if="index < attr.options.length - 1">, </span>
                         </span>
                     </div>
                 </div>
-            </LazyUiCardsSectionCard>
+            </UiCardsSectionCard>
         </div>
         <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal" v-if="categoryProducts.length > 0">
             <p class="mb-2 font-bold">Benzer ürünler</p>
