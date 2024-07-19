@@ -1,6 +1,43 @@
+<template>
+
+  <UCarousel ref="carouselRef" :items="props.images" :ui="{
+    item: 'basis-full',
+    container: 'rounded-none lg:rounded-lg',
+    indicators: {
+      wrapper: 'relative bottom-0 mt-4',
+    },
+  }" :prev-button="{
+    color: 'gray',
+    icon: 'i-heroicons-arrow-left-20-solid',
+    class: 'absolute',
+  }" :next-button="{
+    color: 'gray',
+    icon: 'i-heroicons-arrow-right-20-solid',
+    class: 'absolute',
+  }" indicators arrows class="w-full mx-auto">
+    <template #default="{ item }">
+      <NuxtImg :src="'aws' + item.path" class="w-full zoomable transition-transform duration-300 border lg:rounded-lg"
+        draggable="false" width="600" format="webp" loading="lazy" quality="80" />
+    </template>
+
+    <template #indicator="{ onClick, page, active }">
+      <NuxtImg v-if="!useMain().isMobile" :src="'aws' + images[page - 1]?.path"
+        class="w-12 border-2 rounded-md cursor-pointer" :class="active ? 'border-orange-500' : ''"
+        @click="onClick(page)" size="2xs" />
+      <UButton v-else variant="solid" :color="active ? 'orange' : 'gray'" size="2xs"
+        class="rounded-full duration-200 w-[10px] h-[10px] justify-center -mt-20" :class="active && 'w-4'"
+        @click="onClick(page)" />
+    </template>
+
+  </UCarousel>
+</template>
+
+
 <script setup lang="ts">
-defineProps(["images"]);
+
+const props = defineProps(["images"]);
 const clicked = ref(false);
+const carouselRef = ref()
 
 const toggleZoom = (e: MouseEvent) => {
   const target = e.target as HTMLElement;
@@ -37,63 +74,16 @@ onUnmounted(() => {
   const imgs = document.querySelectorAll(".zoomable");
   imgs.forEach((img) => removeZoomListeners(img as HTMLElement));
 });
+
+watch(props.images, (newVal) => {
+
+  if (newVal[0]?.added) {
+
+    carouselRef.value.select(0)
+
+  }
+
+})
+
+
 </script>
-
-<template>
-  <UCarousel
-    :items="images"
-    :ui="{
-      item: 'basis-full',
-      container: 'rounded-none lg:rounded-lg',
-      indicators: {
-        wrapper: 'relative bottom-0 mt-4',
-      },
-    }"
-    :prev-button="{
-      color: 'gray',
-      icon: 'i-heroicons-arrow-left-20-solid',
-      class: 'absolute',
-    }"
-    :next-button="{
-      color: 'gray',
-      icon: 'i-heroicons-arrow-right-20-solid',
-      class: 'absolute',
-    }"
-    indicators
-    arrows
-    class="w-full mx-auto"
-  >
-    <template #default="{ item }">
-      <NuxtImg
-        :src="'aws' + item.path"
-        class="w-full zoomable transition-transform duration-300 border lg:rounded-lg"
-        draggable="false"
-        width="600"
-        format="webp"
-        loading="lazy"
-         quality="80"
-      />
-    </template>
-
-    <template #indicator="{ onClick, page, active }">
-      <NuxtImg
-        v-if="!useMain().isMobile"
-        :src="'aws' + images[page - 1]?.path"
-        class="w-12 border-2 rounded-md cursor-pointer"
-        :class="active ? 'border-orange-500' : ''"
-        @click="onClick(page)"
-        size="2xs"
-      />
-      <UButton
-        v-else
-        variant="solid"
-        :color="active ? 'orange' : 'gray'"
-        size="2xs"
-        class="rounded-full duration-200 w-[10px] h-[10px] justify-center -mt-20"
-        :class="active && 'w-4'"
-        @click="onClick(page)"
-      />
-    </template>
-  </UCarousel>
-</template>
-

@@ -1,7 +1,10 @@
 <template>
+
   <div class="items-center" :class="[absolute && 'relative']">
-    <input  v-model="model" :value="value" :name="name" :type="inputType" class="hidden" :id="id" />
-    <label :for="id" class="flex items-center space-x-2 cursor-pointer" :class="[labelClass, absolute && '!space-x-0']">
+    <input v-model="model" :value="value" :name="nameHandle" :type="inputType" class="hidden"
+      :id="`image_checkbox_${id}`" />
+    <label :for="`image_checkbox_${id}`" class="flex items-center space-x-2 cursor-pointer"
+      :class="[labelClass, absolute && '!space-x-0']">
       <div :class="absolute && 'absolute top-2 left-2'">
         <span class="block w-5 h-5 border-2 border-gray-300 rounded-md relative">
           <Icon v-if="isActive" name="material-symbols:fitbit-check-small-rounded"
@@ -13,7 +16,7 @@
       </span>
     </label>
   </div>
-  
+
 </template>
 
 <script setup>
@@ -41,6 +44,11 @@ const isActive = computed(() => {
     return model?.value?.id === value.id;
   }
 });
+
+const nameHandle = computed(() => {
+
+  return inputType.value == 'radio' ? 'image' : name
+})
 
 
 </script>

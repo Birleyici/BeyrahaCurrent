@@ -2,7 +2,8 @@
     <div class="lg:px-x-desktop max-w-full">
         <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
             <div class="col-span-3" v-if="useMain().isLoaded">
-                <PartialsProductImageGallery :images="productState.selectedImages" />
+                <PartialsProductImageGallery
+                    :images="selectedImages" />
             </div>
 
             <SkeletonProductGallery v-else></SkeletonProductGallery>
@@ -13,17 +14,7 @@
                 </h1>
                 <UDivider class="my-2" type="dashed" />
 
-                <div class="my-minimal">
-                    <p class="font-medium text-sm">Renk</p>
-                    <UCarousel v-if="useMain().isLoaded" v-slot="{ item }" :items="productState.selectedImages"
-                        :ui="{ item: 'snap-end' }">
-                        <NuxtImg :src="'aws' + item.path" width="60"
-                            class="m-1 rounded-full p-[2px] border w-16 h-16 object-cover object-top" />
-                    </UCarousel>
-                    <div class="flex space-x-2" v-else>
-                        <SkeletonUiThumb v-for="item in 4" :key="item"></SkeletonUiThumb>
-                    </div>
-                </div>
+
 
                 <PartialsProductVariations></PartialsProductVariations>
 
@@ -120,6 +111,10 @@ const { categoryProducts, getProductsByCatId } = useProduct()
 const slug = useRoute().params.slug
 await getProduct(slug);
 await getProductsByCatId(productState.selectedCategories)
+
+const selectedImages = computed(() => {
+  return productState.selectedColorTermImages?.length ? productState.selectedColorTermImages : productState.selectedImages;
+});
 
 if (!productState.id) {
     navigateTo('/')

@@ -8,7 +8,6 @@
           class="absolute right-0 flex items-center justify-center left-0 w-full h-full bg-slate-100 opacity-40 z-[2]">
           <Icon name="mdi:loading" class="w-12 h-12 animate-spin"></Icon>
         </div>
-       {{model}}
 
         <div class="w-32 h-32 border rounded-md overflow-hidden" :key="img.id" v-for="img in images.data">
 

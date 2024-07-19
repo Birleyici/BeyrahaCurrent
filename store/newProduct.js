@@ -10,6 +10,7 @@ export const useNewProductStore = defineStore({
         coverImageId: 0,
         selectedImages: [],
         selectedCategories: [],
+        selectedColorTermImages: [],
         price: null,
         sale_price: null,
         sku: null,

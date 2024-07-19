@@ -47,7 +47,7 @@ export const useVariations = () => {
 
 
     const fetchVariations = async (id) => {
-        
+
         const { data, error } = await useBaseFetch("products/" + id + "/variations");
 
         attrsAndVarsState.variations = data.value
@@ -111,7 +111,7 @@ export const useVariations = () => {
             });
         });
 
-        
+
 
         // Eğer tam eşleşen bir varyasyon bulamazsanız, "any" durumunu da dikkate al.
         if (!selectedVariation) {
@@ -131,20 +131,32 @@ export const useVariations = () => {
 
     const selectedOptions = ref({});
 
-    const selectOption = (attributeName, option) => {
+    const selectOption = (attributeName, option, colorTerm=null) => {
+
+        if(colorTerm){
+            productState.selectedColorTermImages = colorTerm.term_images
+        }
+
+
 
         selectedOptions.value = { ...selectedOptions.value, [attributeName]: option };
 
+        //varyasyona ait image varsa selectedImages'in en başına unshiftliyoruz.
+        if (getSelectedVariation.value.image) {
 
-        console.log(getSelectedVariation.value.image)
-        
-        // if(getSelectedVariation.value.images.length > 0) {
+            const selectedVarImg = { ...getSelectedVariation.value.image, added: true }
+            if (productState.selectedImages[0]?.added) {
+                productState.selectedImages[0] = selectedVarImg
+            } else {
+                productState.selectedImages.unshift(selectedVarImg)
+            }
+            
 
-        //     productState.selectedImages = getSelectedVariation.value.images
-        //     window.scrollTo(0, 0)
+        } else if (productState.selectedImages[0]?.added) {
 
-        // } 
+            productState.selectedImages.shift()
 
+        }
     };
 
 
@@ -279,7 +291,7 @@ export const useVariations = () => {
             await fetchVariations(productState.id);
         }
     }
-    
+
     const saveVariations = async () => {
 
         try {
@@ -359,6 +371,6 @@ export const useVariations = () => {
         saveVariations,
         deleteAllVariations,
         findValueInAttrs,
-        deleteVariation
+        deleteVariation,
     }
 }
