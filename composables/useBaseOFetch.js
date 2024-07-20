@@ -9,6 +9,7 @@ const token = useCookie("auth.token", { watch: true });
 
   const defaults = {
     baseURL: apiBaseUrl,
+    mode: 'no-cors',
     headers: token.value ? { Authorization: `Bearer ${token.value}` } : {},
   };
 
