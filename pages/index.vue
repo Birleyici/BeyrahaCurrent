@@ -24,11 +24,15 @@
     <div class="my-minimal">
       <UiSlidesProductSlide :products="products"></UiSlidesProductSlide>
     </div>
+    {{ productState.coverImageId }}
   </div>
 </template>
 
 <script setup>
+import { useNewProductStore } from '~/store/newProduct';
+
 const { getProducts, products } = useProduct()
 getProducts(5)
+const productState = useNewProductStore()
 
 </script>

@@ -80,6 +80,8 @@ await fetchAttributes(productState.id)
 
 
 
+
+
 function transform(attributes) {
   let newAttrs = [];
   attributes.forEach((a) => {

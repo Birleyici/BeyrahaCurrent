@@ -2,8 +2,8 @@
     <div class="lg:px-x-desktop max-w-full">
         <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
             <div class="col-span-3" v-if="useMain().isLoaded">
-                <LazyPartialsProductImageGallery
-                    :images="selectedImages" />
+                <!-- <LazyPartialsProductImageGallery
+                    :images="selectedImages" /> -->
             </div>
 
             <SkeletonProductGallery v-else></SkeletonProductGallery>
@@ -99,7 +99,6 @@
                 <LazyPartialsCommentItem></LazyPartialsCommentItem>
             </div>
         </div>
-
     </div>
 </template>
 
@@ -112,6 +111,7 @@ const { categoryProducts, getProductsByCatId } = useProduct()
 const slug = useRoute().params.slug
 await getProduct(slug);
 await getProductsByCatId(productState.selectedCategories)
+
 
 const selectedImages = computed(() => {
   return productState.selectedColorTermImages?.length ? productState.selectedColorTermImages : productState.selectedImages;
