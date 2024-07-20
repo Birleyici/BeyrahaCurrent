@@ -24,6 +24,7 @@ export default defineNuxtConfig({
   },
   css: ['~/assets/css/main.css'],
   image: {
+    provider: 'ipx',
     dir: '/images',
     domains: [
       'https://beyraha.s3.eu-central-1.amazonaws.com'
