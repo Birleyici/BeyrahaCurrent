@@ -9,7 +9,6 @@ export async function useBaseFetch(url, options = {}) {
     baseURL: apiBaseUrl,
     key: url,
     watch:false,
-    mode: 'no-cors',
     headers: accessToken.value
       ? { Authorization: `Bearer ${accessToken.value}` }
       : {},
