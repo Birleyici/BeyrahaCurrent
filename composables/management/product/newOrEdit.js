@@ -65,7 +65,7 @@ export function useProductCreate() {
             console.log(productState.selectedCategories, 'selectedcategories')
 
             // Seçilen kategorileri en başa al
-            const selectedIds = productState.selectedCategories.map(cat => cat.id);
+            const selectedIds = productState?.selectedCategories?.map(cat => cat.id);
             const sortedCategories = productState.categories.sort((a, b) => {
                 if (selectedIds.includes(a.id) && !selectedIds.includes(b.id)) {
                     return -1;
