@@ -117,7 +117,7 @@ const selectedImages = computed(() => {
   return productState.selectedColorTermImages?.length ? productState.selectedColorTermImages : productState.selectedImages;
 });
 
-if (!productState.id) {
-    navigateTo('/')
-}
+// if (!productState.id) {
+//     navigateTo('/')
+// }
 </script>
