@@ -1,6 +1,6 @@
 <template>
-
   <div>
+    
     <div>
       <div v-for="attribute in attrsAndVarsState.attributes" :key="attribute.name">
         <!-- Öznitelik Adı -->
@@ -35,7 +35,6 @@
               }" :disabled="!isActive(attribute.name, option.term_name)"
                 @click="selectOption(attribute.name, option.term_name)">
                 {{ option.term_name }}
-
               </UiButtonsBaseButton>
             </div>
           </div>
@@ -55,7 +54,6 @@
       </div>
     </div>
   </div>
-
 </template>
 
 <script setup>
@@ -68,55 +66,15 @@ const {
   isActive,
   selectOption,
   isSelected,
-  getSelectedVariation
-} = useVariations()
+  getSelectedVariation,
+  transform,
+  getTermImageSrc
+} = useVariationsFront()
 
-const {
-  fetchAttributes,
-} = useAttributes()
+const { fetchAttributes } = useAttributes()
 
 await fetchVariationsForFrontEnd(productState.id)
 await fetchAttributes(productState.id)
 
-
-
-
-
-function transform(attributes) {
-  let newAttrs = [];
-  attributes.forEach((a) => {
-    const obj = {};
-    obj.name = a.attribute_name;
-    const termDetails = a.product_terms.map((item) => {
-      return {
-        term_name: item.term_name,
-        term_images: item.term_images.map((image) => ({
-          id: image.id,
-          path: image.path
-        }))
-      };
-    });
-    obj.options = termDetails;
-    newAttrs.push(obj);
-  });
-  return newAttrs;
-}
-
-
-attrsAndVarsState.attributes = transform(attrsAndVarsState.attributes || []) || [];
-
-
-const getTermImageSrc = (item, termName) => {
-  const imagePath = item?.term_images?.[0]?.path;
-  return imagePath ? `aws${imagePath}` : `https://placehold.co/100x100?text=${termName}`;
-};
-
+attrsAndVarsState.attributes = transform(attrsAndVarsState.attributes || [], attrsAndVarsState.variations);
 </script>
-
-<style>
-/* Basit stillendirmeler */
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-</style>
