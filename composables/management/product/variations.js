@@ -259,7 +259,7 @@ export const useVariations = () => {
         const allCombinations = generateCombinations(termsArrays);
 
         // Oluşturulan kombinasyonları kullanarak varyasyonları oluşturalım.
-        const allVariations = allCombinations?.map((combination) => ({
+        const allVariations = allCombinations.map((combination) => ({
             isOpen: false,
             price: null,
             sale_price: null,
@@ -268,7 +268,7 @@ export const useVariations = () => {
             stockAmount: 0,
             isStockManagement: false,
             product_id: productState.id,
-            terms: combination?.map((termId, index) => ({
+            terms: combination.map((termId, index) => ({
                 product_variation_id: null, // Bu değer varyasyon oluşturulduktan sonra atanacak.
                 product_term_id: termId,
                 product_term: {
