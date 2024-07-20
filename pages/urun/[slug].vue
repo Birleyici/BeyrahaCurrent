@@ -2,8 +2,7 @@
     <div class="lg:px-x-desktop max-w-full">
         <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
             <div class="col-span-3" v-if="useMain().isLoaded">
-                <PartialsProductImageGallery
-                    :images="selectedImages" />
+                <PartialsProductImageGallery :images="selectedImages" />
             </div>
 
             <SkeletonProductGallery v-else></SkeletonProductGallery>
@@ -43,10 +42,9 @@
 
         <!-- -------------------sorun burdan aşağıda----------------------- -->
 
-        <!-- <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal" v-if="categoryProducts.length > 0">
-            <p class="mb-2 font-bold">Benzer ürünler</p>
-            <UiSlidesProductSlide :products="categoryProducts"></UiSlidesProductSlide>
-        </div> -->
+
+        <UiSlidesProductSlide title="Benzer ürünler" :products="categoryProducts"></UiSlidesProductSlide>
+
 
         <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
             <p class="mb-2 font-bold">Yorum yap</p>
@@ -99,7 +97,7 @@ await getProductsByCatId(productState.selectedCategories)
 
 
 const selectedImages = computed(() => {
-  return productState.selectedColorTermImages?.length ? productState.selectedColorTermImages : productState.selectedImages;
+    return productState.selectedColorTermImages?.length ? productState.selectedColorTermImages : productState.selectedImages;
 });
 
 // if (!productState.id) {
