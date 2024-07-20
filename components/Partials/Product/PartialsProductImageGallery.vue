@@ -1,6 +1,6 @@
 <template>
 
-  <UCarousel ref="carouselRef" :items="props.images" :ui="{
+  <UCarousel ref="carouselRef" :items="images" :ui="{
     item: 'basis-full',
     container: 'rounded-none lg:rounded-lg',
     indicators: {
@@ -16,12 +16,15 @@
     class: 'absolute',
   }" indicators arrows class="w-full mx-auto">
     <template #default="{ item }">
-      <NuxtImg :src="'aws' + item.path" class="w-full zoomable transition-transform duration-300 border lg:rounded-lg"
-        draggable="false" width="600" format="webp" loading="lazy" quality="80" />
+      <img class="object-cover min-h-[500px]" :src="item.path" v-if="item.placeholder">
+      <NuxtImg else :src="'aws' + item.path"
+        class="w-full zoomable transition-transform duration-300 border lg:rounded-lg" draggable="false" width="600"
+        format="webp" loading="lazy" quality="80" />
     </template>
 
     <template #indicator="{ onClick, page, active }">
-      <NuxtImg v-if="!useMain().isMobile" :src="'aws' + images[page - 1]?.path"
+      
+      <NuxtImg v-if="!useMain().isMobile && !images[page - 1]?.placeholder" :src="'aws' + images[page - 1]?.path"
         class="w-12 border-2 rounded-md cursor-pointer" :class="active ? 'border-orange-500' : ''"
         @click="onClick(page)" size="2xs" />
       <UButton v-else variant="solid" :color="active ? 'orange' : 'gray'" size="2xs"
@@ -36,6 +39,18 @@
 <script setup lang="ts">
 
 const props = defineProps(["images"]);
+
+const placeholderImage = "/img-placeholder.jpg";
+
+const images = computed(() => {
+  return props.images && props.images.length > 0
+    ? props.images.map(image => ({
+      ...image,
+      path: image.path || placeholderImage
+    }))
+    : [{ id: 0, path: placeholderImage, alt: 'Placeholder Image', placeholder: true }];
+});
+
 const clicked = ref(false);
 const carouselRef = ref()
 
