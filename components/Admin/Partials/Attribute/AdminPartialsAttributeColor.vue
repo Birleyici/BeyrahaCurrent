@@ -46,13 +46,7 @@
                 </div>
               </div>
             </div>
-            <div>
-
-              <!-- görsel seçme burada değil termlerin yanında olacaktı -->
-              <!-- <AdminPartialsMediaSelectBox v-model="isOpenMediaModal" :selected-images="productState.selectedImages"
-                :cover-image-id="productState.coverImageId" /> -->
-
-            </div>
+           
           </div>
 
 

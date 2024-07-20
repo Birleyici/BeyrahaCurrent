@@ -77,8 +77,8 @@
           color="secondary" class="px-6 w-full">Yayınla</UiButtonsBaseButton>
 
 
-        <AdminPartialsMediaSelectBox v-model="isOpenMediaModal" :selected-images="productState.selectedImages"
-          :cover-image-id="productState.coverImageId" />
+        <AdminPartialsMediaSelectBox v-model:is-open-modal="isOpenMediaModal" :selected-images="productState.selectedImages"
+          v-model:cover-image-id="productState.coverImageId" />
 
         <div class="my-minimal">
 
