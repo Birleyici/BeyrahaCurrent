@@ -2,7 +2,7 @@
     <div class="lg:px-x-desktop max-w-full">
         <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
             <div class="col-span-3" v-if="useMain().isLoaded">
-                <LazyPartialsProductImageGallery
+                <PartialsProductImageGallery
                     :images="selectedImages" />
             </div>
 
@@ -20,7 +20,7 @@
 
                 <div class="flex justify-between lg:justify-start space-x-4 lg:space-x-8">
                     <div class="inline-block">
-                        <LazyUiFormCounter></LazyUiFormCounter>
+                        <UiFormCounter></UiFormCounter>
                     </div>
                     <UiButtonsBaseButton color="secondary"
                         class="!rounded-full font-bold !flex relative text-sm lg:!px-12 px-6 overflow-hidden">
@@ -66,9 +66,9 @@
         <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
             <p class="mb-2 font-bold">Yorum yap</p>
 
-            <LazyUiNotificationBar type="info">Ürüne yalnızca ürünü satın alan oturum açmış kullanıcılar yorum
+            <UiNotificationBar type="info">Ürüne yalnızca ürünü satın alan oturum açmış kullanıcılar yorum
                 yapabilir.
-            </LazyUiNotificationBar>
+            </UiNotificationBar>
 
             <UiFormTextarea class="h-60 my-minimal border-quaternary-300" placeholder="Yorumunuz"></UiFormTextarea>
 
@@ -96,7 +96,7 @@
             </div>
 
             <div class="grid gap-4 border-b border-dotted pb-3">
-                <LazyPartialsCommentItem></LazyPartialsCommentItem>
+                <PartialsCommentItem></PartialsCommentItem>
             </div>
         </div>
     </div>
