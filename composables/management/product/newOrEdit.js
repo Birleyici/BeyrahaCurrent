@@ -62,6 +62,8 @@ export function useProductCreate() {
             // productState.categories güncelle
             productState.categories = data.value;
 
+            console.log(productState.selectedCategories, 'selectedcategories')
+
             // Seçilen kategorileri en başa al
             const selectedIds = productState.selectedCategories.map(cat => cat.id);
             const sortedCategories = productState.categories.sort((a, b) => {
