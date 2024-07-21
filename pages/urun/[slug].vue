@@ -43,17 +43,17 @@
         <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
             <UiCardsSectionCard title="Ürün açıklaması ve özellikleri">
                 <div v-html="productState.additional_info"></div>
-                <div 
+                <div
                     class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 lg:gap-4 mt-minimal">
-                   <ClientOnly>
-                    <div class="flex lg:block items-center space-x-4 lg:space-x-0 bg-tertiary-100 p-3 lg:p-4 w-full rounded-sm"
-                    v-for="attr in attrsAndVarsState.attributes" :key="attr.name">
-                    <p class="font-medium">{{ attr.name }}</p>
-                    <div class="text-xs flex" v-for="(term, index) in attr.options" :key="index">
-                        {{ term.term_name }}<span v-if="index < attr.options.length - 1">, </span>
-                    </div>
-                </div>
-                   </ClientOnly>
+                    <ClientOnly>
+                        <div class="flex lg:block items-center space-x-4 lg:space-x-0 bg-tertiary-100 p-3 lg:p-4 w-full rounded-sm"
+                            v-for="attr in attrsAndVarsState.attributes" :key="attr.name">
+                            <p class="font-medium">{{ attr.name }}</p>
+                            <div class="text-xs flex" v-for="(term, index) in attr.options" :key="index">
+                                {{ term.term_name }}<span v-if="index < attr.options.length - 1">, </span>
+                            </div>
+                        </div>
+                    </ClientOnly>
                 </div>
             </UiCardsSectionCard>
         </div>
@@ -97,15 +97,18 @@
                 <PartialsCommentItem></PartialsCommentItem>
             </div>
         </div>
+        {{ productState.selectedColorTermImages }}
     </div>
 </template>
 
 <script setup>
-const { useAttrsAndVarsState, useNewProductStore } = useStateIndex()
-const { getProduct } = useProductCreate();
+const { useAttrsAndVarsState, useNewProductStore, useProductState } = useStateIndex()
 const productState = useNewProductStore()
+const { categoryProducts } = useProductState()
+
+const { getProduct } = useProductCreate();
 const attrsAndVarsState = useAttrsAndVarsState()
-const { categoryProducts, getProductsByCatId } = useProduct()
+const { getProductsByCatId } = useProduct()
 const slug = useRoute().params.slug
 await getProduct(slug);
 await getProductsByCatId(productState.selectedCategories)

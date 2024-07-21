@@ -1,24 +1,26 @@
+import { useProductState } from "~/store/front/product";
+
 export function useProduct() {
 
-    const products = ref([])
-    const categoryProducts = ref([])
+    const productState = useProductState()
 
-    const getProducts = async (piece) => {
+    const getProducts = async ({ piece, page = 1, limit = 10 }) => {
 
+        const params = piece ? { piece } : { page, limit };
+    
         const { data, error } = await useBaseFetch('products', {
-
-            params: {
-                piece
-            }
-
-        })
-
+            params
+        });
+    
         if (data.value && !error.value) {
-
-            products.value = data.value
+            // Gelen veri sayfalı ise data.value.data, değilse düz data.value
+           
+            productState.$patch({products:data.value});
         }
-
-    }
+    };
+    
+    
+    
 
 
     const getProductsByCatId = async (catIds) => {
@@ -35,15 +37,13 @@ export function useProduct() {
         })
 
         if (data.value && !error.value) {
-            categoryProducts.value = data.value
+            productState.$patch({categoryProducts: data.value})  
         }
 
     }
 
     return {
         getProducts,
-        getProductsByCatId,
-        products,
-        categoryProducts
+        getProductsByCatId
     }
 }

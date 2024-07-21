@@ -22,17 +22,15 @@
       </div>
     </div>
     <div class="my-minimal">
-      <UiSlidesProductSlide :products="products"></UiSlidesProductSlide>
+      <UiSlidesProductSlide :products="productFrontState.products"></UiSlidesProductSlide>
     </div>
-    {{ productState.coverImageId }}
   </div>
 </template>
 
 <script setup>
-import { useNewProductStore } from '~/store/newProduct';
-
-const { getProducts, products } = useProduct()
-getProducts(5)
-const productState = useNewProductStore()
+const { useProductState } = useStateIndex()
+const productFrontState = useProductState()
+const { getProducts } = useProduct()
+await getProducts({piece:5})
 
 </script>
