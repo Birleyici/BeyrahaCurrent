@@ -1,15 +1,15 @@
 <template>
   <NuxtLoadingIndicator />
-
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
 </template>
 
 <script setup>
+const { $changeMainState } = useNuxtApp()
 
 onMounted(() => {
-  useMain().isLoaded = true;
+  $changeMainState({ isLoaded: true });
 });
 
 </script>

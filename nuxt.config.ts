@@ -40,7 +40,6 @@ export default defineNuxtConfig({
       apiBase: process.env.API_BASE_URL,
       nuxtSecret: process.env.NUXT_SECRET,
       isDevelopment: process.env.NODE_ENV !== 'production' ? true : false,
-
     }
   },
   modules: [
@@ -49,7 +48,9 @@ export default defineNuxtConfig({
     '@nuxt/image',
     // "@sidebase/nuxt-auth"
     '@nuxt/ui',
-    '@nuxtjs/tailwindcss'
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/device',
+
   ],
 
   tailwindcss: {

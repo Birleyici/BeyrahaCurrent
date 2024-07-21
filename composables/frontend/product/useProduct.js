@@ -1,33 +1,27 @@
-import { useProductState } from "~/store/front/product";
+import { useProductState } from "~/store/frontend/product";
 
 export function useProduct() {
 
     const productState = useProductState()
 
-    const getProducts = async ({ piece, page = 1, limit = 10 }) => {
+    const getProducts = async ({piece, filters}) => {
 
-        const params = piece ? { piece } : { page, limit };
-    
+        const params = piece ? { piece } : { ...filters };
+
         const { data, error } = await useBaseFetch('products', {
             params
         });
-    
+
         if (data.value && !error.value) {
             // Gelen veri sayfalı ise data.value.data, değilse düz data.value
-           
-            productState.$patch({products:data.value});
+            productState.$patch({ products: data.value });
         }
     };
-    
-    
-    
 
 
     const getProductsByCatId = async (catIds) => {
 
-
-         catIds = catIds.map(cat => cat.id);
-
+        catIds = catIds.map(cat => cat.id);
 
         const { data, error } = await useBaseFetch(`products/category`, {
             params: {
@@ -37,7 +31,7 @@ export function useProduct() {
         })
 
         if (data.value && !error.value) {
-            productState.$patch({categoryProducts: data.value})  
+            productState.$patch({ categoryProducts: data.value })
         }
 
     }

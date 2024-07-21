@@ -8,7 +8,7 @@
           <div class="my-minimal" v-if="attribute.name.toLowerCase() == 'renk'">
             <div>
               <p class="font-medium text-sm">Renk</p>
-              <UCarousel v-if="useMain().isLoaded" v-slot="{ item }" :items="attribute.options"
+              <UCarousel v-if="$mainState.isLoaded" v-slot="{ item }" :items="attribute.options"
                 :ui="{ item: 'snap-end' }">
                 <NuxtImg @click="selectOption(attribute.name, item.term_name, item)"
                   :src="getTermImageSrc(item, item.term_name)" width="60"

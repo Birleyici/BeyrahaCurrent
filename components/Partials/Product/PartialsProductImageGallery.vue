@@ -24,7 +24,7 @@
 
     <template #indicator="{ onClick, page, active }">
       
-      <NuxtImg v-if="!useMain().isMobile && !images[page - 1]?.placeholder" :src="'aws' + images[page - 1]?.path"
+      <NuxtImg v-if="!$device.isMobile && !images[page - 1]?.placeholder" :src="'aws' + images[page - 1]?.path"
         class="w-12 border-2 rounded-md cursor-pointer" :class="active ? 'border-orange-500' : ''"
         @click="onClick(page)" size="2xs" />
       <UButton v-else variant="solid" :color="active ? 'orange' : 'gray'" size="2xs"

@@ -1,16 +1,12 @@
 import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
 
-
 export const useAttributes = () => {
 
     const attrsAndVarsState = useAttrsAndVarsState()
 
-
-
     let productId = computed(() => {
         return productState.id || useRoute().params.id
     });
-
 
     const addAttr = () => {
 
@@ -82,9 +78,6 @@ export const useAttributes = () => {
     const deleteAttr = (id) => {
         attrsAndVarsState.attributes = attrsAndVarsState.attributes.filter(attribute => attribute.product_attribute_id !== id);
     }
-
-
-
 
 
     const fetchGlobalAttrs = async () => {

@@ -19,20 +19,20 @@
       <p class="font-primary text-heading-1 flex items-center space-x-3">
         <Icon
           @click="menuStatus = true"
-          v-if="useMain().isMobile"
+          v-if="$device.isMobile"
           name="ph:list"
           class="w-8 h-8"
         />
 
         <Icon
-          v-if="useMain().isMobile"
-          @click="useMain().isOpenSearch = true"
+          v-if="$device.isMobile"
+          @click=" $changeMainState({ isOpenSearch: true })"
           name="ph:magnifying-glass"
           class="w-7 h-7"
         />
         <NuxtLink href="/">
           <img
-            v-if="!useMain().isMobile"
+            v-if="!$device.isMobile"
             src="/logo.jpg"
             class="min-w-[100px] max-w-[100px]"
             alt=""
@@ -41,7 +41,7 @@
       </p>
 
       <img
-        v-if="useMain().isMobile"
+        v-if="$device.isMobile"
         src="/logo.jpg"
         class="mx-auto min-w-[100px] max-w-[100px]"
         alt=""
@@ -50,17 +50,15 @@
       <PartialsCommonSearchInput></PartialsCommonSearchInput>
 
       <div>
-        <div v-if="!useMain().isMobile" class="flex items-center font-medium">
+        <div v-if="!$device.isMobile" class="flex items-center font-medium">
           <p
-            @mouseover="changeAccountStatusFewSecond()"
-            @mouseout="mouseOutAccount = true"
+            @click="accountStatus = true"
             class="cursor-pointer font-primary text-heading-4 pr-4"
           >
             HESAP
           </p>
           <p
-            @mouseover="changeCartStatusFewSecond()"
-            @mouseout="mouseOutCart = true"
+            @click="cartStatus = true"
             class="cursor-pointer font-primary text-heading-4 px-4"
           >
             SEPET
@@ -135,15 +133,6 @@ const kategoriler = reactive([
   },
 ]);
 
-const {
-  status: accountStatus,
-  mouseOut: mouseOutAccount,
-  changeStatusFewSecond: changeAccountStatusFewSecond,
-} = useDelayedStatusChange(false);
-
-const {
-  status: cartStatus,
-  mouseOut: mouseOutCart,
-  changeStatusFewSecond: changeCartStatusFewSecond,
-} = useDelayedStatusChange(false);
+const accountStatus = ref(false)
+const cartStatus = ref(false)
 </script>

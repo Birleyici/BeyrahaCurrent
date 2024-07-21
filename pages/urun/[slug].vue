@@ -1,7 +1,7 @@
 <template>
     <div class="lg:px-x-desktop max-w-full">
         <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
-            <div class="col-span-3" v-if="useMain().isLoaded">
+            <div class="col-span-3" v-if="$mainState.isLoaded">
                 <PartialsProductImageGallery :images="selectedImages" />
             </div>
 
@@ -58,7 +58,7 @@
             </UiCardsSectionCard>
         </div>
 
-        <UiSlidesProductSlide title="Benzer ürünler" :products="categoryProducts"></UiSlidesProductSlide>
+        <UiSlidesProductSlide title="Benzer ürünler" :products="productFrontState.categoryProducts"></UiSlidesProductSlide>
 
 
         <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
@@ -104,7 +104,7 @@
 <script setup>
 const { useAttrsAndVarsState, useNewProductStore, useProductState } = useStateIndex()
 const productState = useNewProductStore()
-const { categoryProducts } = useProductState()
+const productFrontState = useProductState()
 
 const { getProduct } = useProductCreate();
 const attrsAndVarsState = useAttrsAndVarsState()
