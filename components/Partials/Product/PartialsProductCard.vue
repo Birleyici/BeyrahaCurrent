@@ -1,10 +1,10 @@
 <template>
-  <div class="border rounded-md">
+  <div class="border rounded-md max-w-[250px]">
     <div class="relative overflow-hidden cursor-pointer ">
       <NuxtLink :to="`/urun/${product.slug}`">
 
-        <NuxtImg v-if="product.coverImage" :src="`aws/${product.coverImage}`" format="webp" quality="90" loading="lazy" width="200"
-          class="rounded-t-sm duration-200 h-[350px] object-cover w-full hover:scale-110" />
+        <NuxtImg v-if="product.coverImage" :src="`aws/${product.coverImage}`" format="webp" quality="90" loading="lazy"
+          width="200" class="rounded-t-sm duration-200 h-[350px] object-cover w-full hover:scale-110" />
         <img :src="img_placeholder" v-else
           class="rounded-t-sm duration-200 h-[350px] w-[250px] object-cover  hover:scale-110"
           alt="Ürün görseli yer tutucusu">
@@ -22,7 +22,7 @@
         <p class="text-secondary-500 font-medium">345.00 TL</p>
       </div>
     </div>
-  
+
   </div>
 </template>
 
