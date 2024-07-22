@@ -1,14 +1,22 @@
 <template>
   <div class="border rounded-md max-w-[250px]">
-    <div class="relative overflow-hidden cursor-pointer ">
+    <div class="relative overflow-hidden cursor-pointer">
       <NuxtLink :to="`/urun/${product.slug}`">
-
-        <NuxtImg v-if="product.coverImage" :src="`aws/${product.coverImage}`" format="webp" quality="90" loading="lazy"
-          width="200" class="rounded-t-sm duration-200 h-[350px] object-cover w-full hover:scale-110" />
-        <img :src="img_placeholder" v-else
-          class="rounded-t-sm duration-200 h-[350px] w-[250px] object-cover  hover:scale-110"
-          alt="Ürün görseli yer tutucusu">
-
+        <NuxtImg
+          v-if="product.coverImage"
+          :src="`aws/${product.coverImage}`"
+          format="webp"
+          quality="90"
+          loading="lazy"
+          width="200"
+          class="rounded-t-sm duration-200 h-[350px] object-cover w-full hover:scale-110"
+        />
+        <img
+          v-else
+          :src="img_placeholder"
+          class="rounded-t-sm duration-200 h-[350px] w-[250px] object-cover hover:scale-110"
+          alt="Ürün görseli yer tutucusu"
+        />
       </NuxtLink>
     </div>
     <div class="p-4">
@@ -18,11 +26,12 @@
         </NuxtLink>
       </div>
       <div class="md:flex justify-center md:space-x-2 items-center text-center">
-        <del class="text-sm text-slate-400">450.00 TL</del>
-        <p class="text-secondary-500 font-medium">345.00 TL</p>
+        <del v-if="product.sale_price" class="text-sm text-slate-400">{{ product.price }} TL</del>
+        <p :class="{'text-secondary-500 font-medium': product.sale_price, 'text-primary-500': !product.sale_price}">
+          {{ product.sale_price || product.price }} TL
+        </p>
       </div>
     </div>
-
   </div>
 </template>
 
