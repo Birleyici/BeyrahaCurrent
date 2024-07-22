@@ -4,7 +4,10 @@ export function useProduct() {
 
     const productState = useProductState()
 
-    const getProducts = async ({piece, filters}) => {
+    const getProducts = async ({ piece, filters }) => {
+
+
+        
 
         const params = piece ? { piece } : { ...filters };
 
@@ -16,7 +19,15 @@ export function useProduct() {
             // Gelen veri sayfalı ise data.value.data, değilse düz data.value
             productState.$patch({ products: data.value });
         }
+
+
+        if (process.client) {
+
+            localStorage.setItem("prevPage", filters.page)
+
+        }
     };
+
 
 
     const getProductsByCatId = async (catIds) => {

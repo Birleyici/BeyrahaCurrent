@@ -11,13 +11,13 @@
         'right-0 z-[20] left-0 p-4 duration-300 h-full fixed bg-slate-50 rounded-t-xl border': $device.isMobile,
       },
     ]">
-      <div @click="isOpenFilters = !isOpenFilters" class="flex justify-between items-center">
-        <b>Filtreler</b>
+      <div @click="isOpenFilters = !isOpenFilters" class="flex justify-between items-center ">
+        <b class="mb-2 font-medium">Filtreler</b>
         <Icon v-if="$device.isMobile" class="w-6 h-6" name="mdi:close"></Icon>
       </div>
       <div class="space-y-minimal">
 
-        <div class="h-[300px] overflow-y-scroll bg-slate-50 p-2 rounded-md">
+        <div class="h-[400px] overflow-y-scroll bg-slate-50 p-4 rounded-md border overflow-hidden">
           <UCommandPalette :emptyState="{
             queryLabel: 'Sonuç bulunamadı...'
           }" placeholder="Kategorilerde ara..." v-model="categoryState.selectedCategories" multiple nullable
@@ -25,7 +25,7 @@
             :fuse="{ resultLimit: -1 }" />
         </div>
 
-        <UiFormCheckboxToggle>Ücretsiz Kargo</UiFormCheckboxToggle>
+        <!-- <UiFormCheckboxToggle>Ücretsiz Kargo</UiFormCheckboxToggle> -->
       </div>
     </div>
     <div @click="isOpenFilters = false" v-if="isOpenFilters && $device.isMobile"
@@ -33,20 +33,21 @@
     <div class="col-span-7 space-y-minimal ">
       <div class="space-y-minimal lg:flex justify-between items-center">
         <div class="flex space-x-4 items-center">
-          <div class="flex items-center space-x-2">
+          <!-- <div class="flex items-center space-x-2">
             <UiBadgesBadge>Ücretsiz Kargo</UiBadgesBadge>
           </div>
           <div class="flex items-center space-x-2">
             <UiBadgesBadge>Marka 1</UiBadgesBadge>
-          </div>
+          </div> -->
         </div>
 
 
         <USelect v-model="query.sort" :options="sortOptions" option-attribute="name" />
 
       </div>
-      <div class="grid grid-cols-5 md:grid-cols-3 gap-2 lg:gap-5 relative">
-        <div v-if="loading" class="absolute bg-slate-100 w-full h-full z-[2] opacity-40 flex items-center justify-center">
+      <div class="grid grid-cols-2 md:grid-cols-3 gap-2 lg:gap-5 relative">
+        <div v-if="loading"
+          class="absolute bg-slate-100 w-full h-full z-[2] opacity-40 flex items-center justify-center">
           <Icon name="mdi:loading" class="w-12 h-12 animate-spin"></Icon>
         </div>
         <PartialsProductCard :product="product" v-for="product in productState.products.data">
@@ -96,9 +97,19 @@ const sortOptions = [
     value: 'decrease'
   }]
 
+
+
+
 const loading = ref(false)
 watchEffect(async () => {
   loading.value = true
+
+  if (process.client) {
+    if (localStorage.getItem("prevPage") == query.value.page) {
+      query.value.page = 1
+    }
+  }
+
   await getProducts({
     filters: {
       ...query.value,
@@ -109,6 +120,9 @@ watchEffect(async () => {
   setTimeout(() => {
     loading.value = false
   }, 100);
+
+
 })
+
 
 </script>

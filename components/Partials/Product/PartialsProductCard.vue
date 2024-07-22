@@ -11,13 +11,13 @@
 
       </NuxtLink>
     </div>
-    <div class="text-center py-4  w-64">
-      <p class="text-sm px-2 py-2 font-medium">
+    <div class="p-4">
+      <div class="text-sm text-center font-medium">
         <NuxtLink :to="'/urun/' + product.slug">
-          <b>Beyraha</b> {{ product.name }}
+          {{ product.name }}
         </NuxtLink>
-      </p>
-      <div class="md:flex justify-center space-x-2 items-center">
+      </div>
+      <div class="flex justify-center space-x-2 items-center">
         <del class="text-sm text-slate-400">450.00 TL</del>
         <p class="text-secondary-500 font-medium">345.00 TL</p>
       </div>
