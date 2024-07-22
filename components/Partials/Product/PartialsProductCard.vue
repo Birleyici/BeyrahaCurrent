@@ -17,7 +17,7 @@
           {{ product.name }}
         </NuxtLink>
       </div>
-      <div class="flex justify-center space-x-2 items-center">
+      <div class="md:flex justify-center md:space-x-2 items-center text-center">
         <del class="text-sm text-slate-400">450.00 TL</del>
         <p class="text-secondary-500 font-medium">345.00 TL</p>
       </div>
