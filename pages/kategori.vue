@@ -29,9 +29,13 @@ const selectedCategoryIds = computed(() => {
   return categoryState.selectedCategories.map(category => category.id);
 });
 
+
+
 const loading = ref(false);
 
-watchEffect(async () => {
+ watch([query, selectedCategoryIds], async () => {
+  
+
   loading.value = true;
 
   if (process.client) {
@@ -51,11 +55,17 @@ watchEffect(async () => {
   setTimeout(() => {
     loading.value = false;
   }, 100);
+},
+{
+  deep:true,
+  immediate:true
 });
 
 watch(
   () => [query, selectedCategoryIds.value],
   () => {
+  console.log("çalıştı watch")
+
     router.push({
       query: {
         ...route.query,
@@ -66,4 +76,6 @@ watch(
   },
   { deep: true }
 );
+
+
 </script>

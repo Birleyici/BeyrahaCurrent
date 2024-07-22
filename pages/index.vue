@@ -22,14 +22,14 @@
       </div>
     </div>
     <div class="my-minimal">
-      <UiSlidesProductSlide :products="productFrontState.products"></UiSlidesProductSlide>
+      <UiSlidesProductSlide :products="productState.products"></UiSlidesProductSlide>
     </div>
   </div>
 </template>
 
 <script setup>
 const { useProductState } = useStateIndex()
-const productFrontState = useProductState()
+const productState = useProductState()
 const { getProducts } = useProduct()
 await getProducts({piece:5})
 

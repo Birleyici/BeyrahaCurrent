@@ -5,6 +5,7 @@ export function useProduct() {
     const productState = useProductState()
 
     const getProducts = async ({ piece, filters = {} }) => {
+
         // Eğer filters objesinde page yoksa, varsayılan olarak 1 ayarla
         if (!('page' in filters)) {
             filters.page = 1;
