@@ -58,12 +58,22 @@ export const useVariationsFront = () => {
     });
 
     const getSelectedVariation = computed(() => {
+        // Seçili seçeneklerin olup olmadığını ve tüm attribute terimlerinin seçilip seçilmediğini kontrol et
+        const hasSelectedOptions = Object.keys(selectedOptions.value).length === attrsAndVarsState.attributes.length;
+    
+        // Eğer tüm attribute terimleri seçilmemişse, null dön
+        if (!hasSelectedOptions) {
+            return null;
+        }
+    
+        // İlk tam eşleşen varyasyonu bul
         let selectedVariation = attrsAndVarsState.variations.find((variation) => {
             return Object.keys(selectedOptions.value).every((key) => {
                 return variation.attributes[key] === selectedOptions.value[key];
             });
         });
-
+    
+        // Eğer tam eşleşen bir varyasyon bulamazsanız, kısmi eşleşen varyasyonu bul
         if (!selectedVariation) {
             selectedVariation = attrsAndVarsState.variations.find((variation) => {
                 return Object.keys(selectedOptions.value).every((key) => {
@@ -74,9 +84,10 @@ export const useVariationsFront = () => {
                 });
             });
         }
-
+    
         return selectedVariation;
     });
+    
 
     const selectedOptions = ref({});
 
@@ -87,7 +98,7 @@ export const useVariationsFront = () => {
 
         selectedOptions.value = { ...selectedOptions.value, [attributeName]: option };
 
-        if (getSelectedVariation.value.image) {
+        if (getSelectedVariation.value?.image) {
             const selectedVarImg = { ...getSelectedVariation.value.image, added: true };
             if (productState.selectedImages[0]?.added) {
                 productState.selectedImages[0] = selectedVarImg;

@@ -1,6 +1,6 @@
 <template>
   <div>
-    
+
     <div>
       <div v-for="attribute in attrsAndVarsState.attributes" :key="attribute.name">
         <!-- Öznitelik Adı -->
@@ -44,16 +44,27 @@
 
     <div class="my-minimal">
       <div>
-        <span v-if="getSelectedVariation?.sale_price" class="flex items-center space-x-2">
-          <del class="text-gray-500">{{ getSelectedVariation?.price }} TL</del>
-          <span class="text-secondary-500 text-3xl font-bold">{{ getSelectedVariation?.sale_price }} TL</span>
-        </span>
-        <span v-else class="text-secondary-500 text-3xl font-bold">
-          {{ getSelectedVariation?.price || "0" }} TL
-        </span>
+        <div v-if="getSelectedVariation">
+          <span v-if="getSelectedVariation.sale_price" class="flex items-center space-x-2">
+            <del class="text-gray-500">{{ getSelectedVariation.price }} TL</del>
+            <span class="text-secondary-500 text-3xl font-bold">{{ getSelectedVariation.sale_price }} TL</span>
+          </span>
+          <span v-else class="text-secondary-500 text-3xl font-bold">
+            {{ getSelectedVariation.price || "0" }} TL
+          </span>
+        </div>
+        <div v-else>
+          <span v-if="productState.sale_price" class="flex items-center space-x-2">
+            <del class="text-gray-500">{{ productState.price }} TL</del>
+            <span class="text-secondary-500 text-3xl font-bold">{{ productState.sale_price }} TL</span>
+          </span>
+          <span v-else class="text-secondary-500 text-3xl font-bold">
+            {{ productState.price || "0" }} TL
+          </span>
+        </div>
       </div>
     </div>
-</div>
+  </div>
 </template>
 
 <script setup>

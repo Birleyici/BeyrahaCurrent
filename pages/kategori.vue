@@ -33,8 +33,8 @@ const selectedCategoryIds = computed(() => {
 
 const loading = ref(false);
 
- watch([query, selectedCategoryIds], async () => {
-  
+watch([query, selectedCategoryIds], async () => {
+
 
   loading.value = true;
 
@@ -52,30 +52,30 @@ const loading = ref(false);
     }
   });
 
+  pushQueryParams()
+
   setTimeout(() => {
     loading.value = false;
   }, 100);
 },
-{
-  deep:true,
-  immediate:true
-});
+  {
+    deep: true,
+    immediate: true
+  });
 
-watch(
-  () => [query, selectedCategoryIds.value],
-  () => {
-  console.log("çalıştı watch")
 
-    router.push({
-      query: {
-        ...route.query,
-        ...query.value,
-        selectedCategoryIds: selectedCategoryIds.value.join(',')
-      }
-    });
-  },
-  { deep: true }
-);
+
+const pushQueryParams = () => {
+
+  router.push({
+    query: {
+      ...route.query,
+      ...query.value,
+      selectedCategoryIds: selectedCategoryIds.value.join(',')
+    }
+  });
+
+}
 
 
 </script>
