@@ -57,11 +57,10 @@
     </div>
 
 
-    <div class="grid gap-10">
+    <div class="grid gap-6">
         <div class="flex justify-between">
           <div></div>
-          <div class="flex space-x-2 items-center">
-            <p class="text-sm">Sıralama :</p>
+          <div class="w-full">
             <USelect v-model="uSelect" :options="sortOptions" option-attribute="name" />
           </div>
         </div>
