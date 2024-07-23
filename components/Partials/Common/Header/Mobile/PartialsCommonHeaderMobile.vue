@@ -1,14 +1,11 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
-    <PartialsCommonHeaderSlideNestedMenu v-model="menuStatus" :menu="props.categories">
-    </PartialsCommonHeaderSlideNestedMenu>
+    
+    <PartialsCommonHeaderSlideNestedMenu v-model="menuStatus" :menu="props.categories" />
 
     <PartialsCommonHeaderSlideAccount v-model="accountStatus" />
 
-
-    <USlideover v-model="cartStatus">
-      <PartialsCartList></PartialsCartList>
-    </USlideover>
+    <PartialsCommonHeaderSlideCart v-model="cartStatus" />
 
     <div class="flex justify-between items-center">
       <p class="font-primary text-heading-1 flex items-center space-x-3">
@@ -24,8 +21,8 @@
       <PartialsCommonSearchInput></PartialsCommonSearchInput>
       <div>
         <div class="flex items-center space-x-4 font-medium">
-          <Icon @click="accountStatus = true" name="ph:user" class="w-8 h-8 cursor-pointer"></Icon>
-          <Icon @click="cartStatus = true" name="ph:bag-simple" class="w-8 h-8 cursor-pointer"></Icon>
+          <Icon @click="accountStatus = true" name="ph:user" class="w-8 h-8 cursor-pointer select-none"></Icon>
+          <Icon @click="cartStatus = true" name="ph:bag-simple" class="w-8 h-8 cursor-pointer select-none"></Icon>
         </div>
       </div>
     </div>

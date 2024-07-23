@@ -3,15 +3,9 @@
     
    
 
-    <USlideover v-model="accountStatus">
-      <div class="p-8">
-        <PartialsFormLoginRegisterForm />
-      </div>
-    </USlideover>
+    <PartialsCommonHeaderSlideAccount v-model="accountStatus" />
 
-    <USlideover v-model="cartStatus">
-      <PartialsCartList></PartialsCartList>
-    </USlideover>
+    <PartialsCommonHeaderSlideCart v-model="cartStatus" />
 
     <div class="flex justify-between items-center">
       <p class="font-primary text-heading-1 flex items-center space-x-3">
