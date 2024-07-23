@@ -19,7 +19,7 @@ export function useProduct() {
     
         if (data.value && !error.value) {
             // Gelen veri sayfalı ise data.value.data, değilse düz data.value
-            productState.$patch({ products: data.value });
+            productState.patchProduct ({ products: data.value });
         }
     
         if (process.client && 'page' in filters) {
@@ -42,7 +42,7 @@ export function useProduct() {
         })
 
         if (data.value && !error.value) {
-            productState.$patch({ categoryProducts: data.value })
+            productState.patchCategoryProducts(data.value)
         }
 
     }

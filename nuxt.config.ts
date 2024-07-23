@@ -3,6 +3,11 @@ import vsharp from 'vite-plugin-vsharp';
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
 
+  sourcemap: {
+    server: true,
+    client: true
+  },
+  
   imports: {
     dirs: [
       'composables/**'

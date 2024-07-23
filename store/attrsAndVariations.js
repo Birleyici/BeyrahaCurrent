@@ -7,7 +7,7 @@ export const useAttrsAndVarsState = defineStore({
         attributes: [],
         variations: [],
         globalAttrs: [],
-        selectedAttrId: 1
+        selectedAttrObj: null
     }),
 });
 

@@ -46,11 +46,6 @@ body{
   }
 
 
-  select + .select2-container {
-    width: 100% !important;
-  }
-
-
   /* Basit stillendirmeler */
 button:disabled {
   opacity: 0.5;

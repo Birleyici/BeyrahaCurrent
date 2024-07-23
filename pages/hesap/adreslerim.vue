@@ -1,14 +1,18 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop my-minimal">
     <b>Adreslerim</b>
-   
-    <div class="lg:grid lg:grid-cols-4 mt-minimal lg:mt-orta gap-10 ">
 
+    <div class="lg:grid lg:grid-cols-4 mt-minimal lg:mt-orta gap-10">
       <div class="col-span-1">
         <PartialsAccountMenu></PartialsAccountMenu>
       </div>
       <div class="col-span-3">
-        <UiButtonsBaseButton @click="newAddressModal = true" color="secondary" class="mb-minimal">Yeni adres</UiButtonsBaseButton>
+        <UiButtonsBaseButton
+          @click="newAddressModal = true"
+          color="secondary"
+          class="mb-minimal"
+          >Yeni adres</UiButtonsBaseButton
+        >
         <div class="grid lg:grid-cols-2 gap-10">
           <div
             v-for="item in 4"
@@ -85,16 +89,17 @@
             <p>Adres varsayılan adres yapılsınmı?</p>
             <div class="space-x-4 mt-minimal flex items-end">
               <UiButtonsBaseButton color="secondary">Onayla</UiButtonsBaseButton>
-              <UiButtonsBaseButton @click="confirmDefaultModal = false" color="slate">Vazgeç</UiButtonsBaseButton>
+              <UiButtonsBaseButton @click="confirmDefaultModal = false" color="slate"
+                >Vazgeç</UiButtonsBaseButton
+              >
             </div>
           </UiModal>
-
 
           <UiModal
             :isOpen="newAddressModal"
             @status-change="(e) => (newAddressModal = e)"
           >
-          <b>Yeni adres</b>
+            <b>Yeni adres</b>
             <PartialsFormAddressForm></PartialsFormAddressForm>
           </UiModal>
         </div>

@@ -12,7 +12,7 @@
               @click="isOpenMediaModal = false" />
           </div>
         </template>
-        <AdminPartialsMedia v-model="productState.selectedImages" />
+        <AdminPartialsMedia v-model="productState.product.selectedImages" />
       </UCard>
     </UModal>
 
@@ -22,12 +22,12 @@
     <div class="lg:grid space-y-4 lg:space-y-0 lg:grid-cols-3 gap-10">
       <div class="col-span-2 space-y-4">
 
-        <UiFormInput v-model="productState.name" placeholder="Ürün adı" class="font-medium"></UiFormInput>
-        <UiFormInput v-model="productState.description" placeholder="Ürün açıklaması"></UiFormInput>
+        <UiFormInput v-model="productState.product.name" placeholder="Ürün adı" class="font-medium"></UiFormInput>
+        <UiFormInput v-model="productState.product.description" placeholder="Ürün açıklaması"></UiFormInput>
         <div class="relative mb-24">
           <label for="" class="text-sm">Detaylı ürün açıklaması</label>
           <div class="bg-tertiary-50">
-            <QuillEditor contentType="html" v-model:content="productState.additional_info" style="height: 300px"
+            <QuillEditor contentType="html" v-model:content="productState.product.additional_info" style="height: 300px"
               theme="snow" />
           </div>
         </div>
@@ -73,20 +73,20 @@
       <div class="col-span-1 flex flex-col-reverse lg:block">
 
 
-        <UiButtonsBaseButton :loading="productState.loading" @click="saveProduct(productState.id, true)"
+        <UiButtonsBaseButton :loading="productState.product.loading" @click="saveProduct(productState.product.id, true)"
           color="secondary" class="px-6 w-full">Yayınla</UiButtonsBaseButton>
 
 
-        <AdminPartialsMediaSelectBox v-model:is-open-modal="isOpenMediaModal" :selected-images="productState.selectedImages"
-          v-model:cover-image-id="productState.coverImageId" />
+        <AdminPartialsMediaSelectBox v-model:is-open-modal="isOpenMediaModal" :selected-images="productState.product.selectedImages"
+          v-model:cover-image-id="productState.product.coverImageId" />
 
         <div class="my-minimal">
 
           <div class="h-[300px] overflow-y-scroll bg-slate-50 p-2 rounded-md">
             <UCommandPalette :emptyState="{
               queryLabel: 'Sonuç bulunamadı...'
-            }" placeholder="Kategorilerde ara..." v-model="productState.selectedCategories" multiple nullable
-              :autoselect="false" :groups="[{ key: 'label', commands: productState.categories }]"
+            }" placeholder="Kategorilerde ara..." v-model="productState.product.selectedCategories" multiple nullable
+              :autoselect="false" :groups="[{ key: 'label', commands: productState.product.categories }]"
               :fuse="{ resultLimit: -1 }" />
           </div>
 
@@ -100,15 +100,15 @@
 definePageMeta({
   layout: "admin",
 });
-const { useNewProductStore } = useStateIndex()
-const productState = useNewProductStore()
+const { useProductState } = useStateIndex()
+const productState = useProductState()
 
 const { tabs, saveProduct, getProduct, getCategories } = useProductCreate();
 const isOpenMediaModal = ref(false);
 const currentTab = ref("GeneralTab");
 const route = useRoute();
 if (route.params.id == "yeni") {
-  productState.$reset();
+  productState.product.$reset();
 } else {
   await getProduct(route.params.id);
 }

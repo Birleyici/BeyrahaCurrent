@@ -1,12 +1,12 @@
-import { useNewProductStore } from "~/store/newProduct.js";
+import { useProductState } from "~/store/frontend/product.js";
 import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
 
 export const useVariationsFront = () => {
-    const productState = useNewProductStore();
+    const productState = useProductState();
     const attrsAndVarsState = useAttrsAndVarsState();
 
     const fetchVariationsForFrontEnd = async () => {
-        const { data, error } = await useBaseFetch("front/products/" + productState.id + "/variations");
+        const { data, error } = await useBaseFetch("front/products/" + productState.product.id + "/variations");
 
         if (data.value && !error.value) {
             attrsAndVarsState.variations = data.value;
@@ -93,20 +93,20 @@ export const useVariationsFront = () => {
 
     const selectOption = (attributeName, option, colorTerm = null) => {
         if (colorTerm) {
-            productState.selectedColorTermImages = colorTerm.term_images;
+            productState.product.selectedColorTermImages = colorTerm.term_images;
         }
 
         selectedOptions.value = { ...selectedOptions.value, [attributeName]: option };
 
         if (getSelectedVariation.value?.image) {
             const selectedVarImg = { ...getSelectedVariation.value.image, added: true };
-            if (productState.selectedImages[0]?.added) {
-                productState.selectedImages[0] = selectedVarImg;
+            if (productState.product.selectedImages[0]?.added) {
+                productState.product.selectedImages[0] = selectedVarImg;
             } else {
-                productState.selectedImages.unshift(selectedVarImg);
+                productState.product.selectedImages.unshift(selectedVarImg);
             }
-        } else if (productState.selectedImages[0]?.added) {
-            productState.selectedImages.shift();
+        } else if (productState.product.selectedImages[0]?.added) {
+            productState.product.selectedImages.shift();
         }
     };
 

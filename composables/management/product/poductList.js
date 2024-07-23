@@ -1,10 +1,8 @@
+import { useProductState } from "~/store/frontend/product";
 
 export function useProductList() {
 
-
-    const productState = reactive({
-        vendorProducts: []
-    })
+    const productState = useProductState()
 
     const columns = [
         { key: "id", label: "ID" },
@@ -22,7 +20,7 @@ export function useProductList() {
 
         if (data.value.products && !error.value) {
 
-            productState.vendorProducts = data.value.products
+            productState.patchVendorProducts(data.value.products)
 
         }
 
@@ -45,13 +43,14 @@ export function useProductList() {
 
     const filteredProducts = (productId) => {
 
-        productState.vendorProducts = productState.vendorProducts.filter(product => product.id !== productId);
+        const filtered = productState.vendorProducts.filter(product => product.id !== productId)
+        console.log(filtered)
+        productState.patchVendorProducts(filtered)
 
     }
 
     return {
 
-        productState,
         getVendorProducts,
         columns,
         deleteProduct,

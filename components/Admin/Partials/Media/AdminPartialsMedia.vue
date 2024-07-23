@@ -29,8 +29,8 @@
 </template>
 
 <script setup>
-import { useNewProductStore } from '~/store/newProduct';
-const productState = useNewProductStore()
+import { useProductState } from '~/store/frontend/product';
+const productState = useProductState()
 
 
 const model = defineModel()

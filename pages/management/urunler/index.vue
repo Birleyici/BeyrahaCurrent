@@ -43,7 +43,10 @@
 definePageMeta({
   layout: "admin",
 });
-const { productState, getVendorProducts, deleteProduct, columns } = useProductList()
+
+const { useProductState } = useStateIndex();
+const productState = useProductState();
+const { getVendorProducts, deleteProduct, columns } = useProductList()
 await getVendorProducts();
 const isOpenDeleteModal = ref(false);
 const deleteProductId = ref(null);

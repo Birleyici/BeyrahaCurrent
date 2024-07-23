@@ -1,10 +1,10 @@
 <template>
   <div class="border rounded-md max-w-[250px]">
     <div class="relative overflow-hidden cursor-pointer">
-      <NuxtLink :to="`/urun/${product.slug}`">
+      <NuxtLink :to="`/urun/${productState.product.slug}`">
         <NuxtImg
-          v-if="product.coverImage"
-          :src="`aws/${product.coverImage}`"
+          v-if="productState.product.coverImage"
+          :src="`aws/${productState.product.coverImage}`"
           format="webp"
           quality="90"
           loading="lazy"
@@ -21,14 +21,14 @@
     </div>
     <div class="p-4">
       <div class="text-sm text-center font-medium">
-        <NuxtLink :to="'/urun/' + product.slug">
-          {{ product.name }}
+        <NuxtLink :to="'/urun/' + productState.product.slug">
+          {{ productState.product.name }}
         </NuxtLink>
       </div>
       <div class="md:flex justify-center md:space-x-2 items-center text-center">
-        <del v-if="product.sale_price" class="text-sm text-slate-400">{{ product.price }} TL</del>
-        <p :class="{'text-secondary-500 font-medium': product.sale_price, 'text-primary-500': !product.sale_price}">
-          {{ product.sale_price || product.price }} TL
+        <del v-if="productState.product.sale_price" class="text-sm text-slate-400">{{ productState.product.price }} TL</del>
+        <p :class="{'text-secondary-500 font-medium': productState.product.sale_price, 'text-primary-500': !productState.product.sale_price}">
+          {{ productState.product.sale_price || productState.product.price }} TL
         </p>
       </div>
     </div>
@@ -36,6 +36,6 @@
 </template>
 
 <script setup>
-const { product } = defineProps(['product'])
+const productState = defineProps(['product'])
 const img_placeholder = '/img-placeholder.jpg' 
 </script>

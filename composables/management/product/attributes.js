@@ -4,14 +4,11 @@ export const useAttributes = () => {
 
     const attrsAndVarsState = useAttrsAndVarsState()
 
-    let productId = computed(() => {
-        return productState.id || useRoute().params.id
-    });
+   
 
     const addAttr = () => {
 
-        const item = attrsAndVarsState.globalAttrs.find((option) => option.id === parseInt(attrsAndVarsState.selectedAttrId));
-
+        const item = attrsAndVarsState.selectedAttrObj
 
         // attributes içerisinde bu attribute_id'ye sahip bir öğe olup olmadığını kontrol ediyoruz.
         const isAttributeExists = attrsAndVarsState.attributes.some(

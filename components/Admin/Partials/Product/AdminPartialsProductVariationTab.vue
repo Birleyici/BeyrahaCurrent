@@ -22,8 +22,8 @@
 </template>
 
 <script setup>
-const { useNewProductStore, useAttrsAndVarsState } = useStateIndex()
-const productState = useNewProductStore();
+const { useProductState, useAttrsAndVarsState } = useStateIndex()
+const productState = useProductState();
 const attrsAndVarsState = useAttrsAndVarsState()
 
 const {
@@ -37,8 +37,8 @@ const {
 } = useAttributes()
 
 
-await fetchAttributes(productState.id);
-await fetchVariations(productState.id);
+await fetchAttributes(product.id);
+await fetchVariations(product.id);
 
 const addedType = ref(1);
 const errorMessage = ref(null);

@@ -1,21 +1,18 @@
-import { useNewProductStore } from "~/store/newProduct.js";
+import { useProductState } from "~/store/frontend/product";
 import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
 
 export const useVariations = () => {
 
-    const productState = useNewProductStore()
+    const productState = useProductState()
     const attrsAndVarsState = useAttrsAndVarsState()
 
 
-    let productId = computed(() => {
-        return productState.id || useRoute().params.id
-    });
 
     const fetchVariationsForFrontEnd = async () => {
 
         const {
             data, error
-        } = await useBaseFetch("page/products/" + productState.id + "/variations");
+        } = await useBaseFetch("page/products/" + productState.product.id + "/variations");
 
         if (data.value && !error.value) {
 
@@ -134,7 +131,7 @@ export const useVariations = () => {
     const selectOption = (attributeName, option, colorTerm=null) => {
 
         if(colorTerm){
-            productState.selectedColorTermImages = colorTerm.term_images
+            productState.product.selectedColorTermImages = colorTerm.term_images
         }
 
 
@@ -145,16 +142,16 @@ export const useVariations = () => {
         if (getSelectedVariation.value.image) {
 
             const selectedVarImg = { ...getSelectedVariation.value.image, added: true }
-            if (productState.selectedImages[0]?.added) {
-                productState.selectedImages[0] = selectedVarImg
+            if (productState.product.selectedImages[0]?.added) {
+                productState.product.selectedImages[0] = selectedVarImg
             } else {
-                productState.selectedImages.unshift(selectedVarImg)
+                productState.product.selectedImages.unshift(selectedVarImg)
             }
             
 
-        } else if (productState.selectedImages[0]?.added) {
+        } else if (productState.product.selectedImages[0]?.added) {
 
-            productState.selectedImages.shift()
+            productState.product.selectedImages.shift()
 
         }
     };
@@ -185,7 +182,7 @@ export const useVariations = () => {
             stockCode: "",
             stockAmount: 0,
             isStockManagement: false,
-            product_id: productState.id,
+            product_id: productState.product.id,
             terms: [],
         };
 
@@ -267,7 +264,7 @@ export const useVariations = () => {
             stockCode: "",
             stockAmount: 0,
             isStockManagement: false,
-            product_id: productState.id,
+            product_id: productState.product.id,
             terms: combination.map((termId, index) => ({
                 product_variation_id: null, // Bu değer varyasyon oluşturulduktan sonra atanacak.
                 product_term_id: termId,
@@ -288,14 +285,14 @@ export const useVariations = () => {
         });
 
         if (error.data == null) {
-            await fetchVariations(productState.id);
+            await fetchVariations(productState.product.id);
         }
     }
 
     const saveVariations = async () => {
 
         try {
-            await useBaseOFetch(`products/${productState.id}/variations/update`, {
+            await useBaseOFetch(`products/${productState.product.id}/variations/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -303,7 +300,7 @@ export const useVariations = () => {
                 body: JSON.stringify({ variations: attrsAndVarsState.variations }),
             });
 
-            await fetchVariations(productState.id);
+            await fetchVariations(productState.product.id);
 
         } catch (error) {
 
