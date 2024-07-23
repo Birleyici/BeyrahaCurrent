@@ -45,7 +45,7 @@ import { UiSlidesProductSlide } from '#build/components';
               </div>
             </div>
             <div
-              class="mt-minimal flex justify-between items-center fixed lg:relative bottom-0 right-0 left-0 bottom-0 bg-white py-3 px-3 lg:px-0 lg:border-t-0 border-t"
+              class="mt-minimal flex justify-between items-center fixed lg:relative bottom-0 right-0 left-0  bg-white py-3 px-3 lg:px-0 lg:border-t-0 border-t"
             >
               <div class="flex justify-start space-x-4 text-lg">
                 <p>Toplam:</p>

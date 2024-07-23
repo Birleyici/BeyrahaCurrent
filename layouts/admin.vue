@@ -1,10 +1,9 @@
 <template>
   <div>
-    <USlideover side="left" v-model="menuStatus">
-      <PartialsMenuNestedSlideMenu
-        :menu="kategoriler"
-      ></PartialsMenuNestedSlideMenu>
-    </USlideover>
+    <PartialsCommonHeaderSlideNestedMenu
+    v-model="menuStatus"
+    :menu="categories"
+  ></PartialsCommonHeaderSlideNestedMenu>
 
     <div class="p-1 px-[3%] bg-tertiary-100 flex justify-between items-center">
       <button @click="menuStatus = true">
@@ -33,8 +32,7 @@
 
 <script setup>
 const menuStatus = ref(false);
-
-const kategoriler = reactive([
+const categories = reactive([
   {
     name: "Ürünler",
     icon: "mdi:view-dashboard",
