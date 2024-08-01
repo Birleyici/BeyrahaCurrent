@@ -1,19 +1,27 @@
-import { useProductState } from "~/store/frontend/product.js";
-import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
+
 
 export const useVariationsFront = () => {
+
+    const { useProductState, useVariationsFrontState, useAttributeState } = useStateIndex()
     const productState = useProductState();
-    const attrsAndVarsState = useAttrsAndVarsState();
+    const variationsFrontState = useVariationsFrontState()
+    const attributeState = useAttributeState()
 
-    const fetchVariationsForFrontEnd = async () => {
-        const { data, error } = await useBaseFetch("front/products/" + productState.product.id + "/variations");
+    const fetchVariationsForFrontEnd = async (productId) => {
 
-        if (data.value && !error.value) {
-            attrsAndVarsState.variations = data.value;
+
+        const response = await useBaseOFetch(`front/products/${productId}/variations`)
+
+        if (response) {
+            variationsFrontState.variations = response;
         }
+
+        return response
     };
 
     function transform(attributes, variations) {
+
+
         let newAttrs = [];
         attributes.forEach((a) => {
             const obj = {};
@@ -41,7 +49,7 @@ export const useVariationsFront = () => {
     }
 
     const filteredVariations = computed(() => {
-        return attrsAndVarsState.variations.filter(variation => {
+        return variationsFrontState.variations.filter(variation => {
             return variation.price || variation.sale_price;
         });
     });
@@ -59,23 +67,23 @@ export const useVariationsFront = () => {
 
     const getSelectedVariation = computed(() => {
         // Seçili seçeneklerin olup olmadığını ve tüm attribute terimlerinin seçilip seçilmediğini kontrol et
-        const hasSelectedOptions = Object.keys(selectedOptions.value).length === attrsAndVarsState.attributes.length;
-    
+        const hasSelectedOptions = Object.keys(selectedOptions.value).length === attributeState?.transformedAttrs?.length;
+
         // Eğer tüm attribute terimleri seçilmemişse, null dön
         if (!hasSelectedOptions) {
             return null;
         }
-    
+
         // İlk tam eşleşen varyasyonu bul
-        let selectedVariation = attrsAndVarsState.variations.find((variation) => {
+        let selectedVariation = variationsFrontState.variations.find((variation) => {
             return Object.keys(selectedOptions.value).every((key) => {
                 return variation.attributes[key] === selectedOptions.value[key];
             });
         });
-    
+
         // Eğer tam eşleşen bir varyasyon bulamazsanız, kısmi eşleşen varyasyonu bul
         if (!selectedVariation) {
-            selectedVariation = attrsAndVarsState.variations.find((variation) => {
+            selectedVariation = useVariationsFrontState.variations.find((variation) => {
                 return Object.keys(selectedOptions.value).every((key) => {
                     return (
                         !variation.attributes[key] ||
@@ -84,10 +92,10 @@ export const useVariationsFront = () => {
                 });
             });
         }
-    
+
         return selectedVariation;
     });
-    
+
 
     const selectedOptions = ref({});
 

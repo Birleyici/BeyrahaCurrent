@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <UModal v-model="isOpenMediaModal" fullscreen>
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
@@ -60,10 +59,17 @@
               <Icon name="mdi:format-list-group" class="w-5 h-5"></Icon>
               <p>Öne Çıkanlar</p>
             </button>
+            <button @click="currentTab = 'ExstrasTab'"
+              :class="{ ' border-secondary-500': currentTab == 'ExstrasTab' }"
+              class="flex items-center space-x-2 border-b-2 py-2 hover:border-secondary-500 duration-300">
+              <Icon name="i-heroicons-squares-plus" class="w-5 h-5"></Icon>
+              <p>Özel alanlar</p>
+            </button>
           </div>
           <div class="content p-minimal border">
+            
             <KeepAlive>
-              <component :is="tabs[currentTab]"></component>
+              <component :is="tabs[currentTab]" :notes="productState.product.note" ></component>
             </KeepAlive>
           </div>
         </div>

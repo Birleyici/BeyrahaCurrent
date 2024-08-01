@@ -1,10 +1,12 @@
 <template>
   <div>
-    <PartialsCommonHeaderMobile :categories="categories" v-if="$device.isMobile" />
-    <PartialsCommonHeaderDesktop :categories="categories" v-else />
+    <PartialsCommonHeaderMobile :cart="cartState" :categories="categories" v-if="$device.isMobile" />
+    <PartialsCommonHeaderDesktop :cart="cartState" :categories="categories" v-else />
   </div>
 </template>
 <script setup>
+const { useCartState } = useStateIndex()
+const cartState = useCartState()
 
 const categories = reactive([
   {

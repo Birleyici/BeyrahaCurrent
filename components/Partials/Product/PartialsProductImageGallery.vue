@@ -28,7 +28,7 @@
       <NuxtImg
         else
         :src="'aws' + item.path"
-        placeholder
+        
         class="w-full zoomable transition-transform duration-300 border lg:rounded-lg"
         draggable="false"
         width="600"

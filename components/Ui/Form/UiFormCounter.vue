@@ -16,5 +16,5 @@
   </div>
 </template>
 <script setup>
-const count = ref(1);
+const count = defineModel()
 </script>

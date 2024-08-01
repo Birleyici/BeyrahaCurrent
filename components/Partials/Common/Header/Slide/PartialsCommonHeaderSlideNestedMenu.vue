@@ -48,9 +48,9 @@
               v-for="(item, idx) in level"
               :key="idx"
               @click="() => handleClick(item, idx, index)"
-              class="flex items-center p-4 mb-2 bg-slate-100 hover:bg-slate-50 cursor-pointer select-none duration-200"
+              class="flex  items-center p-4 mb-2 bg-slate-100 hover:bg-slate-50 cursor-pointer select-none duration-200"
             >
-              <NuxtLink :href="item.url && '/management/' + item.url">
+              <NuxtLink class="w-full h-full" :href="item.url && '/management/' + item.url">
                 <i :class="item.icon"></i>
                 <span class="ml-2">{{ item.name }}</span>
                 <i v-if="item.children" class="mdi mdi-chevron-right ml-auto"></i>

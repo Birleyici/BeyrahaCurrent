@@ -40,7 +40,7 @@ const uploadImages = async (e) => {
 
 const saveImagePaths = async (paths) => {
   try {
-    const response = await useBaseOFetch("vendor/images", {
+    const response = await useBaseOFetchWithAuth("vendor/images", {
       method: "POST",
       body: paths,
     });

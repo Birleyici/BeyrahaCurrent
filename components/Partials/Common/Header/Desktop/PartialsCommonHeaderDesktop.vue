@@ -1,7 +1,5 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
-    
-   
 
     <PartialsCommonHeaderSlideAccount v-model="accountStatus" />
 
@@ -27,7 +25,9 @@
             class="cursor-pointer font-primary text-heading-4 px-4"
           >
             SEPET
-            <span class="text-secondary-500">2</span>
+           <ClientOnly>
+            <span class="text-secondary-500">{{props.cart.cartQyt}}</span>
+           </ClientOnly>
           </p>
         </div>
       </div>
@@ -36,7 +36,7 @@
   </div>
 </template>
 <script setup>
-const props = defineProps(["categories"]);
+const props = defineProps(["categories", "cart"]);
 const menuStatus = ref(false);
 const accountStatus = ref(false);
 const cartStatus = ref(false);

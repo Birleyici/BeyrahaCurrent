@@ -12,6 +12,8 @@ export const useProductState = defineStore('productState', () => {
     selectedImages: [],
     selectedCategories: [],
     selectedColorTermImages: [],
+    selectedInput: null,
+    inputValue: null,
     price: null,
     sale_price: null,
     sku: null,
@@ -19,13 +21,13 @@ export const useProductState = defineStore('productState', () => {
     stock: 0,
     loading: false,
     categories: [],
-    featured_infos: []
+    featured_infos: [],
   })
   const products = ref([])
   const categoryProducts = ref([])
   const vendorProducts = ref([])
 
-  const patchProduct  = (obj) => {
+  const patchProduct = (obj) => {
     product.value = obj
   }
 
@@ -37,5 +39,31 @@ export const useProductState = defineStore('productState', () => {
     vendorProducts.value = obj
   }
 
-  return { product, products, categoryProducts, vendorProducts, patchProduct , patchCategoryProducts, patchVendorProducts }
+  const fetchProduct = async (productIdOrSlug) => {
+
+    const response = await useBaseOFetch(`product/${productIdOrSlug}`)
+
+    patchProduct({ ...response })
+
+    return response
+  }
+
+  const fetchCategoryProducts = async (catIds) => {
+
+    catIds = catIds.map(cat => cat.id);
+
+    const response = await useBaseOFetch('products/category',
+      {
+        params: {
+          catIds: catIds.join(','),
+          limit: 5
+        }
+      }
+    )
+
+    patchCategoryProducts(response)
+
+  }
+
+  return { product, products, categoryProducts, vendorProducts, fetchProduct, fetchCategoryProducts, patchProduct, patchCategoryProducts, patchVendorProducts }
 })

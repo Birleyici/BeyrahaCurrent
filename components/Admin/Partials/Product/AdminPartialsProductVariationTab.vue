@@ -1,46 +1,48 @@
 <template>
   <div class="grid gap-4">
     <div class="flex space-x-4">
-      <UiFormSelect v-model="addedType">
-        <option value="1">Varyasyon ekle</option>
-        <option value="2">Tüm niteliklerden varyasyonlar oluştur</option>
-        <option value="3">Tüm varyasyonları sil</option>
-      </UiFormSelect>
-      <UiButtonsBaseButton @click="variationHandle()" color="secondary">Git</UiButtonsBaseButton>
+      <USelectMenu class="w-full" color="orange" size="md" placeholder="İşlem seçin..." :options="options"
+        v-model="addedType" value-attribute="value" option-attribute="label" />
+
+      <UButton @click="variationHandle()" color="orange" size="md">Git</UButton>
     </div>
     <div class="rounded-md gap-4">
-      <AdminPartialsVariation :item="item" v-for="item in attrsAndVarsState.variations" />
+      <AdminPartialsVariation :item="item" v-for="item in variationState.variations" />
     </div>
     <div v-if="errorMessage" class="my-4">
       <UiNotificationBar type="error">{{ errorMessage }}</UiNotificationBar>
     </div>
     <div class="flex justify-end">
-      <UiButtonsBaseButton @click="saveVariations()" color="secondary">Varyasyonları
-        kaydet</UiButtonsBaseButton>
+      <UButton v-if="variationState.variations?.length > 0"
+        @click="saveVariations(productState.product.id, variationState.variations)" size="md" color="orange">
+        Varyasyonları kaydet</UButton>
     </div>
   </div>
 </template>
 
 <script setup>
-const { useProductState, useAttrsAndVarsState } = useStateIndex()
+const { useProductState, useVariationState, useAttributeState } = useStateIndex();
 const productState = useProductState();
-const attrsAndVarsState = useAttrsAndVarsState()
+const variationState = useVariationState();
+const attributeState = useAttributeState();
+
+const options = [
+  { value: "1", label: "Varyasyon ekle" },
+  { value: "2", label: "Tüm niteliklerden varyasyonlar oluştur" },
+  { value: "3", label: "Tüm varyasyonları sil" },
+];
 
 const {
-  fetchVariations,
   createOneVariation,
   createAllVariation,
   saveVariations,
-} = useVariations()
-const {
-  fetchAttributes,
-} = useAttributes()
+  deleteAllVariations,
+} = useVariations();
 
+await attributeState.fetchAttributes(productState.product.id);
+await variationState.fetchVariations(productState.product.id);
 
-await fetchAttributes(product.id);
-await fetchVariations(product.id);
-
-const addedType = ref(1);
+const addedType = ref(null);
 const errorMessage = ref(null);
 
 const variationHandle = () => {
@@ -48,14 +50,10 @@ const variationHandle = () => {
     createOneVariation();
   }
   if (addedType.value == 2) {
-    createAllVariation();
+    createAllVariation(productState.product.id);
   }
   if (addedType.value == 3) {
-    deleteAllVariations();
+    deleteAllVariations(productState.product.id);
   }
 };
-
-
-
-
 </script>

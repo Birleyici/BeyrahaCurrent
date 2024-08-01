@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="my-minimal">
-      <UiSlidesProductSlide :products="productState.product.products"></UiSlidesProductSlide>
+      <UiSlidesProductSlide :products="productState.products"></UiSlidesProductSlide>
     </div>
   </div>
 </template>

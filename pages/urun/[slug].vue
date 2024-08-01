@@ -1,5 +1,6 @@
 <template>
   <div class="lg:px-x-desktop max-w-full">
+
     <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
       <div class="col-span-3" v-if="$mainState.isLoaded">
         <PartialsProductImageGallery :images="selectedImages" />
@@ -13,20 +14,10 @@
         </h1>
         <UDivider class="my-2" type="dashed" />
 
-        <PartialsProductVariations :attrs-and-vars-state="attrsAndVarsState" :product-state="productState">
+        <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
+          :product-state="productState">
         </PartialsProductVariations>
 
-        <div class="flex justify-between lg:justify-start space-x-4 lg:space-x-8">
-          <div class="inline-block">
-            <UiFormCounter></UiFormCounter>
-          </div>
-          <UiButtonsBaseButton color="secondary"
-            class="!rounded-full font-bold !flex relative text-sm lg:!px-12 px-6 overflow-hidden">
-            <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
-            </Icon>
-            <p>SEPETE EKLE</p>
-          </UiButtonsBaseButton>
-        </div>
         <div class="my-minimal lg:my-maximal bg-tertiary-50 border rounded-md p-4">
           <p class="font-medium">Öne çıkan bilgiler</p>
           <ul class="list-disc p-4 !pl-5 text-sm">
@@ -43,34 +34,45 @@
       <PartialsProductInformation :additional_info="productState.product.additional_info"
         :attributes="attrsAndVarsState.attributes" />
     </div>
-    <UiSlidesProductSlide title="Benzer ürünler" :products="productState.categoryProducts">
-    </UiSlidesProductSlide>
+    <ClientOnly>
+      <LazyUiSlidesProductSlide title="Benzer ürünler" :products="productState.categoryProducts">
+      </LazyUiSlidesProductSlide>
+    </ClientOnly>
 
     <!-- <PartialsProductComment /> -->
   </div>
 </template>
 
 <script setup>
-const { useAttrsAndVarsState, useProductState } = useStateIndex();
+const {
+  useAttrsAndVarsState,
+  useProductState,
+  useAttributeState,
+  useVariationsFrontState,
+} = useStateIndex();
 const productState = useProductState();
+const attributeState = useAttributeState();
+const variationsFrontState = useVariationsFrontState();
 const attrsAndVarsState = useAttrsAndVarsState();
+
 const slug = useRoute().params.slug;
+const { transform } = useVariationsFront();
 
-const { getProduct } = useProductCreate();
-const { getProductsByCatId } = useProduct();
-const { fetchVariationsForFrontEnd, transform } = useVariationsFront();
-const { fetchAttributes } = useAttributes();
+await useAsyncData("initProductPageData", async () => {
+  const response = await productState.fetchProduct(slug)
+  await variationsFrontState.fetchVariations(response.id)
+  await attributeState.fetchAttributes(response.id)
+  return true
+})
 
-await getProduct(slug);
-await getProductsByCatId(productState.product.selectedCategories);
-await fetchVariationsForFrontEnd(productState.product.id);
-await fetchAttributes(productState.product.id);
+onMounted(()=>{
+  productState.fetchCategoryProducts(productState.product.selectedCategories)
+})
 
-attrsAndVarsState.attributes = transform(
-  attrsAndVarsState.attributes || [],
-  attrsAndVarsState.variations
+attributeState.transformedAttrs = transform(
+  attributeState.attributes || [],
+  variationsFrontState.variations || []
 );
-
 
 const selectedImages = computed(() => {
   return productState.product.selectedColorTermImages?.length

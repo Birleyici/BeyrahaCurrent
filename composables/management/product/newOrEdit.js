@@ -4,6 +4,7 @@ import {
     AdminPartialsProductAttributeTab,
     AdminPartialsProductVariationTab,
     AdminPartialsProductFeaturedInfos,
+    AdminPartialsProductExtrasTab,
 } from "#components";
 
 export function useProductCreate() {
@@ -14,7 +15,8 @@ export function useProductCreate() {
         GeneralTab: AdminPartialsProductGeneralTab,
         VariationTab: AdminPartialsProductVariationTab,
         AttributeTab: AdminPartialsProductAttributeTab,
-        FeaturedTab: AdminPartialsProductFeaturedInfos
+        FeaturedTab: AdminPartialsProductFeaturedInfos,
+        ExstrasTab: AdminPartialsProductExtrasTab
     };
 
 
@@ -33,12 +35,12 @@ export function useProductCreate() {
 
         try {
 
-            const response = await useBaseOFetch("products", {
+            const response = await useBaseOFetchWithAuth("products", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify(productState.product.$state),
+                body: JSON.stringify(productState.product),
             });
             productState.product.loading = false
 
@@ -58,12 +60,12 @@ export function useProductCreate() {
 
     const getCategories = async () => {
 
-        const { data, error } = await useBaseFetch("categories");
+        const response = await useBaseOFetchWithAuth("categories");
 
-        if (data.value && !error.value) {
+        if (response) {
 
             // productState.product.categories güncelle
-            productState.product.categories = data.value;
+            productState.product.categories = response;
 
             // Seçilen kategorileri en başa al
             const selectedIds = productState.product.selectedCategories.map(cat => cat.id);
@@ -86,15 +88,21 @@ export function useProductCreate() {
 
     const getProduct = async (productIdOrSlug) => {
 
-        const { data, error } = await useBaseFetch(`product/${productIdOrSlug}`);
 
-        if (data.value && !error.value) {
+       const response = await useBaseOFetchWithAuth(`product/${productIdOrSlug}`)
 
-            productState.patchProduct({ ...data.value })
-        }
+       if (response) {
+
+        productState.patchProduct({ ...response })
+        
+        return response
 
     }
+       
+    
 
+
+    }
 
 
     return {

@@ -1,34 +1,43 @@
 <template>
-  <div>
-    <div class=" flex space-x-4" v-for="(item, index) in 3">
-      <img src="/default-product.jpg" class="w-16 h-24 object-cover rounded-md" />
-      <div>
-        <div class="flex items-start space-x-2">
+  <div class="py-4 first:!pt-0 border-b last:border-b-0 border-dashed">
+    <div class=" flex space-x-4">
+
+      <NuxtImg width="70" class="object-cover rounded-md" :src="`aws/${props.item.product_thumb.path}`"></NuxtImg>
+      <div class="w-full">
+        <div class="flex items-start space-x-2 justify-between w-full">
           <p class="text-sm font-medium">
-            Bordo Renk Siyah İpli Deri Erkek Bileklik
+            {{ props.item.product_name }}
           </p>
-          <button class="text-xs rounded-md bg-slate-100">
-            <Icon name="material-symbols:close-rounded" :key="index" class="w-4 h-4" />
-          </button>
+          <UButton @click="deleteCartItem()" icon="i-heroicons-x-mark" size="2xs" color="red" square
+            :ui="{ rounded: 'rounded-full' }" variant="soft" />
         </div>
-        <div class="mt-2 flex items-center space-x-2">
-          <button class="bg-slate-200 text-md flex items-center px-2 rounded-md">
-            -
-          </button>
-          <p class="text-sm">1</p>
-          <button class="bg-slate-200 text-md flex items-center px-2 rounded-md">
-            +
-          </button>
+        <div v-for="(value, key) in props.item.variation.attributes">
+
+          <div class="flex space-x-2 items-center">
+            <b>{{ key }} :</b>
+            <p>{{ value }}</p>
+          </div>
+        </div>
+
+        <div class="flex items-center space-x-2 justify-between">
+          <p class="text-orange-500 font-medium">₺{{ props.item.variation.price }}</p>
+          
+          <PartialsCartItemCounter :cart-item="props.item" />
+          
         </div>
       </div>
     </div>
-    <div class="mt-minimal flex justify-between">
-      <b>Toplam:</b>
-      <p class="text-secondary-500">1590.00 TL</p>
-    </div>
-    <div class="grid gap-2 mt-2">
-      <UiButtonsBaseButton color="slate">Sepete Git</UiButtonsBaseButton>
-      <UiButtonsBaseButton color="secondary">Ödeme</UiButtonsBaseButton>
-    </div>
   </div>
 </template>
+
+<script setup>
+const props = defineProps(['item'])
+const { useCartState } = useStateIndex()
+const cartState = useCartState()
+
+const deleteCartItem = () => {
+
+  cartState.deleteCartItem(props.item)
+
+}
+</script>

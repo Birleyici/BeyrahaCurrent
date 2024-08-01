@@ -32,7 +32,7 @@ const productState = useProductState()
 
 const addFeature = async () => {
 
-    const { data, error } = await useBaseFetch(`product/productMeta/${productState.product.id}`, {
+    const { data, error } = await useBaseOFetchWithAuth(`product/productMeta/${productState.product.id}`, {
         method: 'POST',
         body: JSON.stringify(form.value)
     })
@@ -46,7 +46,7 @@ const addFeature = async () => {
 
 const deleteFeature = async (featureId) => {
 
-const { data, error } = await useBaseFetch(`product/productMeta/${featureId}`, {
+const { data, error } = await useBaseOFetchWithAuth(`product/productMeta/${featureId}`, {
     method: 'DELETE',
 })
 

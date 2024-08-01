@@ -55,6 +55,9 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/device',
+    '@pinia-plugin-persistedstate/nuxt',
+
+
 
   ],
 

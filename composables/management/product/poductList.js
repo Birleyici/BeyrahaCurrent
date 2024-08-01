@@ -16,20 +16,16 @@ export function useProductList() {
 
     const getVendorProducts = async () => {
 
-        const { data, error } = await useBaseFetch("vendor/products");
+        const response = await useBaseOFetchWithAuth("vendor/products");
 
-        if (data.value.products && !error.value) {
-
-            productState.patchVendorProducts(data.value.products)
-
-        }
+        productState.patchVendorProducts(response.products)
 
     }
 
     const deleteProduct = async (productId) => {
 
 
-        const { data, error } = await useBaseFetch('product/' + productId, {
+        const { data, error } = await useBaseOFetchWithAuth('product/' + productId, {
             method: 'DELETE'
         })
 

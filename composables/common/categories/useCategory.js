@@ -4,12 +4,9 @@ export function useCategory() {
     const categoryState = useCategoryState();
 
     const getCategories = async () => {
-        const { data, error } = await useBaseFetch("categories");
-
-        if (data.value && !error.value) {
-            categoryState.categories = data.value;
-            sortCategories();
-        }
+        const response = await useBaseOFetchWithAuth("categories");
+        categoryState.categories = response;
+        sortCategories();
     };
 
     const sortCategories = () => {
@@ -30,7 +27,7 @@ export function useCategory() {
 
     watch(() => categoryState.selectedCategories, () => {
         sortCategories()
-      })
+    })
 
     return {
         getCategories,

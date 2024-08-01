@@ -46,7 +46,7 @@ const getImagesData = async () => {
   loading.value = true
 
   try {
-    const response = await useBaseOFetch("vendor/images", {
+    const response = await useBaseOFetchWithAuth("vendor/images", {
       query: query.value,
     });
 

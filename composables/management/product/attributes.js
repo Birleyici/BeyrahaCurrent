@@ -1,23 +1,24 @@
-import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
 
 export const useAttributes = () => {
 
+    const { useAttrsAndVarsState, useAttributeState } = useStateIndex()
     const attrsAndVarsState = useAttrsAndVarsState()
+    const attributeState = useAttributeState()
 
-   
+
 
     const addAttr = () => {
 
         const item = attrsAndVarsState.selectedAttrObj
 
         // attributes içerisinde bu attribute_id'ye sahip bir öğe olup olmadığını kontrol ediyoruz.
-        const isAttributeExists = attrsAndVarsState.attributes.some(
+        const isAttributeExists = attributeState.attributes.some(
             (attr) => attr.attribute_id === item.id
         );
 
         // Eğer bu ID'ye sahip bir öğe zaten varsa veya attributes uzunluğu 30'dan fazla ise, yeni bir öğe eklemiyoruz.
-        if (!isAttributeExists && attrsAndVarsState.attributes.length < 30) {
-            attrsAndVarsState.attributes.unshift({
+        if (!isAttributeExists && attributeState.attributes.length < 30) {
+            attributeState.attributes.unshift({
                 attribute_id: item.id,
                 attribute_name: item.text,
                 isOpen: true,
@@ -45,17 +46,15 @@ export const useAttributes = () => {
 
         if (id == null) { return }
 
-        const {
-            data,
-        } = await useBaseFetch("products/" + id + "/attributes");
+        const response = await useBaseOFetchWithAuth(`products/${id}/attributes`)
 
-        attrsAndVarsState.attributes = data.value
+        attrsAndVarsState.attributes = response
 
     }
 
 
     const removeTerm = async (term, terms) => {
-        const { data, error } = await useBaseFetch(
+        const { data, error } = await useBaseOFetchWithAuth(
             "product-terms/" + term.product_term_id,
             {
                 method: "DELETE",
@@ -72,21 +71,29 @@ export const useAttributes = () => {
         }
     };
 
-    const deleteAttr = (id) => {
-        attrsAndVarsState.attributes = attrsAndVarsState.attributes.filter(attribute => attribute.product_attribute_id !== id);
-    }
+    const deleteAttr = async (attrId) => {
+
+        await useBaseOFetchWithAuth(
+            "product-attributes/" + attrId,
+            {
+                method: "DELETE",
+            }
+        );
+
+        attributeState.attributes = attributeState.attributes.filter(attribute => attribute.product_attribute_id !== attrId);
+
+    };
+
+
 
 
     const fetchGlobalAttrs = async () => {
 
-        const { data, error } = await useBaseFetch(
+        const response = await useBaseOFetchWithAuth(
             "attributes/global"
         );
 
-        if (data.value && !error.value) {
-
-            attrsAndVarsState.globalAttrs = data.value
-        }
+        attrsAndVarsState.globalAttrs = response
     }
 
 
@@ -97,5 +104,6 @@ export const useAttributes = () => {
         addTerm,
         removeTerm,
         fetchGlobalAttrs,
+        deleteAttr
     }
 }

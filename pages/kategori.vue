@@ -1,9 +1,9 @@
 <template>
 
   <div class="px-x-mobil lg:px-x-desktop ">
-    <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.product.products"
+    <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
       v-model:query="query" :loading="loading" />
-    <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.product.products" v-model:query="query"
+    <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products" v-model:query="query"
       :loading="loading" />
   </div>
 </template>

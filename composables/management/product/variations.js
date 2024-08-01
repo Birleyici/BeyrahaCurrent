@@ -1,10 +1,12 @@
-import { useProductState } from "~/store/frontend/product";
-import { useAttrsAndVarsState } from "~/store/attrsAndVariations";
 
 export const useVariations = () => {
 
+    const { useProductState, useAttrsAndVarsState, useVariationState, useAttributeState } = useStateIndex();
+
     const productState = useProductState()
     const attrsAndVarsState = useAttrsAndVarsState()
+    const variationState = useVariationState();
+    const attributeState = useAttributeState();
 
 
 
@@ -12,7 +14,7 @@ export const useVariations = () => {
 
         const {
             data, error
-        } = await useBaseFetch("page/products/" + productState.product.id + "/variations");
+        } = await useBaseOFetchWithAuth("page/products/" + productState.product.id + "/variations");
 
         if (data.value && !error.value) {
 
@@ -43,56 +45,6 @@ export const useVariations = () => {
     });
 
 
-    const fetchVariations = async (id) => {
-
-        const { data, error } = await useBaseFetch("products/" + id + "/variations");
-
-        attrsAndVarsState.variations = data.value
-
-        if (!error.value) {
-            attrsAndVarsState.variations.variations.forEach((variation) => {
-                if (!variation.terms || variation.terms.length < attrsAndVarsState.attributes.length) {
-                    let missingTerms = [];
-
-                    attrsAndVarsState.attributes.forEach((attribute) => {
-                        if (attribute.useForVariation == 0) {
-                            return;
-                        }
-
-                        if (!variation.terms.some((term) => term.product_term.product_attribute_id === attribute.product_attribute_id)) {
-                            const templateTerm = {
-                                product_variation_id: variation.id,
-                                useForVariation: attribute.useForVariation,
-                                product_term_id: "null",
-                                product_images: variation.product_images,
-                                product_term: {
-                                    product_attribute_id: attribute.product_attribute_id,
-                                    term_id: null,
-                                },
-                            };
-                            missingTerms.push(templateTerm);
-                        }
-
-                    });
-
-                    variation.terms = missingTerms.concat(variation.terms);
-                }
-
-                if (variation.variation_image && typeof variation.variation_image === 'string') {
-                    try {
-                        variation.variation_image = JSON.parse(variation.variation_image);
-                    } catch (e) {
-                        console.error('JSON parse error:', e);
-                        // Hatalı parse işlemi için hata işleme
-                    }
-                }
-
-                // Gerçek ve şablon term'lerini product_attribute_id'ye göre sıralayın
-                variation.terms.sort((a, b) => a.product_term.product_attribute_id - b.product_term.product_attribute_id);
-            });
-        }
-        attrsAndVarsState.variations = attrsAndVarsState.variations.variations;
-    }
 
 
     const deleteVariationOnState = (id) => {
@@ -128,9 +80,9 @@ export const useVariations = () => {
 
     const selectedOptions = ref({});
 
-    const selectOption = (attributeName, option, colorTerm=null) => {
+    const selectOption = (attributeName, option, colorTerm = null) => {
 
-        if(colorTerm){
+        if (colorTerm) {
             productState.product.selectedColorTermImages = colorTerm.term_images
         }
 
@@ -147,7 +99,7 @@ export const useVariations = () => {
             } else {
                 productState.product.selectedImages.unshift(selectedVarImg)
             }
-            
+
 
         } else if (productState.product.selectedImages[0]?.added) {
 
@@ -187,7 +139,7 @@ export const useVariations = () => {
         };
 
         try {
-            const { data, pending, refresh, error } = await useBaseFetch("variations", {
+            const { data, pending, refresh, error } = await useBaseOFetchWithAuth("variations", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -233,9 +185,9 @@ export const useVariations = () => {
     };
 
 
-    async function createAllVariation() {
+    async function createAllVariation(productId) {
         // Tüm nitelikleri ve bu niteliklere ait termleri alalım.
-        const attributesWithTerms = attrsAndVarsState.attributes.filter(
+        const attributesWithTerms = attributeState.attributes.filter(
             (attribute) => attribute.product_terms && attribute.product_terms.length > 0
         );
 
@@ -275,32 +227,29 @@ export const useVariations = () => {
             })),
         }));
 
-        const { data, pending, refresh, error } = await useBaseFetch("variations", {
+            await useBaseOFetchWithAuth("variations", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(allVariations),
-            cache: false,
         });
 
-        if (error.data == null) {
-            await fetchVariations(productState.product.id);
-        }
+        await variationState.fetchVariations(productId);
     }
 
-    const saveVariations = async () => {
+    const saveVariations = async (productId, variations) => {
 
         try {
-            await useBaseOFetch(`products/${productState.product.id}/variations/update`, {
+            await useBaseOFetchWithAuth(`products/${productId}/variations/update`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ variations: attrsAndVarsState.variations }),
+                body: JSON.stringify({ variations }),
             });
 
-            await fetchVariations(productState.product.id);
+            await variationState.fetchVariations(productId);
 
         } catch (error) {
 
@@ -312,14 +261,14 @@ export const useVariations = () => {
 
     const deleteAllVariations = async (productId) => {
         try {
-            await useBaseFetch("products/" + productId + "/variations", {
+            await useBaseOFetchWithAuth("products/" + productId + "/variations", {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
 
-            await fetchVariations(productId);
+            await variationState.fetchVariations(productId);
 
         } catch (e) {
 
@@ -346,18 +295,12 @@ export const useVariations = () => {
         return term?.term_name || `Herhangi Bir ${attribute.attribute_name}`;
     };
 
-    const deleteVariation = async (id) => {
-
-        await useBaseFetch("variations/" + id, { method: "DELETE" });
-        deleteVariationOnState(id);
-
-    };
+   
 
 
 
     return {
         deleteVariationOnState,
-        fetchVariations,
         fetchVariationsForFrontEnd,
         isActive,
         selectOption,
@@ -367,7 +310,6 @@ export const useVariations = () => {
         createAllVariation,
         saveVariations,
         deleteAllVariations,
-        findValueInAttrs,
-        deleteVariation,
+   
     }
 }

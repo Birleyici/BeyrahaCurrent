@@ -1,7 +1,7 @@
 import { defu } from "defu";
 const apiBaseUrl = useBaseUrl()
 
-export async function useBaseFetch(url, options = {}) {
+export async function useBaseOFetchWithAuth(url, options = {}) {
   
   const accessToken = useCookie("auth.token");
 

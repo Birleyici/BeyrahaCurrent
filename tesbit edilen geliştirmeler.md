@@ -1,0 +1,2 @@
+-media modaldaki resimlere alt ekleme özelliği eklenecek.
+-bir pluginle site içerisinde kullanılan linkler tek bir yerde toplanacak.

@@ -10,23 +10,25 @@ export function useProduct() {
         if (!('page' in filters)) {
             filters.page = 1;
         }
-    
+
         const params = piece ? { piece } : { ...filters };
-    
-        const { data, error } = await useBaseFetch('products', {
-            params
-        });
-    
-        if (data.value && !error.value) {
-            // Gelen veri sayfalı ise data.value.data, değilse düz data.value
-            productState.patchProduct ({ products: data.value });
-        }
-    
+
+
+
+        const response = await useBaseOFetchWithAuth(`products`,
+            {
+                params
+            }
+        )
+
+
+        productState.products = response
+
         if (process.client && 'page' in filters) {
             localStorage.setItem("prevPage", filters.page);
         }
     };
-    
+
 
 
 
@@ -34,16 +36,18 @@ export function useProduct() {
 
         catIds = catIds.map(cat => cat.id);
 
-        const { data, error } = await useBaseFetch(`products/category`, {
-            params: {
-                catIds: catIds.join(','),
-                limit: 5
-            }
-        })
 
-        if (data.value && !error.value) {
-            productState.patchCategoryProducts(data.value)
-        }
+        const response = await useBaseOFetch('products/category',
+            {
+                params: {
+                    catIds: catIds.join(','),
+                    limit: 5
+                }
+            }
+        )
+
+
+        productState.patchCategoryProducts(response)
 
     }
 

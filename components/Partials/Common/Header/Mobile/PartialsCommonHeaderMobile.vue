@@ -1,6 +1,6 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
-    
+
     <PartialsCommonHeaderSlideNestedMenu v-model="menuStatus" :menu="props.categories" />
 
     <PartialsCommonHeaderSlideAccount v-model="accountStatus" />
@@ -21,8 +21,21 @@
       <PartialsCommonSearchInput></PartialsCommonSearchInput>
       <div>
         <div class="flex items-center space-x-4 font-medium">
-          <Icon @click="accountStatus = true" name="ph:user" class="w-8 h-8 cursor-pointer select-none"></Icon>
-          <Icon @click="cartStatus = true" name="ph:bag-simple" class="w-8 h-8 cursor-pointer select-none"></Icon>
+
+          <UIcon @click="accountStatus = true" name="i-heroicons-user-circle" class="w-8 h-8" />
+
+          <div class="relative" @click="cartStatus = true">
+            <ClientOnly>
+              <UChip  :text="props.cart.cartQyt" size="2xl" position="bottom-right">
+                <UButton  variant="ghost" color="gray" class="p-0 cursor-pointer select-none">
+                  <template #trailing>
+                    <UIcon name="i-heroicons-shopping-bag" class="w-8 h-8" />
+                  </template>
+                </UButton>
+              </UChip>
+            </ClientOnly>
+
+          </div>
         </div>
       </div>
     </div>
@@ -30,7 +43,7 @@
   </div>
 </template>
 <script setup>
-const props = defineProps(["categories"]);
+const props = defineProps(["categories", "cart"]);
 const menuStatus = ref(false);
 const accountStatus = ref(false);
 const cartStatus = ref(false);
