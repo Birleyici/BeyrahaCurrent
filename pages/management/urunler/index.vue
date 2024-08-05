@@ -12,25 +12,17 @@
       size: '2xs',
       square: false,
       ui: { rounded: 'rounded-full' },
-    }" class="w-full" :columns="columns" :rows="rows" >
+    }" class="w-full" :columns="columns" :rows="rows">
       <template #name-data="{ row }">
-        <NuxtLink :href="'/management/urunler/' + row.id" class="text-blue-500 font-bold" :class="{'!text-red-500 !font-medium' : !row.name}">{{ row.name ||  `Taslak ürün #${row.id}`  }}</NuxtLink>
+        <NuxtLink :href="'/management/urunler/' + row.id" class="text-blue-500 font-bold"
+          :class="{ '!text-red-500 !font-medium': !row.name }">{{ row.name || `Taslak ürün #${row.id}` }}</NuxtLink>
       </template>
       <template #delete-data="{ row }">
-      <div class="flex justify-end">
-        <UButton @click="openDeleteModal(row.id)" icon="i-heroicons-trash" size="2xs" color="red" variant="solid"
-        :trailing="false" />
-      </div>
-        <UModal v-model="isOpenDeleteModal" :transition="true" :overlay="false">
-          <div class="p-4 grid gap-4">
-            <p>Ürünü silmek istediğinizden emin misiniz?</p>
-            <div class="flex space-x-3">
-              <UButton @click="confirmDelete" size="sm" color="red" variant="solid" label="Onayla" :trailing="false" />
-              <UButton @click="isOpenDeleteModal = false" size="sm" color="gray" variant="solid" label="Vazgeç"
-                :trailing="false" />
-            </div>
-          </div>
-        </UModal>
+        <div class="flex justify-end">
+          <UButton @click="isOpenDeleteModal = true" icon="i-heroicons-trash" size="2xs" color="red" variant="solid" :trailing="false" />
+        </div>
+        <PartialsUiModalConfirmation @is-confirm="e => e && productDelete(row.id)"
+          message="Ürünü silmek istediğinizden emin misiniz?" v-model:is-open="isOpenDeleteModal" />
       </template>
     </UTable>
     <div class="flex justify-end px-3 py-3.5 border-t border-gray-200 dark:border-gray-700">
@@ -49,8 +41,6 @@ const productState = useProductState();
 const { getVendorProducts, deleteProduct, columns } = useProductList()
 await getVendorProducts();
 const isOpenDeleteModal = ref(false);
-const deleteProductId = ref(null);
-
 
 const page = ref(1);
 const pageCount = 5;
@@ -59,18 +49,10 @@ const rows = computed(() => {
   return productState.vendorProducts.slice((page.value - 1) * pageCount, page.value * pageCount);
 });
 
-const openDeleteModal = (productId) => {
-  deleteProductId.value = productId;
-  isOpenDeleteModal.value = true;
-};
-
-const confirmDelete = () => {
-  if (deleteProductId.value) {
-    deleteProduct(deleteProductId.value);
+const productDelete = (productId) => {
+  if (productId) {
+    deleteProduct(productId);
     isOpenDeleteModal.value = false;
   }
 };
-
-
-
 </script>

@@ -25,15 +25,11 @@ export function useProductList() {
     const deleteProduct = async (productId) => {
 
 
-        const { data, error } = await useBaseOFetchWithAuth('product/' + productId, {
+        const response = await useBaseOFetchWithAuth('product/' + productId, {
             method: 'DELETE'
         })
 
-        if (data.value && !error.value) {
-
-            filteredProducts(productId)
-
-        }
+        filteredProducts(productId)
 
     };
 

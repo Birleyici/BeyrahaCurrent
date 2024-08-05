@@ -27,7 +27,7 @@ const variationState = useVariationState();
 const attributeState = useAttributeState();
 
 const options = [
-  { value: "1", label: "Varyasyon ekle" },
+  // { value: "1", label: "Varyasyon ekle" },
   { value: "2", label: "Tüm niteliklerden varyasyonlar oluştur" },
   { value: "3", label: "Tüm varyasyonları sil" },
 ];
@@ -46,9 +46,9 @@ const addedType = ref(null);
 const errorMessage = ref(null);
 
 const variationHandle = () => {
-  if (addedType.value == 1) {
-    createOneVariation();
-  }
+  // if (addedType.value == 1) {
+  //   createOneVariation();
+  // }
   if (addedType.value == 2) {
     createAllVariation(productState.product.id);
   }

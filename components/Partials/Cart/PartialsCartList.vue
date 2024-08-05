@@ -2,6 +2,7 @@
   <div class="py-4 first:!pt-0 border-b last:border-b-0 border-dashed">
     <div class=" flex space-x-4">
 
+      
       <NuxtImg width="70" class="object-cover rounded-md" :src="`aws/${props.item.product_thumb.path}`"></NuxtImg>
       <div class="w-full">
         <div class="flex items-start space-x-2 justify-between w-full">
@@ -20,7 +21,7 @@
         </div>
 
         <div class="flex items-center space-x-2 justify-between">
-          <p class="text-orange-500 font-medium">₺{{ props.item.variation.price }}</p>
+          <p class="text-orange-500 font-medium">{{ formatPrice(props.item.variation.price) }}</p>
           
           <PartialsCartItemCounter :cart-item="props.item" />
           
@@ -31,6 +32,7 @@
 </template>
 
 <script setup>
+
 const props = defineProps(['item'])
 const { useCartState } = useStateIndex()
 const cartState = useCartState()

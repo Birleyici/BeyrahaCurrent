@@ -6,7 +6,6 @@ export const useMainStore = defineStore({
         isOpenSearch: false,
         isLoaded: false,
         isAuthenticated: false,
-        token:null
     }),
 
 

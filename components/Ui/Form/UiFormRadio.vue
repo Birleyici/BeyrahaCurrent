@@ -1,19 +1,18 @@
 <template>
-  <div class=" items-center">
-  
+  <div class=" items-center w-full">
     <input
-      :checked="modelValue === value"
-      @change="onChange"
+      v-model="model"
       :name="name"
       type="radio"
       class="hidden"
+      :value="value"
       :id="id"
     />
     <label :for="id" class="flex items-center space-x-2 cursor-pointer " :class="labelClass">
       <div>
         <span class="block w-5 h-5 border-2 border-gray-300 rounded-full relative">
           <Icon
-            v-if="modelValue === value"
+            v-if="model === value"
             name="material-symbols:fitbit-check-small-rounded"
             class="text-white w-5 h-5 absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2"
           ></Icon>
@@ -25,12 +24,8 @@
 </template>
 
 <script setup>
-const {labelClass, name, id, value, modelValue } = defineProps(['name', 'id', 'value', 'modelValue', 'labelClass']);
-const emit = defineEmits(['update:modelValue']);
-
-const onChange = () => {
-  emit('update:modelValue', value);
-};
+const {labelClass, name, id, value } = defineProps(['name', 'id', 'value', 'labelClass']);
+const model = defineModel()
 </script>
 
 <style>

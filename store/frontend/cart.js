@@ -18,6 +18,11 @@ export const useCartState = defineStore('cartState', () => {
           }
         }, 0);
       });
+
+      const resetCartState = ()=>{
+        cart.value = []
+        cartQyt.value = 0
+      }
       
 
     const patchCart = (obj, qyt) => {
@@ -54,7 +59,9 @@ export const useCartState = defineStore('cartState', () => {
 
 
 
-    return { cart, cartQyt, cartTotalAmount, patchCart, deleteCartItem }
+
+
+    return { cart, cartQyt, cartTotalAmount, resetCartState, patchCart, deleteCartItem }
 },
     {
         persist: {

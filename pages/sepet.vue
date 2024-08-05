@@ -1,7 +1,7 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop">
     <ClientOnly>
-    <p class="text-center font-semibold lg:text-left">Sepet</p>
+      <p class="text-center font-semibold lg:text-left">Sepet</p>
       <div v-if="cartState.cart.length > 0" class="lg:grid lg:grid-cols-3 gap-10">
         <div class="col-span-2">
           <TransitionGroup name="list" tag="div">
@@ -10,38 +10,14 @@
           </TransitionGroup>
 
         </div>
-        <div class="lg:col-span-1 w-full lg:grid gap-2">
-          <div class="w-full">
-            <div class="sticky top-4 w-full z-[2]">
-              <div class="bg-tertiary-50 w-full rounded-md p-minimal space-y-3">
-                <b>Sipariş özeti</b>
-
-                <div class="flex justify-between">
-                  <p>Ürün toplam:</p>
-                  <p class="text-secondary-500 ">{{ formatPrice(cartState.cartTotalAmount) }}</p>
-                </div>
-                <div class="flex justify-between pb-2">
-                  <p>Kargo ücreti:</p>
-                  <p class="text-medium text-secondary-500 ">
-                    {{ shippingCost == 0 ? 'Ücretsiz' : formatPrice(shippingCost) }}
-                  </p>
-                </div>
-                <UDivider type="dashed"></UDivider>
-                <div class="flex justify-between space-x-4 text-lg">
-                  <p>Toplam:</p>
-                  <Transition name="slide-up" mode="out-in">
-                    <p class="text-secondary-500 font-bold" :key="cartState.cartTotalAmount">{{
-                      formatPrice(cartState.cartTotalAmount + shippingCost) }}</p>
-                  </Transition>
-
-                </div>
-              </div>
-              <div class="mt-2 bottom-0 fixed md:!relative  bg-white w-full right-0 left-0 p-2">
-                <UiButtonsBaseButton color="secondary" class="font-semibold px-8 w-full">Ödeme</UiButtonsBaseButton>
-              </div>
+        <PartialsCartExtre>
+          <template #button>
+            <div class="mt-2 bottom-0 fixed md:!relative  bg-white w-full right-0 left-0 p-2">
+              <UButton to="/before-order" color="orange" class="w-full flex justify-center" size="md" variant="solid">
+                Ödeme</UButton>
             </div>
-          </div>
-        </div>
+          </template>
+        </PartialsCartExtre>
       </div>
       <div v-else class="italic h-44 my-4 rounded-md border p-1  border-dashed">
         <div class="text-center bg-slate-50 w-full h-full rounded-md flex items-center justify-center">
@@ -51,12 +27,12 @@
           </div>
         </div>
       </div>
- 
-    <div class="my-maximal">
-      <LazyUiSlidesProductSlide title="Bunlarda ilginizi çekebilir" :products="productState.products">
-      </LazyUiSlidesProductSlide>
-    </div>
-  </ClientOnly>
+
+      <div class="my-maximal">
+        <LazyUiSlidesProductSlide title="Bunlarda ilginizi çekebilir" :products="productState.products">
+        </LazyUiSlidesProductSlide>
+      </div>
+    </ClientOnly>
   </div>
 </template>
 
@@ -65,9 +41,7 @@ const { useCartState, useProductState } = useStateIndex()
 const cartState = useCartState()
 const productState = useProductState()
 const { getProducts } = useProduct()
-const shippingCost = computed(() => {
-  return cartState.cartTotalAmount > 1000 ? 0 : 60
-})
+
 onMounted(() => {
   getProducts({ piece: 7 })
 })

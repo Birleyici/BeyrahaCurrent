@@ -28,11 +28,26 @@
 
 
 export function formatPrice(value) {
-  return new Intl.NumberFormat('tr-TR', {
+  // Kuruşları TL'ye çevir
+  const tlValue = value / 100;
+
+  // Fiyatı formatla
+  const formattedPrice = new Intl.NumberFormat('tr-TR', {
     style: 'currency',
     currency: 'TRY',
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0
-  }).format(value);
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  }).format(tlValue);
+
+  // TL işaretini başa ekle
+  return `₺${formattedPrice.replace('₺', '').trim()}`;
+}
+
+export function calculateTotal(unitPrice, quantity) {
+  // Birim fiyatı ve miktarı çarp, sonucu 1 liraya yuvarla
+  const total = Math.round((unitPrice * quantity) / 100) * 100;
+
+  // Toplam fiyatı formatla ve döndür
+  return formatPrice(total);
 }
 
