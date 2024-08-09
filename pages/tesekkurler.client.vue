@@ -42,9 +42,9 @@
           </div>
           <div class="col-span-1 my-orta lg:my-0">
             <div class="grid gap-6 ">
-              <PartialsOrderAddressCard title="Teslimat adresi" :actions="false"
+              <PartialsOrderAddressCard   class="p-4" title="Teslimat adresi" :actions="false"
                 :address="order.shipping_address || {}" />
-              <PartialsOrderAddressCard title="Fatura adresi" :actions="false" :address="order.billing_address || {}" />
+              <PartialsOrderAddressCard   class="p-4" title="Fatura adresi" :actions="false" :address="order.billing_address || {}" />
             </div>
           </div>
         </div>
@@ -68,9 +68,9 @@ const orderLoaded = ref(false);
 
 
 const getOrder = async () => {
-  const response = await useBaseOFetch(`order/anonymous`, {
+  const response = await useBaseOFetch(`order`, {
     query: {
-      order_token: route.query.order,
+      identifier: route.query.order,
     },
   });
 

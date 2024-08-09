@@ -9,7 +9,6 @@ export const useVariationsFrontState = defineStore('variationsFront', () => {
 
         const response = await useBaseOFetch(`front/products/${productId}/variations`)
 
-        console.log(response)
         variations.value = response;
 
     };

@@ -9,8 +9,8 @@
           <p class="text-sm font-medium">
             {{ props.item.product_name }}
           </p>
-          <UButton @click="deleteCartItem()" icon="i-heroicons-x-mark" size="2xs" color="red" square
-            :ui="{ rounded: 'rounded-full' }" variant="soft" />
+          <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-x-mark" size="xs" color="red" square
+                :ui="{ rounded: 'rounded-full' }" variant="soft" />
         </div>
         <div v-for="(value, key) in props.item.variation.attributes">
 
@@ -37,9 +37,11 @@ const props = defineProps(['item'])
 const { useCartState } = useStateIndex()
 const cartState = useCartState()
 
-const deleteCartItem = () => {
 
-  cartState.deleteCartItem(props.item)
-
+const loading = ref(false)
+const deleteHandle = async () => {
+    loading.value = true
+    await cartState.deleteCartItem(props.item)
+    loading.value = false
 }
 </script>

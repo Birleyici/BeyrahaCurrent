@@ -7,13 +7,8 @@ export const useOrderState = defineStore('orderState', () => {
     const cartState = useStateIndex().useCartState()
     const mainState = useNuxtApp().$mainState
 
-    const orderOptions = ref({
-        selectedPaymentMethod: 'bacs',
-        selectedAddress: 'address1',
-        isOpenOtherAddress: false
-    })
-
     const isOpenAddressModal = ref(false)
+    const openAllAddressModal = ref(false)
 
     let newAddress = ref(
         {
@@ -35,27 +30,66 @@ export const useOrderState = defineStore('orderState', () => {
     const cities = ref([])
     const districts = ref([])
 
-    const addressList = computed(() => {
-        return addresses.value?.filter(address => {
-            if (!orderOptions.value.isOpenOtherAddress) {
-                return address.isDefault === true
-            } else {
-                return true
-            }
-        })
+    const getDefaultAddress = computed(() => {
+
+        let filteredAddresses = addresses.value?.filter(address => address.isDefault === true);
+        return filteredAddresses.length ? filteredAddresses[0] : null;
+    });
+
+
+    const orderOptions = ref({
+        selectedPaymentMethod: 'bacs',
+        selectedAddress: getDefaultAddress?.id,
+        isOpenOtherAddress: false
     })
 
 
-    const saveAddress = (item) => {
+    const saveAddress = async (item) => {
 
         if (!mainState.isAuthenticated) {
             if (!item.id) {
                 item.id = uuidv4();
             }
             addresses.value = [item]
+        } else {
+
+            const response = await useBaseOFetchWithAuth('address', {
+                method: 'POST',
+                body: JSON.stringify(item)
+            })
+
+            if (!response.error) {
+                await setDefaultFalseOtherAddresses(response.id)
+                addresses.value.unshift(response)
+            }
+            isOpenAddressModal.value = false
+            return
         }
         isOpenAddressModal.value = false
     };
+
+    const setDefaultFalseOtherAddresses = (id) => {
+        addresses.value.forEach((address) => {
+            if (address.id !== id) {
+                address.isDefault = false;
+            } else {
+                address.isDefault = true;
+            }
+        });
+    }
+
+
+    const setDefaultAddress = async (id) => {
+        const response = await useBaseOFetchWithAuth('address/default', {
+            method: 'POST',
+            body: JSON.stringify({ addressId: id }),
+        });
+
+        if(!response.error){
+            setDefaultFalseOtherAddresses(id)
+        }
+    }
+    
 
     const deleteAddress = (id) => {
 
@@ -98,33 +132,43 @@ export const useOrderState = defineStore('orderState', () => {
             cart: cartState.cart
         }
 
-        const response = await useBaseOFetch(`order/create`,
+        const response = await useBaseOFetchWithAuth(`order/create`,
             {
                 method: 'POST',
                 body: JSON.stringify(newOrderObj)
             })
 
         addresses.value = []
-        cartState.resetCartState() 
+        cartState.resetCartState()
 
         await navigateTo({
             path: '/tesekkurler',
             query: {
-              order: response.token
+                order: response.token
             }
-          })
+        })
+    }
+
+    const fetchAddresses = async()=>{
+      if(mainState.isAuthenticated){
+        const response = await useBaseOFetchWithAuth('addresses')
+        addresses.value = response
+      }
     }
 
 
     return {
         orderOptions,
         addresses,
-        addressList,
+        getDefaultAddress,
         newAddress,
         copyNewAddress,
         isOpenAddressModal,
+        openAllAddressModal,
         cities,
         districts,
+        fetchAddresses,
+        setDefaultAddress,
         saveAddress,
         deleteAddress,
         fetchCities,

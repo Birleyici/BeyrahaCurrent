@@ -18,19 +18,20 @@
             </div>
         </div>
         <div class="flex justify-between items-center">
-            <div class="rounded-full border p-1">
+            <div class="rounded-full border p-1 bg-white overflow-hidden">
                 <PartialsCartItemCounter :cart-item="props.item" />
             </div>
             <div>
                 <div v-if="props.item.variation && props.item.variation.sale_price">
-                  <del class="font-medium">{{ formatPrice(props.item.variation.price) }}</del>
-                  <p class="text-orange-500 font-medium">{{ formatPrice(props.item.variation.sale_price) }}</p>
+                    <del class="font-medium">{{ formatPrice(props.item.variation.price) }}</del>
+                    <p class="text-orange-500 font-medium">{{ formatPrice(props.item.variation.sale_price) }}</p>
                 </div>
                 <div v-else>
-                  <p class="font-medium">{{ formatPrice(props.item.variation ? props.item.variation.price : props.item.price) }}</p>
+                    <p class="font-medium">{{ formatPrice(props.item.variation ? props.item.variation.price :
+                        props.item.price) }}</p>
                 </div>
-              </div>
-            <UButton @click="props.deleteCartItem(props.item)" icon="i-heroicons-x-mark" size="xs" color="red" square
+            </div>
+            <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-x-mark" size="xs" color="red" square
                 :ui="{ rounded: 'rounded-full' }" variant="soft" />
         </div>
     </div>
@@ -38,4 +39,13 @@
 
 <script setup>
 const props = defineProps(['item', 'index', 'deleteCartItem'])
+const loading = ref(false)
+
+
+
+const deleteHandle = async () => {
+    loading.value = true
+    await props.deleteCartItem(props.item)
+    loading.value = false
+}
 </script>

@@ -30,7 +30,7 @@
                             <span>:</span>
                         </div>
                         <div class="flex justify-end">
-                            <p class="text-secondary-500 font-bold">{{ cartState.cartTotalAmount }}.00 TL</p>
+                            <p class="text-secondary-500 font-bold">{{ formatPrice(cartState.cartTotalAmount) }}</p>
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-2 mt-2">
@@ -50,4 +50,8 @@ const { nextNotRegister } = defineProps(["nextNotRegister"]);
 const { useCartState } = useStateIndex()
 const cartState = useCartState()
 const model = defineModel();
+
+onMounted(()=>{
+  cartState.cartDBToState()
+})
 </script>

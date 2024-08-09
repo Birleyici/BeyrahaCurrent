@@ -47,20 +47,22 @@
       <div>
         <div v-if="getSelectedVariation">
           <span v-if="getSelectedVariation.sale_price" class="flex items-center space-x-2">
-            <del class="text-gray-500">{{ getSelectedVariation.price }} TL</del>
-            <span class="text-secondary-500 text-3xl font-bold">{{ getSelectedVariation.sale_price }} TL</span>
+            <del class="text-gray-500">{{ formatPrice(getSelectedVariation.price) }} TL</del>
+            <span class="text-secondary-500 text-3xl font-bold">{{ formatPrice(getSelectedVariation.sale_price) }}
+              TL</span>
           </span>
           <span v-else class="text-secondary-500 text-3xl font-bold">
-            {{ getSelectedVariation.price || "0" }} TL
+            {{ formatPrice(getSelectedVariation.price) || "0" }} TL
           </span>
         </div>
         <div v-else>
           <span v-if="props.productState.product.sale_price" class="flex items-center space-x-2">
-            <del class="text-gray-500">{{ props.productState.product.price }} TL</del>
-            <span class="text-secondary-500 text-3xl font-bold">{{ props.productState.product.sale_price }} TL</span>
+            <del class="text-gray-500">{{ formatPrice(props.productState.product.price) }} TL</del>
+            <span class="text-secondary-500 text-3xl font-bold">{{ formatPrice(props.productState.product.sale_price) }}
+              TL</span>
           </span>
           <span v-else class="text-secondary-500 text-3xl font-bold">
-            {{ props.productState.product.price || "0" }} TL
+            {{ formatPrice(props.productState.product.price) || "0" }} TL
           </span>
         </div>
       </div>
@@ -76,7 +78,7 @@
         <p>SEPETE EKLE</p>
       </UButton>
     </div>
-  
+
   </div>
 </template>
 
@@ -102,15 +104,19 @@ const isActiveAddToCartButton = computed(() => {
 
 const addToCart = () => {
 
+  if(qyt.value == 0){
+    return
+  } 
+
   const newCartItem = {
     product_id: props.productState.product.id,
     product_name: props.productState.product.name,
     product_thumb: props.productState.product.selectedColorTermImages[0] || props.productState.product.selectedImages[0],
-    qyt: qyt.value,
+    qyt: parseInt(qyt.value),
     variation: getSelectedVariation.value
   }
 
-  cartState.patchCart(newCartItem, qyt.value)
+  cartState.patchCart(newCartItem, parseInt(qyt.value))
 
   // useNuxtApp().$mainState.isAuthenticated
   if (false) {

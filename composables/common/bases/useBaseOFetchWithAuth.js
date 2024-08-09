@@ -20,15 +20,16 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
         if (error.response && error.response.status === 401) {
             console.log("401 block");
 
+            const newToken = await refreshToken(token);
+            token.value = newToken;
+            params.headers.Authorization = `Bearer ${newToken}`;
+
             try {
-                const newToken = await refreshToken(token);
-                token.value = newToken;
-                params.headers.Authorization = `Bearer ${newToken}`;
                 response = await $fetch(apiBaseUrl + url, params);
                 console.log("Retry successful");
                 return response;
             } catch (refreshError) {
-                console.error("Token refresh failed:", refreshError);
+                console.error("Retry failed:", refreshError);
                 throw refreshError;
             }
 
@@ -53,6 +54,9 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
                 throw new Error("Token refresh failed");
             }
         } catch (error) {
+            if(error.response.status === 401) {
+                token.value = null
+            }
             console.error("Token refresh failed", error);
             throw new Error("Token refresh failed");
         }

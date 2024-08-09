@@ -6,6 +6,7 @@ import { useVariationsFrontState } from "~/store/frontend/variations";
 import { useAttributeState } from "~/store/common/attributes";
 import { useVariationState } from "~/store/common/variations";
 import { useOrderState } from "~/store/frontend/order"
+import { useAuthStore } from "~/store/common/auth"
 
 export function useStateIndex() {
 
@@ -17,6 +18,7 @@ export function useStateIndex() {
         useVariationsFrontState,
         useAttributeState,
         useVariationState,
-        useOrderState
+        useOrderState,
+        useAuthStore
     }
 }

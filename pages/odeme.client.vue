@@ -6,16 +6,12 @@
           <b>Sipariş oluştur</b>
         </div>
         <div class="border rounded-md mt-minimal">
-          <TransitionGroup name="fade">
-          
-            <div :key="address.id" v-for="address in orderState.addressList"
+          <Transition name="fade">
+            <div v-if="orderState.getDefaultAddress"
               class="bg-tertiary-50 border border-orange-500 p-minimal rounded-md flex items-center w-full">
-              <UiFormRadio v-model="orderState.orderOptions.selectedAddress" value="address1" id="address"
-                name="address">
-                <PartialsOrderAddressCard class="!border-none" :address="address" />
-              </UiFormRadio>
+              <PartialsOrderAddressCard class="!border-none" :address="orderState.getDefaultAddress" />
             </div>
-          </TransitionGroup>
+          </Transition>
 
           <div class="flex justify-between ">
             <div class="flex h-full items-center space-x-2 text-secondary-500 text-sm">
@@ -25,15 +21,11 @@
                 <Icon name="mdi:plus" class="font-semibold w-4 h-4"></Icon>
               </button>
             </div>
-            <div v-if="orderState.addresses?.length > 2" class="flex justify-center space-x-2 items-center">
-              <button @click="orderState.orderOptions.isOpenOtherAddress = !orderState.orderOptions.isOpenOtherAddress"
+            <div v-if="orderState.addresses?.length > 1" class="flex justify-center space-x-2 items-center">
+              <UButton @click="orderState.openAllAddressModal = true" variant="link" color="orange"
                 class="text-sm font-medium p-3 h-full">
-                Diğer adresleri {{ !orderState.orderOptions.isOpenOtherAddress ? "gör" : "kapat" }}
-                <Icon v-if="orderState.orderOptions.isOpenOtherAddress" name="material-symbols:keyboard-arrow-up"
-                  class="font-medium w-5 h-5">
-                </Icon>
-                <Icon v-else name="material-symbols:keyboard-arrow-down" class="font-medium w-5 h-5"></Icon>
-              </button>
+                Diğer adresler
+              </UButton>
             </div>
           </div>
         </div>
@@ -60,7 +52,8 @@
         <div class="sticky top-4 w-full">
           <PartialsCartExtre>
             <template #button>
-              <UiButtonsBaseButton @click="orderState.createOrder()" color="secondary" class="font-semibold px-8 w-full">Siparişi Onayla
+              <UiButtonsBaseButton @click="orderState.createOrder()" color="secondary"
+                class="font-semibold px-8 w-full">Siparişi Onayla
               </UiButtonsBaseButton>
             </template>
           </PartialsCartExtre>
@@ -82,6 +75,30 @@
         <PartialsOrderAddressForm></PartialsOrderAddressForm>
       </UCard>
     </UModal>
+
+    <UModal v-model="orderState.openAllAddressModal" :fullscreen="$device.isMobile">
+      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800 ' }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+              Adresler
+            </h3>
+            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+              @click="orderState.openAllAddressModal = false" />
+          </div>
+        </template>
+
+        <div class="h-[400px] overflow-y-scroll relative pr-4">
+
+          <div :key="address.id" v-for="address in orderState.addresses">
+            <div class="border my-2 p-minimal rounded-md flex items-center w-full"
+              :class="{ 'bg-tertiary-50 border border-orange-500': address.isDefault }">
+              <PartialsOrderAddressCard class="!border-none" :address="address" />
+            </div>
+          </div>
+        </div>
+      </UCard>
+    </UModal>
   </div>
 </template>
 
@@ -91,9 +108,14 @@ const orderState = useOrderState()
 const mainState = useNuxtApp().$mainState
 
 const isShowNewAddressButton = computed(() => {
-  return (!mainState.isAuthenticate && orderState.addresses.length == 0) || mainState.isAuthenticate
+  return (!mainState.isAuthenticate && orderState.addresses.length == 0) || mainState.isAuthenticated
 })
 
+onMounted(async () => {
+
+  await orderState.fetchAddresses()
+
+})
 </script>
 
 
