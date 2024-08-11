@@ -1,9 +1,9 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
 
-    <PartialsCommonHeaderSlideAccount v-model="accountStatus" />
+    <PartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
 
-    <PartialsCommonHeaderSlideCart v-model="cartStatus" />
+    <PartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
 
     <div class="flex justify-between items-center">
       <p class="font-primary text-heading-1 flex items-center space-x-3">
@@ -14,20 +14,14 @@
       <PartialsCommonSearchInput></PartialsCommonSearchInput>
       <div>
         <div class="flex items-center font-medium">
-          <p
-            @click="accountStatus = true"
-            class="cursor-pointer font-primary text-heading-4 pr-4"
-          >
+          <p @click="$uiStore.state.accountSlide = true" class="cursor-pointer font-primary text-heading-4 pr-4">
             HESAP
           </p>
-          <p
-            @click="cartStatus = true"
-            class="cursor-pointer font-primary text-heading-4 px-4"
-          >
+          <p @click="$uiStore.state.cartSlide = true" class="cursor-pointer font-primary text-heading-4 px-4">
             SEPET
-           <ClientOnly>
-            <span class="text-secondary-500">{{props.cart.cartQyt}}</span>
-           </ClientOnly>
+            <ClientOnly>
+              <span class="text-secondary-500">{{ props.cart.cartQyt }}</span>
+            </ClientOnly>
           </p>
         </div>
       </div>
@@ -37,8 +31,5 @@
 </template>
 <script setup>
 const props = defineProps(["categories", "cart"]);
-const menuStatus = ref(false);
-const accountStatus = ref(false);
-const cartStatus = ref(false);
 const logoSrc = "/logo.jpg";
 </script>

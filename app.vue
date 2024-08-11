@@ -9,10 +9,16 @@
 const { $changeMainState } = useNuxtApp()
 const { useCartState } = useStateIndex()
 const cartState = useCartState()
-
-onMounted(() => {
+const nuxtApp = useNuxtApp()
+const router = useRouter()
+onMounted(async () => {
   $changeMainState({ isLoaded: true });
-    cartState.cartDBToState()
+ await cartState.cartDBToState()
+
 });
+
+watch(router.currentRoute, () => {
+  nuxtApp.$uiStore.closeAll()
+})
 
 </script>

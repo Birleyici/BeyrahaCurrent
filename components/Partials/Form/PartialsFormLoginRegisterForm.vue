@@ -1,18 +1,14 @@
 <template>
-  <UTabs
-    :items="items"
-    class="w-full"
-    :ui="{
-      list: { 
-        marker: { 
-          background: '!bg-orange-500' 
-        },
-        tab:{
-          active: 'text-white'
-        } 
+  <UTabs :items="items" class="w-full" :ui="{
+    list: {
+      marker: {
+        background: '!bg-orange-500'
       },
-    }"
-  >
+      tab: {
+        active: 'text-white'
+      }
+    },
+  }">
     <template #item="{ item }">
       <UCard>
         <template #header>
@@ -25,69 +21,106 @@
         </template>
 
         <div v-if="item.key === 'login'" class="space-y-3 w-[400px] max-w-full">
-          <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+          <UForm :schema="schemaLogin" :state="authStore.user" class="space-y-4" @submit="onLogin">
             <UFormGroup label="Email" name="email">
-              <UInput v-model="state.email" />
+              <UInput v-model="authStore.user.email" />
             </UFormGroup>
 
             <UFormGroup label="Password" name="password">
-              <UInput v-model="state.password" type="password" />
+              <UInput :ui="{ icon: { trailing: { pointer: '' } } }" v-model="authStore.user.password"
+                :type="isShowPassword ? 'text' : 'password'">
+                <template #trailing>
+                  <UIcon @click="isShowPassword = !isShowPassword"
+                    :name="isShowPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
+                    class="w-5 h-5 cursor-pointer" />
+                </template>
+              </UInput>
             </UFormGroup>
 
-            <UButton color="orange" size="md" type="submit"> Giriş </UButton>
+            <UButton :loading="authStore.loginLoading" color="orange" size="md" type="submit"> Giriş </UButton>
+
+            <ul class="list-disc p-4 text-red-500">
+              <li v-for="error in authStore.apiError.login">
+                {{ error[0] }}
+              </li>
+            </ul>
+
           </UForm>
         </div>
         <div v-else-if="item.key === 'register'" class="w-[400px] max-w-full">
-          <UForm :schema="schema" :state="state" class="space-y-4" @submit="onSubmit">
+          <UForm :schema="schemaRegister" :state="authStore.register" class="space-y-4" @submit="onRegister">
             <UFormGroup label="Email" name="email">
-              <UInput v-model="state.email" />
+              <UInput v-model="authStore.register.email" />
             </UFormGroup>
 
             <UFormGroup label="Şifre" name="password">
-              <UInput v-model="state.password" type="password" />
+              <UInput v-model="authStore.register.password" type="password" />
             </UFormGroup>
 
             <UFormGroup label="Şifre tekrar" name="password">
-              <UInput v-model="state.password" type="password" />
+              <UInput v-model="authStore.register.password_confirmation" type="password" />
             </UFormGroup>
 
-            <UButton color="orange" size="md" type="submit"> Kaydol </UButton>
+            <UButton :loading="authStore.registerLoading" color="orange" size="md" type="submit"> Kaydol </UButton>
+
+            <ul class="list-disc p-4 text-red-500">
+              <li v-for="error in authStore.apiError.register">
+                {{ error[0] }}
+              </li>
+            </ul>
+
           </UForm>
         </div>
       </UCard>
     </template>
   </UTabs>
+
 </template>
 
 <script setup lang="ts">
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
+const router = useRouter()
 const { useAuthStore } = useStateIndex()
 const authStore = useAuthStore()
-
-const schema = object({
-  email: string().email('Invalid email').required('Required'),
+const isShowPassword = ref(false)
+const schemaLogin = object({
+  email: string().email('Geçersiz email').required('Zorunlu'),
   password: string()
-    .min(8, 'Must be at least 8 characters')
-    .required('Required')
-})
+    .min(8, 'Şifre minimum 8 karakter olmalıdır.')
+    .required('Zorunlu')
+});
 
-type Schema = InferType<typeof schema>
+type LoginSchema = InferType<typeof schemaLogin>;
 
-const state = reactive({
-  email: undefined,
-  password: undefined
-})
+const schemaRegister = object({
+  email: string().email('Geçersiz email').required('Zorunlu'),
+  password: string()
+    .min(8, 'Şifre minimum 8 karakter olmalıdır.')
+    .required('Zorunlu'),
+  password_confirmation: string()
+    .min(8, 'Şifre minimum 8 karakter olmalıdır.')
+    .required('Zorunlu')
+});
 
-async function onSubmit(event: FormSubmitEvent<Schema>) {
+type RegisterSchema = InferType<typeof schemaRegister>;
+
+
+async function onLogin(event: FormSubmitEvent<LoginSchema>) {
   // Do something with event.data
   const response = await authStore.login()
+  if (response) {
+    navigateTo(router.currentRoute.value.query.callback || '/')
+  }
+}
+
+async function onRegister(event: FormSubmitEvent<RegisterSchema>) {
+
+  const response = await authStore.registerUser()
 
   if (response) {
-    navigateTo('/management/urunler')
+    navigateTo(router.currentRoute.value.query.callback || '/')
   }
-
-
 }
 
 const items = [{

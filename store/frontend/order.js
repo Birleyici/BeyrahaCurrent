@@ -43,6 +43,7 @@ export const useOrderState = defineStore('orderState', () => {
         isOpenOtherAddress: false
     })
 
+    const orders = ref([])
 
     const saveAddress = async (item) => {
 
@@ -156,6 +157,11 @@ export const useOrderState = defineStore('orderState', () => {
       }
     }
 
+    const getOrders = async () => {
+        const response = await useBaseOFetchWithAuth(`orders`);
+        orders.value = response;
+      };
+
 
     return {
         orderOptions,
@@ -167,6 +173,7 @@ export const useOrderState = defineStore('orderState', () => {
         openAllAddressModal,
         cities,
         districts,
+        orders,
         fetchAddresses,
         setDefaultAddress,
         saveAddress,
@@ -174,7 +181,8 @@ export const useOrderState = defineStore('orderState', () => {
         fetchCities,
         fetchDistricts,
         editAddress,
-        createOrder
+        createOrder,
+        getOrders
     }
 },
     {

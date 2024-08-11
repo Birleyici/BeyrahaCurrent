@@ -13,7 +13,8 @@
         <PartialsCartExtre>
           <template #button>
             <div class="mt-2 bottom-0 fixed md:!relative  bg-white w-full right-0 left-0 p-2">
-              <UButton to="/auth" color="orange" class="w-full flex justify-center" size="md" variant="solid">
+              <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md"
+                variant="solid">
                 Ödeme</UButton>
             </div>
           </template>
@@ -34,7 +35,7 @@
       </div>
     </ClientOnly>
 
-  
+
   </div>
 </template>
 

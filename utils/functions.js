@@ -51,3 +51,24 @@ export function calculateTotal(unitPrice, quantity) {
   return formatPrice(total);
 }
 
+export function formatDate(dateString) {
+  // Tarihi Date nesnesine dönüştür
+  const date = new Date(dateString);
+
+  // Aylar Türkçe olarak
+  const months = [
+      "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+      "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"
+  ];
+
+  // Gün, ay, yıl ve saat/dakika bilgilerini al
+  const day = date.getDate();
+  const month = months[date.getMonth()];
+  const year = date.getFullYear();
+  const hours = date.getHours().toString().padStart(2, '0');
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+
+  // Sonucu formatla
+  return `${day} ${month} ${year} - ${hours}:${minutes}`;
+}
+

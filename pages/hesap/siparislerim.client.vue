@@ -7,12 +7,23 @@
       </div>
       <div class="col-span-3 mt-minimal lg:mt-0">
         <div class="space-y-minimal">
-          <PartialsOrderMyOrderItem
-            :open="item == 1"
-            v-for="item in 4"
-          ></PartialsOrderMyOrderItem>
+          <PartialsOrderItem
+            v-for="order in orderState.orders"
+            :item="order"
+          ></PartialsOrderItem>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+<script setup>
+const { useOrderState } = useStateIndex()
+const orderState = useOrderState()
+
+onMounted(async () => {
+
+  await orderState.getOrders()
+  
+})
+</script>

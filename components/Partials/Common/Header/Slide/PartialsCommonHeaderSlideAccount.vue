@@ -14,8 +14,20 @@
                         @click="model = false" />
                 </div>
             </template>
-
-            <PartialsFormLoginRegisterForm />
+            <PartialsFormLoginRegisterForm v-if="!$mainState.isAuthenticated" />
+            <p v-else >
+                <ul class="list-none">
+                    <li
+                    v-for="menu in menuItems"
+                      class="flex  items-center p-4 mb-2 bg-slate-100 hover:bg-slate-50 cursor-pointer select-none duration-200"
+                    >
+                      <NuxtLink class="w-full h-full" :to="menu.link">  
+                        <span class="ml-2">{{menu.name}}</span>
+                      </NuxtLink>
+                    </li>
+               
+                  </ul>
+            </p>
 
 
         </UCard>
@@ -25,4 +37,14 @@
 <script setup>
 const { nextNotRegister } = defineProps(["nextNotRegister"]);
 const model = defineModel();
+const menuItems = [
+    {
+        name: 'Hesabım',
+        link: '/hesap'
+    },
+    {
+        name: 'Siparişlerim',
+        link: '/hesap/siparislerim'
+    }
+]
 </script>

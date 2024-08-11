@@ -1,35 +1,91 @@
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore('authStore', () => {
-
+    const token = useCookie("auth.token");
     const isAuthanticated = ref(false)
     const user = ref({
         email: '',
         password: ''
     })
-    const loading = ref(false)
+
+    const register = ref({
+        email: '',
+        password: '',
+        password_confirmation: ''
+    })
+
+    const apiError = ref({
+        login: [],
+        register: []
+    })
+
+
+    const loginLoading = ref(false)
+    const registerLoading = ref(false)
 
     const login = async () => {
-        loading.value = true;
+        loginLoading.value = true;
         const response = await useBaseOFetch(
             "auth/login",
             {
                 body: JSON.stringify({ ...user.value }),
                 method: "POST",
+                onResponseError: (errorReponse) => {
+                    apiError.value.login = [[errorReponse.response._data.error]]
+                }
             }
-        );
+        ).finally(() => {
+            loginLoading.value = false;
+        });
+
+        console.log(response, 'response')
 
         if (!response.error) {
-            const token = useCookie("auth.token");
+            apiError.value.login = []
             token.value = response.token
             return true
         } else {
-
+            token.value = null
             console.log(response.error)
             return false
         }
+
+
     };
 
 
-    return { isAuthanticated, user, login }
+
+    const registerUser = async () => {
+        registerLoading.value = true;
+        const response = await useBaseOFetch(
+            "auth/register",
+            {
+                body: JSON.stringify({ ...register.value }),
+                method: "POST",
+                onResponseError: (errorReponse) => {
+
+                     apiError.value.register = errorReponse.response._data
+                }
+            }
+        ).finally(() => {
+            registerLoading.value = false;
+        });
+
+        if (!response.error) {
+            apiError.value.register = null
+            token.value = response.token
+            return true
+        } else {
+            token.value = null
+            console.log(response.error)
+            return false
+        }
+
+
+    };
+
+
+
+
+    return { isAuthanticated, user, register, loginLoading, registerLoading, apiError, login, registerUser }
 })
