@@ -11,10 +11,10 @@ const { useCartState } = useStateIndex()
 const cartState = useCartState()
 const nuxtApp = useNuxtApp()
 const router = useRouter()
+await cartState.cartDBToState()
+
 onMounted(async () => {
   $changeMainState({ isLoaded: true });
- await cartState.cartDBToState()
-
 });
 
 watch(router.currentRoute, () => {

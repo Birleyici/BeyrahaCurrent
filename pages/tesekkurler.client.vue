@@ -18,9 +18,12 @@
         </div>
         <div class="lg:grid lg:grid-cols-3 gap-10">
           <div class="col-span-2">
-            <b>Sipariş içeriği</b>
 
-            <PartialsOrderSummary :item="item" v-for="item in order.order_items || []" :key="item.id" />
+         <div class="grid gap-4">
+          <b>Sipariş içeriği</b>
+
+          <PartialsOrderSummary :item="item" v-for="item in order.order_items || []" :key="item.id" />
+         </div>
 
             <div class="my-orta lg:grid lg:grid-cols-3">
               <div class="col-span-2"></div>

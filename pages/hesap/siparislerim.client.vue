@@ -7,10 +7,7 @@
       </div>
       <div class="col-span-3 mt-minimal lg:mt-0">
         <div class="space-y-minimal">
-          <PartialsOrderItem
-            v-for="order in orderState.orders"
-            :item="order"
-          ></PartialsOrderItem>
+          <PartialsOrderItem v-for="order, index in orderState.orders" :item="order" :index="index"></PartialsOrderItem>
         </div>
       </div>
     </div>
@@ -20,10 +17,5 @@
 <script setup>
 const { useOrderState } = useStateIndex()
 const orderState = useOrderState()
-
-onMounted(async () => {
-
-  await orderState.getOrders()
-  
-})
+await orderState.getOrders()
 </script>

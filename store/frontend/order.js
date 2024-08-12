@@ -59,9 +59,16 @@ export const useOrderState = defineStore('orderState', () => {
                 body: JSON.stringify(item)
             })
 
+console.log(response)
             if (!response.error) {
-                await setDefaultFalseOtherAddresses(response.id)
-                addresses.value.unshift(response)
+
+                if (response.isNew) {
+                    await setDefaultFalseOtherAddresses(response.id)
+                    addresses.value.unshift(response)
+                } else {
+                    const index = addresses.value.findIndex(item => item.id === response.id)
+                    addresses.value[index] = response
+                }
             }
             isOpenAddressModal.value = false
             return
@@ -86,11 +93,11 @@ export const useOrderState = defineStore('orderState', () => {
             body: JSON.stringify({ addressId: id }),
         });
 
-        if(!response.error){
+        if (!response.error) {
             setDefaultFalseOtherAddresses(id)
         }
     }
-    
+
 
     const deleteAddress = (id) => {
 
@@ -105,21 +112,23 @@ export const useOrderState = defineStore('orderState', () => {
         cities.value = response
     }
 
-    const fetchDistricts = async () => {
+    const fetchDistricts = async (isEditing = false) => {
 
-        newAddress.value.district = null
+        if (!isEditing) {
+            newAddress.value.district = null
+        }
         const response = await useBaseOFetch(`cities/${newAddress.value?.city?.id}/districts`)
         districts.value = response
 
     }
 
 
-    const editAddress = (id) => {
+    const editAddress = async (id) => {
 
         isOpenAddressModal.value = true
         const editingObj = addresses.value.find(address => address.id === id)
         newAddress.value = toRaw({ ...editingObj })
-
+        await fetchDistricts(true)
     }
 
 
@@ -150,18 +159,24 @@ export const useOrderState = defineStore('orderState', () => {
         })
     }
 
-    const fetchAddresses = async()=>{
-      if(mainState.isAuthenticated){
-        const response = await useBaseOFetchWithAuth('addresses')
-        addresses.value = response
-      }
+    const fetchAddresses = async () => {
+        if (mainState.isAuthenticated) {
+            const response = await useBaseOFetchWithAuth('addresses')
+            addresses.value = response
+        }
     }
 
     const getOrders = async () => {
         const response = await useBaseOFetchWithAuth(`orders`);
         orders.value = response;
-      };
+    };
 
+
+    watch(isOpenAddressModal, () => {
+        if (!isOpenAddressModal.value) {
+            newAddress.value = copyNewAddress
+        }
+    })
 
     return {
         orderOptions,

@@ -1,5 +1,5 @@
 <template>
-    <div :class="{'animate-pulse': loading}" class="grid  w-full border rounded-md relative ">
+    <div :class="{'animate-pulse': loading}" class="grid  w-full border rounded-md relative overflow-hidden">
         <div class="grid gap-2 w-full">
             <b>{{ props.title }}</b>
             <div class="grid grid-cols-6">
@@ -39,6 +39,9 @@
                 <!-- <UButton @click="isOpenDeleteModal = true" color="red" class="p-0" variant="link">Sil</UButton> -->
 
             </div>
+
+
+            
         </div>
     </div>
 </template>

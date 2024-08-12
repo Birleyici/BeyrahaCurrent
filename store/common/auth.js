@@ -1,8 +1,7 @@
 import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore('authStore', () => {
-    const token = useCookie("auth.token");
-    const isAuthanticated = ref(false)
+    const token = ref('');
     const user = ref({
         email: '',
         password: ''
@@ -64,7 +63,7 @@ export const useAuthStore = defineStore('authStore', () => {
                 method: "POST",
                 onResponseError: (errorReponse) => {
 
-                     apiError.value.register = errorReponse.response._data
+                    apiError.value.register = errorReponse.response._data
                 }
             }
         ).finally(() => {
@@ -87,5 +86,10 @@ export const useAuthStore = defineStore('authStore', () => {
 
 
 
-    return { isAuthanticated, user, register, loginLoading, registerLoading, apiError, login, registerUser }
-})
+    return { user, register, loginLoading, registerLoading, apiError, token, login, registerUser }
+},
+    {
+        persist: {
+            storage: persistedState.localStorage,
+        },
+    })
