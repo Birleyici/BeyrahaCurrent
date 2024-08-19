@@ -27,16 +27,13 @@
             class="absolute bg-slate-100 w-full h-full z-[2] opacity-40 flex items-center justify-center">
             <Icon name="mdi:loading" class="w-12 h-12 animate-spin"></Icon>
           </div>
+
           <div class="grid grid-cols-3 gap-4">
             <PartialsProductCard :product="product" v-for="product in props.products.data">
             </PartialsProductCard>
           </div>
         </div>
-        <div class="flex justify-center">
-          <div>
-            <UPagination v-model="query.page" :page-count="query.limit" :total="props.products.total || 0" />
-          </div>
-        </div>
+      
       </div>
     </div>
   </div>

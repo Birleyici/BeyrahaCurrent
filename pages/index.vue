@@ -31,6 +31,9 @@
 const { useProductState } = useStateIndex()
 const productState = useProductState()
 const { getProducts } = useProduct()
-await getProducts({piece:5})
 
+await useAsyncData("initIndexPageData", async () => {
+  await getProducts({piece:5})
+  return true
+})
 </script>

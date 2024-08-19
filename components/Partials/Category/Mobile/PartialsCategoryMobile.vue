@@ -113,15 +113,7 @@
         </PartialsProductCard>
       </div>
     </div>
-    <div class="flex justify-center">
-      <div>
-        <UPagination
-          v-model="query.page"
-          :page-count="query.limit"
-          :total="props.products?.total || 0"
-        />
-      </div>
-    </div>
+   
   </div>
 </template>
 
@@ -132,7 +124,6 @@ const isOpenFiltersSlideOver = ref(false);
 const isOpenCategorySlideOver = ref(false);
 const props = defineProps(["products", "loading"]);
 const uSelect = defineModel("uSelect");
-const query = defineModel("query");
 
 const sortOptions = [
   {

@@ -6,6 +6,9 @@ export const useVariationsFront = () => {
     const productState = useProductState();
     const variationsFrontState = useVariationsFrontState()
     const attributeState = useAttributeState()
+    const router = useRouter()
+    const nuxtApp = useNuxtApp()
+
 
     const fetchVariationsForFrontEnd = async (productId) => {
 
@@ -20,18 +23,19 @@ export const useVariationsFront = () => {
     };
 
     function transform(attributes, variations) {
-
-
         let newAttrs = [];
+    
         attributes.forEach((a) => {
             const obj = {};
             obj.name = a.attribute_name;
-
-            // Yalnızca varyasyonlarda bulunan attribute ve term'leri ekle
-            const termDetails = a.product_terms.filter(term => {
-                return variations.some(variation => variation.attributes[a.attribute_name] === term.term_name);
+    
+            // Include all terms for the Renk attribute regardless of variations
+            const isRenkAttribute = a.attribute_name === 'Renk';
+            const termDetails = a.product_attribute_terms.filter(term => {
+                return isRenkAttribute || variations.some(variation => variation.attributes[a.attribute_name] === term.term_name);
             }).map(item => {
                 return {
+                    term_id: item.product_attribute_term_id,
                     term_name: item.term_name,
                     term_images: item.term_images.map((image) => ({
                         id: image.id,
@@ -39,14 +43,19 @@ export const useVariationsFront = () => {
                     }))
                 };
             });
-
-            if (termDetails.length > 0) {
+    
+            // Add the attribute if it has term details or if it's the Renk attribute
+            if (termDetails.length > 0 || isRenkAttribute) {
                 obj.options = termDetails;
                 newAttrs.push(obj);
             }
         });
+    
         return newAttrs || [];
     }
+    
+    
+    
 
     const filteredVariations = computed(() => {
         return variationsFrontState.variations.filter(variation => {
@@ -75,7 +84,7 @@ export const useVariationsFront = () => {
         }
 
         // İlk tam eşleşen varyasyonu bul
-        let selectedVariation = variationsFrontState.variations.find((variation) => {
+        let selectedVariation = variationsFrontState.variations?.find((variation) => {
             return Object.keys(selectedOptions.value).every((key) => {
                 return variation.attributes[key] === selectedOptions.value[key];
             });
@@ -83,7 +92,7 @@ export const useVariationsFront = () => {
 
         // Eğer tam eşleşen bir varyasyon bulamazsanız, kısmi eşleşen varyasyonu bul
         if (!selectedVariation) {
-            selectedVariation = useVariationsFrontState.variations.find((variation) => {
+            selectedVariation = useVariationsFrontState.variations?.find((variation) => {
                 return Object.keys(selectedOptions.value).every((key) => {
                     return (
                         !variation.attributes[key] ||
@@ -97,11 +106,29 @@ export const useVariationsFront = () => {
     });
 
 
+
     const selectedOptions = ref({});
 
     const selectOption = (attributeName, option, colorTerm = null) => {
+
+
         if (colorTerm) {
             productState.product.selectedColorTermImages = colorTerm.term_images;
+           
+            
+            if (process.client) {
+                const currentSlug = router.currentRoute.value.params.slug;
+                const newParams = nuxtApp.$slugify(colorTerm.term_name, { lower: true }) + '-' + colorTerm.term_id
+                const newUrl = '/urun/' + currentSlug + '--' + newParams
+                
+                router.currentRoute.value.params.urlParams = newParams
+                // Preserve the current history state
+                const currentState = window.history.state;
+                
+                window.history.replaceState(currentState, '', newUrl);
+            }
+
+            
         }
 
         selectedOptions.value = { ...selectedOptions.value, [attributeName]: option };
@@ -132,6 +159,7 @@ export const useVariationsFront = () => {
         isActive,
         selectOption,
         isSelected,
+        selectedOptions,
         getSelectedVariation,
         transform,
         getTermImageSrc

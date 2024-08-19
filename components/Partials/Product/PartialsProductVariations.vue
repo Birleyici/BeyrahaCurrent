@@ -6,10 +6,15 @@
         <div class="mb-4">
           <div class="my-minimal" v-if="attribute.name.toLowerCase() == 'renk'">
             <div>
-              <p class="font-medium text-sm">Renk</p>
+
+              <div class="flex space-x-2 items-center">
+                <p class="font-medium text-sm">Renk:</p>
+                <p class="text-sm">{{ selectedOptions['Renk'] }}</p>
+              </div>
+
               <UCarousel v-if="$mainState.isLoaded" v-slot="{ item }" :items="attribute.options"
                 :ui="{ item: 'snap-end' }">
-                <NuxtImg @click="selectOption(attribute.name, item.term_name, item)"
+                <NuxtImg @click="selectColorOption(attribute.name, item.term_name, item)"
                   :src="getTermImageSrc(item, item.term_name)" width="60"
                   class="cursor-pointer m-1 rounded-full p-[2px] border w-16 h-16 object-cover object-top" :class="{
                     'border-2 !border-secondary-500 text-white': isSelected(
@@ -71,6 +76,7 @@
       <div class="inline-block">
         <UiFormCounter v-model="qyt"></UiFormCounter>
       </div>
+      
       <UButton :loading="loading" @click="addToCart()" :disabled="isActiveAddToCartButton" color="secondary"
         class="!rounded-full font-bold !flex relative text-sm lg:!px-12 px-6 overflow-hidden">
         <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
@@ -78,7 +84,6 @@
         <p>SEPETE EKLE</p>
       </UButton>
     </div>
-
   </div>
 </template>
 
@@ -88,10 +93,12 @@ const { useCartState } = useStateIndex()
 const cartState = useCartState()
 const loading = ref(false)
 const qyt = ref(1)
+const currentRoute = useRouter().currentRoute.value
 const {
   isActive,
   selectOption,
   isSelected,
+  selectedOptions,
   getSelectedVariation,
   getTermImageSrc,
 } = useVariationsFront();
@@ -101,42 +108,66 @@ const isActiveAddToCartButton = computed(() => {
   return getSelectedVariation.value === null
 })
 
+const selectedColor = ref(null)
+const selectColorOption = (attributeName, termName, item)=>{
+
+  selectedColor.value = item
+  selectOption(attributeName, termName, item)
+
+}
+
+const initialColor = () => {
+  const colorTermId = currentRoute.params?.urlParams.split('-')[1]
+  if (colorTermId) {
+    const color = props.attrsAndVarsState.find(i => i.name === 'Renk');
+    const colorTerm = color?.options.find(c => c.term_id === parseInt(colorTermId))
+    selectedColor.value = colorTerm
+    selectOption('Renk', colorTerm?.term_name, colorTerm)
+  }
+};
+initialColor()
 
 const addToCart = () => {
-
-  if(qyt.value == 0){
-    return
-  } 
-
-  const newCartItem = {
-    product_id: props.productState.product.id,
-    product_name: props.productState.product.name,
-    product_thumb: props.productState.product.selectedColorTermImages[0] || props.productState.product.selectedImages[0],
-    qyt: parseInt(qyt.value),
-    variation: getSelectedVariation.value
+  // Eğer miktar 0 ise işlemi durdur
+  if (qyt.value == 0) {
+    return;
   }
+  // Ürünün varyasyonlu olup olmadığını kontrol et
+  const selectedVariation = getSelectedVariation.value;
 
-  cartState.patchCart(newCartItem, parseInt(qyt.value))
-
-  // useNuxtApp().$mainState.isAuthenticated
-  if (false) {
-
-    //Vertabanına ekleme işlemleri
-
+  // Eğer varyasyon yoksa, basit ürün olarak ekleme yap
+  let newCartItem = {
+    product_attribute_term_id: selectedColor.value.term_id
+  };
+  if (selectedVariation) {
+    // Varyasyonlu ürün için
+    newCartItem = {
+      ...newCartItem,
+      product_id: props.productState.product.id,
+      product_name: `${props.productState.product.name} `, // Varyasyon adını ekle
+      product_thumb: selectedVariation.images?.[0] || props.productState.product.selectedColorTermImages[0] || props.productState.product.selectedImages[0],
+      qyt: parseInt(qyt.value),
+      variation: selectedVariation,
+      price: selectedVariation.sale_price ? selectedVariation.sale_price : selectedVariation.price, // Varyasyonun fiyatını ekle
+      total: (selectedVariation.sale_price ? selectedVariation.sale_price : selectedVariation.price) * parseInt(qyt.value) // Toplam tutarı hesapla
+    };
   } else {
-
-    loadingEffect()
-
+    // Basit ürün için
+    newCartItem = {
+      ...newCartItem,
+      product_id: props.productState.product.id,
+      product_name: props.productState.product.name + ' - ' + selectedColor.value.term_name,
+      product_thumb: props.productState.product.selectedColorTermImages[0] || props.productState.product.selectedImages[0],
+      qyt: parseInt(qyt.value),
+      price: props.productState.product.sale_price ? props.productState.product.sale_price : props.productState.product.price, // Ürünün fiyatını ekle
+      total: (props.productState.product.sale_price ? props.productState.product.sale_price : props.productState.product.price) * parseInt(qyt.value) // Toplam tutarı hesapla
+    };
   }
 
-}
+  // Sepeti güncelle
+  cartState.patchCart(newCartItem, parseInt(qyt.value));
+};
 
-const loadingEffect = () => {
 
-  loading.value = true
-  setTimeout(() => {
-    loading.value = false
-  }, 500);
-}
 
 </script>

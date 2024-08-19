@@ -37,7 +37,6 @@ export const useAuthStore = defineStore('authStore', () => {
             loginLoading.value = false;
         });
 
-        console.log(response, 'response')
 
         if (!response.error) {
             apiError.value.login = []

@@ -114,7 +114,7 @@ const isOpenMediaModal = ref(false);
 const currentTab = ref("GeneralTab");
 const route = useRoute();
 if (route.params.id == "yeni") {
-  productState.product.$reset();
+  productState.product = productState.newProduct
 } else {
   await getProduct(route.params.id);
 }

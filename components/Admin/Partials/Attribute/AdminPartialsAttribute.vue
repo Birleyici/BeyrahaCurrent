@@ -44,14 +44,14 @@
         </div>
 
         <div class="mt-4">
-          <p class="text-sm font-medium mb-2" v-if="props.item.product_terms.length > 0">
+          <p class="text-sm font-medium mb-2" v-if="props.item.product_attribute_terms.length > 0">
             Nitelik terimleri:
           </p>
 
           <div class="flex space-x-2">
-            <div v-for="term in props.item.product_terms">
+            <div v-for="term in props.item.product_attribute_terms">
               <UiBadgesBadge
-                @is-click="removeTerm(term, props.item.product_terms)"
+                @is-click="removeTerm(term, props.item.product_attribute_terms)"
                 class="m-1"
               >
                 {{ term.term_name }}

@@ -36,13 +36,13 @@
           
           <div class="grid mt-4">
             <div>
-              <p class="text-sm font-medium mb-2" v-if="props.item.product_terms.length > 0">
+              <p class="text-sm font-medium mb-2" v-if="props.item.product_attribute_terms.length > 0">
                 Nitelik terimleri:
               </p>
 
               <div class="grid">
-                <div v-for="term in props.item.product_terms">
-                  <AdminPartialsAttributeColorTerm :term="term" :terms="props.item.product_terms" />
+                <div v-for="term in props.item.product_attribute_terms">
+                  <AdminPartialsAttributeColorTerm :term="term" :terms="props.item.product_attribute_terms" />
                 </div>
               </div>
             </div>

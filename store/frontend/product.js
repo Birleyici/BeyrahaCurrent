@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 
 export const useProductState = defineStore('productState', () => {
 
+
   const product = ref({
     id: null,
     name: "",
@@ -23,6 +24,10 @@ export const useProductState = defineStore('productState', () => {
     categories: [],
     featured_infos: [],
   })
+
+  const newProduct = toRaw({ ...product.value })
+
+
   const products = ref([])
   const categoryProducts = ref([])
   const vendorProducts = ref([])
@@ -39,9 +44,14 @@ export const useProductState = defineStore('productState', () => {
     vendorProducts.value = obj
   }
 
-  const fetchProduct = async (productIdOrSlug) => {
+  const fetchProduct = async (params) => {
 
-    const response = await useBaseOFetch(`product/${productIdOrSlug}`)
+    const response = await useBaseOFetch(`product/${params.slug}`, {
+      params: {
+        urlParams: params.urlParams
+      },
+      method: 'GET'
+    })
 
     patchProduct({ ...response })
 
@@ -65,5 +75,5 @@ export const useProductState = defineStore('productState', () => {
 
   }
 
-  return { product, products, categoryProducts, vendorProducts, fetchProduct, fetchCategoryProducts, patchProduct, patchCategoryProducts, patchVendorProducts }
+  return { product, newProduct, products, categoryProducts, vendorProducts, fetchProduct, fetchCategoryProducts, patchProduct, patchCategoryProducts, patchVendorProducts }
 })

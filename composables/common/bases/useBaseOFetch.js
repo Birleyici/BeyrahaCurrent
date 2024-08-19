@@ -17,7 +17,6 @@ export async function useBaseOFetch(url, options = {}) {
     console.log("Request successful");
     return response;
   } catch (error) {
-   
       console.error("Request failed:", error);
       throw error;
   }

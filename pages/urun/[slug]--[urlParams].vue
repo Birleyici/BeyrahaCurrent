@@ -1,11 +1,9 @@
 <template>
   <div class="lg:px-x-desktop max-w-full">
-
     <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
       <div class="col-span-3" v-if="$mainState.isLoaded">
         <PartialsProductImageGallery :images="selectedImages" />
       </div>
-
       <SkeletonProductGallery v-else></SkeletonProductGallery>
 
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
@@ -13,7 +11,6 @@
           {{ productState.product.name }}
         </h1>
         <UDivider class="my-2" type="dashed" />
-
         <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
           :product-state="productState">
         </PartialsProductVariations>
@@ -35,6 +32,7 @@
         :attributes="attrsAndVarsState.attributes" />
     </div>
     <ClientOnly>
+
       <LazyUiSlidesProductSlide title="Benzer ürünler" :products="productState.categoryProducts">
       </LazyUiSlidesProductSlide>
     </ClientOnly>
@@ -55,17 +53,19 @@ const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
 const attrsAndVarsState = useAttrsAndVarsState();
 
-const slug = useRoute().params.slug;
+const route = useRoute();
+
 const { transform } = useVariationsFront();
 
 await useAsyncData("initProductPageData", async () => {
-  const response = await productState.fetchProduct(slug)
+  const response = await productState.fetchProduct(route.params)
   await variationsFrontState.fetchVariations(response.id)
-  await attributeState.fetchAttributes(response.id)
+  await attributeState.fetchAttributes(response.id, route.params)
   return true
 })
 
-onMounted(()=>{
+
+onMounted(() => {
   productState.fetchCategoryProducts(productState.product.selectedCategories)
 })
 
@@ -80,7 +80,4 @@ const selectedImages = computed(() => {
     : productState.product.selectedImages;
 });
 
-// if (!productState.product.id) {
-//     navigateTo('/')
-// }
 </script>

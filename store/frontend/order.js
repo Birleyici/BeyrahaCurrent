@@ -59,7 +59,6 @@ export const useOrderState = defineStore('orderState', () => {
                 body: JSON.stringify(item)
             })
 
-console.log(response)
             if (!response.error) {
 
                 if (response.isNew) {

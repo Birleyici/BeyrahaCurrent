@@ -2,10 +2,18 @@
 
   <div class="px-x-mobil lg:px-x-desktop ">
     <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
-      v-model:query="query" :loading="loading" />
-    <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products" v-model:query="query"
       :loading="loading" />
+    <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products" :loading="loading" />
+    <div class="text-center mt-4 bg-slate-50 p-4 rounded-md" v-if="loading">Ürünler yükleniyor</div>
+    <!-- <div class="flex justify-center">
+      <div>
+        <UPagination v-model="query.page" :page-count="query.limit" :total="productState.products.total || 0" />
+      </div>
+    </div> -->
+    <div id="finishProducts"></div>
   </div>
+
+
 </template>
 
 <script setup>
@@ -16,14 +24,28 @@ const { getProducts } = useProduct();
 const { getCategories } = useCategory();
 const route = useRoute();
 const router = useRouter();
+const nuxtApp = useNuxtApp()
 
 const query = ref({
   page: parseInt(route.query.page) || 1,
-  limit: 3,
   sort: route.query.sort || 'default', // Etkisiz başlangıç değeri
 });
 
-await getCategories();
+
+const page = ref(1)
+useScrollEnd('finishProducts', () => {
+  if(query.value.page < productState.products.total){
+    query.value.page ++
+  }
+});
+
+
+await useAsyncData("initCategoryPageData", async () => {
+  await getCategories();
+  return true
+})
+
+
 
 const selectedCategoryIds = computed(() => {
   return categoryState.selectedCategories.map(category => category.id);
@@ -34,7 +56,6 @@ const selectedCategoryIds = computed(() => {
 const loading = ref(false);
 
 watch([query, selectedCategoryIds], async () => {
-
 
   loading.value = true;
 
@@ -54,9 +75,7 @@ watch([query, selectedCategoryIds], async () => {
 
   pushQueryParams()
 
-  setTimeout(() => {
-    loading.value = false;
-  }, 100);
+  loading.value = false;
 },
   {
     deep: true,

@@ -1,24 +1,28 @@
 // findObjectIndex fonksiyonu
- export function findObjectIndex(array, objectToFind, excludeKey) {
-  toRaw(array)
-  toRaw(objectToFind)
+export function findObjectIndex(array, objectToFind, excludeKeys) {
+  // Convert the objectToFind to raw data
+  const rawObjectToFind = toRaw(objectToFind);
+
+  // Filter and sort keys, then convert to a comparable string
   const filteredObjectToFind = JSON.stringify(
-    Object.keys(objectToFind)
-      .filter(key => key !== excludeKey)
+    Object.keys(rawObjectToFind)
+      .filter(key => !excludeKeys.includes(key))
       .sort()
       .reduce((obj, key) => {
-        obj[key] = objectToFind[key];
+        obj[key] = rawObjectToFind[key];
         return obj;
       }, {})
   );
 
-  return array.findIndex(obj => {
+  // Convert array objects to raw and compare
+  return array.findIndex(item => {
+    const rawItem = toRaw(item);
     const filteredObj = JSON.stringify(
-      Object.keys(obj)
-        .filter(key => key !== excludeKey)
+      Object.keys(rawItem)
+        .filter(key => !excludeKeys.includes(key))
         .sort()
         .reduce((newObj, key) => {
-          newObj[key] = obj[key];
+          newObj[key] = rawItem[key];
           return newObj;
         }, {})
     );

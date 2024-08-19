@@ -1,7 +1,8 @@
 <template>
   <div class="border rounded-md max-w-[250px]">
     <div class="relative overflow-hidden cursor-pointer">
-      <NuxtLink :to="`/urun/${productState.product.slug}`">
+      <NuxtLink :to="productState.product.product_url">
+        
         <NuxtImg
           v-if="productState.product.coverImage"
           :src="`aws/${productState.product.coverImage}`"
@@ -21,7 +22,7 @@
     </div>
     <div class="p-4">
       <div class="text-sm text-center font-medium">
-        <NuxtLink :to="'/urun/' + productState.product.slug">
+        <NuxtLink :to="productState.product.product_url">
           {{ productState.product.name }}
         </NuxtLink>
       </div>
@@ -37,5 +38,6 @@
 
 <script setup>
 const productState = defineProps(['product'])
-const img_placeholder = '/img-placeholder.jpg' 
+const img_placeholder = '/img-placeholder.jpg'
+ 
 </script>

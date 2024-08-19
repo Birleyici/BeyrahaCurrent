@@ -67,9 +67,9 @@ const placeholderImage = "/img-placeholder.jpg";
 
 const images = computed(() => {
   return props.images && props.images.length > 0
-    ? props.images.map((image) => ({
-        ...image,
-        path: image.path || placeholderImage,
+    ? props.images.map((i) => ({
+        ...i,
+        path: i.path || placeholderImage,
       }))
     : [{ id: 0, path: placeholderImage, alt: "Placeholder Image", placeholder: true }];
 });

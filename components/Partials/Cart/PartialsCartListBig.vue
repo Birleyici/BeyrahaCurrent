@@ -7,7 +7,7 @@
                 </NuxtImg>
                 <div>
                     <p class="font-medium">{{ props.item.product_name }}</p>
-                    <div v-for="(value, key) in props.item.variation.attributes">
+                    <div v-for="(value, key) in props.item.variation?.attributes">
 
                         <div class="flex space-x-2 items-center">
                             <b>{{ key }} :</b>

@@ -13,16 +13,25 @@ export function useProduct() {
 
         const params = piece ? { piece } : { ...filters };
 
-
-
         const response = await useBaseOFetchWithAuth(`products`,
             {
                 params
             }
         )
 
+console.log(response)
+        if(piece){
+            productState.products = response
+        } else {
+            
+            if(filters.page == 1){
+                productState.products = response
+            } else {
+                const dataArray = Object.values(response.data);
+                productState.products.data.push(...dataArray);
+            }
 
-        productState.products = response
+        }
 
         if (process.client && 'page' in filters) {
             localStorage.setItem("prevPage", filters.page);

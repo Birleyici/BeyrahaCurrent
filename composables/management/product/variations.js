@@ -10,42 +10,6 @@ export const useVariations = () => {
 
 
 
-    const fetchVariationsForFrontEnd = async () => {
-
-        const {
-            data, error
-        } = await useBaseOFetchWithAuth("page/products/" + productState.product.id + "/variations");
-
-        if (data.value && !error.value) {
-
-            attrsAndVarsState.variations = data.value
-        }
-
-    }
-
-
-    // Tüm varyasyonları döndüren computed property
-    const filteredVariations = computed(() => {
-        return attrsAndVarsState.variations.filter(variation => {
-            // Price ve sale_price her ikisi de null veya boş olanları filtrele
-            return variation.price || variation.sale_price;
-        });
-    });
-
-    // Seçeneklerin aktif olup olmadığını kontrol eden computed property
-    const isActive = computed(() => (attributeName, option) => {
-        let tempSelected = { ...selectedOptions.value, [attributeName]: option };
-
-        return filteredVariations.value.some((variation) => {
-            return Object.keys(tempSelected).every((key) => {
-                if (!variation.attributes[key]) return true; // Öznitelik varyasyonda yoksa doğru olarak kabul ediyoruz.
-                return variation.attributes[key] === tempSelected[key];
-            });
-        });
-    });
-
-
-
 
     const deleteVariationOnState = (id) => {
         attrsAndVarsState.variations = attrsAndVarsState.variations.filter(variation => variation.id !== id);
@@ -80,39 +44,7 @@ export const useVariations = () => {
 
     const selectedOptions = ref({});
 
-    const selectOption = (attributeName, option, colorTerm = null) => {
 
-        if (colorTerm) {
-            productState.product.selectedColorTermImages = colorTerm.term_images
-        }
-
-
-
-        selectedOptions.value = { ...selectedOptions.value, [attributeName]: option };
-
-        //varyasyona ait image varsa selectedImages'in en başına unshiftliyoruz.
-        if (getSelectedVariation.value.image) {
-
-            const selectedVarImg = { ...getSelectedVariation.value.image, added: true }
-            if (productState.product.selectedImages[0]?.added) {
-                productState.product.selectedImages[0] = selectedVarImg
-            } else {
-                productState.product.selectedImages.unshift(selectedVarImg)
-            }
-
-
-        } else if (productState.product.selectedImages[0]?.added) {
-
-            productState.product.selectedImages.shift()
-
-        }
-    };
-
-
-
-    const isSelected = (attributeName, option) => {
-        return selectedOptions.value[attributeName] === option;
-    };
 
     const createOneVariation = async () => {
         // Öncelikle, useForVariation değeri 1 olan herhangi bir attribute olup olmadığını kontrol edin.
@@ -188,7 +120,7 @@ export const useVariations = () => {
     async function createAllVariation(productId) {
         // Tüm nitelikleri ve bu niteliklere ait termleri alalım.
         const attributesWithTerms = attributeState.attributes.filter(
-            (attribute) => attribute.product_terms && attribute.product_terms.length > 0
+            (attribute) => attribute.product_attribute_terms && attribute.product_attribute_terms.length > 0
         );
 
         // Tüm kombinasyonları oluşturmak için bir yardımcı fonksiyon
@@ -201,7 +133,7 @@ export const useVariations = () => {
 
         // Tüm termleri bir diziye alalım.
         const termsArrays = attributesWithTerms.map((attribute) =>
-            attribute.product_terms.map((term) => term.product_term_id)
+            attribute.product_attribute_terms.map((term) => term.product_attribute_term_id)
         );
 
         // Tüm kombinasyonları oluşturalım.
@@ -219,8 +151,8 @@ export const useVariations = () => {
             product_id: productState.product.id,
             terms: combination.map((termId, index) => ({
                 product_variation_id: null, // Bu değer varyasyon oluşturulduktan sonra atanacak.
-                product_term_id: termId,
-                product_term: {
+                product_attribute_term_id: termId,
+                product_attribute: {
                     product_attribute_id: attributesWithTerms[index].product_attribute_id,
                     term_id: termId,
                 },
@@ -277,23 +209,6 @@ export const useVariations = () => {
     };
 
 
-    const findValueInAttrs = (
-        data,
-        product_term_id,
-        attribute_id,
-        attribute_name
-    ) => {
-        const attribute = data.find((e) => e.product_attribute_id == attribute_id);
-
-        // Eğer belirli bir attribute_id'ye sahip öğe bulunmazsa, hemen bir default değer döndürelim.
-        if (!attribute) return `Herhangi Bir ${attribute_name}`;
-
-        const term = attribute.product_terms?.find(
-            (d) => d.product_term_id == product_term_id
-        );
-
-        return term?.term_name || `Herhangi Bir ${attribute.attribute_name}`;
-    };
 
    
 
@@ -301,10 +216,6 @@ export const useVariations = () => {
 
     return {
         deleteVariationOnState,
-        fetchVariationsForFrontEnd,
-        isActive,
-        selectOption,
-        isSelected,
         getSelectedVariation,
         createOneVariation,
         createAllVariation,

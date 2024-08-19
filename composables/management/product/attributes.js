@@ -25,7 +25,7 @@ export const useAttributes = () => {
                 useForVariation: false,
                 showProductPage: true,
                 termWord: "",
-                product_terms: [],
+                product_attribute_terms: [],
             });
         }
     }
@@ -34,9 +34,9 @@ export const useAttributes = () => {
         if (
             term.termWord &&
             term.termWord.length <= 25 &&
-            !term.product_terms.some((t) => t.term_name === term.termWord)
+            !term.product_attribute_terms.some((t) => t.term_name === term.termWord)
         ) {
-            term.product_terms.push({ term_name: term.termWord });
+            term.product_attribute_terms.push({ term_name: term.termWord });
             term.termWord = "";
         }
     };

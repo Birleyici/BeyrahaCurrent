@@ -40,12 +40,22 @@ export default defineNuxtConfig({
 
   },
   //runtime public base url tanımlayacağız
+
+
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL,
       nuxtSecret: process.env.NUXT_SECRET,
       isDevelopment: process.env.NODE_ENV !== 'production' ? true : false,
-    }
+      slugify: {
+        extend: {
+          // Your slugify extension characters here
+        },
+        defaults: {
+          lower: true, // Example default option
+        },
+      },
+    },
   },
   modules: [
     '@pinia/nuxt',
@@ -56,9 +66,6 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/device',
     '@pinia-plugin-persistedstate/nuxt',
-
-
-
   ],
 
   tailwindcss: {

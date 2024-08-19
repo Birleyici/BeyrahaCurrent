@@ -45,7 +45,9 @@ export const useCartState = defineStore('cartState', () => {
       obj.id = response.cartItem.id
     }
 
-    const existObjIndex = findObjectIndex(cart.value, obj, 'qyt')
+    const existObjIndex = findObjectIndex(cart.value, obj, ['qyt', 'total'])
+    
+    console.log(cart.value[existObjIndex])
 
     if (existObjIndex === -1) {
 
@@ -85,10 +87,17 @@ export const useCartState = defineStore('cartState', () => {
     }
 
     if (deleteCartItem.variation) {
-      cart.value = cart.value.filter(item => item.variation.id !== deleteCartItem.variation.id);
+      cart.value = cart.value.filter(item => 
+        !(item.variation.id === deleteCartItem.variation.id &&
+          item.product_attribute_term_id === deleteCartItem.product_attribute_term_id)
+      );
     } else {
-      cart.value = cart.value.filter(item => item.product_id !== deleteCartItem.product_id);
+      cart.value = cart.value.filter(item => 
+        !(item.product_id === deleteCartItem.product_id &&
+          item.product_attribute_term_id === deleteCartItem.product_attribute_term_id)
+      );
     }
+    
   }
 
 
