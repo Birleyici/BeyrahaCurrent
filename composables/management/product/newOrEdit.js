@@ -30,7 +30,7 @@ export function useProductCreate() {
         const isCoverSelected = productState.product.selectedImages.find(i => i.id == productState.product.coverImageId)
 
         if (!isCoverSelected) {
-            productState.product.coverImageId = 0
+            productState.product.coverImageId = null
         }
 
         try {

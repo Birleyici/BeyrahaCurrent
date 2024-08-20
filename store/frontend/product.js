@@ -9,7 +9,7 @@ export const useProductState = defineStore('productState', () => {
     name: "",
     description: "",
     additional_info: "",
-    coverImageId: 0,
+    coverImageId: null,
     selectedImages: [],
     selectedCategories: [],
     selectedColorTermImages: [],
@@ -75,5 +75,40 @@ export const useProductState = defineStore('productState', () => {
 
   }
 
-  return { product, newProduct, products, categoryProducts, vendorProducts, fetchProduct, fetchCategoryProducts, patchProduct, patchCategoryProducts, patchVendorProducts }
+
+  const getProducts = async ({ piece, filters = {} }) => {
+
+    // Eğer filters objesinde page yoksa, varsayılan olarak 1 ayarla
+    if (!('page' in filters)) {
+      filters.page = 1;
+    }
+
+    const params = piece ? { piece } : { ...filters };
+
+    const response = await useBaseOFetchWithAuth(`products`,
+      {
+        params
+      }
+    )
+
+    if (piece) {
+      products.value = response
+    } else {
+
+      //eğer sayfalama verileri yoksa
+      if (!products.value.total || filters.page == 1) {
+        products.value = response
+      } else {
+        const dataArray = Object.values(response.data);
+        products.value.data.push(...dataArray);
+      }
+
+    }
+
+    if (process.client && 'page' in filters) {
+      localStorage.setItem("prevPage", filters.page);
+    }
+  };
+
+  return { product, newProduct, products, categoryProducts, vendorProducts, fetchProduct, getProducts, fetchCategoryProducts, patchProduct, patchCategoryProducts, patchVendorProducts }
 })

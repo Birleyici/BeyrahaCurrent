@@ -22,8 +22,9 @@
       </div>
     </div>
     <div class="my-minimal">
-      <UiSlidesProductSlide :products="productState.products"></UiSlidesProductSlide>
+      <UiSlidesProductSlide :products="productState.products.data"></UiSlidesProductSlide>
     </div>
+
   </div>
 </template>
 

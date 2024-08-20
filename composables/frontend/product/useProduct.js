@@ -19,7 +19,8 @@ export function useProduct() {
             }
         )
 
-console.log(response)
+        console.log(response)
+
         if(piece){
             productState.products = response
         } else {

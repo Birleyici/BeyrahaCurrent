@@ -13,42 +13,47 @@
     <div id="finishProducts"></div>
   </div>
 
-
 </template>
 
 <script setup>
 const { useProductState, useCategoryState } = useStateIndex();
 const productState = useProductState();
 const categoryState = useCategoryState();
-const { getProducts } = useProduct();
-const { getCategories } = useCategory();
 const route = useRoute();
 const router = useRouter();
-const nuxtApp = useNuxtApp()
 
 const query = ref({
   page: parseInt(route.query.page) || 1,
   sort: route.query.sort || 'default', // Etkisiz başlangıç değeri
 });
 
-
-const page = ref(1)
 useScrollEnd('finishProducts', () => {
-  if(query.value.page < productState.products.total){
-    query.value.page ++
+  if (query.value.page < productState.products.last_page) {
+    query.value.page++
   }
 });
 
-
-await useAsyncData("initCategoryPageData", async () => {
-  await getCategories();
-  return true
-})
-
-
-
 const selectedCategoryIds = computed(() => {
   return categoryState.selectedCategories.map(category => category.id);
+});
+
+
+await useAsyncData('initDataProductss', async () => {
+  try {
+    await Promise.all([
+      productState.getProducts({
+        filters: {
+          ...query.value,
+          selectedCategoryIds: JSON.stringify(selectedCategoryIds.value)
+        }
+      }),
+      categoryState.getCategories(),
+    ]);
+    return [true, true];
+  } catch (error) {
+    console.error('Hata oluştu:', error);
+    return [false, false];
+  }
 });
 
 
@@ -66,7 +71,7 @@ watch([query, selectedCategoryIds], async () => {
     }
   }
 
-  await getProducts({
+  await productState.getProducts({
     filters: {
       ...query.value,
       selectedCategoryIds: JSON.stringify(selectedCategoryIds.value)
@@ -78,8 +83,7 @@ watch([query, selectedCategoryIds], async () => {
   loading.value = false;
 },
   {
-    deep: true,
-    immediate: true
+    deep: true
   });
 
 
