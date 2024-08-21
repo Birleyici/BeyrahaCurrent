@@ -5,51 +5,60 @@
     <div class="relative">
       <div class="items-center relative w-11/12 lg:w-full flex mx-auto">
         <input ref="searchInput" @focus="$changeMainState({ isOpenSearch: true })"
-          @blur="$changeMainState({ isOpenSearch: false })" type="text" v-model="searchWord"
+          @blur="handleBlur" @mousedown.stop type="text" v-model="searchWord"
           class="focus:p-3 rounded-xl w-full bg-slate-100 focus:bg-white px-4 py-2 focus:outline-0 duration-200 z-[4]"
           placeholder="Ara..." @keydown.enter="goSearch()" />
         <Icon v-if="!$mainState.isOpenSearch || ($mainState.isOpenSearch && !searchWord)" name="ph:magnifying-glass"
           class="w-6 h-6 absolute z-[10] right-2" color="black" />
         <Icon v-if="$mainState.isOpenSearch && searchWord" name="eos-icons:loading"
           class="w-6 h-6 absolute right-2 z-[5]" color="black" />
-
       </div>
       <div v-if="searchWord && $mainState.isOpenSearch"
-        class="min-h-[20px] p-4 bg-white w-full absolute z-10 right-0 top-[50px] rounded-xl">
+        class="min-h-[20px] p-4 bg-white w-full absolute z-10 right-0 top-[50px] rounded-xl results-container">
         <p v-if="productsSearched.length == 0" class="italic">Sonuç bulunamadı...</p>
         <div v-else class="grid gap-4">
-          <div v-for="p in productsSearched">
-            {{ p.name }}
+          <div v-for="p in productsSearched.slice(0, 6)" @mousedown.stop>
+            <NuxtLink :to="p.product_url">{{p.name}}</NuxtLink>
+          </div>
+          <div v-if="productsSearched.length > 3">
+            <UDivider type="dashed" />
+            <ULink @click.prevent="goSearch()" class="text-orange-500 mt-2">Tüm sonuçları gör</ULink>
           </div>
         </div>
       </div>
     </div>
-
   </div>
-  <div class="opacity-40 bg-black absolute bottom-0 top-0 right-0 left-0 w-full z-[3]" v-if="$mainState.isOpenSearch">
-  </div>
+  <div class="opacity-40 bg-black absolute bottom-0 top-0 right-0 left-0 w-full z-[3]" v-if="$mainState.isOpenSearch"></div>
 </template>
 
 <script setup>
 const { useProductState } = useStateIndex()
-const productState = useProductState()
-
-const { $mainState } = useNuxtApp()
+const productState = useProductState();
+const { $mainState } = useNuxtApp();
 const searchInput = ref(null);
-const router = useRouter()
-const route = useRoute()
+const router = useRouter();
+const route = useRoute();
 const searchWord = ref(route.query.searchWord);
-const nuxtApp = useNuxtApp()
-const goSearch = () => {
+const productsSearched = ref([]);
+
+function goSearch() {
   router.push({
-    path: 'kategori',
+    path: '/kategori',
     query: {
       searchWord: searchWord.value
     }
-  })
-  nuxtApp.$changeMainState({ isOpenSearch: false })
-  searchInput.value.blur()
+  });
+  $mainState.isOpenSearch = false;
+  searchInput.value.blur();
 }
+
+function handleBlur(event) {
+  // Eğer tıklanan element arama sonuçları içinde değilse blur işlemi yapılır
+  if (!event.relatedTarget || !event.relatedTarget.closest('.results-container')) {
+    $mainState.isOpenSearch = false;
+  }
+}
+
 watch(
   () => $mainState.isOpenSearch,
   (newValue) => {
@@ -61,13 +70,10 @@ watch(
   }
 );
 
-const productsSearched = ref([])
-
 watchEffect(async (onInvalidate) => {
   const controller = new AbortController();
   const signal = controller.signal;
 
-  // onInvalidate içindeki kod, watchEffect'in yeniden çalıştırılması durumunda önceki işlemi iptal eder.
   onInvalidate(() => controller.abort());
 
   try {
