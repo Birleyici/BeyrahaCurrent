@@ -1,6 +1,6 @@
 <template>
-  <div class="mt-minimal lg:mt-maximal " v-if="props.products?.length > 0">
-    <b class="text-md my-2">{{props.title}}</b>
+  <div class="mt-minimal lg:mt-maximal px-x-mobil" v-if="props.products?.length > 0">
+    <p class="text-md font-medium my-2">{{props.title}}</p>
     <UCarousel arrows v-slot="{ item }" :items="props.products" :ui="{ item: 'snap-end' }">
       <PartialsProductCard class="mr-4" :product="item" :key="item.id"></PartialsProductCard>
     </UCarousel>
