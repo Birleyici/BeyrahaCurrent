@@ -82,7 +82,7 @@ export const useAuthStore = defineStore('authStore', () => {
     };
 
 
-    const logout = ()=>{
+    const logout = () => {
         token.value = null
         user.value = {
             email: '',
@@ -97,9 +97,9 @@ export const useAuthStore = defineStore('authStore', () => {
     }
 
 
-    watch(()=>token.value, (newValue, oldValue)=>{
-    
-        if(!newValue, oldValue){
+    watch(token, (newValue, oldValue) => {
+
+        if (!newValue, oldValue) {
             navigateTo('/auth')
         }
     })
