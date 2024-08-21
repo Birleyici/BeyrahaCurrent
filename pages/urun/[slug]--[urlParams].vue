@@ -33,8 +33,10 @@
     </div>
     <ClientOnly>
 
-      <LazyUiSlidesProductSlide title="Benzer ürünler" :products="productState.categoryProducts">
-      </LazyUiSlidesProductSlide>
+      <div class="px-x-mobil md:px-0">
+        <LazyUiSlidesProductSlide title="Benzer ürünler" :products="productState.categoryProducts">
+        </LazyUiSlidesProductSlide>
+      </div>
     </ClientOnly>
 
     <!-- <PartialsProductComment /> -->

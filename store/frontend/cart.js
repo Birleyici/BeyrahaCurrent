@@ -2,8 +2,10 @@ import { defineStore } from "pinia";
 
 
 export const useCartState = defineStore('cartState', () => {
-  const nuxtApp = useNuxtApp()
   const cart = ref([])
+  const toast = useToast()
+  const authStore = useAuthStore()
+
   const cartQyt = computed(() => {
     return cart.value.reduce((total, item) => total + item.qyt, 0);
   })
@@ -28,7 +30,7 @@ export const useCartState = defineStore('cartState', () => {
 
   const patchCart = async (obj, qyt) => {
 
-    if (nuxtApp.$mainState.isAuthenticated) {
+    if (authStore.token) {
 
       const response = await useBaseOFetchWithAuth('cart', {
         method: 'POST',
@@ -47,7 +49,6 @@ export const useCartState = defineStore('cartState', () => {
 
     const existObjIndex = findObjectIndex(cart.value, obj, ['qyt', 'total'])
     
-    console.log(cart.value[existObjIndex])
 
     if (existObjIndex === -1) {
 
@@ -59,12 +60,17 @@ export const useCartState = defineStore('cartState', () => {
       cart.value[existObjIndex].qyt += qyt
     }
 
+    toast.add({ 
+      title: 'Sepete eklendi!', 
+      color : 'orange',
+      icon: "i-heroicons-check-badge" })
+
   }
 
 
   const cartDBToState = async () => {
 
-    if (cart.value.length == 0 && nuxtApp.$mainState.isAuthenticated) {
+    if (cart.value.length == 0 && authStore.token) {
       
       const response = await useBaseOFetchWithAuth('cart')
       cart.value = response.cart
@@ -75,7 +81,7 @@ export const useCartState = defineStore('cartState', () => {
   const deleteCartItem = async (deleteCartItem) => {
 
 
-    if (nuxtApp.$mainState.isAuthenticated) {
+    if (authStore.token) {
 
       const response = await useBaseOFetchWithAuth(`cart/${deleteCartItem.id}`, {
         method: 'DELETE'

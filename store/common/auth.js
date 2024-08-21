@@ -75,7 +75,6 @@ export const useAuthStore = defineStore('authStore', () => {
             return true
         } else {
             token.value = null
-            console.log(response.error)
             return false
         }
 
@@ -83,9 +82,29 @@ export const useAuthStore = defineStore('authStore', () => {
     };
 
 
+    const logout = ()=>{
+        token.value = null
+        user.value = {
+            email: '',
+            password: ''
+        }
+        register.value = {
+            email: '',
+            password: '',
+            password_confirmation: ''
+        }
+
+    }
 
 
-    return { user, register, loginLoading, registerLoading, apiError, token, login, registerUser }
+    watch(()=>token.value, (newValue, oldValue)=>{
+    
+        if(!newValue, oldValue){
+            navigateTo('/auth')
+        }
+    })
+
+    return { user, register, loginLoading, registerLoading, apiError, token, login, registerUser, logout }
 },
     {
         persist: {

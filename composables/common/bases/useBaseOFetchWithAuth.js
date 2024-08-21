@@ -44,6 +44,9 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
 
     async function refreshToken() {
 
+        if(!authStore.token)
+            return 
+
         try {
             const response = await $fetch(apiBaseUrl + "auth/refresh", {
                 method: "POST",

@@ -14,37 +14,42 @@
                         @click="model = false" />
                 </div>
             </template>
-            <PartialsFormLoginRegisterForm v-if="!$mainState.isAuthenticated" />
-            <p v-else >
-                <ul class="list-none">
-                    <li
-                    v-for="menu in menuItems"
-                      class="flex  items-center p-4 mb-2 bg-slate-100 hover:bg-slate-50 cursor-pointer select-none duration-200"
-                    >
-                      <NuxtLink class="w-full h-full" :to="menu.link">  
-                        <span class="ml-2">{{menu.name}}</span>
-                      </NuxtLink>
-                    </li>
-               
-                  </ul>
+            <div v-if="!authStore.token">
+                <PartialsFormLoginRegisterForm />
+            </div>
+            <p v-else>
+            <ul class="list-none">
+                <li v-for="menu in menuItems"
+                    class="flex  items-center p-4 mb-2 bg-slate-100 hover:bg-slate-50 cursor-pointer select-none duration-200">
+                    <NuxtLink class="w-full h-full" :to="menu.link">
+                        <span class="ml-2">{{ menu.name }}</span>
+                    </NuxtLink>
+                </li>
+                <li @click="authStore.logout()"
+                    class="flex  items-center p-4 mb-2 bg-slate-100 hover:bg-slate-50 cursor-pointer select-none duration-200">
+                    <NuxtLink class="w-full h-full">
+                        <span class="ml-2">Çıkış yap</span>
+                    </NuxtLink>
+                </li>
+            </ul>
             </p>
-
-
         </UCard>
     </USlideover>
 </template>
 
 <script setup>
+const authStore = useAuthStore()
 const { nextNotRegister } = defineProps(["nextNotRegister"]);
 const model = defineModel();
 const menuItems = [
-    {
-        name: 'Hesabım',
-        link: '/hesap'
-    },
+
     {
         name: 'Siparişlerim',
         link: '/hesap/siparislerim'
+    },
+    {
+        name: 'Adreslerim',
+        link: '/hesap/adreslerim'
     }
 ]
 </script>

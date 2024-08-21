@@ -80,7 +80,6 @@ export const useVariations = () => {
                 cache: false,
             });
 
-            console.log(data, error)
 
             // Şimdi, yeni oluşturulan varyasyon için şablon term'leri oluşturalım:
             const createdVariation = data.value.variation;

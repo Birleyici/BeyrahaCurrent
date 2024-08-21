@@ -22,17 +22,8 @@
           <p>Adreslerim</p>
         </div>
       </NuxtLink>
-      <NuxtLink to="/hesap/ayarlar">
-        <div
-        class="flex items-center space-x-2 cursor-pointer  lg:rounded-r-full duration-300 hover:bg-slate-100 p-2 rounded-full lg:rounded-l-none "
-          :class="{'bg-slate-100': useRoute().fullPath == '/hesap/ayarlar'}"
-        
-        >
-          <Icon name="mdi:account" class="w-5 h-5"></Icon>
-          <p>Hesap ayarları</p>
-        </div>
-      </NuxtLink>
-      <NuxtLink to="/hesap/logout">
+     
+      <NuxtLink @click="authStore.logout()">
         <div
         class="flex items-center space-x-2 cursor-pointer  lg:rounded-r-full duration-300 hover:bg-slate-100 p-2 rounded-full lg:rounded-l-none "
         >
@@ -43,4 +34,9 @@
     </div>
   </div>
 </template>
+
+<script setup>
+const { useAuthStore } = useStateIndex()
+const authStore = useAuthStore()
+</script>
 

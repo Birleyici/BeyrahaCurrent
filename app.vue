@@ -3,6 +3,8 @@
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
+  <UNotifications icon="i-heroicons-check-badge" color="orange" />
+
 </template>
 
 <script setup>
@@ -11,7 +13,11 @@ const { useCartState } = useStateIndex()
 const cartState = useCartState()
 const nuxtApp = useNuxtApp()
 const router = useRouter()
-await cartState.cartDBToState()
+
+await useAsyncData('cartInitApp', async () => {
+  await cartState.cartDBToState()
+  return true
+})
 
 onMounted(async () => {
   $changeMainState({ isLoaded: true });

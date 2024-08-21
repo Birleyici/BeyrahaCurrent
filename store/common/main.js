@@ -5,7 +5,6 @@ export const useMainStore = defineStore({
     state: () => ({
         isOpenSearch: false,
         isLoaded: false,
-        isAuthenticated: false,
     }),
 
 

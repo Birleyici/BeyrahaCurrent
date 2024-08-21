@@ -20,7 +20,7 @@
           </p>
         </template>
 
-        <div v-if="item.key === 'login'" class="space-y-3 w-[400px] max-w-full">
+        <div v-if="item.key === 'login'" class="space-y-3 w-[300px]  md:w-[400px]">
           <UForm :schema="schemaLogin" :state="authStore.user" class="space-y-4" @submit="onLogin">
             <UFormGroup label="Email" name="email">
               <UInput v-model="authStore.user.email" />
@@ -47,7 +47,7 @@
 
           </UForm>
         </div>
-        <div v-else-if="item.key === 'register'" class="w-[400px] max-w-full">
+        <div v-else-if="item.key === 'register'" class="w-[300px] md:w-[400px]">
           <UForm :schema="schemaRegister" :state="authStore.register" class="space-y-4" @submit="onRegister">
             <UFormGroup label="Email" name="email">
               <UInput v-model="authStore.register.email" />

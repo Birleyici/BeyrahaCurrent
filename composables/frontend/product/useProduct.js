@@ -19,7 +19,6 @@ export function useProduct() {
             }
         )
 
-        console.log(response)
 
         if(piece){
             productState.products = response

@@ -14,12 +14,11 @@
   </div>
 </template>
 <script setup>
+const authStore = useAuthStore()
 const route = useRoute()
-const nuxtApp = useNuxtApp()
-if (nuxtApp.$mainState.isAuthenticated) {
+if (authStore.token) {
   if (route.query?.callback) {
     navigateTo(route.query.callback)
   }
 }
-
 </script>

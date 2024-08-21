@@ -5,7 +5,8 @@
     <div class="relative">
       <div class="items-center relative w-11/12 lg:w-full flex mx-auto">
         <input ref="searchInput" @focus="$changeMainState({ isOpenSearch: true })"
-          @blur="handleBlur" @mousedown.stop type="text" v-model="searchWord"
+          @blur="handleBlur" @mousedown.stop type="text" @input='evt=>searchWord=evt.target.value'
+          :value="searchWord"
           class="focus:p-3 rounded-xl w-full bg-slate-100 focus:bg-white px-4 py-2 focus:outline-0 duration-200 z-[4]"
           placeholder="Ara..." @keydown.enter="goSearch()" />
         <Icon v-if="!$mainState.isOpenSearch || ($mainState.isOpenSearch && !searchWord)" name="ph:magnifying-glass"
@@ -14,7 +15,7 @@
           class="w-6 h-6 absolute right-2 z-[5]" color="black" />
       </div>
       <div v-if="searchWord && $mainState.isOpenSearch"
-        class="min-h-[20px] p-4 bg-white w-full absolute z-10 right-0 top-[50px] rounded-xl results-container">
+        class="min-h-[20px] w-11/12 p-4 bg-white   absolute z-10 left-0 right-0 mx-auto top-[50px] rounded-xl results-container">
         <p v-if="productsSearched.length == 0" class="italic">Sonuç bulunamadı...</p>
         <div v-else class="grid gap-4">
           <div v-for="p in productsSearched.slice(0, 6)" @mousedown.stop>

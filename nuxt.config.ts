@@ -2,12 +2,11 @@ import vsharp from 'vite-plugin-vsharp';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-
   sourcemap: {
     server: true,
     client: true
   },
-  
+
   imports: {
     dirs: [
       'composables/**'
@@ -18,6 +17,7 @@ export default defineNuxtConfig({
     // Render these routes with SPA
     '/management/**': { ssr: false },
   },
+
   vite: {
     plugins: [vsharp()],
     vue: {
@@ -27,7 +27,9 @@ export default defineNuxtConfig({
       }
   }
   },
+
   css: ['~/assets/css/main.css'],
+
   image: {
     provider: 'ipx',
     dir: '/images',
@@ -39,6 +41,7 @@ export default defineNuxtConfig({
     }
 
   },
+
   //runtime public base url tanımlayacağız
 
 
@@ -57,6 +60,7 @@ export default defineNuxtConfig({
       },
     },
   },
+
   modules: [
     '@pinia/nuxt',
     'nuxt-icon',
@@ -68,6 +72,10 @@ export default defineNuxtConfig({
     '@pinia-plugin-persistedstate/nuxt',
   ],
 
+  pinia: {
+    storesDirs: ['./store/**'],
+  },
+
   tailwindcss: {
     exposeConfig: true,
     viewer: true,
@@ -75,6 +83,7 @@ export default defineNuxtConfig({
   },
 
   devtools: { enabled: false },
+
   postcss: {
     plugins: {
       tailwindcss: {},
@@ -86,6 +95,5 @@ export default defineNuxtConfig({
     },
   },
 
-
-
+  compatibilityDate: '2024-08-21',
 })
