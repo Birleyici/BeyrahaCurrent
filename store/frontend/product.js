@@ -76,7 +76,7 @@ export const useProductState = defineStore('productState', () => {
   }
 
 
-  const getProducts = async ({ piece, filters = {} }) => {
+  const getProducts = async ({ piece, filters = {} }, shouldReturnResponse = false) => {
 
     // Eğer filters objesinde page yoksa, varsayılan olarak 1 ayarla
     if (!('page' in filters)) {
@@ -91,22 +91,26 @@ export const useProductState = defineStore('productState', () => {
       }
     )
 
-    if (piece) {
-      products.value = response
+    if (shouldReturnResponse) {
+      return response
     } else {
-
-      //eğer sayfalama verileri yoksa
-      if (!products.value.total || filters.page == 1) {
+      if (piece) {
         products.value = response
       } else {
-        const dataArray = Object.values(response.data);
-        products.value.data.push(...dataArray);
+
+        //eğer sayfalama verileri yoksa
+        if (!products.value.total || filters.page == 1) {
+          products.value = response
+        } else {
+          const dataArray = Object.values(response.data);
+          products.value.data.push(...dataArray);
+        }
+
       }
 
-    }
-
-    if (process.client && 'page' in filters) {
-      localStorage.setItem("prevPage", filters.page);
+      if (process.client && 'page' in filters) {
+        localStorage.setItem("prevPage", filters.page);
+      }
     }
   };
 

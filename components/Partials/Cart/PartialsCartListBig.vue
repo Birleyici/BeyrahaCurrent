@@ -3,8 +3,9 @@
         class="grid lg:grid-cols-2 gap-4 items-center my-minimal border p-2 rounded-md">
         <div class="h-full flex space-x-4">
             <div class="flex space-x-4">
-                <NuxtImg width="70" class="object-cover rounded-md" :src="`aws/${props.item.product_thumb.path}`">
-                </NuxtImg>
+                <NuxtImg v-if="props.item.product_thumb?.path" width="70" class="object-cover rounded-md"
+                :src="`aws/${props.item.product_thumb?.path}`" />
+              <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
                 <div>
                     <p class="font-medium">{{ props.item.product_name }}</p>
                     <div v-for="(value, key) in props.item.variation?.attributes">

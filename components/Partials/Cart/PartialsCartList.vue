@@ -2,25 +2,17 @@
   <div class="py-4 first:!pt-0 border-b last:border-b-0 border-dashed">
     <div class="flex space-x-4">
       <!-- Product Image -->
-      <NuxtImg width="70" class="object-cover rounded-md" :src="`aws/${props.item.product_thumb.path}`" />
-
+      <NuxtImg v-if="props.item.product_thumb?.path" width="70" class="object-cover rounded-md"
+        :src="`aws/${props.item.product_thumb?.path}`" />
+      <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
       <div class="w-full">
         <!-- Product Name and Delete Button -->
         <div class="flex items-start space-x-2 justify-between w-full">
           <p class="text-sm font-medium">
             {{ props.item.product_name }}
           </p>
-          <UButton 
-            :disabled="loading" 
-            :loading="loading" 
-            @click="deleteHandle()" 
-            icon="i-heroicons-x-mark" 
-            size="xs" 
-            color="red" 
-            square 
-            :ui="{ rounded: 'rounded-full' }" 
-            variant="soft" 
-          />
+          <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-x-mark" size="xs"
+            color="red" square :ui="{ rounded: 'rounded-full' }" variant="soft" />
         </div>
 
         <!-- Display Variation Attributes -->

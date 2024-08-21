@@ -23,6 +23,7 @@ const route = useRoute();
 const router = useRouter();
 
 const query = ref({
+  searchWord: route.query.searchWord,
   page: parseInt(route.query.page) || 1,
   sort: route.query.sort || 'default', // Etkisiz başlangıç değeri
 });
@@ -60,8 +61,10 @@ await useAsyncData('initDataProductss', async () => {
 
 const loading = ref(false);
 
-watch([query, selectedCategoryIds], async () => {
+watch(()=> [query, selectedCategoryIds, route.query.searchWord], async () => {
 
+  query.value.searchWord = route.query.searchWord
+  
   loading.value = true;
 
   if (process.client) {
