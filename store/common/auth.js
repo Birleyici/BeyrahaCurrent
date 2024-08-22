@@ -94,15 +94,10 @@ export const useAuthStore = defineStore('authStore', () => {
             password_confirmation: ''
         }
 
+        navigateTo('/auth')
+
     }
 
-
-    watch(token, (newValue, oldValue) => {
-
-        if (!newValue, oldValue) {
-            navigateTo('/auth')
-        }
-    })
 
     return { user, register, loginLoading, registerLoading, apiError, token, login, registerUser, logout }
 },

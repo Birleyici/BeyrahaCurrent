@@ -15,7 +15,7 @@
                 </div>
             </template>
             <div v-if="!authStore.token">
-                <PartialsFormLoginRegisterForm />
+                <PartialsFormLoginRegisterForm :redirect="false" />
             </div>
             <p v-else>
             <ul class="list-none">
@@ -39,6 +39,7 @@
 
 <script setup>
 const authStore = useAuthStore()
+const router = useRouter()
 const { nextNotRegister } = defineProps(["nextNotRegister"]);
 const model = defineModel();
 const menuItems = [
@@ -52,4 +53,5 @@ const menuItems = [
         link: '/hesap/adreslerim'
     }
 ]
+
 </script>

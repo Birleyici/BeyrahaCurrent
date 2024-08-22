@@ -15,6 +15,7 @@
 </template>
 
 <script setup>
+
 const { useOrderState } = useStateIndex()
 const orderState = useOrderState()
 await orderState.getOrders()

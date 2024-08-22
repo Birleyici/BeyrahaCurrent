@@ -107,11 +107,8 @@ export const useProductState = defineStore('productState', () => {
         }
 
       }
-
-      if (process.client && 'page' in filters) {
-        localStorage.setItem("prevPage", filters.page);
-      }
     }
+
   };
 
   return { product, newProduct, products, categoryProducts, vendorProducts, fetchProduct, getProducts, fetchCategoryProducts, patchProduct, patchCategoryProducts, patchVendorProducts }

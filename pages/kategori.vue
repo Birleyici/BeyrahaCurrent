@@ -61,18 +61,16 @@ await useAsyncData('initDataProductss', async () => {
 
 const loading = ref(false);
 
-watch(()=> [query, selectedCategoryIds, route.query.searchWord], async () => {
+watch(()=> [query, selectedCategoryIds, query.value.page], async (newValue, oldValue) => {
 
-  query.value.searchWord = route.query.searchWord
-  
-  loading.value = true;
 
-  if (process.client) {
-    const prevPage = localStorage.getItem('prevPage');
-    if (prevPage && parseInt(prevPage) == query.value.page) {
-      query.value.page = 1;
-    }
+  //eğer sayfa değişmediyse ama diğer filtreler tetiklendiyse
+  if(newValue[2] == oldValue[2]){
+    query.value.page = 1
   }
+
+  loading.value = true;
+  query.value.searchWord = route.query.searchWord
 
   await productState.getProducts({
     filters: {

@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const useOrderState = defineStore('orderState', () => {
 
     const cartState = useStateIndex().useCartState()
-    const mainState = useNuxtApp().$mainState
+    const authStore = useAuthStore()
 
     const isOpenAddressModal = ref(false)
     const openAllAddressModal = ref(false)
@@ -47,7 +47,7 @@ export const useOrderState = defineStore('orderState', () => {
 
     const saveAddress = async (item) => {
 
-        if (!mainState.isAuthenticated) {
+        if (!authStore.token) {
             if (!item.id) {
                 item.id = uuidv4();
             }
@@ -159,7 +159,7 @@ export const useOrderState = defineStore('orderState', () => {
     }
 
     const fetchAddresses = async () => {
-        if (mainState.isAuthenticated) {
+        if (authStore.token) {
             const response = await useBaseOFetchWithAuth('addresses')
             addresses.value = response
         }

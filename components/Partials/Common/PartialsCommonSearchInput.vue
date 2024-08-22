@@ -18,8 +18,8 @@
         class="min-h-[20px] w-11/12 p-4 bg-white   absolute z-10 left-0 right-0 mx-auto top-[50px] rounded-xl results-container">
         <p v-if="productsSearched.length == 0" class="italic">Sonuç bulunamadı...</p>
         <div v-else class="grid gap-4">
-          <div v-for="p in productsSearched.slice(0, 6)" @mousedown.stop>
-            <NuxtLink :to="p.product_url">{{p.name}}</NuxtLink>
+          <div v-for="p in productsSearched.slice(0, 6)" >
+            <NuxtLink @click="closeSearch" :to="p.product_url">{{p.name}}</NuxtLink>
           </div>
           <div v-if="productsSearched.length > 3">
             <UDivider type="dashed" />
@@ -42,6 +42,13 @@ const route = useRoute();
 const searchWord = ref(route.query.searchWord);
 const productsSearched = ref([]);
 
+
+function closeSearch() {
+  $mainState.isOpenSearch = false;
+  searchInput.value.blur();
+}
+
+
 function goSearch() {
   router.push({
     path: '/kategori',
@@ -49,8 +56,7 @@ function goSearch() {
       searchWord: searchWord.value
     }
   });
-  $mainState.isOpenSearch = false;
-  searchInput.value.blur();
+  closeSearch()
 }
 
 function handleBlur(event) {

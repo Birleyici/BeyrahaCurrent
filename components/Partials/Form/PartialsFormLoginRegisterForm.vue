@@ -1,5 +1,5 @@
 <template>
-  <UTabs :items="items" class="w-full" :ui="{
+  <UTabs :items="items" class="w-[300px]  md:w-[400px]" :ui="{
     list: {
       marker: {
         background: '!bg-orange-500'
@@ -8,7 +8,7 @@
         active: 'text-white'
       }
     },
-  }">
+  }"  >
     <template #item="{ item }">
       <UCard>
         <template #header>
@@ -20,7 +20,7 @@
           </p>
         </template>
 
-        <div v-if="item.key === 'login'" class="space-y-3 w-[300px]  md:w-[400px]">
+        <div v-if="item.key === 'login'" class="space-y-3 ">
           <UForm :schema="schemaLogin" :state="authStore.user" class="space-y-4" @submit="onLogin">
             <UFormGroup label="Email" name="email">
               <UInput v-model="authStore.user.email" />
@@ -47,7 +47,7 @@
 
           </UForm>
         </div>
-        <div v-else-if="item.key === 'register'" class="w-[300px] md:w-[400px]">
+        <div v-else-if="item.key === 'register'" >
           <UForm :schema="schemaRegister" :state="authStore.register" class="space-y-4" @submit="onRegister">
             <UFormGroup label="Email" name="email">
               <UInput v-model="authStore.register.email" />
@@ -78,6 +78,12 @@
 </template>
 
 <script setup lang="ts">
+const props = defineProps({
+  redirect:{
+    type: Boolean,
+    default: true
+  }
+})
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
 const router = useRouter()
@@ -109,7 +115,7 @@ type RegisterSchema = InferType<typeof schemaRegister>;
 async function onLogin(event: FormSubmitEvent<LoginSchema>) {
   // Do something with event.data
   const response = await authStore.login()
-  if (response) {
+  if (response && props.redirect) {
     navigateTo(router.currentRoute.value.query.callback || '/')
   }
 }
@@ -118,7 +124,7 @@ async function onRegister(event: FormSubmitEvent<RegisterSchema>) {
 
   const response = await authStore.registerUser()
 
-  if (response) {
+  if (response && props.redirect) {
     navigateTo(router.currentRoute.value.query.callback || '/')
   }
 }
