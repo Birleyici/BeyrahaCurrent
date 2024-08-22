@@ -77,7 +77,7 @@
         <UiFormCounter v-model="qyt"></UiFormCounter>
       </div>
       
-      <UButton :loading="loading" @click="addToCart()" :disabled="isActiveAddToCartButton" color="secondary"
+      <UButton :loading="cartState.addToCartloading" @click="addToCart()" :disabled="isActiveAddToCartButton" color="secondary"
         class="!rounded-full font-bold flex justify-center relative text-sm lg:!px-12 px-6 overflow-hidden min-w-[180px] ">
         <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
         </Icon>
@@ -91,7 +91,6 @@
 const props = defineProps(["attrsAndVarsState", "productState"]);
 const { useCartState } = useStateIndex()
 const cartState = useCartState()
-const loading = ref(false)
 const qyt = ref(1)
 const currentRoute = useRouter().currentRoute.value
 

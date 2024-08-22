@@ -5,6 +5,7 @@ export const useCartState = defineStore('cartState', () => {
   const cart = ref([])
   const toast = useToast()
   const authStore = useAuthStore()
+  const addToCartloading = ref(false)
 
   const cartQyt = computed(() => {
     return cart.value.reduce((total, item) => total + item.qyt, 0);
@@ -29,7 +30,7 @@ export const useCartState = defineStore('cartState', () => {
 
 
   const patchCart = async (obj, qyt) => {
-
+    addToCartloading.value = true
     if (authStore.token) {
 
       const response = await useBaseOFetchWithAuth('cart', {
@@ -39,8 +40,14 @@ export const useCartState = defineStore('cartState', () => {
           qyt
         })
       })
-
       if (response.error) {
+        toast.add({
+          title: 'Bir hata oluştu!',
+          color: 'red',
+          icon: "i-heroicons-exclamation-triangle",
+        })
+
+        addToCartloading.value = true
         return
       }
 
@@ -48,10 +55,9 @@ export const useCartState = defineStore('cartState', () => {
     }
 
     const existObjIndex = findObjectIndex(cart.value, obj, ['qyt', 'total'])
-    
+
 
     if (existObjIndex === -1) {
-
 
       cart.value.push(obj)
 
@@ -60,10 +66,19 @@ export const useCartState = defineStore('cartState', () => {
       cart.value[existObjIndex].qyt += qyt
     }
 
-    toast.add({ 
-      title: 'Sepete eklendi!', 
-      color : 'orange',
-      icon: "i-heroicons-check-badge" })
+    const actions = ref([{
+      label: 'Sepete Git',
+      click: () => navigateTo('/sepet')
+    }])
+
+    toast.add({
+      title: 'Sepete eklendi!',
+      color: 'orange',
+      icon: "i-heroicons-check-badge",
+      actions
+    })
+
+    addToCartloading.value = false
 
   }
 
@@ -71,7 +86,7 @@ export const useCartState = defineStore('cartState', () => {
   const cartDBToState = async () => {
 
     if (cart.value.length == 0 && authStore.token) {
-      
+
       const response = await useBaseOFetchWithAuth('cart')
       cart.value = response.cart
     }
@@ -93,22 +108,22 @@ export const useCartState = defineStore('cartState', () => {
     }
 
     if (deleteCartItem.variation) {
-      cart.value = cart.value.filter(item => 
+      cart.value = cart.value.filter(item =>
         !(item.variation.id === deleteCartItem.variation.id &&
           item.product_attribute_term_id === deleteCartItem.product_attribute_term_id)
       );
     } else {
-      cart.value = cart.value.filter(item => 
+      cart.value = cart.value.filter(item =>
         !(item.product_id === deleteCartItem.product_id &&
           item.product_attribute_term_id === deleteCartItem.product_attribute_term_id)
       );
     }
-    
+
   }
 
 
 
-  return { cart, cartQyt, cartTotalAmount, cartDBToState, resetCartState, patchCart, deleteCartItem }
+  return { cart, cartQyt, cartTotalAmount,addToCartloading, cartDBToState, resetCartState, patchCart, deleteCartItem }
 },
   {
     persist: {
