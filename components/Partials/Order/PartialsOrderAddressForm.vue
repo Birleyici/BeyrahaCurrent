@@ -53,7 +53,7 @@ await orderState.fetchCities()
 
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
-
+const emit = defineEmits(['isSaved'])
 const schema = object({
   name: string()
     .min(3, '3 karakterden az olamaz.')
@@ -75,6 +75,7 @@ const schema = object({
 const saveAddress = () => {
   orderState.saveAddress(orderState.newAddress)
   orderState.newAddress = orderState.copyNewAddress
+  emit('isSaved', true)
 }
 
 type Schema = InferType<typeof schema>

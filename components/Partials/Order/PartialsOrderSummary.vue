@@ -2,8 +2,11 @@
   <div>
     <div class="lg:flex lg:justify-between items-center  p-2 border rounded-md lg:!rounded-l-full">
       <div class="flex space-x-8">
-        <NuxtImg :src="'aws' + props.item.image.path"
+        <NuxtImg v-if="props.item.image?.path" :src="'aws' + props.item.image?.path"
           class="w-20 h-20 object-cover  object-top rounded-md lg:rounded-full" />
+        <img class="w-[70px] h-[70px] rounded-full" src="/img-placeholder.jpg" v-else>
+
+
         <div>
           <NuxtLink :to="props.item.slug" class="font-medium">{{ props.item.product_name }}</NuxtLink>
           <div v-for="(value, key) in props.item.variation?.terms">

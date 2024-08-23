@@ -12,12 +12,12 @@
     :prev-button="{
       color: 'gray',
       icon: 'i-heroicons-arrow-left-20-solid',
-      class: 'absolute',
+      class: images.length > 1 ? 'absolute' : 'hidden',
     }"
     :next-button="{
       color: 'gray',
       icon: 'i-heroicons-arrow-right-20-solid',
-      class: 'absolute',
+      class: images.length > 1 ? 'absolute' : 'hidden',
     }"
     indicators
     arrows
@@ -113,9 +113,7 @@ onUnmounted(() => {
   imgs.forEach((img) => removeZoomListeners(img as HTMLElement));
 });
 
-watch(props.images, (newVal) => {
-  if (newVal[0]?.added) {
-    carouselRef.value.select(0);
-  }
+watch(()=>props.images, (newVal) => {
+    carouselRef.value?.select(0);
 });
 </script>

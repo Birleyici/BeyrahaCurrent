@@ -22,7 +22,10 @@
          <div class="grid gap-4">
           <b>Sipariş içeriği</b>
 
-          <PartialsOrderSummary :item="item" v-for="item in order.order_items || []" :key="item.id" />
+          
+          <div class="grid gap-4" v-for="sub_order in order.sub_orders ">
+            <PartialsOrderSummary :item="item" v-for="item in sub_order.order_items || []" :key="item.id" />
+          </div>
          </div>
 
             <div class="my-orta lg:grid lg:grid-cols-3">

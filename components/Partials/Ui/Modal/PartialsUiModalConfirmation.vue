@@ -14,5 +14,5 @@
 
 <script setup>
 const isOpen = defineModel('isOpen')
-const props = defineProps(['message'])
+const props = defineProps(['message', 'id'])
 </script>

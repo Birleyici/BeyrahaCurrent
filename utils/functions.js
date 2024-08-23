@@ -76,3 +76,42 @@ export function formatDate(dateString) {
   return `${day} ${month} ${year} - ${hours}:${minutes}`;
 }
 
+
+export function timeAgo(timestamp) {
+  const now = new Date();
+  const date = new Date(timestamp);
+
+  const seconds = Math.floor((now - date) / 1000);
+  let interval = Math.floor(seconds / 31536000);
+
+  // Eğer zaman farkı 24 saatten büyükse, tam tarihi döndür
+  const oneDay = 86400; // 24 saat = 86400 saniye
+  if (seconds > oneDay) {
+    return date.toLocaleDateString('tr-TR', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  if (interval >= 1) {
+    return `${interval} yıl önce`;
+  }
+  interval = Math.floor(seconds / 2592000);
+  if (interval >= 1) {
+    return `${interval} ay önce`;
+  }
+  interval = Math.floor(seconds / 86400);
+  if (interval >= 1) {
+    return `${interval} gün önce`;
+  }
+  interval = Math.floor(seconds / 3600);
+  if (interval >= 1) {
+    return `${interval} saat önce`;
+  }
+  interval = Math.floor(seconds / 60);
+  if (interval >= 1) {
+    return `${interval} dakika önce`;
+  }
+  return `şimdi`;
+}

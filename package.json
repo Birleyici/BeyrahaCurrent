@@ -18,7 +18,8 @@
     "nuxt": "^3.12.3",
     "nuxt-icon": "^0.5.0",
     "postcss": "^8.4.27",
-    "vite-plugin-vsharp": "^1.6.0"
+    "vite-plugin-vsharp": "^1.6.0",
+    "vue3-promise-dialog": "^0.3.4"
   },
   "dependencies": {
     "@nuxt/image": "^1.6.0",

@@ -4,10 +4,12 @@
     <NuxtPage />
   </NuxtLayout>
   <UNotifications icon="i-heroicons-check-badge" color="orange" />
-
+  <DialogWrapper />
+  
 </template>
 
 <script setup>
+import { DialogWrapper } from 'vue3-promise-dialog';
 const { $changeMainState } = useNuxtApp()
 const { useCartState } = useStateIndex()
 const cartState = useCartState()

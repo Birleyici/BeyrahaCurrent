@@ -103,12 +103,10 @@
 </template>
 
 <script setup>
-const { useOrderState } = useStateIndex()
 const orderState = useOrderState()
-const mainState = useNuxtApp().$mainState
-
+const authStore = useAuthStore()
 const isShowNewAddressButton = computed(() => {
-  return (!mainState.isAuthenticate && orderState.addresses.length == 0) || mainState.isAuthenticated
+  return (!authStore.token && orderState.addresses.length == 0) || authStore.token
 })
 
 onMounted(async () => {

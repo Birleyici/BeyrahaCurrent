@@ -66,8 +66,14 @@ export const useOrderState = defineStore('orderState', () => {
                     addresses.value.unshift(response)
                 } else {
                     const index = addresses.value.findIndex(item => item.id === response.id)
-                    addresses.value[index] = response
+                    if(index == -1){
+                        addresses.value = [response]
+                    } else {
+                        addresses.value[index] = response
+
+                    }
                 }
+
             }
             isOpenAddressModal.value = false
             return
@@ -122,11 +128,10 @@ export const useOrderState = defineStore('orderState', () => {
     }
 
 
-    const editAddress = async (id) => {
+    const editAddress = async (address) => {
 
         isOpenAddressModal.value = true
-        const editingObj = addresses.value.find(address => address.id === id)
-        newAddress.value = toRaw({ ...editingObj })
+        newAddress.value = toRaw({ ...address })
         await fetchDistricts(true)
     }
 

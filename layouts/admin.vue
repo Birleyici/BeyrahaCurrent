@@ -24,7 +24,7 @@
     <div class="bg-tertiary-5 py-8 px-[3%]">
       <LazyNuxtPage></LazyNuxtPage>
     </div>
-    <footer class="text-center py-2 text-sm">
+    <footer class="text-center py-2 text-sm bg-slate-100 font-medium border-t-2 border-orange-200 border-dashed">
       Beyraha - Admin Managemenet
     </footer>
   </div>
