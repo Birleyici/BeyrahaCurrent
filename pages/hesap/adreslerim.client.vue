@@ -27,14 +27,14 @@
                     @click="orderState.isOpenAddressModal = false" />
                 </div>
               </template>
-              <PartialsOrderAddressForm></PartialsOrderAddressForm>
+              <PartialsOrderAddressForm :address="orderState.newAddress"></PartialsOrderAddressForm>
             </UCard>
           </UModal>
        
           <div :key="address.id" v-for="address in orderState.addresses">
             <div class="border  p-minimal rounded-md flex items-center w-full"
               :class="{ 'bg-tertiary-50 border-2 border-orange-500': address.isDefault }">
-              <PartialsOrderAddressCard class="!border-none" :address="address" />
+              <PartialsOrderAddressCard class="!border-none" :address="address" :actions="true" />
             </div>
           </div>
         </div>
@@ -44,7 +44,6 @@
 </template>
 
 <script setup>
-const { useOrderState } = useStateIndex()
-const orderState = useOrderState()
+const orderState = useOrderStoreFront()
 await orderState.fetchAddresses()
 </script>

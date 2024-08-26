@@ -1,5 +1,5 @@
 <template>
-  <USlideover v-model="model">
+  <USlideover side="left" v-model="model">
     <UCard
       class="flex flex-col flex-1"
       :ui="{

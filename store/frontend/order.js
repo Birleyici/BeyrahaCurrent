@@ -2,11 +2,11 @@ import { defineStore } from "pinia";
 import { v4 as uuidv4 } from 'uuid';
 
 
-export const useOrderState = defineStore('orderState', () => {
+export const useOrderStoreFront = defineStore('orderStoreFront', () => {
 
-    const cartState = useStateIndex().useCartState()
     const authStore = useAuthStore()
-
+    const cartState = useCartState()
+    
     const isOpenAddressModal = ref(false)
     const openAllAddressModal = ref(false)
 
@@ -66,7 +66,7 @@ export const useOrderState = defineStore('orderState', () => {
                     addresses.value.unshift(response)
                 } else {
                     const index = addresses.value.findIndex(item => item.id === response.id)
-                    if(index == -1){
+                    if (index == -1) {
                         addresses.value = [response]
                     } else {
                         addresses.value[index] = response
@@ -117,22 +117,11 @@ export const useOrderState = defineStore('orderState', () => {
         cities.value = response
     }
 
-    const fetchDistricts = async (isEditing = false) => {
+    const fetchDistricts = async () => {
 
-        if (!isEditing) {
-            newAddress.value.district = null
-        }
         const response = await useBaseOFetch(`cities/${newAddress.value?.city?.id}/districts`)
         districts.value = response
 
-    }
-
-
-    const editAddress = async (address) => {
-
-        isOpenAddressModal.value = true
-        newAddress.value = toRaw({ ...address })
-        await fetchDistricts(true)
     }
 
 
@@ -199,7 +188,6 @@ export const useOrderState = defineStore('orderState', () => {
         deleteAddress,
         fetchCities,
         fetchDistricts,
-        editAddress,
         createOrder,
         getOrders
     }

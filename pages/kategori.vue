@@ -16,7 +16,6 @@
 </template>
 
 <script setup>
-const { useProductState, useCategoryState } = useStateIndex();
 const productState = useProductState();
 const categoryState = useCategoryState();
 const route = useRoute();

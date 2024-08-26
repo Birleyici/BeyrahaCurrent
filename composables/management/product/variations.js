@@ -1,7 +1,6 @@
 
 export const useVariations = () => {
 
-    const { useProductState, useAttrsAndVarsState, useVariationState, useAttributeState } = useStateIndex();
 
     const productState = useProductState()
     const attrsAndVarsState = useAttrsAndVarsState()

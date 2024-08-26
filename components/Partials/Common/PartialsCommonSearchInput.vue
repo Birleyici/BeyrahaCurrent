@@ -33,7 +33,6 @@
 </template>
 
 <script setup>
-const { useProductState } = useStateIndex()
 const productState = useProductState();
 const { $mainState } = useNuxtApp();
 const searchInput = ref(null);

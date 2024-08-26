@@ -1,7 +1,6 @@
 
 export const useAttributes = () => {
 
-    const { useAttrsAndVarsState, useAttributeState } = useStateIndex()
     const attrsAndVarsState = useAttrsAndVarsState()
     const attributeState = useAttributeState()
 

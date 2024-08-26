@@ -40,14 +40,15 @@
 </template>
 
 <script setup>
-const { useCartState, useProductState } = useStateIndex()
 const cartState = useCartState()
 const productState = useProductState()
 const { getProducts } = useProduct()
 
-onMounted(() => {
+onMounted(async () => {
   getProducts({ piece: 7 })
-  cartState.cartDBToState()
+  await cartState.cartDBToState()
+
+  console.log(cartState.cart)
 })
 
 </script>

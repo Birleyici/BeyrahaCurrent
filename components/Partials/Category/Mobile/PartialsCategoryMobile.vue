@@ -118,7 +118,6 @@
 </template>
 
 <script setup>
-const { useCategoryState } = useStateIndex();
 const categoryState = useCategoryState();
 const isOpenFiltersSlideOver = ref(false);
 const isOpenCategorySlideOver = ref(false);

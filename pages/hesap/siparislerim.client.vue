@@ -16,7 +16,6 @@
 
 <script setup>
 
-const { useOrderState } = useStateIndex()
-const orderState = useOrderState()
+const orderState = useOrderStoreFront()
 await orderState.getOrders()
 </script>

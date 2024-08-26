@@ -1,38 +1,38 @@
 <template>
   <div class="space-y-4">
 
-    <UForm :schema="schema" :state="orderState.newAddress" class="space-y-4" @submit="saveAddress()">
+    <UForm :schema="schema" :state="props.address" class="space-y-4" @submit="saveAddress()">
       <div class="grid gap-4">
         <div class="grid grid-cols-2 gap-4">
           <UFormGroup label="Ad" name="name">
-            <UInput color="orange" v-model="orderState.newAddress.name" type="text" />
+            <UInput color="orange" v-model="props.address.name" type="text" />
           </UFormGroup>
 
           <UFormGroup label="Soyad" name="last_name">
-            <UInput color="orange" v-model="orderState.newAddress.last_name" type="text" />
+            <UInput color="orange" v-model="props.address.last_name" type="text" />
           </UFormGroup>
 
           <div class="col-span-2">
             <UFormGroup label="Adres" name="address">
-              <UInput color="orange" v-model="orderState.newAddress.address" type="text" />
+              <UInput color="orange" v-model="props.address.address" type="text" />
             </UFormGroup>
           </div>
           <UFormGroup label="Şehir" name="city">
             <USelectMenu @change="orderState.fetchDistricts()" color="orange" searchable searchable-placeholder="Bir nitelik seçin..." class="w-full"
-              placeholder="Bir nitelik seçin" :options="orderState.cities" v-model="orderState.newAddress.city"
+              placeholder="Bir nitelik seçin" :options="orderState.cities" v-model="props.address.city"
               option-attribute="city" :search-attributes="['city']" />
           </UFormGroup>
           <UFormGroup label="İlçe" name="district">
             <USelectMenu color="orange" searchable searchable-placeholder="Bir nitelik seçin..." class="w-full"
-              placeholder="Bir nitelik seçin" :options="orderState.districts" v-model="orderState.newAddress.district"
+              placeholder="Bir nitelik seçin" :options="orderState.districts" v-model="props.address.district"
               option-attribute="district" :search-attributes="['district']" />
           </UFormGroup>
 
           <UFormGroup label="Telefon" name="phone">
-            <UInput color="orange" v-model="orderState.newAddress.phone" type="text" />
+            <UInput color="orange" v-model="props.address.phone" type="text" />
           </UFormGroup>
           <UFormGroup label="Email" name="email">
-            <UInput color="orange" v-model="orderState.newAddress.email" type="email" />
+            <UInput color="orange" v-model="props.address.email" type="email" />
           </UFormGroup>
 
         </div>
@@ -46,13 +46,14 @@
 </template>
 
 <script setup lang="ts">
-const { useOrderState } = useStateIndex()
-const orderState = useOrderState()
-
-await orderState.fetchCities()
-
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
+const props = defineProps(['address', 'saveFunction'])
+const orderState = useOrderStoreFront() 
+await orderState.fetchCities()
+await orderState.fetchDistricts()
+
+
 const emit = defineEmits(['isSaved'])
 const schema = object({
   name: string()
@@ -72,14 +73,18 @@ const schema = object({
   district: object().required('Zorunlu'),
 
 })
-const saveAddress = () => {
-  orderState.saveAddress(orderState.newAddress)
-  orderState.newAddress = orderState.copyNewAddress
+
+const saveAddress = async () => {
+  if(props.saveFunction){
+    const response = await props.saveFunction(props.address)
+    console.log(response)
+  } else {
+    orderState.saveAddress(props.address)
+  }
+  
   emit('isSaved', true)
 }
 
 type Schema = InferType<typeof schema>
-
-
 
 </script>

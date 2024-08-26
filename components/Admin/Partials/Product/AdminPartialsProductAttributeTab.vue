@@ -18,7 +18,6 @@
 </template>
 
 <script setup>
-const { useProductState, useAttributeState, useVariationState, useAttrsAndVarsState } = useStateIndex();
 const productState = useProductState();
 const attributeState = useAttributeState();
 const variationState = useVariationState();

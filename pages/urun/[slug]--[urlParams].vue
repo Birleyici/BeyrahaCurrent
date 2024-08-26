@@ -44,12 +44,7 @@
 </template>
 
 <script setup>
-const {
-  useAttrsAndVarsState,
-  useProductState,
-  useAttributeState,
-  useVariationsFrontState,
-} = useStateIndex();
+
 const productState = useProductState();
 const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
@@ -67,8 +62,8 @@ await useAsyncData("initProductPageData", async () => {
 })
 
 
-onMounted(() => {
-  productState.fetchCategoryProducts(productState.product.selectedCategories)
+onMounted(async() => {
+  await productState.fetchCategoryProducts(productState.product.selectedCategories)
 })
 
 attributeState.transformedAttrs = transform(

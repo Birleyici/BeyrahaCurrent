@@ -87,7 +87,6 @@ const props = defineProps({
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
 const router = useRouter()
-const { useAuthStore } = useStateIndex()
 const authStore = useAuthStore()
 const isShowPassword = ref(false)
 const schemaLogin = object({

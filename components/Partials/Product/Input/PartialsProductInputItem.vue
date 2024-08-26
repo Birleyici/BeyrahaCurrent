@@ -8,7 +8,7 @@
           <div class="grid gap-1">
             <UInput  id="input" color="orange"  variant="outline"
               :placeholder="props.product.selectedInput.placeholder"
-              v-model="props.product.inpuValue" />
+              v-model="props.product.inputValue" />
             <p class="text-xs text-gray-400">*{{ props.product.selectedInput.description || 'Açıklama' }}</p>
           </div>
         </div>

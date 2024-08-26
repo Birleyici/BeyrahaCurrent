@@ -5,7 +5,6 @@
   </div>
 </template>
 <script setup>
-const { useCartState } = useStateIndex()
 const cartState = useCartState()
 
 const categories = reactive([

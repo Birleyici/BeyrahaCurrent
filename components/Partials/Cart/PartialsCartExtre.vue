@@ -7,7 +7,7 @@
 
                     <div class="flex justify-between">
                         <p>Ürün toplam:</p>
-                        <p class="text-secondary-500 ">{{ formatPrice(cartState.cartTotalAmount) }}</p>
+                        <p class="text-secondary-500 ">{{ formatPrice(cartStore.cartTotalAmount) }}</p>
                     </div>
                     <div class="flex justify-between pb-2">
                         <p>Kargo ücreti:</p>
@@ -19,8 +19,8 @@
                     <div class="flex justify-between space-x-4 text-lg">
                         <p>Toplam:</p>
                         <Transition name="slide-up" mode="out-in">
-                            <p class="text-secondary-500 font-bold" :key="cartState.cartTotalAmount">{{
-                                formatPrice(cartState.cartTotalAmount + shippingCost) }}</p>
+                            <p class="text-secondary-500 font-bold" :key="cartStore.cartTotalAmount">{{
+                                formatPrice(cartStore.cartTotalAmount + shippingCost) }}</p>
                         </Transition>
 
                     </div>
@@ -34,8 +34,8 @@
 </template>
 
 <script setup>
-const cartState = useStateIndex().useCartState()
+const cartStore = useCartState()
 const shippingCost = computed(() => {
-  return cartState.cartTotalAmount > 1000 ? 0 : 60
+  return cartStore.cartTotalAmount > 1000 ? 0 : 60
 })
 </script>

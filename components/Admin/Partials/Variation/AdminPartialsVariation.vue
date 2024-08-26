@@ -53,7 +53,6 @@
 </template>
 
 <script setup>
-const variationState = useStateIndex().useVariationState();
 const { item } = defineProps(["item"]);
 const placeholderImg = "/img-placeholder.jpg";
 const isOpen = ref(false);

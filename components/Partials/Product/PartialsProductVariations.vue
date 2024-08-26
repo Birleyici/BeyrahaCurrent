@@ -76,23 +76,25 @@
       <div class="inline-block">
         <UiFormCounter v-model="qyt"></UiFormCounter>
       </div>
-      
-      <UButton :loading="cartState.addToCartloading" @click="addToCart()" :disabled="isActiveAddToCartButton" color="secondary"
+
+      <UButton :loading="cartState.addToCartloading" @click="addToCart()" :disabled="isActiveAddToCartButton"
+        color="secondary"
         class="!rounded-full font-bold flex justify-center relative text-sm lg:!px-12 px-6 overflow-hidden min-w-[180px] ">
         <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
         </Icon>
         <p>SEPETE EKLE</p>
       </UButton>
     </div>
+
   </div>
 </template>
 
 <script setup>
 const props = defineProps(["attrsAndVarsState", "productState"]);
-const { useCartState } = useStateIndex()
 const cartState = useCartState()
 const qyt = ref(1)
 const currentRoute = useRouter().currentRoute.value
+const toast = useToast()
 
 
 const {
@@ -110,7 +112,7 @@ const isActiveAddToCartButton = computed(() => {
 })
 
 const selectedColor = ref(null)
-const selectColorOption = (attributeName, termName, item)=>{
+const selectColorOption = (attributeName, termName, item) => {
 
   selectedColor.value = item
   selectOption(attributeName, termName, item)
@@ -129,6 +131,19 @@ const initialColor = () => {
 initialColor()
 
 const addToCart = () => {
+
+  const input = props.productState.product.inputs?.[0]
+  const inputValue = props.productState.product.inputValue
+
+  if (input?.isRequired && !inputValue) {
+    toast.add({
+      title: input.label + ' alanı gereklidir!',
+      color: 'red',
+      icon: "i-heroicons-exclamation-triangle",
+    })
+    return
+  }
+
   // Eğer miktar 0 ise işlemi durdur
   if (qyt.value == 0) {
     return;
@@ -138,8 +153,17 @@ const addToCart = () => {
 
   // Eğer varyasyon yoksa, basit ürün olarak ekleme yap
   let newCartItem = {
-    product_attribute_term_id: selectedColor.value?.term_id
+    product_attribute_term_id: selectedColor.value?.term_id,
   };
+  if (inputValue) {
+    newCartItem.input_value = {
+      value: inputValue,
+      label:input.label,
+      product_input_id: input.pivot.id,
+      input_id: input.id
+    };
+  }
+
   if (selectedVariation) {
     // Varyasyonlu ürün için
     newCartItem = {

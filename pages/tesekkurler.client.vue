@@ -46,6 +46,7 @@
               </div>
             </div>
           </div>
+         
           <div class="col-span-1 my-orta lg:my-0">
             <div class="grid gap-6 ">
               <PartialsOrderAddressCard   class="p-4" title="Teslimat adresi" :actions="false"

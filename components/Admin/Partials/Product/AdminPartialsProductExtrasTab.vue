@@ -43,6 +43,6 @@
 </template>
 
 <script setup>
-const productState = useStateIndex().useProductState();
+const productState = useProductState();
 const isOpenAddIpnutModal = ref(false);
 </script>

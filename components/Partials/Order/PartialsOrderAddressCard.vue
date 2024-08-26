@@ -29,18 +29,16 @@
                 message="Adresi silmek istediğinize emin misiniz?" v-model:is-open="isOpenDeleteModal" />
             <div class="flex space-x-4 ">
 
-                <UButton v-if="props.actionEdit || props.actions" @click="editHandle(props.address)" color="orange"
-                    class="p-0" variant="link">
+                <UButton v-if="isActiveEditingButton" @click="editAddress(props.address)" color="orange" class="p-0"
+                    variant="link">
                     Düzenle
                 </UButton>
-                <UButton v-if="(props.actionSetDefault || props.actions) && !props.address.isDefault"
-                    :disabled="loading" @click="setDefaultAddressHandle()" color="orange" class="p-0" variant="link">
+                <UButton v-if="isActiveSetDefaultButton" :disabled="loading" @click="setDefaultAddressHandle()"
+                    color="orange" class="p-0" variant="link">
                     Varsayılan yap
                     <UIcon v-if="loading" name="i-heroicons-arrow-path-20-solid animate-spin"></UIcon>
                 </UButton>
-
                 <!-- <UButton @click="isOpenDeleteModal = true" color="red" class="p-0" variant="link">Sil</UButton> -->
-
             </div>
         </div>
         <UModal v-model="isOpenEditModal" :fullscreen="$device.isMobile">
@@ -54,38 +52,37 @@
                             @click="isOpenEditModal = false" />
                     </div>
                 </template>
-                <PartialsOrderAddressForm @is-saved="e => e && (isOpenEditModal = false)" ></PartialsOrderAddressForm>
+                <PartialsOrderAddressForm :address="props.address" @is-saved="e => e && (isOpenEditModal = false)"
+                    :save-function="props.saveFunction"></PartialsOrderAddressForm>
             </UCard>
         </UModal>
     </div>
 </template>
 
 <script setup>
-const orderState = useOrderState();
-const props = defineProps(["address", "class", "deleteAddress", "actions", "actionEdit", "actionSetDefault", 'title']);
+const orderState = useOrderStoreFront();
+const props = defineProps(["address", "class", "actions", "actionEdit", "actionSetDefault", 'title', 'saveFunction', 'editingMode']);
 const isOpenDeleteModal = ref(false);
 const isOpenEditModal = ref(false)
 const loading = ref(false)
 const emit = defineEmits(['editedAddress'])
+
 const setDefaultAddressHandle = async () => {
     loading.value = true
     await orderState.setDefaultAddress(props.address.id)
     loading.value = false
 }
 
-const editHandle = (address) => {
+const editAddress = async (address) => {
     isOpenEditModal.value = true
-    orderState.editAddress(address)
 }
 
-//bir adres düzenlendiğinde o adresi üst katmana emitler
-watch(() => orderState.addresses, () => {
-    console.log(orderState.addresses.length)
-    if (orderState.addresses.length == 1) {
-        emit('editedAddress', orderState.addresses[0])
-    }
-}, {
-    deep: true
+
+const isActiveEditingButton = computed(() => {
+    return props.editingMode || props.actionEdit || props.actions;
+})
+const isActiveSetDefaultButton = computed(() => {
+    return (props.editingMode && props.address.isDefault) || ((props.actionSetDefault || props.actions) && !props.address.isDefault);
 })
 
 </script>

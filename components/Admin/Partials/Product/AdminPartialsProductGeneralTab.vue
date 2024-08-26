@@ -27,7 +27,6 @@
 </template>
 
 <script setup>
-const { useProductState } = useStateIndex()
 const productState  = useProductState();
 
 const isStockManagement = ref(false);

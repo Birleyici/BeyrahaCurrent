@@ -36,7 +36,6 @@ definePageMeta({
   layout: "admin",
 });
 
-const { useProductState } = useStateIndex();
 const productState = useProductState();
 const { getVendorProducts, deleteProduct, columns } = useProductList()
 await getVendorProducts();

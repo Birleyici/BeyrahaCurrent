@@ -21,7 +21,6 @@
 </template>
 
 <script setup>
-const { useProductState, useVariationState, useAttributeState } = useStateIndex();
 const productState = useProductState();
 const variationState = useVariationState();
 const attributeState = useAttributeState();

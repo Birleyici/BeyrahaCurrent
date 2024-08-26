@@ -2,7 +2,6 @@
 
 export const useVariationsFront = () => {
 
-    const { useProductState, useVariationsFrontState, useAttributeState } = useStateIndex()
     const productState = useProductState();
     const variationsFrontState = useVariationsFrontState()
     const attributeState = useAttributeState()

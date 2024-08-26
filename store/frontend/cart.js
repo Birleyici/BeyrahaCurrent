@@ -39,6 +39,9 @@ export const useCartState = defineStore('cartState', () => {
           ...obj,
           qyt
         })
+      }).finally(()=>{
+        addToCartloading.value = false
+
       })
       if (response.error) {
         toast.add({
@@ -47,7 +50,7 @@ export const useCartState = defineStore('cartState', () => {
           icon: "i-heroicons-exclamation-triangle",
         })
 
-        addToCartloading.value = true
+     
         return
       }
 
@@ -64,6 +67,10 @@ export const useCartState = defineStore('cartState', () => {
     } else {
 
       cart.value[existObjIndex].qyt += qyt
+      if (obj.input_value) {
+        cart.value[existObjIndex].input_value = obj.input_value;
+    }
+    
     }
 
     const actions = ref([{
@@ -71,14 +78,17 @@ export const useCartState = defineStore('cartState', () => {
       click: () => navigateTo('/sepet')
     }])
 
-    toast.add({
-      title: 'Sepete eklendi!',
-      color: 'orange',
-      icon: "i-heroicons-check-badge",
-      actions
-    })
+  
 
-    addToCartloading.value = false
+     setTimeout(async () => {
+      addToCartloading.value = false
+      toast.add({
+        title: 'Sepete eklendi!',
+        color: 'orange',
+        icon: "i-heroicons-check-badge",
+        actions
+      })
+    }, 500);
 
   }
 
@@ -94,32 +104,47 @@ export const useCartState = defineStore('cartState', () => {
 
 
   const deleteCartItem = async (deleteCartItem) => {
-
-
     if (authStore.token) {
+        const response = await useBaseOFetchWithAuth(`cart/${deleteCartItem.id}`, {
+            method: 'DELETE'
+        });
 
-      const response = await useBaseOFetchWithAuth(`cart/${deleteCartItem.id}`, {
-        method: 'DELETE'
-      })
-
-      if (response.error) {
-        return
-      }
+        if (response.error) {
+            return;
+        }
     }
 
-    if (deleteCartItem.variation) {
-      cart.value = cart.value.filter(item =>
-        !(item.variation.id === deleteCartItem.variation.id &&
-          item.product_attribute_term_id === deleteCartItem.product_attribute_term_id)
-      );
-    } else {
-      cart.value = cart.value.filter(item =>
-        !(item.product_id === deleteCartItem.product_id &&
-          item.product_attribute_term_id === deleteCartItem.product_attribute_term_id)
-      );
-    }
+    cart.value = cart.value.filter(item => {
+        // Ürün varyasyonu varsa
+        if (deleteCartItem.variation) {
+            if (item.variation.id === deleteCartItem.variation.id &&
+                item.product_attribute_term_id === deleteCartItem.product_attribute_term_id) {
 
-  }
+                // input_value varsa, bunları karşılaştır
+                if (item.input_value && deleteCartItem.input_value) {
+                    return JSON.stringify(item.input_value) !== JSON.stringify(deleteCartItem.input_value);
+                }
+
+                return false;
+            }
+        } else {
+            if (item.product_id === deleteCartItem.product_id &&
+                item.product_attribute_term_id === deleteCartItem.product_attribute_term_id) {
+
+                // input_value varsa, bunları karşılaştır
+                if (item.input_value && deleteCartItem.input_value) {
+                    return JSON.stringify(item.input_value) !== JSON.stringify(deleteCartItem.input_value);
+                }
+
+                return false;
+            }
+        }
+
+        return true;
+    });
+};
+
+
 
 
 

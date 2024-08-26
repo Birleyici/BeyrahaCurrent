@@ -47,7 +47,6 @@
 
 <script setup>
 const { nextNotRegister } = defineProps(["nextNotRegister"]);
-const { useCartState } = useStateIndex()
 const cartState = useCartState()
 const model = defineModel();
 

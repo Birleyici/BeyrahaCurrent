@@ -9,7 +9,7 @@
           <Transition name="fade">
             <div v-if="orderState.getDefaultAddress"
               class="bg-tertiary-50 border border-orange-500 p-minimal rounded-md flex items-center w-full">
-              <PartialsOrderAddressCard class="!border-none" :address="orderState.getDefaultAddress" />
+              <PartialsOrderAddressCard :action-edit="true" class="!border-none" :address="orderState.getDefaultAddress" />
             </div>
           </Transition>
 
@@ -93,7 +93,7 @@
           <div :key="address.id" v-for="address in orderState.addresses">
             <div class="border my-2 p-minimal rounded-md flex items-center w-full"
               :class="{ 'bg-tertiary-50 border border-orange-500': address.isDefault }">
-              <PartialsOrderAddressCard class="!border-none" :address="address" />
+              <PartialsOrderAddressCard  class="!border-none" :address="address"  />
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@
 </template>
 
 <script setup>
-const orderState = useOrderState()
+const orderState = useOrderStoreFront()
 const authStore = useAuthStore()
 const isShowNewAddressButton = computed(() => {
   return (!authStore.token && orderState.addresses.length == 0) || authStore.token

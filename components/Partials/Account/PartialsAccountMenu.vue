@@ -36,7 +36,6 @@
 </template>
 
 <script setup>
-const { useAuthStore } = useStateIndex()
 const authStore = useAuthStore()
 </script>
 

@@ -2,7 +2,7 @@
   <div class="grid grid-cols-10 gap-10">
     <div class="col-span-3 ">
       <div class="grid gap-2">
-        <b class="font-medium">Filtreler</b>
+        <p class="font-medium">Filtreler</p>
         <div class="h-[500px] overflow-y-scroll bg-slate-100 p-4 rounded-md border">
           <UCommandPalette :emptyState="{
             queryLabel: 'Sonuç bulunamadı...'
@@ -40,7 +40,6 @@
 </template>
 
 <script setup>
-const { useCategoryState } = useStateIndex()
 const categoryState = useCategoryState()
 const props = defineProps(['products', 'loading'])
 const uSelect = defineModel('uSelect')

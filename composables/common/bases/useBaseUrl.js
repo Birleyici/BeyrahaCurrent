@@ -8,7 +8,7 @@ export const useBaseUrl = () => {
 
     } else {
 
-        return 'http://192.168.226.244/laravel-api/public/api/';
+        return 'http://localhost/laravel-api/public/api/';
 
 
     }

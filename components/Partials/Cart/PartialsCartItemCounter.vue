@@ -13,7 +13,7 @@
 
 <script setup>
 const props = defineProps(["cartItem"]);
-const cartState = useStateIndex().useCartState();
+const cartState = useCartState();
 const loadingPlus = ref(false)
 const loadingMinus = ref(false)
 
