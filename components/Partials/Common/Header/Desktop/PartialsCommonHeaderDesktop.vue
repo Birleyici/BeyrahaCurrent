@@ -26,7 +26,7 @@
         </div>
       </div>
     </div>
-    <div class="scroll-container my-8 w-full whitespace-nowrap bg-slate-100  rounded-sm p-2">
+    <div class="scroll-container my-8 w-full whitespace-nowrap bg-slate-100  rounded-sm p-2 ">
       <p
         v-for="cat in props.categories"
         :key="cat.id"
