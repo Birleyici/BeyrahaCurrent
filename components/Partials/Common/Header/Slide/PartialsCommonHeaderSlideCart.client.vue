@@ -16,6 +16,7 @@
             </template>
             <div>
                 <div v-if="cartState.cart.length > 0" class="h-[400px] pr-6 overflow-y-scroll">
+                 
                     <PartialsCartList :key="Math.random()" :item="cartItem" v-for="(cartItem, index) in cartState.cart">
                     </PartialsCartList>
                     <br> <br>
@@ -30,6 +31,7 @@
                             <span>:</span>
                         </div>
                         <div class="flex justify-end">
+                           
                             <p class="text-secondary-500 font-bold">{{ formatPrice(cartState.cartTotalAmount) }}</p>
                         </div>
                     </div>
@@ -37,7 +39,9 @@
                         <nuxt-link to="/sepet">
                             <UiButtonsBaseButton class="w-full" color="slate">Sepete Git</UiButtonsBaseButton>
                         </nuxt-link>
-                        <UiButtonsBaseButton color="secondary">Ödeme</UiButtonsBaseButton>
+                        <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md"
+                        variant="solid">
+                        Ödeme</UButton>
                     </div>
                 </div>
             </div>
@@ -50,7 +54,5 @@ const { nextNotRegister } = defineProps(["nextNotRegister"]);
 const cartState = useCartState()
 const model = defineModel();
 
-onMounted(()=>{
-  cartState.cartDBToState()
-})
+
 </script>

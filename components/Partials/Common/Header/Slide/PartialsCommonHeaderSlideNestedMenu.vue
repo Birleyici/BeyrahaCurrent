@@ -1,7 +1,7 @@
 <template>
   <USlideover side="left" v-model="model">
     <UCard
-      class="flex flex-col flex-1"
+      class="flex flex-col flex-1 "
       :ui="{
         body: { base: 'flex-1' },
         ring: '',
@@ -32,12 +32,12 @@
         </div>
       </template>
 
-      <div class="relative w-full h-full overflow-hidden">
+      <div class="relative w-full h-full overflow-y-scroll overflow-x-hidden">
         <div
           v-for="(level, index) in nestedMenus"
           :key="index"
           :class="{
-            'absolute top-0 left-0 w-full h-full ': true,
+            'absolute top-0 left-0 w-full h-full pr-2': true,
             'translate-x-full': index > currentLevel,
             'translate-x-0': index === currentLevel,
             '-translate-x-full': index < currentLevel,
@@ -64,11 +64,36 @@
 </template>
 
 <script setup>
+const props = defineProps({
+  menu: Array,
+  selectedCategory: Object
+});
 const model = defineModel();
-const props = defineProps(["menu"]);
 const nestedMenus = ref([props.menu]);
-
 const currentLevel = ref(0);
+
+watch(
+  () => props.selectedCategory,
+  (newCategory) => {
+    if (newCategory) {
+      let currentMenu = props.menu;
+      nestedMenus.value = [currentMenu];
+      currentLevel.value = 0;
+
+      while (newCategory && currentMenu) {
+        const found = currentMenu.find(item => item.name === newCategory.name);
+        if (found && found.children) {
+          nestedMenus.value.push(found.children);
+          currentLevel.value++;
+          currentMenu = found.children;
+        } else {
+          break;
+        }
+      }
+    }
+  },
+  { immediate: true }
+);
 
 const handleClick = (item, idx, levelIndex) => {
   if (item.children) {
@@ -83,6 +108,8 @@ const goBack = () => {
   }
 };
 </script>
+
+
 
 <style scoped>
 .mdi-chevron-right {

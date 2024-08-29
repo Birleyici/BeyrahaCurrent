@@ -7,7 +7,7 @@
         <NuxtImg v-if="props.item.image?.path" :src="'aws' + props.item.image?.path"
           class="w-20 h-20 object-cover  object-top rounded-md lg:rounded-full" />
         <img class="w-20 h-20 rounded-full" src="/img-placeholder.jpg" v-else>
-        <div>
+        <div class="text-left">
           <NuxtLink :to="props.item.slug" class="font-medium">{{ props.item.product_name }}</NuxtLink>
           <div v-for="(value, key) in props.item.variation?.terms" :key="key">
             <div class="flex space-x-2 items-center text-sm">

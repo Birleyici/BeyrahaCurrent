@@ -4,7 +4,6 @@ import { defineStore } from "pinia";
 export const useCartState = defineStore('cartState', () => {
   const cart = ref([])
   const toast = useToast()
-  const authStore = useAuthStore()
   const addToCartloading = ref(false)
 
   const cartQyt = computed(() => {
@@ -12,7 +11,7 @@ export const useCartState = defineStore('cartState', () => {
   })
   const cartTotalAmount = computed(() => {
     return cart.value.reduce((total, item) => {
-      if (item.variation) {
+      if (item.variation.id) {
         // Varyasyon varsa ve sale_price doluysa onu al, yoksa price'ı al
         const price = item.variation.sale_price ? item.variation.sale_price : item.variation.price;
         return total + (price * item.qyt);
@@ -31,127 +30,115 @@ export const useCartState = defineStore('cartState', () => {
 
   const patchCart = async (obj, qyt) => {
     addToCartloading.value = true
-    if (authStore.token) {
 
-      const response = await useBaseOFetchWithAuth('cart', {
-        method: 'POST',
-        body: JSON.stringify({
-          ...obj,
-          qyt
-        })
-      }).finally(()=>{
-        addToCartloading.value = false
-
+    const response = await useBaseOFetchWithAuth('cart', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...obj,
+        qyt
       })
-      if (response.error) {
-        toast.add({
-          title: 'Bir hata oluştu!',
-          color: 'red',
-          icon: "i-heroicons-exclamation-triangle",
-        })
+    }).finally(() => {
+      addToCartloading.value = false
+    })
 
-     
-        return
-      }
-
-      obj.id = response.cartItem.id
+    if (response.error) {
+      toast.add({
+        title: 'Bir hata oluştu!',
+        color: 'red',
+        icon: "i-heroicons-exclamation-triangle",
+      })
+      return
     }
 
-    const existObjIndex = findObjectIndex(cart.value, obj, ['qyt', 'total'])
+    obj.id = response.cartItem.id
 
+    const existObjIndex = findObjectIndex(cart.value, response.cartItem, ['qyt', 'total', 'input_value'])
 
     if (existObjIndex === -1) {
 
-      cart.value.push(obj)
+      cart.value.push(response.cartItem)
+
+      const actions = ref([{
+        label: 'Sepete Git',
+        click: () => navigateTo('/sepet')
+      }])
+  
+      setTimeout(async () => {
+        addToCartloading.value = false
+        toast.add({
+          title: 'Sepete eklendi!',
+          color: 'orange',
+          icon: "i-heroicons-check-badge",
+          actions
+        })
+      }, 500);
+
 
     } else {
 
       cart.value[existObjIndex].qyt += qyt
       if (obj.input_value) {
         cart.value[existObjIndex].input_value = obj.input_value;
-    }
-    
-    }
+      }
 
-    const actions = ref([{
-      label: 'Sepete Git',
-      click: () => navigateTo('/sepet')
-    }])
+    }
 
   
-
-     setTimeout(async () => {
-      addToCartloading.value = false
-      toast.add({
-        title: 'Sepete eklendi!',
-        color: 'orange',
-        icon: "i-heroicons-check-badge",
-        actions
-      })
-    }, 500);
 
   }
 
 
   const cartDBToState = async () => {
 
-    if (cart.value.length == 0 && authStore.token) {
-
       const response = await useBaseOFetchWithAuth('cart')
+      console.log(response)
       cart.value = response.cart
-    }
   }
 
 
   const deleteCartItem = async (deleteCartItem) => {
-    if (authStore.token) {
-        const response = await useBaseOFetchWithAuth(`cart/${deleteCartItem.id}`, {
-            method: 'DELETE'
-        });
+      const response = await useBaseOFetchWithAuth(`cart/${deleteCartItem.id}`, {
+        method: 'DELETE'
+      });
 
-        if (response.error) {
-            return;
-        }
-    }
+      if (response.error) {
+        console.log(response.error)
+        return;
+      }
 
     cart.value = cart.value.filter(item => {
-        // Ürün varyasyonu varsa
-        if (deleteCartItem.variation) {
-            if (item.variation.id === deleteCartItem.variation.id &&
-                item.product_attribute_term_id === deleteCartItem.product_attribute_term_id) {
+      // Ürün varyasyonu varsa
+      if (deleteCartItem.variation) {
+        if (item.variation.id === deleteCartItem.variation.id &&
+          item.product_attribute_term_id === deleteCartItem.product_attribute_term_id) {
 
-                // input_value varsa, bunları karşılaştır
-                if (item.input_value && deleteCartItem.input_value) {
-                    return JSON.stringify(item.input_value) !== JSON.stringify(deleteCartItem.input_value);
-                }
+          // input_value varsa, bunları karşılaştır
+          if (item.input_value && deleteCartItem.input_value) {
+            return JSON.stringify(item.input_value) !== JSON.stringify(deleteCartItem.input_value);
+          }
 
-                return false;
-            }
-        } else {
-            if (item.product_id === deleteCartItem.product_id &&
-                item.product_attribute_term_id === deleteCartItem.product_attribute_term_id) {
-
-                // input_value varsa, bunları karşılaştır
-                if (item.input_value && deleteCartItem.input_value) {
-                    return JSON.stringify(item.input_value) !== JSON.stringify(deleteCartItem.input_value);
-                }
-
-                return false;
-            }
+          return false;
         }
+      } else {
+        if (item.product_id === deleteCartItem.product_id &&
+          item.product_attribute_term_id === deleteCartItem.product_attribute_term_id) {
 
-        return true;
+          // input_value varsa, bunları karşılaştır
+          if (item.input_value && deleteCartItem.input_value) {
+            return JSON.stringify(item.input_value) !== JSON.stringify(deleteCartItem.input_value);
+          }
+
+          return false;
+        }
+      }
+
+      return true;
     });
-};
+  };
 
 
 
 
 
-  return { cart, cartQyt, cartTotalAmount,addToCartloading, cartDBToState, resetCartState, patchCart, deleteCartItem }
-},
-  {
-    persist: {
-      storage: persistedState.localStorage,
-    },
-  })
+  return { cart, cartQyt, cartTotalAmount, addToCartloading, cartDBToState, resetCartState, patchCart, deleteCartItem }
+})

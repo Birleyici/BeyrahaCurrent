@@ -1,5 +1,6 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
+    
     <PartialsCommonHeaderSlideNestedMenu v-model="$uiStore.state.menuSlide" :menu="props.categories" />
 
     <PartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />

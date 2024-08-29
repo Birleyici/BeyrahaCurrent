@@ -164,13 +164,14 @@ const addToCart = () => {
     };
   }
 
+
   if (selectedVariation) {
     // Varyasyonlu ürün için
     newCartItem = {
       ...newCartItem,
       product_id: props.productState.product.id,
       product_name: `${props.productState.product.name} `, // Varyasyon adını ekle
-      product_thumb: selectedVariation.images?.[0] || props.productState.product.selectedColorTermImages?.[0] || props.productState.product.selectedImages?.[0],
+      image_id: selectedVariation.images?.[0]?.id || props.productState.product.selectedColorTermImages?.[0].id || props.productState.product.selectedImages?.[0]?.id,
       qyt: parseInt(qyt.value),
       variation: selectedVariation,
       price: selectedVariation.sale_price ? selectedVariation.sale_price : selectedVariation.price, // Varyasyonun fiyatını ekle
@@ -182,13 +183,14 @@ const addToCart = () => {
       ...newCartItem,
       product_id: props.productState.product.id,
       product_name: props.productState.product.name + ' ' + (selectedColor.value?.term_name || ''),
-      product_thumb: props.productState.product.selectedColorTermImages?.[0] || props.productState.product.selectedImages?.[0],
+      image_id: props.productState.product.selectedColorTermImages?.[0]?.id || props.productState.product.selectedImages?.[0]?.id,
       qyt: parseInt(qyt.value),
       price: props.productState.product.sale_price ? props.productState.product.sale_price : props.productState.product.price, // Ürünün fiyatını ekle
       total: (props.productState.product.sale_price ? props.productState.product.sale_price : props.productState.product.price) * parseInt(qyt.value) // Toplam tutarı hesapla
     };
   }
 
+  console.log(newCartItem)
   // Sepeti güncelle
   cartState.patchCart(newCartItem, parseInt(qyt.value));
 

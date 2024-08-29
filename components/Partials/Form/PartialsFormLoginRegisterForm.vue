@@ -8,7 +8,7 @@
         active: 'text-white'
       }
     },
-  }"  >
+  }">
     <template #item="{ item }">
       <UCard>
         <template #header>
@@ -26,7 +26,7 @@
               <UInput v-model="authStore.user.email" />
             </UFormGroup>
 
-            <UFormGroup label="Password" name="password">
+            <!-- <UFormGroup label="Password" name="password">
               <UInput :ui="{ icon: { trailing: { pointer: '' } } }" v-model="authStore.user.password"
                 :type="isShowPassword ? 'text' : 'password'">
                 <template #trailing>
@@ -35,7 +35,9 @@
                     class="w-5 h-5 cursor-pointer" />
                 </template>
               </UInput>
-            </UFormGroup>
+            </UFormGroup> -->
+
+            <UiInputPassword label="Şifre" v-model="authStore.user.password" />
 
             <UButton :loading="authStore.loginLoading" color="orange" size="md" type="submit"> Giriş </UButton>
 
@@ -47,19 +49,15 @@
 
           </UForm>
         </div>
-        <div v-else-if="item.key === 'register'" >
+        <div v-else-if="item.key === 'register'">
           <UForm :schema="schemaRegister" :state="authStore.register" class="space-y-4" @submit="onRegister">
             <UFormGroup label="Email" name="email">
               <UInput v-model="authStore.register.email" />
             </UFormGroup>
 
-            <UFormGroup label="Şifre" name="password">
-              <UInput v-model="authStore.register.password" type="password" />
-            </UFormGroup>
+            <UiInputPassword label="Şifre" v-model="authStore.register.password" />
 
-            <UFormGroup label="Şifre tekrar" name="password">
-              <UInput v-model="authStore.register.password_confirmation" type="password" />
-            </UFormGroup>
+            <UiInputPassword label="Şifre tekrar" v-model="authStore.register.password_confirmation" />
 
             <UButton :loading="authStore.registerLoading" color="orange" size="md" type="submit"> Kaydol </UButton>
 
@@ -79,7 +77,7 @@
 
 <script setup lang="ts">
 const props = defineProps({
-  redirect:{
+  redirect: {
     type: Boolean,
     default: true
   }

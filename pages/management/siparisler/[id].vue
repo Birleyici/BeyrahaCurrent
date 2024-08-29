@@ -11,16 +11,19 @@
             :save-function="orderState.saveAddress" class="p-4" title="Fatura adresi"
             :address="order.billing_address || {}" />
           <div class="border rounded-md p-4 ">
-            <div class="grid gap-2">
+            <div class="grid gap-4">
               <div>
                 <label class="text-sm">Sipariş durumu: </label>
                 <UBadge :ui="{ rounded: 'rounded-full' }" :color="badge.color">{{ badge.text }}</UBadge>
               </div>
+
+              <UNotification v-if="orderState.vendorOrder.shipping_code" :id="7" title="Sürat kargo kodu"
+                :description="orderState.vendorOrder.shipping_code" :timeout="0" />
+
               <div class="flex space-x-2 ">
-                <UButton label="Kargo kodu al" color="orange"
-                  :loading="orderState.vendorOrder.loadingState === 'processing'"
+                <UButton label="Kargo kodu al" color="orange" :loading="orderState.vendorOrder.shippingLoading"
                   v-if="orderState.vendorOrder.status == 'processing'"
-                  @click="orderState.getShippingCode(orderState.vendorOrder.id)" size="xs" />
+                  @click="orderState.getShippingCode(orderState.vendorOrder)" size="xs" />
 
                 <UButton label="Onayla" color="primary" :loading="orderState.vendorOrder.loadingState === 'processing'"
                   v-if="orderState.vendorOrder.status == 'pending'"
@@ -85,17 +88,7 @@ const editingMode = ref(false)
 const isOpenAddProductModal = ref(false)
 
 const badge = computed(() => {
-  const statuses = {
-    pending: { color: 'gray', text: 'Beklemede' },
-    processing: { color: 'blue', text: 'Hazırlanıyor' },
-    shipped: { color: 'green', text: 'Kargoya Verildi' },
-    in_transit: { color: 'yellow', text: 'Yolda' },
-    cancelled: { color: 'red', text: 'İptal Edildi' },
-    returned: { color: 'purple', text: 'İade Edildi' },
-    failed: { color: 'black', text: 'Başarısız' }
-  };
-
-  return statuses[orderState.vendorOrder.status] || { color: 'gray', text: 'Bilinmeyen' };
+  return orderState.statuses[orderState.vendorOrder.status] || { color: 'gray', text: 'Bilinmeyen' };
 });
 
 

@@ -46,9 +46,6 @@ const { getProducts } = useProduct()
 
 onMounted(async () => {
   getProducts({ piece: 7 })
-  await cartState.cartDBToState()
-
-  console.log(cartState.cart)
 })
 
 </script>

@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 
 export const useAuthStore = defineStore('authStore', () => {
     const token = ref('');
+    const orderState = useOrderStoreFront()
+    const cartState = useCartState()
+
     const user = ref({
         email: '',
         password: ''
@@ -18,22 +21,30 @@ export const useAuthStore = defineStore('authStore', () => {
         register: []
     })
 
+    const anon = ref({
+        id: null,
+        name: null
+    })
+
 
     const loginLoading = ref(false)
     const registerLoading = ref(false)
 
     const login = async () => {
         loginLoading.value = true;
-        const response = await useBaseOFetch(
+        const response = await useBaseOFetchWithAuth(
             "auth/login",
             {
                 body: JSON.stringify({ ...user.value }),
                 method: "POST",
                 onResponseError: (errorReponse) => {
                     apiError.value.login = [[errorReponse.response._data.error]]
+                    loginLoading.value = false;
+
                 }
             }
         ).finally(() => {
+            console.log("deneme")
             loginLoading.value = false;
         });
 
@@ -41,6 +52,7 @@ export const useAuthStore = defineStore('authStore', () => {
         if (!response.error) {
             apiError.value.login = []
             token.value = response.token
+            actionsOnLogin()
             return true
         } else {
             token.value = null
@@ -52,6 +64,15 @@ export const useAuthStore = defineStore('authStore', () => {
     };
 
 
+    const actionsOnLogin = async () => {
+        await orderState.fetchAddresses()
+        await cartState.cartDBToState()
+    }
+
+    const actionsOnLogout = async () => {
+        await orderState.fetchAddresses()
+        await cartState.cartDBToState()
+    }
 
     const registerUser = async () => {
         registerLoading.value = true;
@@ -93,13 +114,13 @@ export const useAuthStore = defineStore('authStore', () => {
             password: '',
             password_confirmation: ''
         }
-
+        actionsOnLogout()
         navigateTo('/auth')
 
     }
 
 
-    return { user, register, loginLoading, registerLoading, apiError, token, login, registerUser, logout }
+    return { user, anon, register, loginLoading, registerLoading, apiError, token, login, registerUser, logout }
 },
     {
         persist: {

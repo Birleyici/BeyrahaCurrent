@@ -26,10 +26,46 @@
         </div>
       </div>
     </div>
-    <PartialsCommonMegaMenu></PartialsCommonMegaMenu>
+    <div class="scroll-container my-8 w-full whitespace-nowrap bg-slate-100  rounded-sm p-2">
+      <p
+        v-for="cat in props.categories"
+        :key="cat.id"
+        class="font-medium border-r px-4 first:pl-0 last:border-r-0 cursor-pointer inline-block"
+        @click="openMenu(cat)"
+      >
+        {{ cat.name }}
+      </p>
+    </div>
+    
+
+    <PartialsCommonHeaderSlideNestedMenu
+      v-model="$uiStore.state.menuSlide"
+      :menu="props.categories"
+      :selected-category="selectedCategory"
+    />
   </div>
 </template>
+
 <script setup>
 const props = defineProps(["categories", "cart"]);
 const logoSrc = "/logo.jpg";
+const selectedCategory = ref(null); // selectedCategory ref olarak tanımlandı
+
+const openMenu = (cat) => {
+  selectedCategory.value = cat; // selectedCategory değeri burada ayarlandı
+  useNuxtApp().$uiStore.state.menuSlide = true;
+};
 </script>
+
+<style scoped>
+.scroll-container {
+  display: flex;
+  overflow-x: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+}
+
+.scroll-container::-webkit-scrollbar { 
+  display: none; /* Safari and Chrome */
+}
+</style>

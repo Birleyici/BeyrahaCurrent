@@ -3,18 +3,27 @@
         class="grid lg:grid-cols-2 gap-4 items-center my-minimal border p-2 rounded-md">
         <div class="h-full flex space-x-4">
             <div class="flex space-x-4">
-                <NuxtImg v-if="props.item.product_thumb?.path" width="70" class="object-cover rounded-md"
-                :src="`aws/${props.item.product_thumb?.path}`" />
-              <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
+                <NuxtImg v-if="props.item.image_path" width="70" class="object-cover rounded-md"
+                    :src="`aws/${props.item.image_path}`" />
+                <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
                 <div>
                     <p class="font-medium">{{ props.item.product_name }}</p>
-                    <div v-for="(value, key) in props.item.variation?.attributes">
 
-                        <div class="flex space-x-2 items-center">
-                            <b>{{ key }} :</b>
+                    <!-- Display Variation Attributes -->
+                    <div v-if="props.item.variation">
+                        <div v-for="(value, key) in props.item.variation.attributes" :key="key"
+                            class="text-sm flex space-x-2 items-center">
+                            <p class="font-medium">{{ key }} :</p>
                             <p>{{ value }}</p>
                         </div>
                     </div>
+
+                    <template v-if="props.item.input_value?.label">
+                        <div  class="flex space-x-2 items-center text-sm">
+                          <p class="font-medium">{{ props.item.input_value.label }}:</p>
+                          <p>{{ props.item.input_value.value?.length > 10 ? props.item.input_value.value.substring(0, 10) + '...' : props.item.input_value.value }}</p>
+                        </div>
+                      </template>
                 </div>
             </div>
         </div>
@@ -23,17 +32,17 @@
                 <PartialsCartItemCounter :cart-item="props.item" />
             </div>
             <div>
-                <div v-if="props.item.variation && props.item.variation.sale_price">
-                    <del class="font-medium">{{ formatPrice(props.item.variation.price) }}</del>
-                    <p class="text-orange-500 font-medium">{{ formatPrice(props.item.variation.sale_price) }}</p>
-                </div>
-                <div v-else>
-                    <p class="font-medium">{{ formatPrice(props.item.variation ? props.item.variation.price :
-                        props.item.price) }}</p>
-                </div>
+                <p class="text-orange-500 font-medium">
+                    {{ formatPrice(
+                      props.item.variation?.sale_price || 
+                      props.item.variation?.price || 
+                      props.item.sale_price || 
+                      props.item.price
+                    ) }} TL
+                  </p>
             </div>
-            <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-x-mark" size="xs" color="red" square
-                :ui="{ rounded: 'rounded-full' }" variant="soft" />
+            <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-x-mark" size="xs"
+                color="red" square :ui="{ rounded: 'rounded-full' }" variant="soft" />
         </div>
     </div>
 </template>

@@ -19,39 +19,40 @@
         <div class="lg:grid lg:grid-cols-3 gap-10">
           <div class="col-span-2">
 
-         <div class="grid gap-4">
-          <b>Sipariş içeriği</b>
+            <div class="grid gap-4">
+              <b>Sipariş içeriği</b>
+              <div class="grid gap-4" v-for="sub_order in order.sub_orders ">
+                <PartialsOrderSummary  :item="item" v-for="item in sub_order.order_items || []" :key="item.id" />
+              </div>
+            </div>
 
-          
-          <div class="grid gap-4" v-for="sub_order in order.sub_orders ">
-            <PartialsOrderSummary :item="item" v-for="item in sub_order.order_items || []" :key="item.id" />
-          </div>
-         </div>
+            <div class="my-orta flex justify-between w-[300px]">
+              <div>
+                <p class="font-medium">Ödeme yöntemi </p>
+                <p class="font-medium">Kargo </p>
+                <p class="font-medium">Genel toplam </p>
 
-            <div class="my-orta lg:grid lg:grid-cols-3">
-              <div class="col-span-2"></div>
-              <div class="col-span-1 gap-2 grid">
-                <div class="flex justify-between">
-                  <p class="font-medium">Ödeme yöntemi :</p>
-                  <p class="text-secondary-500">Havale / EFT</p>
-                </div>
-                <div class="flex justify-between">
-                  <p class="font-medium">Kargo :</p>
-                  <p class="text-secondary-500">Ücretsiz</p>
-                </div>
-                <div class="flex justify-between">
-                  <p class="font-medium">Genel toplam :</p>
-                  <b class="text-secondary-500 border-b-4 border-secondary-200">{{ formatPrice(order.total) }}</b>
-                </div>
+              </div>
+              <div>
+                <p>:</p>
+                <p>:</p>
+                <p>:</p>
+              </div>
+              <div>
+                <p class="text-secondary-500">Havale / EFT</p>
+                <p class="text-secondary-500">Ücretsiz</p>
+                <b class="text-secondary-500 border-b-4 border-secondary-200">{{ formatPrice(order.total) }}</b>
+
               </div>
             </div>
           </div>
-         
+
           <div class="col-span-1 my-orta lg:my-0">
             <div class="grid gap-6 ">
-              <PartialsOrderAddressCard   class="p-4" title="Teslimat adresi" :actions="false"
+              <PartialsOrderAddressCard class="p-4" title="Teslimat adresi" :actions="false"
                 :address="order.shipping_address || {}" />
-              <PartialsOrderAddressCard   class="p-4" title="Fatura adresi" :actions="false" :address="order.billing_address || {}" />
+              <PartialsOrderAddressCard class="p-4" title="Fatura adresi" :actions="false"
+                :address="order.billing_address || {}" />
             </div>
           </div>
         </div>
@@ -61,7 +62,7 @@
     <div v-else>
       Yükleniyor...
     </div>
-   <pre>
+    <pre>
     <!-- {{ order.order_items[0].variation.terms }} -->
    </pre>
   </div>

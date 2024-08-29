@@ -4,7 +4,6 @@ import { v4 as uuidv4 } from 'uuid';
 
 export const useOrderStoreFront = defineStore('orderStoreFront', () => {
 
-    const authStore = useAuthStore()
     const cartState = useCartState()
     
     const isOpenAddressModal = ref(false)
@@ -47,20 +46,13 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
 
     const saveAddress = async (item) => {
 
-        if (!authStore.token) {
-            if (!item.id) {
-                item.id = uuidv4();
-            }
-            addresses.value = [item]
-        } else {
-
             const response = await useBaseOFetchWithAuth('address', {
                 method: 'POST',
                 body: JSON.stringify(item)
             })
 
-            if (!response.error) {
 
+            if (!response.error) {
                 if (response.isNew) {
                     await setDefaultFalseOtherAddresses(response.id)
                     addresses.value.unshift(response)
@@ -73,13 +65,11 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
 
                     }
                 }
-
             }
             isOpenAddressModal.value = false
             return
-        }
-        isOpenAddressModal.value = false
     };
+    
 
     const setDefaultFalseOtherAddresses = (id) => {
         addresses.value.forEach((address) => {
@@ -117,9 +107,9 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
         cities.value = response
     }
 
-    const fetchDistricts = async () => {
+    const fetchDistricts = async (city) => {
 
-        const response = await useBaseOFetch(`cities/${newAddress.value?.city?.id}/districts`)
+        const response = await useBaseOFetch(`cities/${city?.id}/districts`)
         districts.value = response
 
     }
@@ -153,10 +143,8 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
     }
 
     const fetchAddresses = async () => {
-        if (authStore.token) {
             const response = await useBaseOFetchWithAuth('addresses')
             addresses.value = response
-        }
     }
 
     const getOrders = async () => {

@@ -45,5 +45,7 @@
 
 <script setup>
 const orderState = useOrderStoreFront()
-await orderState.fetchAddresses()
+onMounted(async() => {
+  await orderState.fetchAddresses()
+})
 </script>

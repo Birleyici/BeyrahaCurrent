@@ -6,35 +6,5 @@
 </template>
 <script setup>
 const cartState = useCartState()
-
-const categories = reactive([
-  {
-    name: "Giyim",
-    icon: "mdi:clothes",
-    children: [
-      {
-        name: "Tesettür",
-        icon: null,
-        children: [
-          {
-            name: "alt alt",
-            icon: null,
-            children: [
-              {
-                name: "alt alt alt",
-                icon: null,
-              },
-            ],
-          },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Takı",
-    icon: "mdi:gold",
-  },
-]);
-
-
+const {data:categories} = await useFetch(useBaseUrl() + 'categories')
 </script>

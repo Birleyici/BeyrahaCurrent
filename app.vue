@@ -11,18 +11,16 @@
 <script setup>
 import { DialogWrapper } from 'vue3-promise-dialog';
 const { $changeMainState } = useNuxtApp()
-const cartState = useCartState()
 const nuxtApp = useNuxtApp()
 const router = useRouter()
-
-// await useAsyncData('cartInitApp', async () => {
-//   await cartState.cartDBToState()
-//   return true
-// })
+const cartState = useCartState()
 
 onMounted(async () => {
   $changeMainState({ isLoaded: true });
+  await cartState.cartDBToState()
+
 });
+
 
 watch(router.currentRoute, () => {
   nuxtApp.$uiStore.closeAll()

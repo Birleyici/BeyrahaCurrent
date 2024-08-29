@@ -5,12 +5,23 @@ export const useOrderManagementStore = defineStore('orderManagementStore', () =>
     const vendorOrders = ref([])
     const vendorOrder = ref(null)
     const toast = useToast()
+    const statuses = {
+        pending: { color: 'gray', text: 'Beklemede' },
+        processing: { color: 'blue', text: 'Hazırlanıyor' },
+        shipped: { color: 'green', text: 'Kargoya Verildi' },
+        in_transit: { color: 'yellow', text: 'Yolda' },
+        cancelled: { color: 'red', text: 'İptal Edildi' },
+        returned: { color: 'purple', text: 'İade Edildi' },
+        failed: { color: 'black', text: 'Başarısız' }
+    };
+
     const orderListColumns = [
         { key: "id", label: "ID" },
         { key: "full_name", label: "Ad Soyad", sortable: true },
-        { key: "total", label: "Toplam tutar", sortable: true },
+        { key: "total", label: "Toplam", sortable: true },
+        { key: "status", label: "Durum", sortable: true },
         { key: "created_at", label: "Tarih", sortable: true },
-        { key: "delete", label: "İşlemler" },
+        { key: "actions", label: "İşlemler" },
     ];
 
 
@@ -76,7 +87,10 @@ export const useOrderManagementStore = defineStore('orderManagementStore', () =>
         const response = await useBaseOFetchWithAuth('subOrder/save-input', {
             method: 'POST',
             body: JSON.stringify(input)
+        }).finally(() => {
+            input.loading = false
         })
+
         if (!response.error) {
             input.value = response.orderItemInput.value
             toast.add({
@@ -112,17 +126,17 @@ export const useOrderManagementStore = defineStore('orderManagementStore', () =>
         }
     };
 
-    const getShippingCode = async (subOrderId) => {
+    const getShippingCode = async (subOrder) => {
 
-        await useBaseOFetchWithAuth('shipping/get-code', {
+        subOrder.shippingLoading = true
+        const response = await useBaseOFetchWithAuth('shipping/get-code', {
             method: 'POST',
             body: {
-                subOrderId
+                subOrderId: subOrder.id
             },
             onResponseError: async (error) => {
 
                 const message = error.response?._data?.details
-console.log(error)
                 toast.add({
                     title: message ? message : 'Bir hata oluştu!',
                     color: 'red',
@@ -130,8 +144,18 @@ console.log(error)
                 })
 
             }
+        }).finally(() => {
+            subOrder.shippingLoading = false
         })
+        if (!response.error) {
+            subOrder.shipping_code = response.barcode
+            subOrder.status = 'shipped'
 
+            toast.add({
+                title: 'Kargo kodu alındı!',
+                icon: "i-heroicons-check-badge",
+            })
+        }
 
 
     }
@@ -144,6 +168,7 @@ console.log(error)
         vendorOrders,
         vendorOrder,
         orderListColumns,
+        statuses,
         deleteOrder,
         deleteSubOrderItem,
         saveInput,

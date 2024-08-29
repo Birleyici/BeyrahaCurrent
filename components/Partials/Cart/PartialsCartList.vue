@@ -2,8 +2,8 @@
   <div class="my-2 border rounded-md p-1 last:border-b-0 border-dashed">
     <div class="flex space-x-4">
       <!-- Product Image -->
-      <NuxtImg v-if="props.item.product_thumb?.path" width="70" class="object-cover rounded-md"
-        :src="`aws/${props.item.product_thumb?.path}`" />
+      <NuxtImg v-if="props.item.image_path" width="70" class="object-cover rounded-md"
+        :src="`aws/${props.item.image_path}`" />
       <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
       <div class="w-full">
         <!-- Product Name and Delete Button -->
@@ -23,8 +23,7 @@
             <p>{{ value }}</p>
           </div>
         </div>
-        <!-- Product Price and Counter -->
-        <template v-if="props.item.input_value">
+        <template v-if="props.item.input_value?.label">
           <div  class="flex space-x-2 items-center text-sm">
             <p class="font-medium">{{ props.item.input_value.label }}:</p>
             <p>{{ props.item.input_value.value?.length > 10 ? props.item.input_value.value.substring(0, 10) + '...' : props.item.input_value.value }}</p>
@@ -34,7 +33,12 @@
     </div>
     <div class="flex items-center space-x-2 justify-between mt-2">
       <p class="text-orange-500 font-medium">
-        {{ formatPrice(props.item.variation?.price || props.item.price) }} TL
+        {{ formatPrice(
+          props.item.variation?.sale_price || 
+          props.item.variation?.price || 
+          props.item.sale_price || 
+          props.item.price
+        ) }} TL
       </p>
       <PartialsCartItemCounter :cart-item="props.item" />
     </div>

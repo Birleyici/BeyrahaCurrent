@@ -21,7 +21,7 @@
                 <Icon name="mdi:plus" class="font-semibold w-4 h-4"></Icon>
               </button>
             </div>
-            <div v-if="orderState.addresses?.length > 1" class="flex justify-center space-x-2 items-center">
+            <div v-if="orderState.addresses?.length > 1 && authStore.token" class="flex justify-center space-x-2 items-center">
               <UButton @click="orderState.openAllAddressModal = true" variant="link" color="orange"
                 class="text-sm font-medium p-3 h-full">
                 Diğer adresler
@@ -89,16 +89,16 @@
         </template>
 
         <div class="h-[400px] overflow-y-scroll relative pr-4">
-
           <div :key="address.id" v-for="address in orderState.addresses">
             <div class="border my-2 p-minimal rounded-md flex items-center w-full"
               :class="{ 'bg-tertiary-50 border border-orange-500': address.isDefault }">
-              <PartialsOrderAddressCard  class="!border-none" :address="address"  />
+              <PartialsOrderAddressCard :actions="true" class="!border-none" :address="address"  />
             </div>
           </div>
         </div>
       </UCard>
     </UModal>
+   
   </div>
 </template>
 
@@ -110,9 +110,7 @@ const isShowNewAddressButton = computed(() => {
 })
 
 onMounted(async () => {
-
   await orderState.fetchAddresses()
-
 })
 </script>
 

@@ -6,8 +6,8 @@
       <p class="text-sm" :key="props.cartItem.qyt">{{ props.cartItem.qyt }} Ad.</p>
     </Transition>
 
-    <UButton :loading="loadingPlus" :disabled="loadingPlus" @click="increase()"
-      icon="i-heroicons-plus" size="2xs" color="gray" square :ui="{ rounded: 'rounded-full' }" variant="solid" />
+    <UButton :loading="loadingPlus" :disabled="loadingPlus" @click="increase()" icon="i-heroicons-plus" size="2xs"
+      color="gray" square :ui="{ rounded: 'rounded-full' }" variant="solid" />
   </div>
 </template>
 
@@ -19,16 +19,18 @@ const loadingMinus = ref(false)
 
 const increase = async () => {
   loadingPlus.value = true
-  await cartState.patchCart(props.cartItem, +1)
-  loadingPlus.value = false
-
+  await cartState.patchCart(props.cartItem, +1).finally(() => {
+    loadingPlus.value = false
+  })
 }
 
 const decrease = async () => {
   loadingMinus.value = true
-  await cartState.patchCart(props.cartItem, -1)
-  loadingMinus.value = false
+  await cartState.patchCart(props.cartItem, -1).finally(() => {
+    loadingMinus.value = false
 
+  })
+  loadingMinus.value = false
 }
 
 </script>
