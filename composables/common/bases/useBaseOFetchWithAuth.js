@@ -1,5 +1,12 @@
 import { defu } from "defu";
 
+let isRefreshing = false;
+let refreshSubscribers = [];
+
+function onRefreshed(token) {
+    refreshSubscribers.map(callback => callback(token));
+}
+
 export async function useBaseOFetchWithAuth(url, options = {}) {
     const authStore = useAuthStore();
     const apiBaseUrl = useBaseUrl();
@@ -45,13 +52,15 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
         if (error.response && error.response.status === 401) {
             console.log("401 block");
 
-            // Token'ı yenile
-            const newToken = await refreshToken();
-            authStore.token = newToken;
+            // Token yenileme işlemi
+            const newToken = await handleTokenRefresh(authStore, apiBaseUrl);
+
+            // Yenilenen token ile tekrar isteği yap
             params.headers['Authorization'] = `Bearer ${newToken}`;
 
             try {
-                console.log("Retrying with new token:", newToken);
+                console.log("Retrying url:", url);
+
                 const retryResponse = await $fetch(apiBaseUrl + url, params);
                 console.log("Retry successful", retryResponse);
                 return retryResponse;
@@ -69,29 +78,40 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
             throw error;
         }
     }
+}
 
-    async function refreshToken() {
-        if (!authStore.token) return;
-
-        try {
-            const response = await $fetch(apiBaseUrl + "auth/refresh", {
-                method: "POST",
-                headers: { Authorization: `Bearer ${authStore.token}` },
+async function handleTokenRefresh(authStore, apiBaseUrl) {
+    if (isRefreshing) {
+        return new Promise(resolve => {
+            refreshSubscribers.push(token => {
+                resolve(token);
             });
+        });
+    }
 
-            if (response && response.token) {
-                authStore.token = response.token;
-                return response.token;
-            } else {
-                throw new Error("Token refresh failed");
-            }
-        } catch (error) {
-            console.log(error);
-            if (error.response?.status === 401) {
-                authStore.token = null;
-            }
-            console.error("Token refresh failed", error);
+    isRefreshing = true;
+
+    try {
+        const response = await $fetch(apiBaseUrl + "auth/refresh", {
+            method: "POST",
+            headers: { Authorization: `Bearer ${authStore.token}` },
+        });
+
+        if (response && response.token) {
+            authStore.token = response.token;
+            onRefreshed(response.token);
+            refreshSubscribers = [];
+            return response.token;
+        } else {
             throw new Error("Token refresh failed");
         }
+    } catch (error) {
+        if (error.response?.status === 401) {
+            authStore.logout();
+        }
+        console.error("Token refresh failed", error);
+        throw error;
+    } finally {
+        isRefreshing = false;
     }
 }

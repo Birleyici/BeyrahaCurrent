@@ -30,7 +30,7 @@
       </div>
 
       <div class="my-maximal">
-        <LazyUiSlidesProductSlide title="Bunlarda ilginizi çekebilir" :products="productState.products">
+        <LazyUiSlidesProductSlide title="Bunlarda ilginizi çekebilir" :products="productState.products.data">
         </LazyUiSlidesProductSlide>
       </div>
     </ClientOnly>

@@ -21,6 +21,14 @@ const categoryState = useCategoryState();
 const route = useRoute();
 const router = useRouter();
 
+// - categoryState.selectedCategories STATE'İ kullanıcının seçtiği kategoriler için
+// v-model olarak kullanılan bir model değişkenidir.
+
+const initCategoryIds = route.query.selectedCategoryIds
+if (initCategoryIds) {
+  categoryState.selectedCategories = initCategoryIds.split(',').map(Number).map(id => ({ id }))
+}
+
 const query = ref({
   searchWord: route.query.searchWord,
   page: parseInt(route.query.page) || 1,
@@ -34,7 +42,7 @@ useScrollEnd('finishProducts', () => {
 });
 
 const selectedCategoryIds = computed(() => {
-  return categoryState.selectedCategories.map(category => category.id);
+  return categoryState.selectedCategories.map(category => category.id) || [];
 });
 
 
@@ -60,11 +68,11 @@ await useAsyncData('initDataProductss', async () => {
 
 const loading = ref(false);
 
-watch(()=> [query, selectedCategoryIds, query.value.page], async (newValue, oldValue) => {
+watch(() => [query, selectedCategoryIds, query.value.page], async (newValue, oldValue) => {
 
 
   //eğer sayfa değişmediyse ama diğer filtreler tetiklendiyse
-  if(newValue[2] == oldValue[2]){
+  if (newValue?.[2] == oldValue?.[2]) {
     query.value.page = 1
   }
 
@@ -98,6 +106,30 @@ const pushQueryParams = () => {
     }
   });
 
+}
+
+
+
+onMounted(() => {
+  watch(() => categoryState.selectedCategories, () => {
+    categoryState.sortCategories()
+  }, {
+    immediate: true,
+    deep: true
+  })
+})
+
+
+onBeforeRouteUpdate(async (to, from) => {
+  if (to.path == '/kategori' && (to.query.selectedCategoryIds !== from.query.selectedCategoryIds)) {
+    categoryState.selectedCategories = to.query.selectedCategoryIds.split(',').map(Number).map(id => ({ id }))
+  }
+})
+
+
+const categorySlug = categoryState.categories.find(c => c.slug === route.params.catSlug);
+if (categorySlug && !categoryState.selectedCategories.some(cat => cat.id === categorySlug.id)) {
+  categoryState.selectedCategories.push({ id: categorySlug.id });
 }
 
 

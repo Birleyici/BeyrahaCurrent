@@ -6,5 +6,9 @@
 </template>
 <script setup>
 const cartState = useCartState()
-const {data:categories} = await useFetch(useBaseUrl() + 'categories')
+const {data:categories} = await useFetch(useBaseUrl() + 'categories', {
+  params:{
+    transform:true
+  }
+})
 </script>

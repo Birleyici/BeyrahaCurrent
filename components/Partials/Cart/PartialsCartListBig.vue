@@ -19,11 +19,12 @@
                     </div>
 
                     <template v-if="props.item.input_value?.label">
-                        <div  class="flex space-x-2 items-center text-sm">
-                          <p class="font-medium">{{ props.item.input_value.label }}:</p>
-                          <p>{{ props.item.input_value.value?.length > 10 ? props.item.input_value.value.substring(0, 10) + '...' : props.item.input_value.value }}</p>
+                        <div class="flex space-x-2 items-center text-sm">
+                            <p class="font-medium">{{ props.item.input_value.label }}:</p>
+                            <p>{{ props.item.input_value.value?.length > 10 ? props.item.input_value.value.substring(0,
+                                10) + '...' : props.item.input_value.value }}</p>
                         </div>
-                      </template>
+                    </template>
                 </div>
             </div>
         </div>
@@ -32,15 +33,11 @@
                 <PartialsCartItemCounter :cart-item="props.item" />
             </div>
             <div>
-                <p class="text-orange-500 font-medium">
-                    {{ formatPrice(
-                      props.item.variation?.sale_price || 
-                      props.item.variation?.price || 
-                      props.item.sale_price || 
-                      props.item.price
-                    ) }} TL
-                  </p>
+                <PartialsProductPrice type="card"
+                    :sale-price="props.item.variation?.sale_price || props.item.sale_price"
+                    :price="props.item.variation?.price || props.item.price" />
             </div>
+
             <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-x-mark" size="xs"
                 color="red" square :ui="{ rounded: 'rounded-full' }" variant="soft" />
         </div>

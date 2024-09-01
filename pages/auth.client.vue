@@ -2,7 +2,7 @@
   <div class="px-x-mobil lg:px-x-desktop my-minimal flex items-center justify-center">
     <div>
       <div class="mb-orta font-medium text-center ">Oturum seçenekleri</div>
-      <PartialsFormLoginRegisterForm></PartialsFormLoginRegisterForm>
+      <PartialsFormAuthForm></PartialsFormAuthForm>
       <div v-if="route.query?.callback=='/odeme'" class="mt-4 flex justify-end">
         <div class="flex items-center space-x-2">
           <UButton to="/odeme?type=withoutMembership" size="md" variant="soft" color="orange"

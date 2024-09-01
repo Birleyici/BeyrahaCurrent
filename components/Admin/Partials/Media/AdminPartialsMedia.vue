@@ -67,8 +67,7 @@ const getImagesData = async () => {
 await getImagesData();
 
 const addNewPathsToImages = (imgs) => {
-
-  images.value.data.unshift(imgs)
+  images.value.data.unshift(...imgs)
   
 }
 

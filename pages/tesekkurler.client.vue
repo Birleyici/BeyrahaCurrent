@@ -6,6 +6,7 @@
       <div class="my-minimal">
         <UiNotificationBar type="info">
           <span class="text-secondary-500">#000{{ order.id }}</span> Numaralı sipariniz başarıyla
+          
           oluşturuldu. <span class="text-secondary-500">{{ formatPrice(order.total) }}</span> toplam tutarı
           aşağıdaki banka bilgilerimize açıklama kısmına sipariş numaranızı yazarak
           gönderdiğinizde siparişiniz onaylanarak işleme alınacaktır.
@@ -22,7 +23,7 @@
             <div class="grid gap-4">
               <b>Sipariş içeriği</b>
               <div class="grid gap-4" v-for="sub_order in order.sub_orders ">
-                <PartialsOrderSummary  :item="item" v-for="item in sub_order.order_items || []" :key="item.id" />
+                <PartialsOrderSummary :item="item" v-for="item in sub_order.order_items || []" :key="item.id" />
               </div>
             </div>
 
@@ -49,10 +50,12 @@
 
           <div class="col-span-1 my-orta lg:my-0">
             <div class="grid gap-6 ">
-              <PartialsOrderAddressCard class="p-4" title="Teslimat adresi" :actions="false"
-                :address="order.shipping_address || {}" />
-              <PartialsOrderAddressCard class="p-4" title="Fatura adresi" :actions="false"
-                :address="order.billing_address || {}" />
+              <PartialsOrderAddressCard title="Teslimat Adresi" :address="order.shipping_address || {}" :addressOptions="{
+                allAction: false
+              }" />
+              <PartialsOrderAddressCard title="Fatura Adresi" :addressOptions="{
+                allAction: false
+              }" :address="order.billing_address || {}" />
             </div>
           </div>
         </div>

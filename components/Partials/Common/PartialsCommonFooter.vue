@@ -1,8 +1,11 @@
 <template>
   <div>
+    <UDivider type="dashed" class="mt-section-desktop"/>
+
     <div
-      class="mx-x-mobil grid sm:grid-cols-2 gap-10 lg:grid-cols-4 lg:mx-x-desktop py-minimal mt-section-desktop border-t border-primary"
+      class="mx-x-mobil grid sm:grid-cols-2 gap-10 lg:grid-cols-4 lg:mx-x-desktop py-8  "
     >
+    
       <div class="grid gap-1">
         <b class="text-lg">Kişisel</b>
         <a href="#">Hesabım</a>
@@ -48,6 +51,6 @@
         </div>
       </div>
     </div>
-    <div class="bg-slate-100 text-center text-sm py-2 font-bold">Beyraha - 2017</div>
+    <div class="bg-slate-100 text-center text-sm py-2 font-medium">Beyraha Ltd. Şti. | 2017 - 2023</div>
   </div>
 </template>

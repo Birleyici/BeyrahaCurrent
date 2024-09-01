@@ -29,6 +29,14 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Beyraha Tesettür Giyim - Ana Sayfa',
+  meta: [
+    { name: 'description', content: 'En sevdiğiniz tesettür mağazaları artık yeni Beyraha da sizleri bekliyor.' }
+  ],
+})
+
+
 const productState = useProductState()
 const { getProducts } = useProduct()
 

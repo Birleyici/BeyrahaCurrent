@@ -5,7 +5,7 @@
   </NuxtLayout>
   <UNotifications icon="i-heroicons-check-badge" color="orange" />
   <DialogWrapper />
-  
+
 </template>
 
 <script setup>
@@ -18,7 +18,6 @@ const cartState = useCartState()
 onMounted(async () => {
   $changeMainState({ isLoaded: true });
   await cartState.cartDBToState()
-
 });
 
 

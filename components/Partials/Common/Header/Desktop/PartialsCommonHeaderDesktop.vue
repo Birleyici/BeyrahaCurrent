@@ -26,23 +26,19 @@
         </div>
       </div>
     </div>
-    <div class="scroll-container my-8 w-full whitespace-nowrap bg-slate-100  rounded-sm p-2 ">
-      <p
-        v-for="cat in props.categories"
-        :key="cat.id"
-        class="font-medium border-r px-4 first:pl-0 last:border-r-0 cursor-pointer inline-block"
-        @click="openMenu(cat)"
-      >
-        {{ cat.name }}
+
+    <div class="scroll-container my-8 w-full rounded-sm p-2 ">
+      <p v-for="cat in props.categories" :key="cat.id"
+        class="font-medium px-4 first:pl-0 text-center cursor-pointer inline-block align-top" @click="openMenu(cat)">
+        <NuxtImg :src="'aws/' + cat.icon" width="80px"
+          class="border  object-cover object-top min-w-20 h-20 border-orange-500 rounded-full p-1 hover:p-0 duration-200 mb-2" />
+        <span class="block overflow-hidden text-ellipsis">
+          {{ cat.name }}
+        </span>
       </p>
     </div>
-    
-
-    <PartialsCommonHeaderSlideNestedMenu
-      v-model="$uiStore.state.menuSlide"
-      :menu="props.categories"
-      :selected-category="selectedCategory"
-    />
+    <PartialsCommonHeaderSlideNestedMenu v-model="$uiStore.state.menuSlide" :menu="props.categories"
+      :selected-category="selectedCategory" />
   </div>
 </template>
 
@@ -50,22 +46,21 @@
 const props = defineProps(["categories", "cart"]);
 const logoSrc = "/logo.jpg";
 const selectedCategory = ref(null); // selectedCategory ref olarak tanımlandı
+const router = useRouter()
 
 const openMenu = (cat) => {
+  if (!cat.children) {
+    return router.push({
+      path: '/kategori',
+      query: {
+        selectedCategoryIds: cat.id
+      }
+    })
+  }
   selectedCategory.value = cat; // selectedCategory değeri burada ayarlandı
   useNuxtApp().$uiStore.state.menuSlide = true;
 };
+
+
 </script>
 
-<style scoped>
-.scroll-container {
-  display: flex;
-  overflow-x: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none;  /* Internet Explorer 10+ */
-}
-
-.scroll-container::-webkit-scrollbar { 
-  display: none; /* Safari and Chrome */
-}
-</style>

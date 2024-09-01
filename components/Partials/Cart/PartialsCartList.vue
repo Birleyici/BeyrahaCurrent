@@ -24,22 +24,19 @@
           </div>
         </div>
         <template v-if="props.item.input_value?.label">
-          <div  class="flex space-x-2 items-center text-sm">
+          <div class="flex space-x-2 items-center text-sm">
             <p class="font-medium">{{ props.item.input_value.label }}:</p>
-            <p>{{ props.item.input_value.value?.length > 10 ? props.item.input_value.value.substring(0, 10) + '...' : props.item.input_value.value }}</p>
+            <p>{{ props.item.input_value.value?.length > 10 ? props.item.input_value.value.substring(0, 10) + '...' :
+              props.item.input_value.value }}</p>
           </div>
         </template>
       </div>
     </div>
     <div class="flex items-center space-x-2 justify-between mt-2">
-      <p class="text-orange-500 font-medium">
-        {{ formatPrice(
-          props.item.variation?.sale_price || 
-          props.item.variation?.price || 
-          props.item.sale_price || 
-          props.item.price
-        ) }} TL
-      </p>
+      <div>
+        <PartialsProductPrice type="card" :sale-price="props.item.variation?.sale_price || props.item.sale_price"
+          :price="props.item.variation?.price || props.item.price" />
+      </div>
       <PartialsCartItemCounter :cart-item="props.item" />
     </div>
   </div>

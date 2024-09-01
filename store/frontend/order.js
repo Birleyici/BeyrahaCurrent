@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 export const useOrderStoreFront = defineStore('orderStoreFront', () => {
 
     const cartState = useCartState()
-    
+
     const isOpenAddressModal = ref(false)
     const openAllAddressModal = ref(false)
 
@@ -46,30 +46,30 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
 
     const saveAddress = async (item) => {
 
-            const response = await useBaseOFetchWithAuth('address', {
-                method: 'POST',
-                body: JSON.stringify(item)
-            })
+        const response = await useBaseOFetchWithAuth('address', {
+            method: 'POST',
+            body: JSON.stringify(item)
+        })
 
 
-            if (!response.error) {
-                if (response.isNew) {
-                    await setDefaultFalseOtherAddresses(response.id)
-                    addresses.value.unshift(response)
+        if (!response.error) {
+            if (response.isNew) {
+                await setDefaultFalseOtherAddresses(response.id)
+                addresses.value.unshift(response)
+            } else {
+                const index = addresses.value.findIndex(item => item.id === response.id)
+                if (index == -1) {
+                    addresses.value = [response]
                 } else {
-                    const index = addresses.value.findIndex(item => item.id === response.id)
-                    if (index == -1) {
-                        addresses.value = [response]
-                    } else {
-                        addresses.value[index] = response
+                    addresses.value[index] = response
 
-                    }
                 }
             }
-            isOpenAddressModal.value = false
-            return
+        }
+        isOpenAddressModal.value = false
+        return
     };
-    
+
 
     const setDefaultFalseOtherAddresses = (id) => {
         addresses.value.forEach((address) => {
@@ -82,14 +82,16 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
     }
 
 
-    const setDefaultAddress = async (id) => {
+    const setDefaultAddress = async (address) => {
+        address.loading = true
         const response = await useBaseOFetchWithAuth('address/default', {
             method: 'POST',
-            body: JSON.stringify({ addressId: id }),
+            body: JSON.stringify({ addressId: address.id }),
+        }).finally(() => {
+            address.loading = false
         });
-
         if (!response.error) {
-            setDefaultFalseOtherAddresses(id)
+            setDefaultFalseOtherAddresses(address.id)
         }
     }
 
@@ -143,8 +145,8 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
     }
 
     const fetchAddresses = async () => {
-            const response = await useBaseOFetchWithAuth('addresses')
-            addresses.value = response
+        const response = await useBaseOFetchWithAuth('addresses')
+        addresses.value = response
     }
 
     const getOrders = async () => {

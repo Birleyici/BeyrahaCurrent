@@ -15,7 +15,7 @@
                 </div>
             </template>
             <div v-if="!authStore.token">
-                <PartialsFormLoginRegisterForm :redirect="false" />
+                <PartialsFormAuthForm :redirect="false" />
             </div>
             <p v-else>
             <ul class="list-none">

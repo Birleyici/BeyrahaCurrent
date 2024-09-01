@@ -33,7 +33,7 @@ export function findObjectIndex(array, objectToFind, excludeKeys) {
 
 export function formatPrice(value) {
   // Kuruşları TL'ye çevir
-  const tlValue = value / 100;
+  const tlValue = value;
 
   // Fiyatı formatla
   const formattedPrice = new Intl.NumberFormat('tr-TR', {

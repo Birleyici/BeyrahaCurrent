@@ -26,11 +26,8 @@
           {{ productState.product.name }}
         </NuxtLink>
       </div>
-      <div class="md:flex justify-center md:space-x-2 items-center text-center">
-        <del v-if="productState.product.sale_price" class="text-sm text-slate-400">{{ productState.product.price }} TL</del>
-        <p :class="{'text-secondary-500 font-medium': productState.product.sale_price, 'text-primary-500': !productState.product.sale_price}">
-          {{ productState.product.sale_price || productState.product.price }} TL
-        </p>
+      <div class="flex justify-center">
+        <PartialsProductPrice type="card" :sale-price="productState.product.sale_price" :price="productState.product.price" />
       </div>
     </div>
   </div>

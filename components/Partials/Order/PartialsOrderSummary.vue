@@ -32,7 +32,7 @@
         <div>
           <p class="text-sm">Birim fiyat</p>
           <div class="flex space-x-2">
-            <p class="text-secondary-500">{{ formatPrice(props.item.price) }}</p>
+            <PartialsProductPrice :del-price="false" type="card" :price="props.item.variation?.price || props.item.price" :sale-price="props.item.variation?.sale_price || props.item.sale_price" />
             <p>x {{ props.item.quantity }}</p>
           </div>
         </div>

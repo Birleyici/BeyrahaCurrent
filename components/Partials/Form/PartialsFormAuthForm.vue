@@ -1,5 +1,5 @@
 <template>
-  <UTabs :items="items" class="w-[300px]  md:w-[400px]" :ui="{
+  <UTabs :items="items" class="w-full  md:w-[400px]" :ui="{
     list: {
       marker: {
         background: '!bg-orange-500'

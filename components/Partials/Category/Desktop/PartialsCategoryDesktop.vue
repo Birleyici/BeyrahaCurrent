@@ -3,12 +3,12 @@
     <div class="col-span-3 ">
       <div class="grid gap-2">
         <p class="font-medium">Filtreler</p>
-        <div class="h-[500px] overflow-y-scroll bg-slate-100 p-4 rounded-md border">
+        <div class="h-[300px] overflow-y-scroll bg-slate-100 p-4 rounded-md border">
           <UCommandPalette :emptyState="{
             queryLabel: 'Sonuç bulunamadı...'
           }" placeholder="Kategorilerde ara..." v-model="categoryState.selectedCategories" multiple nullable
             :autoselect="false" :groups="[{ key: 'label', commands: categoryState.categories }]"
-            :fuse="{ resultLimit: -1 }" />
+            :fuse="{ resultLimit: 20 }" />
 
         </div>
       </div>

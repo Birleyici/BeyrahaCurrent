@@ -12,7 +12,7 @@
                     <div class="flex justify-between pb-2">
                         <p>Kargo ücreti:</p>
                         <p class="text-medium text-secondary-500 ">
-                            {{ shippingCost == 0 ? 'Ücretsiz' : formatPrice(shippingCost) }}
+                            {{ shippingCost == 0 ? 'Ücretsiz' : '₺' + shippingCost }}
                         </p>
                     </div>
                     <UDivider type="dashed"></UDivider>
@@ -20,7 +20,7 @@
                         <p>Toplam:</p>
                         <Transition name="slide-up" mode="out-in">
                             <p class="text-secondary-500 font-bold" :key="cartStore.cartTotalAmount">{{
-                                formatPrice(cartStore.cartTotalAmount + shippingCost) }}</p>
+                                formatPrice(cartStore.cartTotalAmount + shippingCost)  }}</p>
                         </Transition>
 
                     </div>

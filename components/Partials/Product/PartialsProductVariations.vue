@@ -51,24 +51,12 @@
     <div class="my-minimal">
       <div>
         <div v-if="getSelectedVariation">
-          <span v-if="getSelectedVariation.sale_price" class="flex items-center space-x-2">
-            <del class="text-gray-500">{{ formatPrice(getSelectedVariation.price) }} TL</del>
-            <span class="text-secondary-500 text-3xl font-bold">{{ formatPrice(getSelectedVariation.sale_price) }}
-              TL</span>
-          </span>
-          <span v-else class="text-secondary-500 text-3xl font-bold">
-            {{ formatPrice(getSelectedVariation.price) || "0" }} TL
-          </span>
+          <PartialsProductPrice type="page" :sale-price="getSelectedVariation.sale_price"
+            :price="getSelectedVariation.price" />
         </div>
         <div v-else>
-          <span v-if="props.productState.product.sale_price" class="flex items-center space-x-2">
-            <del class="text-gray-500">{{ formatPrice(props.productState.product.price) }} TL</del>
-            <span class="text-secondary-500 text-3xl font-bold">{{ formatPrice(props.productState.product.sale_price) }}
-              TL</span>
-          </span>
-          <span v-else class="text-secondary-500 text-3xl font-bold">
-            {{ formatPrice(props.productState.product.price) || "0" }} TL
-          </span>
+          <PartialsProductPrice type="page" :sale-price="props.productState.product.sale_price"
+            :price="props.productState.product.price" />
         </div>
       </div>
     </div>
@@ -158,7 +146,7 @@ const addToCart = () => {
   if (inputValue) {
     newCartItem.input_value = {
       value: inputValue,
-      label:input.label,
+      label: input.label,
       product_input_id: input.pivot.id,
       input_id: input.id
     };

@@ -29,7 +29,7 @@
         else
         :src="'aws' + item.path"
         
-        class="w-full zoomable transition-transform duration-300 border lg:rounded-lg"
+        class="w-full min-h-[300px] zoomable transition-transform duration-300 border lg:rounded-lg"
         draggable="false"
         width="600"
         format="webp"

@@ -48,7 +48,7 @@ const saveImagePaths = async (paths) => {
 
     console.log(response)
 
-    emit('uploadedImages', response.data[0])
+    emit('uploadedImages', response.data)
     
   } catch (error) {
     console.log(error, "error");

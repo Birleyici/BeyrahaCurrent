@@ -7,14 +7,8 @@
         <PartialsAccountMenu></PartialsAccountMenu>
       </div>
       <div class="col-span-3">
-        <UButton
-          @click="orderState.isOpenAddressModal = true"
-          color="orange"
-          class="mb-minimal"
-          size="md"
-          icon="i-heroicons-plus"
-          >Yeni adres</UButton
-        >
+        <UButton @click="orderState.isOpenAddressModal = true" color="orange" class="mb-minimal" size="md"
+          icon="i-heroicons-plus">Yeni adres</UButton>
         <div class="grid lg:grid-cols-2 gap-10">
           <UModal v-model="orderState.isOpenAddressModal" :fullscreen="$device.isMobile">
             <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
@@ -30,11 +24,13 @@
               <PartialsOrderAddressForm :address="orderState.newAddress"></PartialsOrderAddressForm>
             </UCard>
           </UModal>
-       
+
           <div :key="address.id" v-for="address in orderState.addresses">
             <div class="border  p-minimal rounded-md flex items-center w-full"
               :class="{ 'bg-tertiary-50 border-2 border-orange-500': address.isDefault }">
-              <PartialsOrderAddressCard class="!border-none" :address="address" :actions="true" />
+              <PartialsOrderAddress :address="address" :address-options="{
+                allAction: true
+              }" />
             </div>
           </div>
         </div>
@@ -45,7 +41,7 @@
 
 <script setup>
 const orderState = useOrderStoreFront()
-onMounted(async() => {
+onMounted(async () => {
   await orderState.fetchAddresses()
 })
 </script>
