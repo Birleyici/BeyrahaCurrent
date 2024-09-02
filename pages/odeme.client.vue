@@ -106,6 +106,9 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Ödeme - Beyraha',
+})
 const orderState = useOrderStoreFront()
 const authStore = useAuthStore()
 const isShowNewAddressButton = computed(() => {

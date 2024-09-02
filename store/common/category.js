@@ -6,6 +6,10 @@ export const useCategoryState = defineStore('categoryCommon', () => {
 
   const categories = ref([])
   const selectedCategories = ref([])
+  const selectedCategoryIds = computed(() => {
+    return selectedCategories?.value?.map(category => category.id) || [];
+  });
+
 
   const getCategories = async () => {
     const response = await useBaseOFetchWithAuth("categories");
@@ -15,6 +19,27 @@ export const useCategoryState = defineStore('categoryCommon', () => {
   const patchCategories = (obj) => {
     categories.value = obj
   }
+
+  const patchSelectedCategories = (cats, isPush = true) => {
+    const newCatIds = cats.split(',').map(Number);
+
+    // Zaten mevcut olmayan kategorileri seç
+    const uniqueNewCats = newCatIds.filter(
+        newCat => !selectedCategories.value.some(cat => cat.id === newCat)
+    ).map(id => ({ id }));
+
+    // Sadece yeni olanları ekle
+    if (uniqueNewCats.length) {
+        if (isPush) {
+            selectedCategories.value.push(...uniqueNewCats);
+        } else if (uniqueNewCats.length === 1) {
+            // Eğer uniqueNewCats 1 tane ise ve isPush false ise
+            selectedCategories.value = [uniqueNewCats[0]];
+        }
+    }
+};
+
+
 
   const sortCategories = () => {
     const selectedIds = selectedCategories.value.map(cat => cat.id);
@@ -33,5 +58,13 @@ export const useCategoryState = defineStore('categoryCommon', () => {
   };
 
 
-  return { categories, selectedCategories, sortCategories, getCategories, patchCategories }
+  return {
+    categories,
+    selectedCategories,
+    selectedCategoryIds,
+    sortCategories,
+    getCategories,
+    patchCategories,
+    patchSelectedCategories
+  }
 })

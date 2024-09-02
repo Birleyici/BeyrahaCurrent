@@ -7,8 +7,7 @@
       </div>
       <div class="col-span-3 mt-minimal lg:mt-0">
         <div class="space-y-minimal">
-          <div v-for="order, index in orderState.orders">
-            <PartialsOrderItem v-for="subOrder in order.sub_orders" :item="subOrder" :key="subOrder.id" :index="index">
+            <PartialsOrderItem v-for="order,index in orderState.orders" :item="order" :key="order.id" :index="index">
               <div class="grid gap-4 mt-4">
                 <PartialsOrderAddressCard title="Teslimat Adresi" :address="order.shipping_address || {}"
                   :addressOptions="{
@@ -19,7 +18,6 @@
                 }" :address="order.billing_address || {}" />
               </div>
             </PartialsOrderItem>
-          </div>
         </div>
       </div>
     </div>
@@ -27,7 +25,9 @@
 </template>
 
 <script setup>
-
+useHead({
+  title: 'Siparişlerim - Beyraha',
+})
 const orderState = useOrderStoreFront()
 useAsyncData('siparislerimInit', async () => {
   await orderState.getOrders()

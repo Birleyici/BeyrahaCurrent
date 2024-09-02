@@ -40,6 +40,11 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Sepet - Beyraha',
+ 
+})
+
 const cartState = useCartState()
 const productState = useProductState()
 const { getProducts } = useProduct()

@@ -7,7 +7,7 @@
         <UiNotificationBar type="info">
           <span class="text-secondary-500">#000{{ order.id }}</span> Numaralı sipariniz başarıyla
           
-          oluşturuldu. <span class="text-secondary-500">{{ formatPrice(order.total) }}</span> toplam tutarı
+          oluşturuldu. <span class="text-secondary-500">{{ formatPrice(order.total_with_shipping) }}</span> toplam tutarı
           aşağıdaki banka bilgilerimize açıklama kısmına sipariş numaranızı yazarak
           gönderdiğinizde siparişiniz onaylanarak işleme alınacaktır.
         </UiNotificationBar>
@@ -26,26 +26,8 @@
                 <PartialsOrderSummary :item="item" v-for="item in sub_order.order_items || []" :key="item.id" />
               </div>
             </div>
-
-            <div class="my-orta flex justify-between w-[300px]">
-              <div>
-                <p class="font-medium">Ödeme yöntemi </p>
-                <p class="font-medium">Kargo </p>
-                <p class="font-medium">Genel toplam </p>
-
-              </div>
-              <div>
-                <p>:</p>
-                <p>:</p>
-                <p>:</p>
-              </div>
-              <div>
-                <p class="text-secondary-500">Havale / EFT</p>
-                <p class="text-secondary-500">Ücretsiz</p>
-                <b class="text-secondary-500 border-b-4 border-secondary-200">{{ formatPrice(order.total) }}</b>
-
-              </div>
-            </div>
+            
+            <PartialsOrderExtre :total="order?.total" :shipping-cost="order?.shipping_cost" />
           </div>
 
           <div class="col-span-1 my-orta lg:my-0">
@@ -65,18 +47,18 @@
     <div v-else>
       Yükleniyor...
     </div>
-    <pre>
-    <!-- {{ order.order_items[0].variation.terms }} -->
-   </pre>
   </div>
-
 </template>
 
 <script setup>
+useHead({
+  title: 'Siparişiniz alındı - Beyraha',
+
+})
+
 const route = useRoute();
 const order = ref({});
 const orderLoaded = ref(false);
-
 
 const getOrder = async () => {
   const response = await useBaseOFetch(`order`, {
@@ -92,4 +74,5 @@ const getOrder = async () => {
 onMounted(async () => {
   await getOrder();
 });
+
 </script>

@@ -51,9 +51,9 @@ const router = useRouter()
 const openMenu = (cat) => {
   if (!cat.children) {
     return router.push({
-      path: '/kategori',
+      path: `/${cat.slug}-a${cat.id}`,
       query: {
-        selectedCategoryIds: cat.id
+        page: 1
       }
     })
   }

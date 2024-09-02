@@ -1,5 +1,4 @@
 <template>
-
   <div class="px-x-mobil lg:px-x-desktop ">
     <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
       :loading="loading" />
@@ -12,21 +11,23 @@
     </div> -->
     <div id="finishProducts"></div>
   </div>
-
 </template>
 
 <script setup>
+
+
 const productState = useProductState();
 const categoryState = useCategoryState();
 const route = useRoute();
 const router = useRouter();
+const catSlug = route.params.catSlug
+const catId = route.params.catId
 
-// - categoryState.selectedCategories STATE'İ kullanıcının seçtiği kategoriler için
-// v-model olarak kullanılan bir model değişkenidir.
+
 
 const initCategoryIds = route.query.selectedCategoryIds
 if (initCategoryIds) {
-  categoryState.selectedCategories = initCategoryIds.split(',').map(Number).map(id => ({ id }))
+  categoryState.patchSelectedCategories(initCategoryIds)
 }
 
 const query = ref({
@@ -41,22 +42,27 @@ useScrollEnd('finishProducts', () => {
   }
 });
 
-const selectedCategoryIds = computed(() => {
-  return categoryState.selectedCategories.map(category => category.id) || [];
-});
 
-
-await useAsyncData('initDataProductss', async () => {
+await useAsyncData('initDataProducts', async () => {
   try {
+    if (catSlug && catId) {
+      categoryState.selectedCategories = []
+      categoryState.patchSelectedCategories(catId.toString(), false)
+    }
+
     await Promise.all([
       productState.getProducts({
         filters: {
           ...query.value,
-          selectedCategoryIds: JSON.stringify(selectedCategoryIds.value)
+          selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
         }
       }),
       categoryState.getCategories(),
+
+
     ]);
+
+
     return [true, true];
   } catch (error) {
     console.error('Hata oluştu:', error);
@@ -67,9 +73,8 @@ await useAsyncData('initDataProductss', async () => {
 
 
 const loading = ref(false);
-
-watch(() => [query, selectedCategoryIds, query.value.page], async (newValue, oldValue) => {
-
+watch(() => [query, categoryState.selectedCategoryIds, query.value.page], async (newValue, oldValue) => {
+  console.log("çalıştı")
 
   //eğer sayfa değişmediyse ama diğer filtreler tetiklendiyse
   if (newValue?.[2] == oldValue?.[2]) {
@@ -82,7 +87,7 @@ watch(() => [query, selectedCategoryIds, query.value.page], async (newValue, old
   await productState.getProducts({
     filters: {
       ...query.value,
-      selectedCategoryIds: JSON.stringify(selectedCategoryIds.value)
+      selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
     }
   });
 
@@ -102,12 +107,11 @@ const pushQueryParams = () => {
     query: {
       ...route.query,
       ...query.value,
-      selectedCategoryIds: selectedCategoryIds.value.join(',')
+      selectedCategoryIds: categoryState.selectedCategoryIds.join(',')
     }
   });
 
 }
-
 
 
 onMounted(() => {
@@ -120,17 +124,12 @@ onMounted(() => {
 })
 
 
-onBeforeRouteUpdate(async (to, from) => {
-  if (to.path == '/kategori' && (to.query.selectedCategoryIds !== from.query.selectedCategoryIds)) {
-    categoryState.selectedCategories = to.query.selectedCategoryIds.split(',').map(Number).map(id => ({ id }))
-  }
+const slugsCat = categoryState.categories?.find(c => c.id === parseInt(catId))
+useHead({
+  title: `${slugsCat.label} fiyatları ve modelleri`,
+  meta: [
+    { name: 'description', content: slugsCat.description }
+  ],
 })
-
-
-const categorySlug = categoryState.categories.find(c => c.slug === route.params.catSlug);
-if (categorySlug && !categoryState.selectedCategories.some(cat => cat.id === categorySlug.id)) {
-  categoryState.selectedCategories.push({ id: categorySlug.id });
-}
-
 
 </script>

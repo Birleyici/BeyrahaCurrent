@@ -40,6 +40,9 @@
 </template>
 
 <script setup>
+useHead({
+  title: 'Adreslerim - Beyraha',
+})
 const orderState = useOrderStoreFront()
 onMounted(async () => {
   await orderState.fetchAddresses()
