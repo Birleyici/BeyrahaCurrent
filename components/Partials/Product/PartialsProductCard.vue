@@ -1,6 +1,7 @@
 <template>
   <div class="border rounded-md max-w-[250px]">
     <div class="relative overflow-hidden cursor-pointer">
+    
       <NuxtLink :to="productState.product.product_url">
         
         <NuxtImg

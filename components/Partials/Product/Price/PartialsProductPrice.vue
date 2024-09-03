@@ -1,5 +1,5 @@
 <template>
-    <div class="md:flex md:space-x-2 items-center text-center " :class="props.class">
+    <div class="flex space-x-2 items-center" :class="props.class">
         <del  :class="delClasses" v-if="props.salePrice && props.delPrice" class="text-slate-400">
             {{ formatPrice(props.price) }}
         </del>
