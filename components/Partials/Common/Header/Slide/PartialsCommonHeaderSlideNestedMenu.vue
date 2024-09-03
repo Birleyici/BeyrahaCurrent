@@ -24,9 +24,13 @@
         }">
           <ul class="list-none">
             <li v-for="(item, idx) in level" :key="idx" 
-              class="grid grid-cols-3 items-center  mb-2 bg-slate-100 hover:bg-slate-50 cursor-pointer select-none duration-200">
-             
-              <NuxtLink :to="`/${item.slug}-a${item.id}`" class="col-span-2 p-4">{{ item.name }}</NuxtLink>
+              class="grid grid-cols-3 items-center  mb-2 bg-slate-100 hover:bg-slate-50 rounded-l-full cursor-pointer select-none duration-200">
+              <div class="flex space-x-2 items-center">
+                <NuxtImg :src="'aws/' + item.icon" width="60px"
+          class="border  object-cover object-top min-w-14 h-14 border-orange-500 rounded-full p-1 hover:p-0 duration-200 " />
+    
+              <NuxtLink :to="`/${item.slug}-a${item.id}`" class="col-span-2 p-4 font-medium">{{ item.name }}</NuxtLink>
+              </div>
               <div v-if="item.children" @click="() => handleClick(item, idx, index)" class="bg-slate-50 p-4 h-full text-right">
                 <UIcon  name="i-heroicons-arrow-right"  />
               </div>
