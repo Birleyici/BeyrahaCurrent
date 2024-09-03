@@ -111,6 +111,7 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
 
     const fetchDistricts = async (city) => {
 
+        
         const response = await useBaseOFetch(`cities/${city?.id}/districts`)
         districts.value = response
 

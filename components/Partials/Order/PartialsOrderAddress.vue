@@ -33,7 +33,7 @@
 
         <div v-if="isActiveEditingButton || isActiveSetDefaultButton" class="flex space-x-4 ">
 
-            <UButton v-if="isActiveEditingButton" @click="editAddress(isOpenEditModal = true)" color="orange" class="p-0"
+            <UButton v-if="isActiveEditingButton" @click="isOpenEditModal = true" color="orange" class="p-0"
                 variant="link">
                 Düzenle
             </UButton>
