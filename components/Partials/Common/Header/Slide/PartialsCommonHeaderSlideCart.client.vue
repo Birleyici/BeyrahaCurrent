@@ -1,6 +1,6 @@
 <template>
     <USlideover v-model="model">
-        <UCard class="flex flex-col flex-1" :ui="{
+        <UCard class="h-full flex flex-col" :ui="{
             body: { base: 'flex-1' },
             ring: '',
             divide: 'divide-y divide-gray-100 dark:divide-gray-800',
@@ -14,35 +14,43 @@
                         @click="model = false" />
                 </div>
             </template>
-            <div class="flex flex-col h-full">
-                <!-- Bu div, kaydırma yapılacak alanın yüksekliğini belirler -->
-                <div v-if="cartState.cart.length > 0" class="overflow-y-scroll flex-grow pr-1" style="max-height: calc(100vh - 200px);">
+            <div class="flex flex-col h-screen relative">
+                
+                <!-- Scrollable area -->
+                <div v-if="cartState.cart.length > 0" class="overflow-y-auto">
                     <div>
-                        <PartialsCartList :key="Math.random()" :item="cartItem" v-for="(cartItem, index) in cartState.cart">
-                        </PartialsCartList>
+                        <PartialsCartList :key="Math.random()" :item="cartItem" v-for="(cartItem, index) in cartState.cart" />
                         <br><br>
                     </div>
                 </div>
                 <p v-else class="italic">Sepette ürün bulunmuyor...</p>
-                <div v-if="cartState.cart.length > 0" class="bg-white py-2">
-                    <UDivider icon="i-heroicons-shopping-cart" type="dashed" />
-                    <div class="grid grid-cols-2">
-                        <div class="flex justify-between">
-                            <b>Toplam</b>
-                            <span>:</span>
-                        </div>
-                        <div class="flex justify-end">
-                            <p class="text-secondary-500 font-bold">{{ formatPrice(cartState.cartTotalAmount) }}</p>
-                        </div>
+                <!-- Footer area -->
+                <div
+                id="toolbar"
+                class="sticky b-0 h-[200px] shrink-0 text-center"
+              >
+              <div v-if="cartState.cart.length > 0" class="bg-white py-2">
+                <UDivider icon="i-heroicons-shopping-cart" type="dashed" />
+                <div class="grid grid-cols-2">
+                    <div class="flex justify-between">
+                        <b>Toplam</b>
+                        <span>:</span>
                     </div>
-                    <div class="grid grid-cols-2 gap-2 mt-2">
-                        <nuxt-link to="/sepet">
-                            <UiButtonsBaseButton class="w-full" color="slate">Sepete Git</UiButtonsBaseButton>
-                        </nuxt-link>
-                        <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md" variant="solid">
-                        Ödeme</UButton>
+                    <div class="flex justify-end">
+                        <p class="text-secondary-500 font-bold">{{ formatPrice(cartState.cartTotalAmount) }}</p>
                     </div>
                 </div>
+                <div class="grid grid-cols-2 gap-2 mt-2">
+                    <nuxt-link to="/sepet">
+                        <UiButtonsBaseButton class="w-full" color="slate">Sepete Git</UiButtonsBaseButton>
+                    </nuxt-link>
+                    <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md" variant="solid">
+                    Ödeme</UButton>
+                </div>
+            </div>
+              </div>
+
+           
             </div>
         </UCard>
     </USlideover>
