@@ -3,7 +3,7 @@ export const useBaseUrl = () => {
 
     if (process.env.NODE_ENV === 'production') {
 
-        return 'http://localhost/laravel-api/public/api/'
+        return 'https://birleyici.online/api/'
 
 
     } else {
