@@ -78,3 +78,28 @@ button:disabled {
   display: none;
   /* Safari and Chrome */
 }
+
+
+/* Genel scrollbar stili */
+::-webkit-scrollbar {
+  width: 8px; /* Scrollbar genişliği */
+  height: 12px; /* Yatay scrollbar için yükseklik */
+}
+
+/* Scrollbar track (arkaplan) stili */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  border-radius: 10px; /* Scrollbar track köşelerini yuvarla */
+}
+
+/* Scrollbar thumb (sürgü) stili */
+::-webkit-scrollbar-thumb {
+  background: #b3b2b2; 
+  border-radius: 10px; /* Scrollbar thumb köşelerini yuvarla */
+}
+
+/* Scrollbar thumb hover (üzerine gelince) stili */
+::-webkit-scrollbar-thumb:hover {
+  background: #8b8b8b; 
+  border-radius: 10px; /* Hover sırasında köşeleri yuvarla */
+}

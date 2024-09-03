@@ -91,7 +91,7 @@
           </div>
         </template>
 
-        <div class="h-[400px] overflow-y-scroll relative pr-4">
+        <div class="h-full  relative pr-4">
           <div :key="address.id" v-for="address in orderState.addresses">
             <div class="border my-2 p-minimal rounded-md flex items-center w-full"
               :class="{ 'bg-tertiary-50 border border-orange-500': address.isDefault }">

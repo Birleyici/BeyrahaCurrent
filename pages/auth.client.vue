@@ -1,5 +1,5 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop my-minimal flex items-center justify-center">
+  <div class="my-minimal px-8 ">
     <div>
       <div class="mb-orta font-medium text-center ">Oturum seçenekleri</div>
       <PartialsFormAuthForm></PartialsFormAuthForm>

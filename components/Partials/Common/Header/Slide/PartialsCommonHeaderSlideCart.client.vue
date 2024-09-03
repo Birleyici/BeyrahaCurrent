@@ -14,24 +14,24 @@
                         @click="model = false" />
                 </div>
             </template>
-            <div>
-                <div v-if="cartState.cart.length > 0" class="h-[400px] pr-6 overflow-y-scroll">
-                 
-                    <PartialsCartList :key="Math.random()" :item="cartItem" v-for="(cartItem, index) in cartState.cart">
-                    </PartialsCartList>
-                    <br> <br>
+            <div class="flex flex-col h-full">
+                <!-- Bu div, kaydırma yapılacak alanın yüksekliğini belirler -->
+                <div v-if="cartState.cart.length > 0" class="overflow-y-scroll flex-grow pr-1" style="max-height: calc(100vh - 200px);">
+                    <div>
+                        <PartialsCartList :key="Math.random()" :item="cartItem" v-for="(cartItem, index) in cartState.cart">
+                        </PartialsCartList>
+                        <br><br>
+                    </div>
                 </div>
                 <p v-else class="italic">Sepette ürün bulunmuyor...</p>
-                <div v-if="cartState.cart.length > 0" class="sticky bottom-0  bg-white py-2  ">
+                <div v-if="cartState.cart.length > 0" class="bg-white py-2">
                     <UDivider icon="i-heroicons-shopping-cart" type="dashed" />
-
                     <div class="grid grid-cols-2">
                         <div class="flex justify-between">
                             <b>Toplam</b>
                             <span>:</span>
                         </div>
                         <div class="flex justify-end">
-                           
                             <p class="text-secondary-500 font-bold">{{ formatPrice(cartState.cartTotalAmount) }}</p>
                         </div>
                     </div>
@@ -39,8 +39,7 @@
                         <nuxt-link to="/sepet">
                             <UiButtonsBaseButton class="w-full" color="slate">Sepete Git</UiButtonsBaseButton>
                         </nuxt-link>
-                        <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md"
-                        variant="solid">
+                        <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md" variant="solid">
                         Ödeme</UButton>
                     </div>
                 </div>
@@ -51,8 +50,6 @@
 
 <script setup>
 const { nextNotRegister } = defineProps(["nextNotRegister"]);
-const cartState = useCartState()
+const cartState = useCartState();
 const model = defineModel();
-
-
 </script>

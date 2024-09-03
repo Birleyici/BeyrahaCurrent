@@ -81,7 +81,7 @@ const schema = object({
     .min(3, '3 karakterden az olamaz.')
     .required('Zorunlu'),
   last_name: string()
-    .min(3, '3 karakterden az olamaz.')
+    .min(2, '2 karakterden az olamaz.')
     .required('Zorunlu'),
   address: string()
     .min(20, 'Adres 20 karakterden kısa olamaz.')
