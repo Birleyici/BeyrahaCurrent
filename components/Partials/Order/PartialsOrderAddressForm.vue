@@ -69,20 +69,11 @@ let newAddress = ref(
 )
 
 
-
 const addressObj = props.address ? props.address : newAddress.value
 
-
 watch(()=> addressObj.city, () => {
-
   addressObj.district = null
-  console.log(addressObj.district) 
-
-}, {
-deep: true
 })
-
-
 
 const emit = defineEmits(['isSaved'])
 const schema = object({

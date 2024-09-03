@@ -25,7 +25,8 @@
           <ul class="list-none">
             <li v-for="(item, idx) in level" :key="idx" 
               class="grid grid-cols-3 items-center  mb-2 bg-slate-100 hover:bg-slate-50 cursor-pointer select-none duration-200">
-              <NuxtLink :to="'/kategori?selectedCategoryIds=' + item.id" class="col-span-2 p-4">{{ item.name }}</NuxtLink>
+             
+              <NuxtLink :to="`/${item.slug}-a${item.id}`" class="col-span-2 p-4">{{ item.name }}</NuxtLink>
               <div v-if="item.children" @click="() => handleClick(item, idx, index)" class="bg-slate-50 p-4 h-full text-right">
                 <UIcon  name="i-heroicons-arrow-right"  />
               </div>
