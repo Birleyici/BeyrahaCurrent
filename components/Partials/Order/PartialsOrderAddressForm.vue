@@ -36,7 +36,7 @@
           </UFormGroup>
         </div>
 
-        <UButton type="submit" class="flex justify-center mt-4 absolute bottom-0 right-4 left-4 " color="orange"
+        <UButton type="submit" class="flex justify-center mt-4 " color="orange"
           size="md">
           Adresi Kaydet
         </UButton>
