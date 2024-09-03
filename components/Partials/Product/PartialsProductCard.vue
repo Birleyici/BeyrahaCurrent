@@ -11,12 +11,12 @@
           quality="90"
           loading="lazy"
           width="200"
-          class="rounded-t-sm duration-200 h-[350px] object-cover w-full hover:scale-110"
+          class="rounded-t-sm duration-200 h-[250px] md:h-[350px] object-cover w-full hover:scale-110"
         />
         <img
           v-else
           :src="img_placeholder"
-          class="rounded-t-sm duration-200 h-[350px] w-[250px] object-cover hover:scale-110"
+          class="rounded-t-sm duration-200 h-[250px] md:h-[350px] w-[250px] object-cover hover:scale-110"
           alt="Ürün görseli yer tutucusu"
         />
       </NuxtLink>

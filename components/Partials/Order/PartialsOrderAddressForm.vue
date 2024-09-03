@@ -1,6 +1,5 @@
 <template>
   <div class="space-y-4">
-
     <UForm :schema="schema" :state="addressObj" class="space-y-4" @submit="saveAddress()">
       <div class="grid gap-4">
         <div class="grid grid-cols-2 gap-4">
@@ -35,10 +34,10 @@
           <UFormGroup label="Email" name="email">
             <UInput color="orange" v-model="addressObj.email" type="email" />
           </UFormGroup>
-
         </div>
 
-        <UButton type="submit" class="flex justify-center mt-4" color="orange" size="md">
+        <UButton type="submit" class="flex justify-center mt-4 absolute bottom-0 right-4 left-4 " color="orange"
+          size="md">
           Adresi Kaydet
         </UButton>
       </div>
@@ -71,7 +70,7 @@ let newAddress = ref(
 
 const addressObj = props.address ? props.address : newAddress.value
 
-watch(()=> addressObj.city, () => {
+watch(() => addressObj.city, () => {
   addressObj.district = null
 })
 
