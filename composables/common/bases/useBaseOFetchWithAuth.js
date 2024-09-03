@@ -69,11 +69,11 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
                 throw retryError;
             }
         } else {
-            toast.add({
-                title: 'Bir hata oluştu!',
-                color: 'red',
-                icon: "i-heroicons-exclamation-triangle",
-            });
+            // toast.add({
+            //     title: 'Bir hata oluştu!',
+            //     color: 'red',
+            //     icon: "i-heroicons-exclamation-triangle",
+            // });
             console.error("Fetch error:", error);
             throw error;
         }

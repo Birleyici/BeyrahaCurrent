@@ -152,13 +152,13 @@ const addToCart = () => {
     };
   }
 
-
+console.log(selectedColor.value?.term_name)
   if (selectedVariation) {
     // Varyasyonlu ürün için
     newCartItem = {
       ...newCartItem,
       product_id: props.productState.product.id,
-      product_name: `${props.productState.product.name} `, // Varyasyon adını ekle
+      product_name: `${props.productState.product.name} `+ (selectedColor.value?.term_name || ''), // Varyasyon adını ekle
       image_id: selectedVariation.images?.[0]?.id || props.productState.product.selectedColorTermImages?.[0].id || props.productState.product.selectedImages?.[0]?.id,
       qyt: parseInt(qyt.value),
       variation: selectedVariation,

@@ -9,7 +9,6 @@
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
         <h1 class="text-2xl font-semibold pb-2">
           {{ productState.product.name }}
-         <span class="text-gray-400 font-light"> #{{ productState.product.sku }}</span>
         </h1>
         <UDivider class="my-2" type="dashed" />
         <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
@@ -80,7 +79,7 @@ const selectedImages = computed(() => {
 
 
 useHead({
-  title: `${productState.product.name} ${productState.product.sku}`,
+  title: `${productState.product.name}`,
   meta: [
     { name: 'description', content: productState.product.description }
   ],
