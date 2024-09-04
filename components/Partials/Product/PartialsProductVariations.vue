@@ -15,8 +15,11 @@
               <UCarousel v-if="$mainState.isLoaded" v-slot="{ item }" :items="attribute.options"
                 :ui="{ item: 'snap-end' }">
                 <NuxtImg @click="selectColorOption(attribute.name, item.term_name, item)"
-                  :src="getTermImageSrc(item, item.term_name)" width="60"
-                  class="cursor-pointer m-1 rounded-full p-[2px] border w-16 h-16 object-cover object-top" :class="{
+                  :src="getTermImageSrc(item, item.term_name)" 
+                  width="60"
+                  height="80"
+                  fit="cover"
+                  class="cursor-pointer m-1 rounded-full p-[2px] border  " :class="{
                     'border-2 !border-secondary-500 text-white': isSelected(
                       attribute.name,
                       item.term_name

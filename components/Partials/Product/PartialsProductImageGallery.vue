@@ -28,13 +28,14 @@
       <NuxtImg
         else
         :src="'aws' + item.path"
-        
         class="w-full min-h-[300px] zoomable transition-transform duration-300 border lg:rounded-lg"
         draggable="false"
         width="600"
-        format="webp"
+        height="800"
+        fit="cover"
         loading="lazy"
-        quality="80"
+        quality="90"
+        format="webp"
       />
     </template>
 
@@ -42,7 +43,9 @@
       <NuxtImg
         v-if="!$device.isMobile && !images[page - 1]?.placeholder"
         :src="'aws' + images[page - 1]?.path"
-        class="w-12 border-2 rounded-md cursor-pointer"
+        class="border-2 rounded-md cursor-pointer"
+        width="60"
+        height="80"
         :class="active ? 'border-orange-500' : ''"
         @click="onClick(page)"
         size="2xs"

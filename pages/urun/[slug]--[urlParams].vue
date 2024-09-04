@@ -7,7 +7,7 @@
       <SkeletonProductGallery v-else></SkeletonProductGallery>
 
       <div class="col-span-5 my-minimal lg:my-0 px-x-mobil">
-        <h1 class="text-2xl font-semibold pb-2">
+        <h1 class="text-2xl font-medium pb-2">
           {{ productState.product.name }}
         </h1>
         <UDivider class="my-2" type="dashed" />
