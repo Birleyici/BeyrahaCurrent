@@ -103,7 +103,8 @@ export const useAuthStore = defineStore('authStore', () => {
     };
 
 
-    const logout = () => {
+    const logout = (callback = null) => {
+
         token.value = null
         user.value = {
             email: '',
@@ -115,7 +116,8 @@ export const useAuthStore = defineStore('authStore', () => {
             password_confirmation: ''
         }
         actionsOnLogout()
-        navigateTo('/auth')
+        
+        callback ? navigateTo(callback) : navigateTo('/auth')
 
     }
 

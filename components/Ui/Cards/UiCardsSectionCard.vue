@@ -5,7 +5,7 @@
       :class="isOpen ? '' : 'rounded-xl'"
       class="cursor-pointer bg-tertiary-100 p-minimal w-full rounded-t-xl flex justify-between"
     >
-      <b>{{ title }}</b>
+      <span class="font-medium">{{ title }}</span>
       <Icon
         v-if="isOpen"
         name="material-symbols:keyboard-arrow-down"

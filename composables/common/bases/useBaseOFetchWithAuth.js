@@ -10,7 +10,10 @@ function onRefreshed(token) {
 export async function useBaseOFetchWithAuth(url, options = {}) {
     const authStore = useAuthStore();
     const apiBaseUrl = useBaseUrl();
-    const toast = useToast();
+    const route = useRoute()
+
+    // const toast = useToast();
+
 
     const headers = {};
 
@@ -53,7 +56,7 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
             console.log("401 block");
 
             // Token yenileme işlemi
-            const newToken = await handleTokenRefresh(authStore, apiBaseUrl);
+            const newToken = await handleTokenRefresh(authStore, apiBaseUrl, route);
 
             // Yenilenen token ile tekrar isteği yap
             params.headers['Authorization'] = `Bearer ${newToken}`;
@@ -75,12 +78,15 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
             //     icon: "i-heroicons-exclamation-triangle",
             // });
             console.error("Fetch error:", error);
+            console.error('Validation errors:', error.response?._data?.errors);
+
             throw error;
         }
     }
 }
 
-async function handleTokenRefresh(authStore, apiBaseUrl) {
+async function handleTokenRefresh(authStore, apiBaseUrl, route) {
+
     if (isRefreshing) {
         return new Promise(resolve => {
             refreshSubscribers.push(token => {
@@ -107,7 +113,8 @@ async function handleTokenRefresh(authStore, apiBaseUrl) {
         }
     } catch (error) {
         if (error.response?.status === 401) {
-            authStore.logout();
+            
+            authStore.logout(route.fullPath);
         }
         console.error("Token refresh failed", error);
         throw error;

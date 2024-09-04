@@ -40,29 +40,29 @@ export const useCategoryState = defineStore('categoryCommon', () => {
 };
 
 
+const sortedCategories = computed(() => {
+  const selectedIds = selectedCategories.value.map(cat => cat.id);
 
-  const sortCategories = () => {
-    const selectedIds = selectedCategories.value.map(cat => cat.id);
-    categories.value = categories.value.slice().sort((a, b) => {
-      const aSelected = selectedIds.includes(a.id);
-      const bSelected = selectedIds.includes(b.id);
+  return categories.value.slice().sort((a, b) => {
+    const aSelected = selectedIds.includes(a.id);
+    const bSelected = selectedIds.includes(b.id);
 
-      if (aSelected && !bSelected) {
-        return -1;
-      }
-      if (!aSelected && bSelected) {
-        return 1;
-      }
-      return 0;
-    });
-  };
+    if (aSelected && !bSelected) {
+      return -1;
+    }
+    if (!aSelected && bSelected) {
+      return 1;
+    }
+    return 0;
+  });
+});
 
 
   return {
     categories,
     selectedCategories,
     selectedCategoryIds,
-    sortCategories,
+    sortedCategories,
     getCategories,
     patchCategories,
     patchSelectedCategories

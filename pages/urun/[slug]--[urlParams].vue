@@ -15,21 +15,25 @@
           :product-state="productState">
         </PartialsProductVariations>
 
-        <div class="my-minimal lg:my-maximal bg-tertiary-50 border rounded-md p-4">
-          <p class="font-medium">Öne çıkan bilgiler</p>
-          <ul class="list-disc p-4 !pl-5 text-sm">
+        <div class="my-minimal lg:my-maximal bg-tertiary-50 border rounded-md py-4 px-6">
+          <p class="font-medium mb-2">Öne çıkan bilgiler</p>
+          <ul class="list-disc grid gap-2 text-sm">
             <li>15 gün içerisinde ücretsiz iade</li>
-            <li v-for="feature in productState.product.featured_infos">
+            <li v-for="feature in productState.product.featured_infos.slice(0,2)">
               {{ feature.content }}
             </li>
+            <div @click="goInfo()" v-if="productState.product?.featured_infos?.length > 2" class="cursor-pointer w-full  flex  space-x-2 items-center">
+              <p class="underline">Tüm ürün bilgilerini gör</p>
+              <UIcon name="i-heroicons-chevron-double-down" />
+            </div>
           </ul>
         </div>
       </div>
     </div>
 
-    <div class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
-      <PartialsProductInformation :additional_info="productState.product.additional_info"
-        :attributes="attrsAndVarsState.attributes" />
+    <div ref="product_information" class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
+      <PartialsProductInformation 
+        :attributes="attributeState.transformedAttrs" />
     </div>
     <ClientOnly>
 
@@ -48,6 +52,7 @@ const productState = useProductState();
 const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
 const attrsAndVarsState = useAttrsAndVarsState();
+const product_information = ref(null)
 
 const route = useRoute();
 
@@ -84,4 +89,10 @@ useHead({
     { name: 'description', content: productState.product.description }
   ],
 })
+
+const goInfo = ()=>{
+  console.log(product_information)
+  product_information.value?.scrollIntoView({behavior: "smooth"})
+
+}
 </script>

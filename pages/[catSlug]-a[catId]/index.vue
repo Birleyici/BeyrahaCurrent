@@ -71,10 +71,8 @@ await useAsyncData('initDataProducts', async () => {
 });
 
 
-
 const loading = ref(false);
 watch(() => [query, categoryState.selectedCategoryIds, query.value.page], async (newValue, oldValue) => {
-  console.log("çalıştı")
 
   //eğer sayfa değişmediyse ama diğer filtreler tetiklendiyse
   if (newValue?.[2] == oldValue?.[2]) {
@@ -112,16 +110,6 @@ const pushQueryParams = () => {
   });
 
 }
-
-
-onMounted(() => {
-  watch(() => categoryState.selectedCategories, () => {
-    categoryState.sortCategories()
-  }, {
-    immediate: true,
-    deep: true
-  })
-})
 
 
 const slugsCat = categoryState.categories?.find(c => c.id === parseInt(catId))

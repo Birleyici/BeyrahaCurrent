@@ -78,7 +78,12 @@ export default defineNuxtConfig({
     '@nuxtjs/tailwindcss',
     '@nuxtjs/device',
     '@pinia-plugin-persistedstate/nuxt',
+    'nuxt-tiptap-editor',
   ],
+
+  tiptap: {
+    prefix: 'Tiptap', //prefix for Tiptap imports, composables not included
+  },
 
   pinia: {
     storesDirs: ['./store/**'],

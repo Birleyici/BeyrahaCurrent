@@ -7,7 +7,7 @@
           <UCommandPalette :emptyState="{
             queryLabel: 'Sonuç bulunamadı...'
           }" placeholder="Kategorilerde ara..." v-model="categoryState.selectedCategories" multiple nullable
-            :autoselect="false" :groups="[{ key: 'label', commands: categoryState.categories }]"
+            :autoselect="false" :groups="[{ key: 'label', commands: categoryState.sortedCategories }]"
             :fuse="{ resultLimit: 20 }" />
 
         </div>

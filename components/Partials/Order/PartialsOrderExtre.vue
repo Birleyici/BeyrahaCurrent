@@ -12,7 +12,7 @@
     </div>
     <div>
       <p class="text-secondary-500">Havale / EFT</p>
-      <p class="text-secondary-500">{{ props.shippingCost ? formatPrice(props.shippingCost) : Ücretsiz }}</p>
+      <p class="text-secondary-500">{{ props.shippingCost ? formatPrice(props.shippingCost) : 'Ücretsiz' }}</p>
       <b class="text-secondary-500 border-b-4 border-secondary-200">{{ formatPrice(props.total + props.shippingCost)
         }}</b>
 

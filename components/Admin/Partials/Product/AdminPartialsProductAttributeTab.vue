@@ -10,9 +10,9 @@
       <AdminPartialsAttributeColor v-if="item.attribute_name.toLowerCase() == 'renk'" :item="item" />
       <AdminPartialsAttribute v-else :item="item" />
     </div>
-    <div v-if="attributeState.attributes.length > 0" class="flex justify-end mt-4">
-      <UiButtonsBaseButton @click="saveAttrs()" color="secondary">Nitelikleri kaydet
-      </UiButtonsBaseButton>
+    <div  v-if="attributeState.attributes.length > 0" class="flex justify-end mt-4">
+      <UButton @click="saveAttrs()" color="orange"  size="md" :loading="attributeState.attributes.loading">Nitelikleri kaydet
+      </UButton>
     </div>
   </div>
 </template>
@@ -22,7 +22,7 @@ const productState = useProductState();
 const attributeState = useAttributeState();
 const variationState = useVariationState();
 const attrsAndVarsState = useAttrsAndVarsState();
-
+const toast = useToast()
 
 const { addAttr, fetchGlobalAttrs } = useAttributes();
 
@@ -30,17 +30,25 @@ await attributeState.fetchAttributes(productState.product.id);
 await fetchGlobalAttrs();
 
 const saveAttrs = async () => {
-  if (productState.product.id == null) {
-    await saveProduct(productState.product.id);
-  }
-
-  await useBaseOFetchWithAuth("products/" + productState.product.id + "/attributes", {
+  attributeState.attributes.loading = true
+  const response =  await useBaseOFetchWithAuth("products/" + productState.product.id + "/attributes", {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(attributeState.attributes),
+  }).finally(() => {
+    attributeState.attributes.loading = false
   });
+
+  if(!response.error){
+
+    toast.add({
+      title: 'Nitelikler kaydedildi!',
+      color: 'orange',
+    })
+  }
+
   await attributeState.fetchAttributes(productState.product.id);
   await variationState.fetchVariations(productState.product.id);
 };

@@ -103,3 +103,45 @@ button:disabled {
   background: #8b8b8b; 
   border-radius: 10px; /* Hover sırasında köşeleri yuvarla */
 }
+
+
+ul {
+  list-style-type: disc;
+  padding-left: 0;
+  margin-left: 0;
+  list-style-position: inside;
+}
+
+/* Tüm olası nested listeler için de geçerli */
+ul ul {
+  list-style-type: disc;
+  padding-left: 0;
+  margin-left: 0;
+  list-style-position: inside;
+}
+
+
+.ProseMirror {
+  position: relative;
+  min-height: 300px;
+}
+
+.ProseMirror {
+  position: relative;
+  min-height: 200px;
+}
+.ProseMirror-focused {
+  outline: none !important;
+}
+
+.ProseMirror  h2 {
+font-size: 20px;
+font-weight: 600;
+}
+
+.ProseMirror  h3 {
+  font-size: 18px;
+font-weight: 600;
+
+  }
+  

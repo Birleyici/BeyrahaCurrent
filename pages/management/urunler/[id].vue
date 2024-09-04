@@ -20,14 +20,13 @@
 
     <div class="lg:grid space-y-4 lg:space-y-0 lg:grid-cols-3 gap-10">
       <div class="col-span-2 space-y-4">
-
         <UiFormInput v-model="productState.product.name" placeholder="Ürün adı" class="font-medium"></UiFormInput>
         <UiFormInput v-model="productState.product.description" placeholder="Ürün açıklaması"></UiFormInput>
         <div class="relative mb-24">
           <label for="" class="text-sm">Detaylı ürün açıklaması</label>
-          <div class="bg-tertiary-50">
-            <QuillEditor contentType="html" v-model:content="productState.product.additional_info" style="height: 300px"
-              theme="snow" />
+          <div>
+            <TiptapEditor :inital-data="productState.product.additional_info"
+              @updated-content="e => productState.product.additional_info = e"></TiptapEditor>
           </div>
         </div>
 
@@ -59,41 +58,36 @@
               <Icon name="mdi:format-list-group" class="w-5 h-5"></Icon>
               <p>Öne Çıkanlar</p>
             </button>
-            <button @click="currentTab = 'ExstrasTab'"
-              :class="{ ' border-secondary-500': currentTab == 'ExstrasTab' }"
+            <button @click="currentTab = 'ExstrasTab'" :class="{ ' border-secondary-500': currentTab == 'ExstrasTab' }"
               class="flex items-center space-x-2 border-b-2 py-2 hover:border-secondary-500 duration-300">
               <Icon name="i-heroicons-squares-plus" class="w-5 h-5"></Icon>
               <p>Özel alanlar</p>
             </button>
           </div>
           <div class="content p-minimal border">
-            
+
             <KeepAlive>
-              <component :is="tabs[currentTab]" ></component>
+              <component :is="tabs[currentTab]"></component>
             </KeepAlive>
           </div>
         </div>
       </div>
 
-
       <div class="col-span-1 flex flex-col-reverse lg:block">
+        <UButton :loading="productState.product.loading" @click="saveProduct(productState.product.id, true)"
+          color="secondary" class="px-6 w-full flex justify-center">Yayınla</UButton>
 
-
-        <UiButtonsBaseButton :loading="productState.product.loading" @click="saveProduct(productState.product.id, true)"
-          color="secondary" class="px-6 w-full">Yayınla</UiButtonsBaseButton>
-
-
-        <AdminPartialsMediaSelectBox v-model:is-open-modal="isOpenMediaModal" :selected-images="productState.product.selectedImages"
+          <AdminPartialsMediaSelectBox v-model:is-open-modal="isOpenMediaModal"
+          :selected-images="productState.product.selectedImages"
           v-model:cover-image-id="productState.product.coverImageId" />
 
-        <div class="my-minimal">
-
+          <div class="my-minimal">
           <div class="h-[300px] overflow-y-scroll bg-slate-50 p-2 rounded-md">
             <UCommandPalette :emptyState="{
               queryLabel: 'Sonuç bulunamadı...'
             }" placeholder="Kategorilerde ara..." v-model="productState.product.selectedCategories" multiple nullable
-              :autoselect="false" :groups="[{ key: 'label', commands: productState.product.categories }]"
-              :fuse="{ resultLimit: -1 }" />
+              :autoselect="false" :groups="[{ key: 'label', commands: categoryState?.sortedCategories }]"
+              :fuse="{ resultLimit: 30 }" />
           </div>
 
         </div>
@@ -107,17 +101,22 @@ definePageMeta({
   layout: "admin",
 });
 const productState = useProductState()
+const categoryState = useCategoryState()
 
-const { tabs, saveProduct, getProduct, getCategories } = useProductCreate();
+const { tabs, saveProduct, getProduct } = useProductCreate();
+
 const isOpenMediaModal = ref(false);
 const currentTab = ref("GeneralTab");
+
 const route = useRoute();
+
 if (route.params.id == "yeni") {
-  productState.product = productState.newProduct
+  productState.product = {}
+  await saveProduct(productState.product.id, true)
 } else {
   await getProduct(route.params.id);
 }
-await getCategories()
+await categoryState.getCategories()
 
 
 const links = [{

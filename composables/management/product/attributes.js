@@ -35,7 +35,7 @@ export const useAttributes = () => {
             term.termWord.length <= 25 &&
             !term.product_attribute_terms.some((t) => t.term_name === term.termWord)
         ) {
-            term.product_attribute_terms.push({ term_name: term.termWord });
+            term.product_attribute_terms.push({ term_name: term.termWord, term_images: [] });
             term.termWord = "";
         }
     };
@@ -53,33 +53,44 @@ export const useAttributes = () => {
 
 
     const removeTerm = async (term, terms) => {
-        const { data, error } = await useBaseOFetchWithAuth(
-            "product-terms/" + term.product_term_id,
-            {
-                method: "DELETE",
-            }
-        );
 
-        if (data.value && !error.value) {
 
-            const index = terms.indexOf(term);
-            if (index !== -1) {
-                terms.splice(index, 1);
-            }
+        if (term.product_attribute_term_id) {
 
+            term.loading = true
+            await useBaseOFetchWithAuth(
+                "product-terms/" + term.product_attribute_term_id,
+                {
+                    method: "DELETE",
+                }
+            ).finally(() => {
+                term.loading = false
+            });
+
+        }
+
+        const index = terms.indexOf(term);
+        if (index !== -1) {
+            terms.splice(index, 1);
         }
     };
 
-    const deleteAttr = async (attrId) => {
+    const deleteAttr = async (attr) => {
+        if (attr.product_attribute_id) {
 
-        await useBaseOFetchWithAuth(
-            "product-attributes/" + attrId,
-            {
-                method: "DELETE",
-            }
-        );
+            attr.loading = true
+            await useBaseOFetchWithAuth(
+                "product-attributes/" + attr.product_attribute_id,
+                {
+                    method: "DELETE",
+                }
+            ).finally(() => {
+                attr.loading = false
 
-        attributeState.attributes = attributeState.attributes.filter(attribute => attribute.product_attribute_id !== attrId);
+            })
+        }
+
+        attributeState.attributes = attributeState.attributes.filter(attribute => attribute.product_attribute_id !== attr.product_attribute_id);
 
     };
 

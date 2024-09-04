@@ -86,7 +86,7 @@
             multiple
             nullable
             :autoselect="false"
-            :groups="[{ key: 'label', commands: categoryState.categories }]"
+            :groups="[{ key: 'label', commands: categoryState.sortedCategories }]"
             :fuse="{ resultLimit: -1 }"
           />
         </div>

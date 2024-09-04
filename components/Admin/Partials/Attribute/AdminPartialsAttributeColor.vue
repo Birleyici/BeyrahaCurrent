@@ -13,8 +13,10 @@
 
           <template #trailing>
             <div class="flex items-center">
-              <UIcon name="i-heroicons-trash" class="text-red-500" @click.prevent="deleteAttr(props.item.product_attribute_id)">
-              </UIcon>
+              <UButton icon="i-heroicons-trash" color="red" variant="ghost" 
+              @click.prevent="deleteAttr(props.item)"
+              :loading="props.item.loading"
+              />
               <UIcon name="i-heroicons-chevron-right-20-solid ml-4 "
                 class="w-5 h-5  transform transition-transform duration-200 " :class="[open && 'rotate-90']" />
             </div>
