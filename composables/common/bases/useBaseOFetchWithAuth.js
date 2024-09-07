@@ -78,7 +78,7 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
             //     icon: "i-heroicons-exclamation-triangle",
             // });
             console.error("Fetch error:", error);
-            console.error('Validation errors:', error.response?._data?.errors);
+            console.error('Validation errors:', error.response);
 
             throw error;
         }
