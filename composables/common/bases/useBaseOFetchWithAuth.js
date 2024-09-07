@@ -24,7 +24,7 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
 
     // Anonim kullanıcı ID'si varsa, başlığa ekle
     if (authStore.anon.id) {
-        headers['X-Anonymous-User-ID'] = authStore.anon.id;
+        headers['X-Anonymous-User-ID'] = parseInt(authStore.anon.id, 10);
     }
 
     const defaults = {

@@ -66,7 +66,7 @@ const order = ref({});
 const orderLoaded = ref(false);
 
 const getOrder = async () => {
-  const response = await useBaseOFetch(`order`, {
+  const response = await useBaseOFetchWithAuth(`order`, {
     query: {
       identifier: route.query.order,
     },
