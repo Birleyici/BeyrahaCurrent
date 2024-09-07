@@ -18,7 +18,7 @@
 
         <div class="p-1 my-4 border  bg-slate-50   rounded-md mb-4 inline-block">
           <div class="flex items-center space-x-2 ">
-            <img src="http://localhost:3000/logo.jpg" width="100"
+            <img src="/logo.jpg" width="100"
               class="border  bg-white rounded-md w-8 h-8 object-contain p-1" alt="">
             <div class="flex space-x-2 items-center">
               <p class="font-medium text-sky-500 text-sm">Beyraha</p>

@@ -12,7 +12,7 @@
                         hatalı, yanlış ölçülü gibi firmamızdan kaynaklanan bir sorunla size ulaştıysa, bu ürünlerin
                         ücretsiz olarak iade ve değişimi mümkündür. Bu tür durumlarda, müşteri memnuniyeti bizim için en
                         önemli önceliktir. Lütfen, bu tip bir sorunla karşılaştığınızda, ürünü aldığınız tarihten
-                        itibaren 30 gün içinde bizimle iletişime geçin.</p>
+                        itibaren 15 gün içinde bizimle iletişime geçin.</p>
                 </li><br>
                 <li>
                     <p><strong>Standart Ürünlerde İade ve Değişim:</strong>&nbsp;“Özel dikim olmayan standart ürünler”
