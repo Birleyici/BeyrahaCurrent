@@ -4,13 +4,21 @@
       <b>Siparişiniz alındı</b>
 
       <div class="my-minimal">
-        <UiNotificationBar type="info">
-          <span class="text-secondary-500">#000{{ order.id }}</span> Numaralı sipariniz başarıyla
-          
-          oluşturuldu. <span class="text-secondary-500">{{ formatPrice(order.total_with_shipping) }}</span> toplam tutarı
-          aşağıdaki banka bilgilerimize açıklama kısmına sipariş numaranızı yazarak
-          gönderdiğinizde siparişiniz onaylanarak işleme alınacaktır.
-        </UiNotificationBar>
+
+
+        <UNotification description="This is a notification." :id="2" color="red"
+          :close-button="{ icon: null, variant: 'soft' }" icon="i-heroicons-information-circle" :timeout="0"
+          title="Notification">
+          <template #title>
+            <span class="text-secondary-500">#000{{ order.id }}</span> Numaralı sipariniz başarıyla
+            oluşturuldu.
+          </template>
+          <template #description>
+            <span class="text-secondary-500">{{ formatPrice(order.total_with_shipping) }}</span> toplam tutarı
+            aşağıdaki banka bilgilerimize, açıklama kısmına sipariş numaranızı yazarak
+            gönderdiğinizde siparişiniz onaylanarak işleme alınacaktır.
+          </template>
+        </UNotification>
       </div>
 
       <div class="my-orta lg:my-maximal">
@@ -19,17 +27,14 @@
         </div>
         <div class="lg:grid lg:grid-cols-3 gap-10">
           <div class="col-span-2">
-
             <div class="grid gap-4">
               <b>Sipariş içeriği</b>
               <div class="grid gap-4" v-for="sub_order in order.sub_orders ">
                 <PartialsOrderSummary :item="item" v-for="item in sub_order.order_items || []" :key="item.id" />
               </div>
             </div>
-            
             <PartialsOrderExtre :total="order?.total" :shipping-cost="order?.shipping_cost" />
           </div>
-
           <div class="col-span-1 my-orta lg:my-0">
             <div class="grid gap-6 ">
               <PartialsOrderAddressCard title="Teslimat Adresi" :address="order.shipping_address || {}" :addressOptions="{
