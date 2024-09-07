@@ -21,7 +21,7 @@
           <div v-for="p in productsSearched.slice(0, 6)" >
             <NuxtLink @click="closeSearch" :to="p.product_url">{{p.name}}</NuxtLink>
           </div>
-          <div v-if="productsSearched.length > 3">
+          <div v-if="productsSearched.length > 1">
             <UDivider type="dashed" />
             <ULink @click.prevent="goSearch()" class="text-orange-500 mt-2">Tüm sonuçları gör</ULink>
           </div>
@@ -50,7 +50,7 @@ function closeSearch() {
 
 function goSearch() {
   router.push({
-    path: '/kategori',
+    path: '/arama-a0',
     query: {
       searchWord: searchWord.value
     }
@@ -76,6 +76,7 @@ watch(
   }
 );
 
+
 watchEffect(async (onInvalidate) => {
   const controller = new AbortController();
   const signal = controller.signal;
@@ -84,10 +85,9 @@ watchEffect(async (onInvalidate) => {
 
   try {
     const response = await productState.getProducts({
-      filters: {
-        searchWord: searchWord.value
-      }
-    }, { signal });
+        searchWord: searchWord.value,
+        limit: 10
+    }, true, { signal });
 
     productsSearched.value = response.data;
   } catch (error) {

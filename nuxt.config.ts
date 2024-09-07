@@ -81,6 +81,10 @@ export default defineNuxtConfig({
     'nuxt-tiptap-editor',
   ],
 
+
+
+
+
   tiptap: {
     prefix: 'Tiptap', //prefix for Tiptap imports, composables not included
   },

@@ -14,6 +14,7 @@
       </div>
     </div>
     <div class="col-span-7 ">
+   
       <div class="grid gap-10">
         <div class="flex justify-between">
           <div></div>
@@ -29,6 +30,9 @@
           </div>
 
           <div class="grid grid-cols-3 gap-4">
+            <p v-if="props.products.data.length == 0" class="italic">
+              Ürün bulunamadı...
+             </p>
             <PartialsProductCard :product="product" v-for="product in props.products.data">
             </PartialsProductCard>
           </div>

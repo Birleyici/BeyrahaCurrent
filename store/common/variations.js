@@ -15,11 +15,13 @@ export const useVariationState = defineStore('variationState', () => {
 
     }
 
-    const deleteVariation = async (id) => {
+    const deleteVariation = async (item) => {
+        item.loading = true
+        await useBaseOFetchWithAuth("variations/" + item.id, { method: "DELETE" }).finally(()=>{
+        item.loading = false
+        })
 
-        await useBaseOFetchWithAuth("variations/" + id, { method: "DELETE" });
-
-        deleteVariationOnState(id)
+        deleteVariationOnState(item.id)
     };
 
     function deleteVariationOnState(id) {

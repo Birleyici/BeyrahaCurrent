@@ -3,13 +3,15 @@
     <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
       :loading="loading" />
     <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products" :loading="loading" />
+
     <div class="text-center mt-4 bg-slate-50 p-4 rounded-md" v-if="loading">Ürünler yükleniyor</div>
     <!-- <div class="flex justify-center">
       <div>
         <UPagination v-model="query.page" :page-count="query.limit" :total="productState.products.total || 0" />
       </div>
     </div> -->
-    <div id="finishProducts"></div>
+    <div v-if="$mainState.isLoaded" id="finishProducts"></div>
+
   </div>
 </template>
 
@@ -36,30 +38,23 @@ const query = ref({
   sort: route.query.sort || 'default', // Etkisiz başlangıç değeri
 });
 
-useScrollEnd('finishProducts', () => {
-  if (query.value.page < productState.products.last_page) {
-    query.value.page++
-  }
-});
 
+
+//kategori ürün listesine girildiğinde eğer yükleme devam ediyorsa
+//scroll tetiklendiğinde örneğin 2. sayfayı products e set ediyor 1. sayfa kayboluyor
 
 await useAsyncData('initDataProducts', async () => {
   try {
-    if (catSlug && catId) {
-      categoryState.selectedCategories = []
+    categoryState.selectedCategories = []
+    if ((catSlug && catId) && catSlug != 'arama') {
       categoryState.patchSelectedCategories(catId.toString(), false)
     }
-
     await Promise.all([
       productState.getProducts({
-        filters: {
-          ...query.value,
-          selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
-        }
+        ...query.value,
+        selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
       }),
       categoryState.getCategories(),
-
-
     ]);
 
 
@@ -82,11 +77,10 @@ watch(() => [query, categoryState.selectedCategoryIds, query.value.page], async 
   loading.value = true;
   query.value.searchWord = route.query.searchWord
 
+  console.log(JSON.stringify(categoryState.selectedCategoryIds))
   await productState.getProducts({
-    filters: {
       ...query.value,
       selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
-    }
   });
 
   pushQueryParams()
@@ -113,11 +107,25 @@ const pushQueryParams = () => {
 
 
 const slugsCat = categoryState.categories?.find(c => c.id === parseInt(catId))
-useHead({
-  title: `${slugsCat.label} fiyatları ve modelleri`,
-  meta: [
-    { name: 'description', content: slugsCat.description }
-  ],
-})
+let meta
+if (query.value.searchWord) {
+  meta = {
+    title: `${query.value.searchWord} arama sonuçları`,
+  }
+} else if (slugsCat) {
+  meta = {
+    title: `${slugsCat?.label} fiyatları ve modelleri`,
+    meta: [
+      { name: 'description', content: slugsCat?.description }
+    ],
+  }
+}
+useHead(meta)
+
+useScrollEnd('finishProducts', () => {
+  if (!loading.value && query.value.page < productState.products.last_page) {
+    query.value.page++;
+  }
+});
 
 </script>

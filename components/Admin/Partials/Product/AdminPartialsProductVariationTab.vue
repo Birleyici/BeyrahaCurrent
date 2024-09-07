@@ -4,9 +4,16 @@
       <USelectMenu class="w-full" color="orange" size="md" placeholder="İşlem seçin..." :options="options"
         v-model="addedType" value-attribute="value" option-attribute="label" />
 
-      <UButton @click="variationHandle()" color="orange" size="md">Git</UButton>
+      <UButton :loading="loading" @click="variationHandle()" color="orange" size="md">Git</UButton>
     </div>
-    <div class="rounded-md gap-4">
+    <div class="flex space-x-2 items-center text-sm">
+      <UToggle v-model="bulkEditMode" />
+      <p>Toplu düzenleme</p>
+    </div>
+    <div v-if="bulkEditMode">
+      Toplu düzenlemeler
+    </div>
+    <div class="rounded-md grid gap-2">
       <AdminPartialsVariation :item="item" v-for="item in variationState.variations" />
     </div>
     <div v-if="errorMessage" class="my-4">
@@ -24,15 +31,14 @@
 const productState = useProductState();
 const variationState = useVariationState();
 const attributeState = useAttributeState();
+const bulkEditMode = ref(false)
 
 const options = [
-  // { value: "1", label: "Varyasyon ekle" },
   { value: "2", label: "Tüm niteliklerden varyasyonlar oluştur" },
   { value: "3", label: "Tüm varyasyonları sil" },
 ];
 
 const {
-  createOneVariation,
   createAllVariation,
   saveVariations,
   deleteAllVariations,
@@ -43,16 +49,16 @@ await variationState.fetchVariations(productState.product.id);
 
 const addedType = ref(null);
 const errorMessage = ref(null);
-
-const variationHandle = () => {
-  // if (addedType.value == 1) {
-  //   createOneVariation();
-  // }
+const loading = ref(false)
+const variationHandle = async () => {
+  loading.value = true
   if (addedType.value == 2) {
-    createAllVariation(productState.product.id);
+    await createAllVariation(productState.product.id);
   }
   if (addedType.value == 3) {
-    deleteAllVariations(productState.product.id);
+    await deleteAllVariations(productState.product.id);
   }
+  loading.value = false
+
 };
 </script>

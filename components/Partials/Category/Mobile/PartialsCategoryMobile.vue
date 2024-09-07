@@ -109,6 +109,9 @@
         <Icon name="mdi:loading" class="w-12 h-12 animate-spin"></Icon>
       </div>
       <div class="grid grid-cols-2 gap-4">
+        <p v-if="props.products.data.length == 0" class="italic">
+          Ürün bulunamadı...
+         </p>
         <PartialsProductCard :product="product" v-for="product in props.products?.data">
         </PartialsProductCard>
       </div>

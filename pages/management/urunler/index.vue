@@ -42,7 +42,7 @@ await getVendorProducts();
 const isOpenDeleteModal = ref(false);
 
 const page = ref(1);
-const pageCount = 5;
+const pageCount = 10;
 
 const rows = computed(() => {
   return productState.vendorProducts.slice((page.value - 1) * pageCount, page.value * pageCount);

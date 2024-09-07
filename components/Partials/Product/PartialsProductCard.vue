@@ -10,8 +10,10 @@
           format="webp"
           quality="90"
           loading="lazy"
-          width="200"
-          class="rounded-t-sm duration-200 h-[250px] md:h-[350px] object-cover w-full hover:scale-110"
+          width="400"
+          height="600"
+          fit="cover"
+          class="rounded-t-md duration-200 w-full hover:scale-110"
         />
         <img
           v-else

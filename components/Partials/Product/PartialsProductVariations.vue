@@ -6,7 +6,6 @@
         <div class="mb-4">
           <div class="my-minimal" v-if="attribute.name.toLowerCase() == 'renk'">
             <div>
-
               <div class="flex space-x-2 items-center">
                 <p class="font-medium text-sm">Renk:</p>
                 <p class="text-sm">{{ selectedOptions['Renk'] }}</p>
@@ -14,27 +13,38 @@
 
               <UCarousel v-if="$mainState.isLoaded" v-slot="{ item }" :items="attribute.options"
                 :ui="{ item: 'snap-end' }">
-                <NuxtImg @click="selectColorOption(attribute.name, item.term_name, item)"
-                  :src="getTermImageSrc(item, item.term_name)" 
-                  width="60"
-                  height="80"
+                <div
+                 :class="{
+                  'border-2 !border-secondary-500 text-white': isSelected(
+                    attribute.name,
+                    item.term_name
+                  ),
+                }"
+                 class="mt-2 border w-[80px] h-[80px] rounded-full mr-2 overflow-hidden cursor-pointer">
+                  <NuxtImg @click="isActive(attribute.name, item.term_name) && selectColorOption(attribute.name, item.term_name, item)"
+                  :src="getTermImageSrc(item, item.term_name)"
+                  :class="{
+                    'opacity-50 cursor-not-allowed': !isActive(attribute.name, item.term_name),
+                  }"
+                  
+                  width="80"
+                  height="120"
                   fit="cover"
-                  class="cursor-pointer m-1 rounded-full p-[2px] border  " :class="{
-                    'border-2 !border-secondary-500 text-white': isSelected(
-                      attribute.name,
-                      item.term_name
-                    ),
-                  }" />
+                   />
+                </div>
               </UCarousel>
               <div class="flex space-x-2" v-else>
                 <SkeletonUiThumb v-for="item in 4" :key="item"></SkeletonUiThumb>
               </div>
             </div>
+        
           </div>
-          <div v-else>
+          
+          <div class="grid gap-1" v-else>
             <p class="font-medium text-sm">{{ attribute.name }}</p>
+            
             <div class="flex space-x-2">
-              <UiButtonsBaseButton color="slate" v-for="option in attribute.options" :key="option.term_name" :class="{
+              <UButton class="cursor-pointer font-normal" size="md" color="gray" v-for="option in attribute.options" :key="option.term_name" :class="{
                 '!bg-secondary-500 text-white': isSelected(
                   attribute.name,
                   option.term_name
@@ -42,7 +52,7 @@
               }" :disabled="!isActive(attribute.name, option.term_name)"
                 @click="selectOption(attribute.name, option.term_name)">
                 {{ option.term_name }}
-              </UiButtonsBaseButton>
+              </UButton>
             </div>
           </div>
         </div>

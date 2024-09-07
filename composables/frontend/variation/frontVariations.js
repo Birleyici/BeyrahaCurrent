@@ -58,9 +58,11 @@ export const useVariationsFront = () => {
 
     const filteredVariations = computed(() => {
         return variationsFrontState.variations.filter(variation => {
-            return variation.price || variation.sale_price;
+            // Eğer varyasyon 'renk' içermiyorsa, fiyatı kontrol et, aksi takdirde her zaman geri döndür
+            return variation.attributes['Renk'] || variation.price || variation.sale_price;
         });
     });
+    
 
     const isActive = computed(() => (attributeName, option) => {
         let tempSelected = { ...selectedOptions.value, [attributeName]: option };
@@ -112,6 +114,7 @@ export const useVariationsFront = () => {
 
 
         if (colorTerm) {
+            productState.product.selectedColorTermImages = []
             productState.product.selectedColorTermImages = colorTerm.term_images;
            
             

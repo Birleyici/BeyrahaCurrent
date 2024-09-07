@@ -76,37 +76,34 @@ export const useProductState = defineStore('productState', () => {
   }
 
 
-  const getProducts = async ({ piece, filters = {} }, shouldReturnResponse = false) => {
+  const getProducts = async (filters, shouldReturnResponse = false) => {
 
     // Eğer filters objesinde page yoksa, varsayılan olarak 1 ayarla
     if (!('page' in filters)) {
       filters.page = 1;
     }
 
-    const params = piece ? { piece } : { ...filters };
 
     const response = await useBaseOFetchWithAuth(`products`,
       {
-        params
+        params: filters
       }
     )
 
     if (shouldReturnResponse) {
+
       return response
+
     } else {
-      if (piece) {
+
+      //eğer sayfalama verileri yoksa
+      if (!products.value.total || filters.page == 1) {
         products.value = response
       } else {
-
-        //eğer sayfalama verileri yoksa
-        if (!products.value.total || filters.page == 1) {
-          products.value = response
-        } else {
-          const dataArray = Object.values(response.data);
-          products.value.data.push(...dataArray);
-        }
-
+        const dataArray = Object.values(response.data);
+        products.value.data.push(...dataArray);
       }
+
     }
 
   };

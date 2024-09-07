@@ -24,7 +24,6 @@ export function useProductCreate() {
     const saveProduct = async (productId, isAllSave = false) => {
 
         productState.product.loading = true
-
         try {
 
             const response = await useBaseOFetchWithAuth("products", {

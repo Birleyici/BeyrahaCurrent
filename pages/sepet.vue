@@ -30,8 +30,10 @@
       </div>
 
       <div class="my-maximal">
-        <LazyUiSlidesProductSlide title="Bunlarda ilginizi çekebilir" :products="productState.products.data">
-        </LazyUiSlidesProductSlide>
+        <UiSlidesProductSlide title="İlginizi çekebilir" :filters="{
+          piece: 8
+        }">
+        </UiSlidesProductSlide>
       </div>
     </ClientOnly>
 
@@ -42,16 +44,9 @@
 <script setup>
 useHead({
   title: 'Sepet - Beyraha',
- 
 })
 
 const cartState = useCartState()
-const productState = useProductState()
-const { getProducts } = useProduct()
-
-onMounted(async () => {
-  getProducts({ piece: 7 })
-})
 
 </script>
 
