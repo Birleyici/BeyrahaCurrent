@@ -17,7 +17,7 @@
 const props = defineProps(['title', 'filters', 'to'])
 const productState = useProductState()
 
-const { data: products } = await useAsyncData('initIndexPage', async () => {
+const { data: products } = await useAsyncData(props.to, async () => {
   const response = await productState.getProducts(props.filters, true)
   return response
 })
