@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center">
       <p class="font-primary text-heading-1 flex items-center space-x-3">
         <NuxtLink href="/">
-          <img :src="logoSrc" class="mx-auto w-[100px] " />
+          <img :src="logoSrc" class="mx-auto w-[100px] h-auto" />
         </NuxtLink>
       </p>
       <PartialsCommonSearchInput></PartialsCommonSearchInput>
