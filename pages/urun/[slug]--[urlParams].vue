@@ -11,7 +11,6 @@
           {{ productState.product.name }}
         </h1>
 
-
         <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
           :product-state="productState">
         </PartialsProductVariations>

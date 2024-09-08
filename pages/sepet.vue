@@ -30,7 +30,7 @@
       </div>
 
       <div class="my-maximal">
-        <UiSlidesProductSlide title="İlginizi çekebilir" :filters="{
+        <UiSlidesProductSlide title="İlginizi çekebilir" id="ilginizi_cekebilir" :filters="{
           piece: 8
         }">
         </UiSlidesProductSlide>

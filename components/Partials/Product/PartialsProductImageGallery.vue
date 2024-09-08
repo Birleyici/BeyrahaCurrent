@@ -1,4 +1,5 @@
 <template>
+  <!-- Ana carousel -->
   <UCarousel
     ref="carouselRef"
     :items="images"
@@ -6,8 +7,11 @@
       item: 'basis-full',
       container: 'rounded-none lg:rounded-lg',
       indicators: {
-        wrapper: 'relative bottom-0 mt-4',
-      },
+        wrapper: 'absolute bottom-2 mt-4 flex justify-center space-x-2',  // Indicator wrapper
+        item: 'w-3 h-3 rounded-full cursor-pointer',  // Common style for all indicators
+        active: 'bg-orange-500',  // Active indicator color (Orange)
+        inactive: 'bg-gray-300'   // Inactive indicator color (Gray)
+      }
     }"
     :prev-button="{
       color: 'gray',
@@ -24,9 +28,7 @@
     class="w-full mx-auto"
   >
     <template #default="{ item }">
-      <img class="object-cover min-h-[500px]" :src="item.path" v-if="item.placeholder" />
       <NuxtImg
-        else
         :src="'aws' + item.path"
         class="w-full min-h-[300px] zoomable transition-transform duration-300 border lg:rounded-lg"
         draggable="false"
@@ -38,33 +40,46 @@
         format="webp"
       />
     </template>
-
-    <template #indicator="{ onClick, page, active }">
-      <NuxtImg
-        v-if="!$device.isMobile && !images[page - 1]?.placeholder"
-        :src="'aws' + images[page - 1]?.path"
-        class="border-2 rounded-md cursor-pointer"
-        width="60"
-        height="90"
-        :class="active ? 'border-orange-500' : ''"
-        @click="onClick(page)"
-        size="2xs"
-      />
-      <UButton
-        v-else
-        variant="solid"
-        :color="active ? 'orange' : 'gray'"
-        size="2xs"
-        class="rounded-full duration-200 w-[10px] h-[10px] justify-center -mt-20"
-        :class="active && 'w-4'"
-        @click="onClick(page)"
-      />
-    </template>
   </UCarousel>
+
+  <!-- Küçük resimler için carousel -->
+  <div class="mt-4" v-if="!$device.isMobile">
+    <UCarousel
+      :items="images"
+      :ui="{
+        item: 'basis-[60px] px-2',
+        container: 'overflow-x-auto whitespace-nowrap scrollbar-hide flex justify-start',
+      }"
+      :arrows="true"
+      :prev-button="{
+        color: 'gray',
+        icon: 'i-heroicons-arrow-left-20-solid',
+        class: images.length > 1 ? 'absolute' : 'hidden',
+      }"
+      :next-button="{
+        color: 'gray',
+        icon: 'i-heroicons-arrow-right-20-solid',
+        class: images.length > 1 ? 'absolute' : 'hidden',
+      }"
+    >
+      <template #default="{ item, index }">
+        <NuxtImg
+          :src="'aws' + item.path"
+          class="border-2 rounded-md cursor-pointer min-w-16"
+          width="60"
+          height="90"
+          :class="currentImageIndex === index ? 'border-orange-500' : ''"
+          @click="goToImage(index)"
+          size="2xs"
+        />
+      </template>
+    </UCarousel>
+  </div>
 </template>
 
 <script setup lang="ts">
 const props = defineProps(["images"]);
+const currentImageIndex = ref(0);
 
 const placeholderImage = "/img-placeholder.jpg";
 
@@ -76,6 +91,11 @@ const images = computed(() => {
       }))
     : [{ id: 0, path: placeholderImage, alt: "Placeholder Image", placeholder: true }];
 });
+
+const goToImage = (index: number) => {
+  currentImageIndex.value = index;
+  carouselRef.value?.select(index);
+};
 
 const clicked = ref(false);
 const carouselRef = ref();
@@ -116,7 +136,19 @@ onUnmounted(() => {
   imgs.forEach((img) => removeZoomListeners(img as HTMLElement));
 });
 
-watch(()=>props.images, (newVal) => {
-    carouselRef.value?.select(0);
+watch(() => props.images, (newVal) => {
+  carouselRef.value?.select(0);
 });
 </script>
+
+<style>
+/* Scrollbar'ı tamamen gizlemek için */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Firefox için */
+.scrollbar-hide {
+  scrollbar-width: none;
+}
+</style>

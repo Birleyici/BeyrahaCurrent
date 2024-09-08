@@ -1,6 +1,6 @@
 <template>
-
-  <div :id="props.id" v-if="products.length == 0" class="w-full overflow-x-hidden">
+<div :id="props.id" >
+  <div v-if="products.length == 0" class="w-full overflow-x-hidden">
     <div class="flex gap-4">
       <div v-for="item in 6" class="flex-shrink-0 space-y-2 w-[250px] border rounded-md">
         <USkeleton class="w-full h-[300px]" :ui="{ rounded: 'rounded-md' }" />
@@ -22,6 +22,8 @@
     </UCarousel>
   </div>
 
+</div>
+  
 </template>
 
 <script setup>
