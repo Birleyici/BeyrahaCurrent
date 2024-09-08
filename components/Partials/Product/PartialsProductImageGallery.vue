@@ -6,12 +6,12 @@
     :ui="{
       item: 'basis-full',
       container: 'rounded-none lg:rounded-lg',
-      indicators: {
-        wrapper: 'absolute bottom-2 mt-4 flex justify-center space-x-2',  // Indicator wrapper
-        item: 'w-3 h-3 rounded-full cursor-pointer',  // Common style for all indicators
-        active: 'bg-orange-500',  // Active indicator color (Orange)
-        inactive: 'bg-gray-300'   // Inactive indicator color (Gray)
-      }
+      indicators: $device.isMobile ? {
+        wrapper: 'absolute duration-300 bottom-2 mt-4 flex justify-center space-x-2',  // Indicator wrapper
+        item: 'rounded-full cursor-pointer',  // Common style for all indicators
+        active: 'w-5 bg-orange-500',  // Active indicator color (Orange)
+        inactive: 'bg-white'   // Inactive indicator color (Gray)
+      }: false
     }"
     :prev-button="{
       color: 'gray',
@@ -54,12 +54,12 @@
       :prev-button="{
         color: 'gray',
         icon: 'i-heroicons-arrow-left-20-solid',
-        class: images.length > 1 ? 'absolute' : 'hidden',
+        class: 'absolute -left-2',
       }"
       :next-button="{
         color: 'gray',
         icon: 'i-heroicons-arrow-right-20-solid',
-        class: images.length > 1 ? 'absolute' : 'hidden',
+        class: 'absolute -right-2',
       }"
     >
       <template #default="{ item, index }">
