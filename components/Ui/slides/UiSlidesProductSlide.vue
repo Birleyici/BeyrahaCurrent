@@ -1,5 +1,5 @@
 <template>
-  
+
   <div v-if="products.length == 0" class="w-full overflow-x-hidden">
     <div class="flex gap-4">
       <div v-for="item in 6" class="flex-shrink-0 space-y-2 w-[250px] border rounded-md">
@@ -11,27 +11,34 @@
   </div>
   <div v-else>
     <div class="flex items-center space-x-4">
-     <p class="text-md font-medium my-2">{{ props.title }}</p>
-     <NuxtLink v-if="props.to" :to="props.to" class="flex space-x-1 items-center text-sm font-medium text-orange-500">
-       <span>Tümü</span>
-       <UIcon name="i-heroicons-chevron-right" />
-     </NuxtLink>
+      <p class="text-md font-medium my-2">{{ props.title }}</p>
+      <NuxtLink v-if="props.to" :to="props.to" class="flex space-x-1 items-center text-sm font-medium text-orange-500">
+        <span>Tümü</span>
+        <UIcon name="i-heroicons-chevron-right" />
+      </NuxtLink>
     </div>
-     <UCarousel arrows v-slot="{ item }" :items="products" :ui="{ item: 'snap-end' }">
-       <PartialsProductCard class="mr-4" :product="item" :key="item.id"></PartialsProductCard>
-     </UCarousel>
-   </div>
-  
+    <UCarousel arrows v-slot="{ item }" :items="products" :ui="{ item: 'snap-end' }">
+      <PartialsProductCard class="mr-4" :product="item" :key="item.id"></PartialsProductCard>
+    </UCarousel>
+  </div>
+
 </template>
 
 <script setup>
-const props = defineProps(['title', 'filters', 'to'])
+const props = defineProps(['title', 'filters', 'to', 'isSsr'])
 const productState = useProductState()
 const products = ref([])
 
-onMounted(async () => {
-  const response = await productState.getProducts(props.filters, true)
-  products.value = response
-})
+if (props.isSsr) {
+  const { data } = await useAsyncData(props.to, async () => {
+    return await productState.getProducts(props.filters, true)
+  })
+  products.value = data.value
+} {
+  onMounted(async () => {
+    const response = await productState.getProducts(props.filters, true)
+    products.value = response
+  })
+}
 
 </script>
