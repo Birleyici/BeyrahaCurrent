@@ -11,6 +11,7 @@
           format="webp"
           quality="90"
           :loading="props.index === 0 || props.index === 1 ? '' : 'lazy'"
+          :preload ="props.index === 0 || props.index === 1 ? true : false"
           width="400"
           height="600"
           fit="cover"
