@@ -1,4 +1,4 @@
-export function useScrollEnd(elementId, callback) {
+export function useShowElement(elementId, callback) {
     let observer = null;
 
     onMounted(() => {

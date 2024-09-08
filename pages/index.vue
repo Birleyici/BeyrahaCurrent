@@ -2,7 +2,7 @@
   <div class="px-x-mobil lg:px-x-desktop">
 
     <div class="my-8">
-      <UiSlidesProductSlide title="Çarşaf" to="/carsaf-cilbab-a51" :is-ssr="true" :filters="{
+      <UiSlidesProductSlide  title="Çarşaf" to="/carsaf-cilbab-a51" :is-ssr="true" :filters="{
         selectedCategoryIds: '[51]',
         piece: 8
       }">
@@ -35,5 +35,8 @@ useHead({
     { name: 'description', content: 'En sevdiğiniz tesettür mağazaları artık yeni Beyraha da sizleri bekliyor.' }
   ],
 })
+
+
+
 
 </script>

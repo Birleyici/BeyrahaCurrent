@@ -122,7 +122,7 @@ if (query.value.searchWord) {
 }
 useHead(meta)
 
-useScrollEnd('finishProducts', () => {
+useShowElement('finishProducts', () => {
   if (!loading.value && query.value.page < productState.products.last_page) {
     query.value.page++;
   }

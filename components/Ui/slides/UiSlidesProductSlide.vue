@@ -1,6 +1,6 @@
 <template>
 
-  <div v-if="products.length == 0" class="w-full overflow-x-hidden">
+  <div :id="props.id" v-if="products.length == 0" class="w-full overflow-x-hidden">
     <div class="flex gap-4">
       <div v-for="item in 6" class="flex-shrink-0 space-y-2 w-[250px] border rounded-md">
         <USkeleton class="w-full h-[300px]" :ui="{ rounded: 'rounded-md' }" />
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-const props = defineProps(['title', 'filters', 'to', 'isSsr'])
+const props = defineProps(['title', 'filters', 'to', 'isSsr', 'id'])
 const productState = useProductState()
 const products = ref([])
 
@@ -34,11 +34,13 @@ if (props.isSsr) {
     return await productState.getProducts(props.filters, true)
   })
   products.value = data.value
-} {
-  onMounted(async () => {
+}
+
+useShowElement(props.id, async () => {
+  if (products?.value?.length == 0) {
     const response = await productState.getProducts(props.filters, true)
     products.value = response
-  })
-}
+  }
+})
 
 </script>

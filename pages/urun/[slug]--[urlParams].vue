@@ -18,8 +18,7 @@
 
         <div class="p-1 my-4 border  bg-slate-50   rounded-md mb-4 inline-block">
           <div class="flex items-center space-x-2 ">
-            <img src="/logo.jpg" width="100"
-              class="border  bg-white rounded-md w-8 h-8 object-contain p-1" alt="">
+            <img src="/logo.jpg" width="100" class="border  bg-white rounded-md w-8 h-8 object-contain p-1" alt="">
             <div class="flex space-x-2 items-center">
               <p class="font-medium text-sky-500 text-sm">Beyraha</p>
               <div>
@@ -50,17 +49,13 @@
     <div ref="product_information" class="my-minimal lg:my-maximal px-x-mobil lg:px-0">
       <PartialsProductInformation :attributes="attributeState.transformedAttrs" />
     </div>
-    <ClientOnly>
-
-      <div class="px-x-mobil md:px-0">
-        <UiSlidesProductSlide title="Benzer Ürünler" :filters="{
-          selectedCategoryIds: JSON.stringify(productCategoryIds),
-          piece: 8
-        }">
-        </UiSlidesProductSlide>
-
-      </div>
-    </ClientOnly>
+    <div class="px-x-mobil md:px-0">
+      <UiSlidesProductSlide id="product_page_slide_1" title="Benzer Ürünler" :filters="{
+        selectedCategoryIds: JSON.stringify(productCategoryIds),
+        piece: 8
+      }">
+      </UiSlidesProductSlide>
+    </div>
 
     <!-- <PartialsProductComment /> -->
   </div>
@@ -71,8 +66,8 @@ const productState = useProductState();
 const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
 const product_information = ref(null)
-const productCategoryIds = computed(()=>{
-  return productState.product.selectedCategories.map(c=> c.id)
+const productCategoryIds = computed(() => {
+  return productState.product.selectedCategories.map(c => c.id)
 })
 
 const route = useRoute();
