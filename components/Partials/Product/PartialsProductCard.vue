@@ -2,14 +2,15 @@
   <div class="border rounded-md max-w-[250px]">
     <div class="relative overflow-hidden cursor-pointer">
     
-      <NuxtLink :to="productState.product.product_url">
+      <NuxtLink :to="props.product.product_url">
         
+
         <NuxtImg
-          v-if="productState.product.coverImage"
-          :src="`aws/${productState.product.coverImage}`"
+          v-if="props.product.coverImage"
+          :src="`aws/${props.product.coverImage}`"
           format="webp"
           quality="90"
-          loading="lazy"
+          :loading="props.index === 0 || props.index === 1 ? '' : 'lazy'"
           width="400"
           height="600"
           fit="cover"
@@ -25,19 +26,19 @@
     </div>
     <div class="p-4">
       <div class="text-sm text-center font-medium">
-        <NuxtLink :to="productState.product.product_url">
-          {{ productState.product.name }}
+        <NuxtLink :to="props.product.product_url">
+          {{ props.product.name }}
         </NuxtLink>
       </div>
       <div class="flex justify-center">
-        <PartialsProductPrice type="card" :sale-price="productState.product.sale_price" :price="productState.product.price" />
+        <PartialsProductPrice type="card" :sale-price="props.product.sale_price" :price="props.product.price" />
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const productState = defineProps(['product'])
+const props = defineProps(['product', 'index'])
 const img_placeholder = '/img-placeholder.jpg'
  
 </script>
