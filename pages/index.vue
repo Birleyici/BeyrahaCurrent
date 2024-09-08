@@ -10,6 +10,9 @@
       }">
       </UiSlidesProductSlide>
     </div>
+    
+
+    
 
     <div class="my-8">
       <UiSlidesProductSlide title="Peçe" 

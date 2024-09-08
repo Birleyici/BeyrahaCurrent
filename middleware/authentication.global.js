@@ -2,6 +2,7 @@ import { useAuthStore } from "~/store/common/auth"
 
 export default defineNuxtRouteMiddleware((to, from) => {
   const authStore = useAuthStore()
+
   if (import.meta.server) return
 
   const protectedRoutes = ['/hesap', '/management'];
