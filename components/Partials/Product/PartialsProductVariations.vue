@@ -4,7 +4,7 @@
       <div v-for="attribute in props.attrsAndVarsState" :key="attribute.name">
         <!-- Öznitelik Adı -->
         <div class="mb-4">
-          <div class="my-minimal" v-if="attribute.name.toLowerCase() == 'renk'">
+          <div  class="my-minimal" v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
             <div>
               <div class="flex space-x-2 items-center">
                 <p class="font-medium text-sm">Renk:</p>
@@ -40,7 +40,7 @@
         
           </div>
           
-          <div class="grid gap-1" v-else>
+          <div class="grid gap-1" v-else-if="attribute.name.toLowerCase() != 'renk' ">
             <p class="font-medium text-sm">{{ attribute.name }}</p>
             
             <div class="flex space-x-2">

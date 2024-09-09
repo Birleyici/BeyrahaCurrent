@@ -93,6 +93,7 @@ const images = computed(() => {
 });
 
 const goToImage = (index: number) => {
+  console.log(index)
   currentImageIndex.value = index;
   carouselRef.value?.select(index);
 };
