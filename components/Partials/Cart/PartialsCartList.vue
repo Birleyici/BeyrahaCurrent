@@ -2,7 +2,7 @@
   <div class="my-2 border rounded-md p-1 last:border-b-0 border-dashed">
     <div class="flex space-x-4">
       <!-- Product Image -->
-      <NuxtImg v-if="props.item.image_path" width="70" class="object-cover rounded-md"
+      <NuxtImg v-if="props.item.image_path" width="80" height="120" fit="cover" class="object-cover rounded-md"
         :src="`aws/${props.item.image_path}`" />
       <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
       <div class="w-full">
