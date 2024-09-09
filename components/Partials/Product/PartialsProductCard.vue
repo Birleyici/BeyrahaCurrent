@@ -8,7 +8,7 @@
           format="webp"
           quality="90"
           :loading="imgLoadingType"
-          :palceholder="imgPreload"
+          :preload="imgPreload"
           width="400"
           height="600"
           fit="cover"
