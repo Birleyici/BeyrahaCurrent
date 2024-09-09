@@ -34,7 +34,7 @@
             </div>
             <div class="grid grid-cols-2 gap-2 mt-2">
                 <nuxt-link to="/sepet">
-                    <UiButtonsBaseButton class="w-full" color="slate">Sepete Git</UiButtonsBaseButton>
+                    <UButton class="w-full flex justify-center" color="gray" size="md" >Sepete Git</UButton>
                 </nuxt-link>
                 <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md"
                     variant="solid">

@@ -1,7 +1,7 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop">
 
-    <!-- <div class="my-8">
+    <div class="my-8">
       <UiSlidesProductSlide :lcp="true" title="Çarşaf" to="/carsaf-cilbab-a51" :is-ssr="true" :filters="{
         selectedCategoryIds: '[51]',
         piece: 8
@@ -23,7 +23,7 @@
         piece: 8
       }">
       </UiSlidesProductSlide>
-    </div> -->
+    </div>
 
   </div>
 </template>

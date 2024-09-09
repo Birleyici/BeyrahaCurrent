@@ -142,14 +142,4 @@ watch(() => props.images, (newVal) => {
 });
 </script>
 
-<style>
-/* Scrollbar'ı tamamen gizlemek için */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
-}
 
-/* Firefox için */
-.scrollbar-hide {
-  scrollbar-width: none;
-}
-</style>

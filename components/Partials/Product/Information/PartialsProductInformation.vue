@@ -26,19 +26,3 @@ const productState = useProductState();
 const props = defineProps(['attributes'])
 </script>
 
-<style>
-h2{
-  font-size: 20px;
-  font-weight: 600;
-  padding-top: 5px;
-padding-bottom: 5px;
-}
-
-h3{
-  font-size: 16px;
-  font-weight: 600;
-  padding-top: 5px;
-  padding-bottom: 5px;
-
-}
-</style>

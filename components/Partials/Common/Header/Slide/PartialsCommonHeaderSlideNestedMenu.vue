@@ -91,10 +91,3 @@ const goBack = () => {
 };
 </script>
 
-
-
-<style scoped>
-.mdi-chevron-right {
-  margin-left: auto;
-}
-</style>
