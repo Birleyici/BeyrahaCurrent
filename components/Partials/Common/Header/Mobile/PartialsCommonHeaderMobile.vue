@@ -3,9 +3,9 @@
     
     <PartialsCommonHeaderSlideNestedMenu v-model="$uiStore.state.menuSlide" :menu="props.categories" />
 
-    <PartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
+    <LazyPartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
 
-    <PartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
+    <LazyPartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
 
     <div class="flex justify-between items-center">
       <p class="font-primary text-heading-1 flex items-center space-x-3">
@@ -18,7 +18,7 @@
         <img :src="logoSrc" class="mx-auto " width="102" height="45" />
       </NuxtLink>
 
-      <PartialsCommonSearchInput></PartialsCommonSearchInput>
+      <LazyPartialsCommonSearchInput></LazyPartialsCommonSearchInput>
       <div>
         <div class="flex items-center space-x-4 font-medium">
 
@@ -38,7 +38,6 @@
         </div>
       </div>
     </div>
-    <PartialsCommonMegaMenu></PartialsCommonMegaMenu>
   </div>
 </template>
 <script setup>

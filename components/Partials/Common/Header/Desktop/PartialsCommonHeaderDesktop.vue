@@ -1,9 +1,9 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
 
-    <PartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
+    <LazyPartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
 
-    <PartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
+    <LazyPartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
 
     <div class="flex justify-between items-center">
       <p class="font-primary text-heading-1 flex items-center space-x-3">
@@ -11,7 +11,7 @@
           <NuxtImg :src="logoSrc" class="mx-auto" format="webp" width="102" height="45" />
         </NuxtLink>
       </p>
-      <PartialsCommonSearchInput></PartialsCommonSearchInput>
+      <LazyPartialsCommonSearchInput></LazyPartialsCommonSearchInput>
       <div>
         <div class="flex items-center font-medium">
           <p @click="$uiStore.state.accountSlide = true" class="cursor-pointer font-primary text-heading-4 pr-4">
