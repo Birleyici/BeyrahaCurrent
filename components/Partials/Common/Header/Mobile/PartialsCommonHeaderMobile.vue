@@ -15,7 +15,7 @@
       </p>
 
       <NuxtLink href="/">
-        <img :src="logoSrc" class="mx-auto " width="100" height="auto" />
+        <img :src="logoSrc" class="mx-auto " width="102" height="45" />
       </NuxtLink>
 
       <PartialsCommonSearchInput></PartialsCommonSearchInput>
