@@ -1,17 +1,14 @@
 <template>
   <div class="border rounded-md max-w-[250px]">
     <div class="relative overflow-hidden cursor-pointer">
-    
       <NuxtLink :to="props.product.product_url">
-        
-
         <NuxtImg
           v-if="props.product.coverImage"
           :src="`aws/${props.product.coverImage}`"
           format="webp"
           quality="90"
-          :loading="props.index === 0 || props.index === 1 ? '' : 'lazy'"
-          :preload ="props.index === 0 || props.index === 1 ? true : false"
+          :loading="imgLoadingType"
+          :preload ="imgPreload"
           width="400"
           height="600"
           fit="cover"
@@ -42,4 +39,10 @@
 const props = defineProps(['product', 'index'])
 const img_placeholder = '/img-placeholder.jpg'
  
+ const imgLoadingType = computed(()=>{
+ return  props.index === 0 || props.index === 1 ? '' : 'lazy'
+ })
+ const imgPreload = computed(()=>{
+  return props.index === 0 || props.index === 1 ? true : false
+ })
 </script>
