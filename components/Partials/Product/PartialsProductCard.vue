@@ -8,7 +8,7 @@
           format="webp"
           quality="90"
           :loading="imgLoadingType"
-          :preload ="imgPreload"
+          :preload="imgPreload"
           width="400"
           height="600"
           fit="cover"
@@ -36,13 +36,13 @@
 </template>
 
 <script setup>
-const props = defineProps(['product', 'index'])
+const props = defineProps(['product', 'index', 'lcp'])
 const img_placeholder = '/img-placeholder.jpg'
  
  const imgLoadingType = computed(()=>{
- return  props.index === 0 || props.index === 1 ? '' : 'lazy'
+ return  props.lcp && (props.index == 0 || props.index == 1) ? '' : 'lazy'
  })
  const imgPreload = computed(()=>{
-  return props.index === 0 || props.index === 1 ? true : false
+  return props.lcp && (props.index === 0 || props.index === 1) ? true : false
  })
 </script>

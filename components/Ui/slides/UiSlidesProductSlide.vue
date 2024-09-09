@@ -18,7 +18,7 @@
       </NuxtLink>
     </div>
     <UCarousel arrows v-slot="{ item,index }" :items="products" :ui="{ item: 'snap-end' }">
-      <PartialsProductCard class="mr-4" :index="index" :product="item" :key="item.id"></PartialsProductCard>
+      <PartialsProductCard :lcp="props.lcp" class="mr-4" :index="index" :product="item" :key="item.id"></PartialsProductCard>
     </UCarousel>
   </div>
 
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-const props = defineProps(['title', 'filters', 'to', 'isSsr', 'id'])
+const props = defineProps(['title', 'filters', 'to', 'isSsr', 'id', 'lcp'])
 const productState = useProductState()
 const products = ref([])
 
