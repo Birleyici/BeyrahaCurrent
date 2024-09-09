@@ -1,8 +1,7 @@
 <template>
   <div class="border rounded-md">
-    <div class="lg:flex items-center justify-between lg:space-x-8 bg-tertiary-100 rounded-t-md p-minimal">
+    <div class="flex items-center justify-between lg:space-x-8 bg-tertiary-100 rounded-t-md p-4">
       <div class="flex justify-between space-x-8">
-
         <!-- <UAvatarGroup size="sm" :max="2">
           <NuxtImg v-for="orderItem in props.item.order_items" :src="'aws' + orderItem.image?.path"
             class="w-[50px] h-[50px] object-top object-cover border border-white drop-shadow-sm rounded-full" width="50"
