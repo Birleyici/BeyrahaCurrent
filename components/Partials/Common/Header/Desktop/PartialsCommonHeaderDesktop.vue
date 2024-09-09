@@ -8,7 +8,7 @@
     <div class="flex justify-between items-center">
       <p class="font-primary text-heading-1 flex items-center space-x-3">
         <NuxtLink href="/">
-          <img :src="logoSrc" class="mx-auto" width="102" height="45" />
+          <NuxtImg :src="logoSrc" class="mx-auto" format="webp" width="102" height="45" />
         </NuxtLink>
       </p>
       <PartialsCommonSearchInput></PartialsCommonSearchInput>
@@ -44,23 +44,7 @@
 
 <script setup>
 const props = defineProps(["categories", "cart"]);
-const logoSrc = "/logo.jpg";
+const logoSrc = "aws/products/1/1725865521513.jpg";
 const selectedCategory = ref(null); // selectedCategory ref olarak tanımlandı
-const router = useRouter()
-
-const openMenu = (cat) => {
-  if (!cat.children) {
-    return router.push({
-      path: `/${cat.slug}-a${cat.id}`,
-      query: {
-        page: 1
-      }
-    })
-  }
-  selectedCategory.value = cat; // selectedCategory değeri burada ayarlandı
-  useNuxtApp().$uiStore.state.menuSlide = true;
-};
-
-
 </script>
 
