@@ -40,7 +40,7 @@ const props = defineProps(['product', 'index', 'lcp'])
 const img_placeholder = '/img-placeholder.jpg'
  
  const imgLoadingType = computed(()=>{
- return  props.lcp && (props.index == 0 || props.index == 1) ? '' : 'lazy'
+ return  props.lcp && (props.index == 0 || props.index == 1) ? 'eager' : 'lazy'
  })
  const imgPreload = computed(()=>{
   return props.lcp && (props.index === 0 || props.index === 1) ? true : false
