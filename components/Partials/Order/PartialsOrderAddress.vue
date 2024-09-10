@@ -58,7 +58,6 @@
                     :save-function="props.saveFunction"></PartialsOrderAddressForm>
             </UCard>
         </UModal>
-
     </div>
 </template>
 

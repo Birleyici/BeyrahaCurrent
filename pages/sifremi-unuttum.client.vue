@@ -101,7 +101,6 @@ async function onRemind(event: FormSubmitEvent<RemindSchema>) {
 
     // parseError fonksiyonunu kullanarak hatayı işleyelim
     const parsedError = parseError(error);
-    console.log(parsedError)
 
     if (parsedError.errorType) {
       remindFormErrors.value = parsedError.errors; // Eğer başka bir hata türü geldiyse
