@@ -182,9 +182,4 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
         createOrder,
         getOrders
     }
-},
-    {
-        persist: {
-            storage: persistedState.sessionStorage,
-        },
-    })
+})

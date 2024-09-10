@@ -38,8 +38,11 @@
             </UFormGroup> -->
 
             <UiInputPassword label="Şifre" v-model="authStore.user.password" />
+            <div>
+              <ULink class="font-medium text-sm" to="/sifremi-unuttum">Şifremi unuttum</ULink>
+            </div>
 
-            <UButton :loading="authStore.loginLoading" color="orange" size="md" type="submit"> Giriş </UButton>
+            <UButton :loading="authStore.loading.login" color="orange" size="md" type="submit"> Giriş </UButton>
 
             <ul class="list-disc p-4 text-red-500">
               <li v-for="error in authStore.apiError.login">
@@ -59,7 +62,7 @@
 
             <UiInputPassword label="Şifre tekrar" v-model="authStore.register.password_confirmation" />
 
-            <UButton :loading="authStore.registerLoading" color="orange" size="md" type="submit"> Kaydol </UButton>
+            <UButton :loading="authStore.loading.register" color="orange" size="md" type="submit"> Kaydol </UButton>
 
             <ul class="list-disc p-4 text-red-500">
               <li v-for="error in authStore.apiError.register">

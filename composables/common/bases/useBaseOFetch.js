@@ -14,10 +14,8 @@ export async function useBaseOFetch(url, options = {}) {
 
   try {
     response = await $fetch(apiBaseUrl + url, params);
-    console.log("Request successful");
     return response;
   } catch (error) {
-      console.error("Request failed:", error);
       throw error;
   }
 

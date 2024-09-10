@@ -85,7 +85,7 @@ const schema = object({
   address: string()
     .min(20, 'Adres 20 karakterden kısa olamaz.')
     .required('Zorunlu'),
-  email: string().email('Geçersiz email adresi.').required('Zorunlu'),
+  email: string().trim().email('Geçersiz email adresi.').required('Zorunlu'),
   phone: string()
     .min(10, 'Cep Telefonu 10 hane olmalıdır.')
     .required('Zorunlu'),

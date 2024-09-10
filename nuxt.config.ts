@@ -77,12 +77,10 @@ export default defineNuxtConfig({
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
     '@nuxtjs/device',
-    '@pinia-plugin-persistedstate/nuxt',
+    '@pinia/nuxt',
+    'pinia-plugin-persistedstate/nuxt',
     'nuxt-tiptap-editor',
   ],
-
-
-
 
 
   tiptap: {

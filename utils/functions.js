@@ -120,3 +120,36 @@ export function ucfirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
+
+
+export function parseError(error) {
+  let errorType = 'general';  // Varsayılan hata türü
+  let errors = [];
+  let statusCode = error.response?.status || 500;  // Varsayılan 500
+
+  if (statusCode === 422) {
+    if (error.response?._data?.errors) {
+      // Validasyon hatası
+      errorType = 'validation';
+      // Hataları array'a çeviriyoruz, tek hata bile olsa
+      errors = Object.values(error.response._data.errors).flat();
+    } else if (error.response?._data?.message) {
+      // Başka bir 422 hata mesajı
+      errorType = 'custom';
+      errors = [error.response._data.message];
+    }
+  } else {
+    // Diğer hata durumları
+    if (error.response?._data?.message) {
+      errors = [error.response._data.message];
+    } else {
+      errors = ['Bilinmeyen bir hata oluştu.'];
+    }
+  }
+
+  return {
+    errorType,
+    errors,
+    statusCode
+  };
+}

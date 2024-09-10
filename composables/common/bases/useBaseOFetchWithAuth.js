@@ -47,13 +47,12 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
 
             // İsteği tekrar yap
             response = await $fetch(apiBaseUrl + url, params);
-            console.log('Retrying with anonymous user ID:', response);
         }
 
         return response;
     } catch (error) {
+
         if (error.response && error.response.status === 401) {
-            console.log("401 block");
 
             // Token yenileme işlemi
             const newToken = await handleTokenRefresh(authStore, apiBaseUrl, route);
@@ -62,24 +61,15 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
             params.headers['Authorization'] = `Bearer ${newToken}`;
 
             try {
-                console.log("Retrying url:", url);
-
                 const retryResponse = await $fetch(apiBaseUrl + url, params);
-                console.log("Retry successful", retryResponse);
                 return retryResponse;
             } catch (retryError) {
                 console.error("Retry failed:", retryError);
                 throw retryError;
             }
         } else {
-            // toast.add({
-            //     title: 'Bir hata oluştu!',
-            //     color: 'red',
-            //     icon: "i-heroicons-exclamation-triangle",
-            // });
+          
             console.error("Fetch error:", error);
-            console.error('Validation errors:', error.response);
-
             throw error;
         }
     }
@@ -113,7 +103,6 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route) {
         }
     } catch (error) {
         if (error.response?.status === 401) {
-            
             authStore.logout(route.fullPath);
         }
         console.error("Token refresh failed", error);

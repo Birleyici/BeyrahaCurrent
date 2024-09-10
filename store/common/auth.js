@@ -11,14 +11,15 @@ export const useAuthStore = defineStore('authStore', () => {
     })
 
     const register = ref({
-        email: '',
+        email: '', 
         password: '',
         password_confirmation: ''
     })
 
     const apiError = ref({
         login: [],
-        register: []
+        register: [],
+        remind: []
     })
 
     const anon = ref({
@@ -26,12 +27,17 @@ export const useAuthStore = defineStore('authStore', () => {
         name: null
     })
 
+    const loading = ref({
+        login: false,
+        register: false,
+        remind: false
+    })
 
-    const loginLoading = ref(false)
-    const registerLoading = ref(false)
+
+
 
     const login = async () => {
-        loginLoading.value = true;
+        loading.value.login = true;
         const response = await useBaseOFetchWithAuth(
             "auth/login",
             {
@@ -39,13 +45,13 @@ export const useAuthStore = defineStore('authStore', () => {
                 method: "POST",
                 onResponseError: (errorReponse) => {
                     apiError.value.login = [[errorReponse.response._data.error]]
-                    loginLoading.value = false;
+                    loading.value.login = false;
 
                 }
             }
         ).finally(() => {
             console.log("deneme")
-            loginLoading.value = false;
+            loading.value.login = false;
         });
 
 
@@ -75,7 +81,7 @@ export const useAuthStore = defineStore('authStore', () => {
     }
 
     const registerUser = async () => {
-        registerLoading.value = true;
+        loading.value.register = true;
         const response = await useBaseOFetch(
             "auth/register",
             {
@@ -87,7 +93,7 @@ export const useAuthStore = defineStore('authStore', () => {
                 }
             }
         ).finally(() => {
-            registerLoading.value = false;
+            loading.value.register = false;
         });
 
         if (!response.error) {
@@ -101,6 +107,49 @@ export const useAuthStore = defineStore('authStore', () => {
 
 
     };
+
+    const remind = async (email)=>{
+        loading.value.remind = true
+         await useBaseOFetch(
+            "auth/remind",
+            {
+                body: JSON.stringify({email}),
+                method: "POST",
+                onResponseError: (errorResponse) => {
+                    const data = errorResponse.response._data;
+                    
+                    // Eğer veri bir array ise apiError.value.remind'e ata
+                    if (Array.isArray(data)) {
+                        apiError.value.remind = data;
+                    } else {
+                        // Array değilse, hata mesajını işleyebilir ya da görmezden gelebilirsiniz
+                        console.log('Hata mesajı array formatında değil:', data);
+                    }
+                }
+                
+            }
+        ).finally(() => {
+            loading.value.remind = false;
+        });
+    }
+
+
+    const changePassword = async (form) => {
+        loading.value.remind = true;
+        try {
+          const response = await useBaseOFetch("auth/reset-password", {
+            body: JSON.stringify(form),
+            method: "POST",
+          });
+          return response; // Başarılı yanıtı döndürüyoruz
+        } catch (error) {
+          console.error("Error in changePassword", error);
+          throw error; // Hata fırlatıyoruz, böylece `onChange` fonksiyonunda yakalanabilir
+        } finally {
+          loading.value.remind = false;
+        }
+      };
+      
 
 
     const logout = (callback = null) => {
@@ -122,10 +171,11 @@ export const useAuthStore = defineStore('authStore', () => {
     }
 
 
-    return { user, anon, register, loginLoading, registerLoading, apiError, token, login, registerUser, logout }
+    return { user, anon, register, loading, apiError, token, login, registerUser, remind, logout, changePassword }
 },
     {
         persist: {
-            storage: persistedState.localStorage,
+            storage: piniaPluginPersistedstate.localStorage(),
+            pick:['token', 'anon']
         },
     })
