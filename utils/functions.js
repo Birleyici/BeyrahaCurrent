@@ -131,21 +131,21 @@ export function parseError(error) {
     if (error.response?._data?.errors) {
       // Validasyon hatası
       errorType = 'validation';
-      // Hataları array'a çeviriyoruz, tek hata bile olsa
       errors = Object.values(error.response._data.errors).flat();
     } else if (error.response?._data?.message) {
-      // Başka bir 422 hata mesajı
       errorType = 'custom';
       errors = [error.response._data.message];
     }
   } else {
-    // Diğer hata durumları
     if (error.response?._data?.message) {
       errors = [error.response._data.message];
     } else {
       errors = ['Bilinmeyen bir hata oluştu.'];
     }
   }
+
+  // Belirli bir hata mesajını filtreleyelim
+  errors = errors.filter(err => err !== 'Bu e-posta adresi ile kayıtlı bir kullanıcı bulunamadı.');
 
   return {
     errorType,
