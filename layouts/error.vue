@@ -1,0 +1,9 @@
+<template>
+  <header>
+    <PartialsCommonHeader></PartialsCommonHeader>
+  </header>
+  <slot/>
+  <footer>
+    <LazyPartialsCommonFooter></LazyPartialsCommonFooter>
+  </footer>
+</template>
