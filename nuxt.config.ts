@@ -163,5 +163,5 @@ export default defineNuxtConfig({
       '/urun/uc-3-katli-firfirli-arap-tulu-arabia-pece': { redirect: '/urun/uc-katli-kelebek-model-arabia-pece--29', statusCode: 301 },
       '/urun/pratik-esarp': { redirect: '/urun/kare-esarp--46', statusCode: 301 },
       '/urun/pratik-tek-parca-sandy-namaz-elbisesi-siyah': { redirect: '/urun/yarasa-kol-ferace-ozel-dikim--41', statusCode: 301 }
-  
+  }
 })
