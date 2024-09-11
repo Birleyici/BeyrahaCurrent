@@ -154,7 +154,7 @@ export default defineNuxtConfig({
       '/urun/iki-katli-tam-boy-pece': { redirect: '/urun/iki-katli-pece--32', statusCode: 301 },
       '/urun/tek-katli-pece-kahverengi': { redirect: '/urun/tek-katli-pece--kahverengi-81', statusCode: 301 },
       '/urun/tek-katli-pece-lacivert': { redirect: '/urun/tek-katli-pece--lacivert-80', statusCode: 301 },
-      '/urun/buyuk-boy-ucgen-model-fransiz-bas-kolsuz-sufle': { redirect: '/urun/buyuk-boy-kolsuz-meryem-suflesi--38', statusCode: 301 },
+      '/urun/buyuk-boy-ucgen-model-fransiz-bas-kolsuz-sufle': { redirect: '/urun/orta-boy-tek-katli-khimar-sufle--siyah-111', statusCode: 301 },
       '/urun/tekli-tek-katli-pece-yesil': { redirect: '/urun/tek-katli-pece--yesil-82', statusCode: 301 },
       '/urun/orta-boy-sultanbas-oval-kesim-kolsuz-sufle': { redirect: '/urun/orta-boy-sultanbas-kolsuz-sufle--35', statusCode: 301 },
       '/urun/kisa-boy-sultanbas-oval-kesim-kolsuz-sufle': { redirect: '/urun/kucuk-boy-sultanbas-kolsuz-sufle--36', statusCode: 301 },
