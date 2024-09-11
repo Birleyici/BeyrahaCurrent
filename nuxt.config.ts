@@ -121,6 +121,17 @@ export default defineNuxtConfig({
       '/urun/buyuk-boy-kolsuz-meryem-suflesi': { redirect: '/urun/buyuk-boy-kolsuz-meryem-suflesi--siyah-114', statusCode: 301 },
       '/urun/orta-boy-tek-katli-khimar-sufle': { redirect: '/urun/orta-boy-tek-katli-khimar-sufle--siyah-111', statusCode: 301 },
   
+
+      '/kategori/eldiven': { redirect: '/tesettur-eldiven-a57' },
+      '/kategori/ferace': { redirect: '/ferace-a52' },
+      '/kategori/carsaf': { redirect: '/carsaf-a51' },
+      '/kategori/pece': { redirect: '/pece-a56' },
+      '/kategori/esarp': { redirect: '/esarp-sal-a58' },
+      '/kategori/sufle': { redirect: '/sufle-a55' },
+      '/kategori/etek': { redirect: '/etek-a59' },
+      '/kategori/genel': { redirect: '/' },  // Genel kategoriyi ana sayfaya yönlendirme
+
+      
       // Diğer yönlendirmeler
       '/urun/tam-klos-ferace': { redirect: '/urun/sultanbas-carsaf-takimi--7', statusCode: 301 },
       '/urun/carsaf-eldiveni': { redirect: '/urun/carsaf-eldiveni--45', statusCode: 301 },
