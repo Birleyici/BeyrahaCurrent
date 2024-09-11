@@ -15,6 +15,7 @@ const nuxtApp = useNuxtApp()
 const router = useRouter()
 const cartState = useCartState()
 
+
 onMounted(async () => {
   $changeMainState({ isLoaded: true });
   await cartState.cartDBToState()

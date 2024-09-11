@@ -80,6 +80,8 @@ await useAsyncData("initProductPageData", async () => {
   return true
 })
 
+// Ürün ismini kontrol et ve hata yönetimi uygula
+await useErrorHandle(productState.product.name);
 
 onMounted(async () => {
   await productState.fetchCategoryProducts(productState.product.selectedCategories)

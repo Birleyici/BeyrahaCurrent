@@ -7,7 +7,7 @@
       <div class="grid gap-1">
         <b class="text-lg">Kişisel</b>
         <NuxtLink to="/hesap/siparislerim">Siparişlerim</NuxtLink>
-        <NuxtLink to="/hesap/adreslerim">Areslerim</NuxtLink>
+        <NuxtLink to="/hesap/adreslerim">Adreslerim</NuxtLink>
         <NuxtLink to="/sepet">Sepet</NuxtLink>
         <!-- <a href="#">Son baktıklarım</a> -->
       </div>

@@ -46,6 +46,8 @@ export const useProductState = defineStore('productState', () => {
 
   const fetchProduct = async (params) => {
 
+    
+
     const response = await useBaseOFetch(`product/${params.slug}`, {
       params: {
         urlParams: params.urlParams
