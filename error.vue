@@ -20,8 +20,8 @@ const props = defineProps({
         <div class="mt-2 z-10" >
           <UButton @click="handleError"  label="Ana sayfaya dön" color="sky" variant="outline" />
         </div>
-        <UIcon class="text-[200px]   absolute opacity-5" name="i-heroicons-exclamation-triangle" />
-
+        <!-- <UIcon class="text-[200px]   absolute opacity-5" name="i-heroicons-exclamation-triangle" /> -->
+<p  class="text-[200px]   absolute opacity-5">404</p>
       </div>
     </div>
   </NuxtLayout>
