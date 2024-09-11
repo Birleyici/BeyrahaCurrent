@@ -123,6 +123,7 @@ export default defineNuxtConfig({
       '/urun/ic-pece-siyah': { redirect: '/urun/ic-pece--siyah-88', statusCode: 301 },
       '/urun/buyuk-boy-kolsuz-meryem-suflesi': { redirect: '/urun/buyuk-boy-kolsuz-meryem-suflesi--siyah-114', statusCode: 301 },
       '/urun/orta-boy-tek-katli-khimar-sufle': { redirect: '/urun/orta-boy-tek-katli-khimar-sufle--siyah-111', statusCode: 301 },
+      '/urun/buyuk-boy-sultanbas-oval-kesim-kolsuz-sufle': { redirect: '/urun/buyuk-boy-sultanbas-kolsuz-sufle--37', statusCode: 301 },
   
 
       '/kategori/eldiven': { redirect: '/tesettur-eldiven-a57' },
