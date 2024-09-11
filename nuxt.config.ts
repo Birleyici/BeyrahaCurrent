@@ -135,7 +135,7 @@ export default defineNuxtConfig({
       // Diğer yönlendirmeler
       
       '/urun/kare-esarp': { redirect: '/urun/kare-esarp--46', statusCode: 301 },
-      '/urun/iki-katli-arabia-pee': { redirect: '/urun/iki-katli-pece--32', statusCode: 301 },
+      '/urun/iki-katli-arabia-pece': { redirect: '/urun/iki-katli-pece--32', statusCode: 301 },
       '/urun/tam-klos-ferace': { redirect: '/urun/sultanbas-carsaf-takimi--7', statusCode: 301 },
       '/urun/carsaf-eldiveni': { redirect: '/urun/carsaf-eldiveni--45', statusCode: 301 },
       '/urun/uc-katli-peceli-khimar-sufle': { redirect: '/urun/uc-katli-peceli-khimar-sufle--34', statusCode: 301 },
