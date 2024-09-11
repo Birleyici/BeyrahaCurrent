@@ -116,8 +116,8 @@ export default defineNuxtConfig({
       '/urun/sultanbas-carsaf-takimi': { redirect: '/urun/sultanbas-carsaf-takimi--siyah-22', statusCode: 301 },
       '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim': { redirect: '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim--siyah-37', statusCode: 301 },
       '/urun/bassiz-afgan-takimi-ozel-dikim': { redirect: '/urun/bassiz-afgan-takimi-ozel-dikim--siyah-71', statusCode: 301 },
-      '/urun/tek-katli-pece': { redirect: '/urun/tek-katli-pece--siyah-79', statusCode: 301 },
-      '/urun/ic-pece': { redirect: '/urun/ic-pece--siyah-88', statusCode: 301 },
+      '/urun/tek-katli-pece-siyah': { redirect: '/urun/tek-katli-pece--siyah-79', statusCode: 301 },
+      '/urun/ic-pece-siyah': { redirect: '/urun/ic-pece--siyah-88', statusCode: 301 },
       '/urun/buyuk-boy-kolsuz-meryem-suflesi': { redirect: '/urun/buyuk-boy-kolsuz-meryem-suflesi--siyah-114', statusCode: 301 },
       '/urun/orta-boy-tek-katli-khimar-sufle': { redirect: '/urun/orta-boy-tek-katli-khimar-sufle--siyah-111', statusCode: 301 },
   
