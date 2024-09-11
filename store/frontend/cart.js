@@ -28,7 +28,7 @@ export const useCartState = defineStore('cartState', () => {
   }
 
 
-  const patchCart = async (obj, qyt) => {
+  const patchCart = async (obj, qyt, openSlide = true) => {
     addToCartloading.value = true
 
     const response = await useBaseOFetchWithAuth('cart', {
@@ -43,7 +43,7 @@ export const useCartState = defineStore('cartState', () => {
 
     if (response.error) {
       toast.add({
-        title: 'Bir hata oluştu!',
+        title: 'Bir hata oluştu, tekrar deneyin.',
         color: 'red',
         icon: "i-heroicons-exclamation-triangle",
       })
@@ -58,22 +58,6 @@ export const useCartState = defineStore('cartState', () => {
 
       cart.value.push(response.cartItem)
 
-      const actions = ref([{
-        label: 'Sepete Git',
-        click: () => navigateTo('/sepet')
-      }])
-  
-      setTimeout(async () => {
-        addToCartloading.value = false
-        toast.add({
-          title: 'Sepete eklendi!',
-          color: 'orange',
-          icon: "i-heroicons-check-badge",
-          actions
-        })
-      }, 500);
-
-
     } else {
 
       cart.value[existObjIndex].qyt += qyt
@@ -83,28 +67,30 @@ export const useCartState = defineStore('cartState', () => {
 
     }
 
-  
+    if (openSlide) {
+      useUIStore().cartSlide = true
+    }
 
   }
 
 
   const cartDBToState = async () => {
 
-      const response = await useBaseOFetchWithAuth('cart')
-      console.log(response)
-      cart.value = response.cart
+    const response = await useBaseOFetchWithAuth('cart')
+    console.log(response)
+    cart.value = response.cart
   }
 
 
   const deleteCartItem = async (deleteCartItem) => {
-      const response = await useBaseOFetchWithAuth(`cart/${deleteCartItem.id}`, {
-        method: 'DELETE'
-      });
+    const response = await useBaseOFetchWithAuth(`cart/${deleteCartItem.id}`, {
+      method: 'DELETE'
+    });
 
-      if (response.error) {
-        console.log(response.error)
-        return;
-      }
+    if (response.error) {
+      console.log(response.error)
+      return;
+    }
 
     cart.value = cart.value.filter(item => {
       // Ürün varyasyonu varsa

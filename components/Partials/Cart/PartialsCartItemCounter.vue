@@ -19,14 +19,14 @@ const loadingMinus = ref(false)
 
 const increase = async () => {
   loadingPlus.value = true
-  await cartState.patchCart(props.cartItem, +1).finally(() => {
+  await cartState.patchCart(props.cartItem, +1, false).finally(() => {
     loadingPlus.value = false
   })
 }
 
 const decrease = async () => {
   loadingMinus.value = true
-  await cartState.patchCart(props.cartItem, -1).finally(() => {
+  await cartState.patchCart(props.cartItem, -1, false).finally(() => {
     loadingMinus.value = false
 
   })

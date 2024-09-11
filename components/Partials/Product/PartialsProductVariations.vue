@@ -165,7 +165,6 @@ const addToCart = () => {
     };
   }
 
-console.log(selectedColor.value?.term_name)
   if (selectedVariation) {
     // Varyasyonlu ürün için
     newCartItem = {
@@ -191,7 +190,6 @@ console.log(selectedColor.value?.term_name)
     };
   }
 
-  console.log(newCartItem)
   // Sepeti güncelle
   cartState.patchCart(newCartItem, parseInt(qyt.value));
 
