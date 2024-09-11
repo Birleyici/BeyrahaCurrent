@@ -114,6 +114,7 @@ export default defineNuxtConfig({
     '/management/**': { ssr: false },
     // Renk belirtilmeyen ürünler için siyah varyantlarına yönlendirme
       '/urun/sultanbas-carsaf-takimi': { redirect: '/urun/sultanbas-carsaf-takimi--siyah-22', statusCode: 301 },
+      '/urun/iki-katli-super-soft-pece/': { redirect: '/urun/iki-katli-super-soft-pece--48', statusCode: 301 },
       '/urun/kendinden-peceli-afgan-carsaf-takimi': { redirect: '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim--siyah-37', statusCode: 301 },
       '/urun/bassiz-afgan-takimi-tunik-etek-takimi': { redirect: '/urun/bassiz-afgan-takimi-ozel-dikim--siyah-71', statusCode: 301 },
       '/urun/tek-katli-pece-siyah': { redirect: '/urun/tek-katli-pece--siyah-79', statusCode: 301 },
