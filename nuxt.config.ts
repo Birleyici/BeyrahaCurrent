@@ -109,9 +109,10 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-08-21',
 
- 
+
   routeRules: {
-      // Renk belirtilmeyen ürünler için siyah varyantlarına yönlendirme
+    '/management/**': { ssr: false },
+    // Renk belirtilmeyen ürünler için siyah varyantlarına yönlendirme
       '/urun/sultanbas-carsaf-takimi': { redirect: '/urun/sultanbas-carsaf-takimi--siyah-22', statusCode: 301 },
       '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim': { redirect: '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim--siyah-37', statusCode: 301 },
       '/urun/bassiz-afgan-takimi-ozel-dikim': { redirect: '/urun/bassiz-afgan-takimi-ozel-dikim--siyah-71', statusCode: 301 },
