@@ -114,8 +114,8 @@ export default defineNuxtConfig({
     '/management/**': { ssr: false },
     // Renk belirtilmeyen ürünler için siyah varyantlarına yönlendirme
       '/urun/sultanbas-carsaf-takimi': { redirect: '/urun/sultanbas-carsaf-takimi--siyah-22', statusCode: 301 },
-      '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim': { redirect: '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim--siyah-37', statusCode: 301 },
-      '/urun/bassiz-afgan-takimi-ozel-dikim': { redirect: '/urun/bassiz-afgan-takimi-ozel-dikim--siyah-71', statusCode: 301 },
+      '/urun/kendinden-peceli-afgan-carsaf-takimi': { redirect: '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim--siyah-37', statusCode: 301 },
+      '/urun/bassiz-afgan-takimi-tunik-etek-takimi': { redirect: '/urun/bassiz-afgan-takimi-ozel-dikim--siyah-71', statusCode: 301 },
       '/urun/tek-katli-pece-siyah': { redirect: '/urun/tek-katli-pece--siyah-79', statusCode: 301 },
       '/urun/ic-pece-siyah': { redirect: '/urun/ic-pece--siyah-88', statusCode: 301 },
       '/urun/buyuk-boy-kolsuz-meryem-suflesi': { redirect: '/urun/buyuk-boy-kolsuz-meryem-suflesi--siyah-114', statusCode: 301 },
@@ -144,7 +144,6 @@ export default defineNuxtConfig({
       '/urun/kendinden-peceli-afgan-carsaf-takimi-kahverengi': { redirect: '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim--kahverengi-59', statusCode: 301 },
       '/urun/ic-pece-lacivert': { redirect: '/urun/ic-pece--lacivert-89', statusCode: 301 },
       '/urun/buyuk-boy-kolsuz-meryem-suflesi-lacivert': { redirect: '/urun/buyuk-boy-kolsuz-meryem-suflesi--lacivert-115', statusCode: 301 },
-      '/urun/bassiz-afgan-takimi-tunik-etek-takimi': { redirect: '/urun/bassiz-afgan-takimi-ozel-dikim--28', statusCode: 301 },
       '/urun/mansetli-robali-ferace-murdum': { redirect: '/urun/kat-kat-robali-soft-krep-ferace--43', statusCode: 301 },
       '/urun/bonebas-yarasakol-ferace-lacivert': { redirect: '/urun/bonebas-yarasakol-ferace-ozel-dikim--42', statusCode: 301 },
       '/urun/yarasa-kol-ferace': { redirect: '/urun/yarasa-kol-ferace-ozel-dikim--41', statusCode: 301 },
