@@ -126,6 +126,7 @@ export default defineNuxtConfig({
       '/urun/carsaf-eldiveni': { redirect: '/urun/carsaf-eldiveni--45', statusCode: 301 },
       '/urun/uc-katli-peceli-khimar-sufle': { redirect: '/urun/uc-katli-peceli-khimar-sufle--34', statusCode: 301 },
       '/urun/uc-katli-arabia-pece': { redirect: '/urun/uc-katli-kelebek-model-arabia-pece--29', statusCode: 301 },
+      '/urun/uc-katli-kelebek-model-arabia-pece': { redirect: '/urun/uc-katli-kelebek-model-arabia-pece--29', statusCode: 301 },
       '/urun/kendinden-peceli-afgan-carsaf-takimi-kahverengi': { redirect: '/urun/kendinden-peceli-afgan-carsaf-takimi-ozel-dikim--kahverengi-59', statusCode: 301 },
       '/urun/ic-pece-lacivert': { redirect: '/urun/ic-pece--lacivert-89', statusCode: 301 },
       '/urun/buyuk-boy-kolsuz-meryem-suflesi-lacivert': { redirect: '/urun/buyuk-boy-kolsuz-meryem-suflesi--lacivert-115', statusCode: 301 },
