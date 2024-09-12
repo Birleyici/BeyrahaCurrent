@@ -12,8 +12,9 @@ const props = defineProps({
 
 <template>
   <NuxtLayout name="error">
-    <div class="px-x-mobil lg:px-x-desktop flex justify-center">
-      <div class=" md:w-[500px] py-10 md:p-10 text-center relative grid gap-2  rounded-md">
+    
+    <div  class="px-x-mobil lg:px-x-desktop flex justify-center">
+      <div v-if="props.error?.statusCode==404" class=" md:w-[500px] py-10 md:p-10 text-center relative grid gap-2  rounded-md">
         <!-- <span class=" text-sky-500 font-medium">{{ error.statusCode }}</span> -->
         <h1 class="font-bold text-4xl text-sky-500">Sayfa bulunamadı</h1>
         <NuxtLink class="text-sm" to="/">Aradığınız ürün yada sayfa şuanda mevcut değil.</NuxtLink>
@@ -22,6 +23,18 @@ const props = defineProps({
         </div>
         <!-- <UIcon class="text-[200px]   absolute opacity-5" name="i-heroicons-exclamation-triangle" /> -->
         <p class="text-[200px]  absolute opacity-[0.03]">404</p>
+      </div>
+      <div v-else>
+        <div  class=" md:w-[500px] py-10 md:p-10 text-center relative grid gap-2  rounded-md">
+          <!-- <span class=" text-sky-500 font-medium">{{ error.statusCode }}</span> -->
+          <h1 class="font-bold text-4xl text-sky-500">Bir hata oluştu</h1>
+          <NuxtLink class="text-sm" to="/">Sorunu düzeltmeye çalışıyoruz, lütfen daha sonra tekrar deneyin.</NuxtLink>
+          <div class="mt-2 z-10">
+            <UButton @click="handleError" label="Sorunu bildir" color="sky" variant="outline" />
+          </div>
+          <!-- <UIcon class="text-[200px]   absolute opacity-5" name="i-heroicons-exclamation-triangle" /> -->
+          <p class="text-[200px]  absolute opacity-[0.03]">{{props.error?.statusCode}}</p>
+        </div>
       </div>
     </div>
   </NuxtLayout>

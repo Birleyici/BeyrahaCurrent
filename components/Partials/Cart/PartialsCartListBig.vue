@@ -7,8 +7,7 @@
                     :src="`aws/${props.item.image_path}`" />
                 <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
                 <div>
-                    <p class="font-medium">{{ props.item.product_name }}</p>
-
+                    <NuxtLink :to="props.item.product_url" class="font-medium">{{ props.item.product_name }}</NuxtLink>
                     <!-- Display Variation Attributes -->
                     <div v-if="props.item.variation">
                         <div v-for="(value, key) in props.item.variation.attributes" :key="key"
