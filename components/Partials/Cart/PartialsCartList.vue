@@ -8,9 +8,8 @@
       <div class="w-full">
         <!-- Product Name and Delete Button -->
         <div class="flex items-start space-x-2 justify-between w-full">
-          <p class="text-sm font-medium">
-            {{ props.item.product_name }}
-          </p>
+          <NuxtLink :to="props.item.product_url" class="text-sm font-medium">{{ props.item.product_name }}</NuxtLink>
+
           <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-x-mark" size="xs"
             color="red" square :ui="{ rounded: 'rounded-full' }" variant="soft" />
         </div>
