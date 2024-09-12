@@ -89,7 +89,6 @@ import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
 const router = useRouter()
 const authStore = useAuthStore()
-const isShowPassword = ref(false)
 const schemaLogin = object({
   email: string().email('Geçersiz email').required('Zorunlu'),
   password: string()

@@ -1,185 +1,174 @@
-import { defineStore } from "pinia";
-import { v4 as uuidv4 } from 'uuid';
-
+import { defineStore } from 'pinia'
 
 export const useOrderStoreFront = defineStore('orderStoreFront', () => {
+  const cartState = useCartState()
+  const toast = useToast()
+  const isOpenAddressModal = ref(false)
+  const openAllAddressModal = ref(false)
 
-    const cartState = useCartState()
+  let newAddress = ref({
+    name: null,
+    last_name: null,
+    phone: null,
+    address: null,
+    city: null,
+    district: null,
+    email: null,
+    isDefault: true
+  })
 
-    const isOpenAddressModal = ref(false)
-    const openAllAddressModal = ref(false)
+  const copyNewAddress = toRaw({ ...newAddress.value })
 
-    let newAddress = ref(
-        {
-            name: null,
-            last_name: null,
-            phone: null,
-            address: null,
-            city: null,
-            district: null,
-            email: null,
-            isDefault: true
-        }
+  const addresses = ref([])
+  const cities = ref([])
+  const districts = ref([])
+
+  const getDefaultAddress = computed(() => {
+    let filteredAddresses = addresses.value?.filter(
+      (address) => address.isDefault === true
     )
+    return filteredAddresses.length ? filteredAddresses[0] : null
+  })
 
-    const copyNewAddress = toRaw({ ...newAddress.value })
+  const orderOptions = ref({
+    selectedPaymentMethod: 'bacs',
+    selectedAddress: getDefaultAddress?.id,
+    isOpenOtherAddress: false
+  })
 
+  const orders = ref([])
 
-    const addresses = ref([])
-    const cities = ref([])
-    const districts = ref([])
-
-    const getDefaultAddress = computed(() => {
-
-        let filteredAddresses = addresses.value?.filter(address => address.isDefault === true);
-        return filteredAddresses.length ? filteredAddresses[0] : null;
-    });
-
-
-    const orderOptions = ref({
-        selectedPaymentMethod: 'bacs',
-        selectedAddress: getDefaultAddress?.id,
-        isOpenOtherAddress: false
+  const saveAddress = async (item) => {
+    const response = await useBaseOFetchWithAuth('address', {
+      method: 'POST',
+      body: JSON.stringify(item)
     })
 
-    const orders = ref([])
-
-    const saveAddress = async (item) => {
-
-        const response = await useBaseOFetchWithAuth('address', {
-            method: 'POST',
-            body: JSON.stringify(item)
-        })
-
-
-        if (!response.error) {
-            if (response.isNew) {
-                await setDefaultFalseOtherAddresses(response.id)
-                addresses.value.unshift(response)
-            } else {
-                const index = addresses.value.findIndex(item => item.id === response.id)
-                if (index == -1) {
-                    addresses.value = [response]
-                } else {
-                    addresses.value[index] = response
-
-                }
-            }
+    if (!response.error) {
+      if (response.isNew) {
+        await setDefaultFalseOtherAddresses(response.id)
+        addresses.value.unshift(response)
+      } else {
+        const index = addresses.value.findIndex(
+          (item) => item.id === response.id
+        )
+        if (index == -1) {
+          addresses.value = [response]
+        } else {
+          addresses.value[index] = response
         }
-        isOpenAddressModal.value = false
-        return
-    };
+      }
+    }
+    isOpenAddressModal.value = false
+    return
+  }
 
+  const setDefaultFalseOtherAddresses = (id) => {
+    addresses.value.forEach((address) => {
+      if (address.id !== id) {
+        address.isDefault = false
+      } else {
+        address.isDefault = true
+      }
+    })
+  }
 
-    const setDefaultFalseOtherAddresses = (id) => {
-        addresses.value.forEach((address) => {
-            if (address.id !== id) {
-                address.isDefault = false;
-            } else {
-                address.isDefault = true;
-            }
-        });
+  const setDefaultAddress = async (address) => {
+    address.loading = true
+    const response = await useBaseOFetchWithAuth('address/default', {
+      method: 'POST',
+      body: JSON.stringify({ addressId: address.id })
+    }).finally(() => {
+      address.loading = false
+    })
+    if (!response.error) {
+      setDefaultFalseOtherAddresses(address.id)
+    }
+  }
+
+  const deleteAddress = (id) => {
+    addresses.value = addresses.value.filter((address) => address.id !== id)
+  }
+
+  const fetchCities = async () => {
+    const response = await useBaseOFetch(`countries/1/cities`)
+
+    cities.value = response
+  }
+
+  const fetchDistricts = async (city) => {
+    const response = await useBaseOFetch(`cities/${city?.id}/districts`)
+    districts.value = response
+  }
+
+  const createOrder = async () => {
+    if (addresses.value.length == 0) {
+      toast.add({
+        title: 'Lütfen "Yeni adres" butonundan sipariş adresi ekleyin.',
+        color: 'red'
+      })
+      return
     }
 
-
-    const setDefaultAddress = async (address) => {
-        address.loading = true
-        const response = await useBaseOFetchWithAuth('address/default', {
-            method: 'POST',
-            body: JSON.stringify({ addressId: address.id }),
-        }).finally(() => {
-            address.loading = false
-        });
-        if (!response.error) {
-            setDefaultFalseOtherAddresses(address.id)
-        }
+    if (cartState.cart.length == 0) {
+      return
     }
 
-
-    const deleteAddress = (id) => {
-
-        addresses.value = addresses.value.filter(address => address.id !== id)
+    const newOrderObj = {
+      address: addresses.value[0],
+      cart: cartState.cart
     }
 
-
-    const fetchCities = async () => {
-
-        const response = await useBaseOFetch(`countries/1/cities`)
-
-        cities.value = response
-    }
-
-    const fetchDistricts = async (city) => {
-
-        
-        const response = await useBaseOFetch(`cities/${city?.id}/districts`)
-        districts.value = response
-
-    }
-
-
-    const createOrder = async () => {
-
-        if (addresses.value.length == 0 || cartState.cart.length == 0) {
-            return
-        }
-        const newOrderObj = {
-            address: addresses.value[0],
-            cart: cartState.cart
-        }
-
-        const response = await useBaseOFetchWithAuth(`order/create`,
-            {
-                method: 'POST',
-                body: JSON.stringify(newOrderObj)
-            })
-
-        addresses.value = []
-        cartState.resetCartState()
-
-        await navigateTo({
-            path: '/tesekkurler',
-            query: {
-                order: response.token
-            }
-        })
-    }
-
-    const fetchAddresses = async () => {
-        const response = await useBaseOFetchWithAuth('addresses')
-        addresses.value = response
-    }
-
-    const getOrders = async () => {
-        const response = await useBaseOFetchWithAuth(`orders`);
-        orders.value = response;
-    };
-
-
-    watch(isOpenAddressModal, () => {
-        if (!isOpenAddressModal.value) {
-            newAddress.value = copyNewAddress
-        }
+    const response = await useBaseOFetchWithAuth(`order/create`, {
+      method: 'POST',
+      body: JSON.stringify(newOrderObj)
     })
 
-    return {
-        orderOptions,
-        addresses,
-        getDefaultAddress,
-        newAddress,
-        copyNewAddress,
-        isOpenAddressModal,
-        openAllAddressModal,
-        cities,
-        districts,
-        orders,
-        fetchAddresses,
-        setDefaultAddress,
-        saveAddress,
-        deleteAddress,
-        fetchCities,
-        fetchDistricts,
-        createOrder,
-        getOrders
+    addresses.value = []
+    cartState.resetCartState()
+
+    await navigateTo({
+      path: '/tesekkurler',
+      query: {
+        order: response.token
+      }
+    })
+  }
+
+  const fetchAddresses = async () => {
+    const response = await useBaseOFetchWithAuth('addresses')
+    addresses.value = response
+  }
+
+  const getOrders = async () => {
+    const response = await useBaseOFetchWithAuth(`orders`)
+    orders.value = response
+  }
+
+  watch(isOpenAddressModal, () => {
+    if (!isOpenAddressModal.value) {
+      newAddress.value = copyNewAddress
     }
+  })
+
+  return {
+    orderOptions,
+    addresses,
+    getDefaultAddress,
+    newAddress,
+    copyNewAddress,
+    isOpenAddressModal,
+    openAllAddressModal,
+    cities,
+    districts,
+    orders,
+    fetchAddresses,
+    setDefaultAddress,
+    saveAddress,
+    deleteAddress,
+    fetchCities,
+    fetchDistricts,
+    createOrder,
+    getOrders
+  }
 })
