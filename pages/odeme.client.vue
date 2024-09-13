@@ -120,15 +120,14 @@ onMounted(async () => {
 })
 
 
-onBeforeRouteLeave((to, from, next) => {
-  if (orderState.openAllAddressModal) {
-    orderState.openAllAddressModal = false
-    next(false) // Geri gitme işlemini durdurur
-  } else {
-    next()
-  }
-})
-
+// onBeforeRouteLeave((to, from, next) => {
+//   if (orderState.openAllAddressModal) {
+//     orderState.openAllAddressModal = false
+//     next(false) // Geri gitme işlemini durdurur
+//   } else {
+//     next()
+//   }
+// })
 
 </script>
 
