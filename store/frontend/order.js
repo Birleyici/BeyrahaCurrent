@@ -5,6 +5,7 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
   const toast = useToast()
   const isOpenAddressModal = ref(false)
   const openAllAddressModal = ref(false)
+  const createOrderLoading = ref(false)
 
   let newAddress = ref({
     name: null,
@@ -119,9 +120,12 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
       cart: cartState.cart
     }
 
+    createOrderLoading.value = true
     const response = await useBaseOFetchWithAuth(`order/create`, {
       method: 'POST',
       body: JSON.stringify(newOrderObj)
+    }).finally(() => {
+      createOrderLoading.value = false
     })
 
     addresses.value = []
@@ -162,6 +166,7 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
     cities,
     districts,
     orders,
+    createOrderLoading,
     fetchAddresses,
     setDefaultAddress,
     saveAddress,

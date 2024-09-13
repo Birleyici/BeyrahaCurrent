@@ -55,9 +55,10 @@
         <div class="sticky top-4 w-full">
           <PartialsCartExtre>
             <template #button>
-              <UiButtonsBaseButton @click="orderState.createOrder()" color="secondary"
-                class="font-semibold px-8 w-full">Siparişi Onayla
-              </UiButtonsBaseButton>
+              <UButton :loading="orderState.createOrderLoading" @click="orderState.createOrder()" color="orange"
+                class="font-semibold px-8 w-full flex justify-center" size="md">Siparişi
+                Onayla
+              </UButton>
             </template>
           </PartialsCartExtre>
         </div>

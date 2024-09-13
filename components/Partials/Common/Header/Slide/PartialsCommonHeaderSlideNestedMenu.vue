@@ -27,7 +27,7 @@
               class="grid grid-cols-3 items-center  mb-2 bg-slate-100 hover:bg-slate-50 rounded-l-full cursor-pointer select-none duration-200">
 
               <NuxtLink :to="`/${item.slug}-a${item.id}`" class="col-span-2 flex space-x-2">
-                <NuxtImg :to="`/${item.slug}-a${item.id}`" :src="'aws/' + item.icon" width="60px"
+                <NuxtImg :to="`/${item.slug}-a${item.id}`" :src="'aws' + item.icon" width="60px"
                   class="border  object-cover object-top w-14 h-14 border-orange-500 rounded-full p-1 hover:p-0 duration-200 " />
                 <p class="col-span-2 p-4 font-medium">{{ item.name }}</p>
               </NuxtLink>
@@ -90,4 +90,3 @@ const goBack = () => {
   }
 };
 </script>
-

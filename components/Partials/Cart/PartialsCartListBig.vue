@@ -4,7 +4,7 @@
         <div class="h-full flex space-x-4">
             <div class="flex space-x-4">
                 <NuxtImg v-if="props.item.image_path" width="70" class="object-cover rounded-md"
-                    :src="`aws/${props.item.image_path}`" />
+                    :src="`aws${props.item.image_path}`" />
                 <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
                 <div>
                     <NuxtLink :to="props.item.product_url" class="font-medium">{{ props.item.product_name }}</NuxtLink>

@@ -2,24 +2,12 @@
   <div class="border rounded-md max-w-[250px]">
     <div class="relative overflow-hidden cursor-pointer">
       <NuxtLink :to="props.product.product_url">
-        <NuxtImg
-          v-if="props.product.coverImage"
-          :src="`aws/${props.product.coverImage}`"
-          format="webp"
-          quality="90"
-          :loading="imgLoadingType"
-          :preload="imgPreload"
-          width="400"
-          height="600"
-          fit="cover"
-          class="rounded-t-md duration-200 w-full hover:scale-110"
-        />
-        <img
-          v-else
-          :src="img_placeholder"
+        <NuxtImg v-if="props.product.coverImage" :src="`aws${props.product.coverImage}`" format="webp" quality="90"
+          :loading="imgLoadingType" :preload="imgPreload" width="400" height="600" fit="cover"
+          class="rounded-t-md duration-200 w-full hover:scale-110" />
+        <img v-else :src="img_placeholder"
           class="rounded-t-sm duration-200 h-[250px] md:h-[350px] w-[250px] object-cover hover:scale-110"
-          alt="Ürün görseli yer tutucusu"
-        />
+          alt="Ürün görseli yer tutucusu" />
       </NuxtLink>
     </div>
     <div class="p-4">
@@ -38,11 +26,11 @@
 <script setup>
 const props = defineProps(['product', 'index', 'lcp'])
 const img_placeholder = '/img-placeholder.jpg'
- 
- const imgLoadingType = computed(()=>{
- return  props.lcp && (props.index == 0 || props.index == 1) ? 'eager' : 'lazy'
- })
- const imgPreload = computed(()=>{
+
+const imgLoadingType = computed(() => {
+  return props.lcp && (props.index == 0 || props.index == 1) ? 'eager' : 'lazy'
+})
+const imgPreload = computed(() => {
   return props.lcp && (props.index === 0 || props.index === 1) ? true : false
- })
+})
 </script>
