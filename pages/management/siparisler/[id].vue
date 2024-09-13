@@ -6,13 +6,12 @@
       <div class="col-span-1 my-orta lg:my-0">
         <div class="grid md:grid-cols-2 gap-6 ">
           <PartialsOrderAddressCard :address-options="{
-            editMode: true
-          }" :save-function="orderState.saveAddress" class="p-4"
-            title="Teslimat adresi" :address="order.shipping_address || {}" />
-          <PartialsOrderAddressCard  :address-options="{
-            editMode: true
-          }" v-if="isAddressesDifferent"
-            :save-function="orderState.saveAddress" class="p-4" title="Fatura adresi"
+            editMode: editingMode
+          }" :save-function="orderState.saveAddress" class="p-4" title="Teslimat adresi"
+            :address="order.shipping_address || {}" />
+          <PartialsOrderAddressCard :address-options="{
+            editMode: editingMode
+          }" v-if="isAddressesDifferent" :save-function="orderState.saveAddress" class="p-4" title="Fatura adresi"
             :address="order.billing_address || {}" />
           <div class="border rounded-md p-4 ">
             <div class="grid gap-4">

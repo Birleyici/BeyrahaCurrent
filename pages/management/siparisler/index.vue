@@ -22,20 +22,20 @@
                 {{ timeAgo(row.created_at) }}
             </template>
             <template #status-data="{ row }">
-               <div class="flex space-x-2">
-                <UBadge :ui="{ rounded: 'rounded-full' }" :color="orderState.statuses[row.status].color">
-                    {{ orderState.statuses[row.status].text }}
-                </UBadge>
-                <UBadge :ui="{ rounded: 'rounded-full' }" color="orange" v-if="row.shipping_code" >
-                    {{ row.shipping_code }}
-                </UBadge>
-               </div>
+                <div class="flex space-x-2">
+                    <UBadge :ui="{ rounded: 'rounded-full' }" :color="orderState.statuses[row.status].color">
+                        {{ orderState.statuses[row.status].text }}
+                    </UBadge>
+                    <UBadge :ui="{ rounded: 'rounded-full' }" color="orange" v-if="row.shipping_code">
+                        {{ row.shipping_code }}
+                    </UBadge>
+                </div>
             </template>
             <template #actions-data="{ row }">
                 <div class="my-auto h-full flex space-x-2">
                     <UButton @click="deleteHandling(row.id)" icon="i-heroicons-trash" size="2xs" color="red"
                         variant="solid" :trailing="false" />
-                        <UButton icon="i-heroicons-qr-code" color="orange" v-if="row.status == 'processing'"
+                    <UButton icon="i-heroicons-qr-code" color="orange" v-if="row.status == 'processing'"
                         :loading="row.shippingLoading" @click="orderState.getShippingCode(row)" size="2xs" />
                 </div>
             </template>
@@ -54,7 +54,7 @@ definePageMeta({
 });
 const orderState = useOrderManagementStore();
 const page = ref(1);
-const pageCount = 5;
+const pageCount = 10;
 
 await useAsyncData('orderListInManagement', async () => {
 
@@ -66,9 +66,9 @@ const orders = computed(() => {
     return orderState.vendorOrders.slice((page.value - 1) * pageCount, page.value * pageCount);
 });
 
-async function deleteHandling(orderId) {
+async function deleteHandling(subOrderId) {
     if (await useConfirmation("İşlem Onayı", "Siparişi silmek istediğinize emin misiniz?")) {
-        await orderState.deleteOrder(orderId)
+        await orderState.deleteSubOrder(subOrderId)
     }
 }
 

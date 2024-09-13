@@ -36,8 +36,7 @@
           </UFormGroup>
         </div>
 
-        <UButton type="submit" class="flex justify-center mt-4 " color="orange"
-          size="md">
+        <UButton type="submit" class="flex justify-center mt-4 " color="orange" size="md">
           Adresi Kaydet
         </UButton>
       </div>
@@ -104,5 +103,12 @@ const saveAddress = async () => {
 }
 
 type Schema = InferType<typeof schema>
+
+
+
+
+
+
+
 
 </script>

@@ -95,7 +95,7 @@
           <div :key="address.id" v-for="address in orderState.addresses">
             <div class="border my-2 p-minimal rounded-md flex items-center w-full"
               :class="{ 'bg-tertiary-50 border border-orange-500': address.isDefault }">
-              <PartialsOrderAddress :address-options="{allAction:true}" :address="address" />
+              <PartialsOrderAddress :address-options="{ allAction: true }" :address="address" />
             </div>
           </div>
         </div>
@@ -118,6 +118,18 @@ const isShowNewAddressButton = computed(() => {
 onMounted(async () => {
   await orderState.fetchAddresses()
 })
+
+
+onBeforeRouteLeave((to, from, next) => {
+  if (orderState.openAllAddressModal) {
+    orderState.openAllAddressModal = false
+    next(false) // Geri gitme işlemini durdurur
+  } else {
+    next()
+  }
+})
+
+
 </script>
 
 

@@ -37,8 +37,8 @@
                 variant="link">
                 Düzenle
             </UButton>
-            <UButton v-if="isActiveSetDefaultButton" :loading="props.address.loading" @click="orderState.setDefaultAddress(props.address)"
-                color="orange" class="p-0" variant="link">
+            <UButton v-if="isActiveSetDefaultButton" :loading="props.address.loading"
+                @click="orderState.setDefaultAddress(props.address)" color="orange" class="p-0" variant="link">
                 Varsayılan yap
             </UButton>
             <!-- <UButton @click="isOpenDeleteModal = true" color="red" class="p-0" variant="link">Sil</UButton> -->
@@ -62,7 +62,7 @@
 </template>
 
 <script setup>
-const props = defineProps(["address",  'saveFunction', 'addressOptions']);
+const props = defineProps(["address", 'saveFunction', 'addressOptions']);
 const orderState = useOrderStoreFront();
 const isOpenDeleteModal = ref(false);
 const isOpenEditModal = ref(false)

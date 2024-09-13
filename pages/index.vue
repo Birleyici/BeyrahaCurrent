@@ -34,4 +34,6 @@ useHead({
     { name: 'description', content: 'En sevdiğiniz tesettür mağazaları artık yeni Beyraha da sizleri bekliyor.' }
   ],
 })
+
+
 </script>
