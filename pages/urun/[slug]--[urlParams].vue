@@ -2,7 +2,7 @@
   <div class="lg:px-x-desktop max-w-full">
     <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
       <div class="col-span-3" v-if="$mainState.isLoaded">
-        <PartialsProductImageGallery :images="selectedImages" />
+        <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages" />
       </div>
       <SkeletonProductGallery v-else></SkeletonProductGallery>
 

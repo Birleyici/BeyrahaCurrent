@@ -3,7 +3,7 @@
     <div class="relative overflow-hidden cursor-pointer">
       <NuxtLink :to="props.product.product_url">
         <NuxtImg v-if="props.product.coverImage" :src="`aws${props.product.coverImage}`" format="webp" quality="90"
-          :loading="imgLoadingType" :preload="imgPreload" width="400" height="600" fit="cover"
+          :loading="imgLoadingType" :preload="imgPreload" width="400" height="600" fit="cover" :alt="props.product.name"
           class="rounded-t-md duration-200 w-full hover:scale-110" />
         <img v-else :src="img_placeholder"
           class="rounded-t-sm duration-200 h-[250px] md:h-[350px] w-[250px] object-cover hover:scale-110"
