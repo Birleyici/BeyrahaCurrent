@@ -90,7 +90,7 @@ import type { FormSubmitEvent } from '#ui/types'
 const router = useRouter()
 const authStore = useAuthStore()
 const schemaLogin = object({
-  email: string().email('Geçersiz email').required('Zorunlu'),
+  email: string().trim().email('Geçersiz email').required('Zorunlu'),
   password: string()
     .min(8, 'Şifre minimum 8 karakter olmalıdır.')
     .required('Zorunlu')
