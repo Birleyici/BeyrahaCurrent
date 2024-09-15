@@ -34,12 +34,15 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
-
   image: {
-    provider: 'ipx',
-    dir: '/images',
+  provider: 'cloudflare',
+    cloudflare: {
+      baseURL: 'https://www.pakpazar.com'
+    },
     domains: [
-      'https://beyraha.s3.eu-central-1.amazonaws.com'
+      'https://beyraha.s3.eu-central-1.amazonaws.com',
+      'https://pakpazar.com',
+      'https://www.pakpazar.com',
     ],
     alias: {
       aws: 'https://beyraha.s3.eu-central-1.amazonaws.com/images'
