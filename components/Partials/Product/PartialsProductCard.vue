@@ -2,7 +2,7 @@
   <div class="border rounded-md max-w-[250px]">
     <div class="relative overflow-hidden cursor-pointer">
       <NuxtLink :to="props.product.product_url">
-        <NuxtImg sizes="400px sm:300px md:400px " v-if="props.product.coverImage"
+        <NuxtImg sizes="390px sm:300px md:390px " v-if="props.product.coverImage"
           :src="`cl/${props.product.coverImage}`" format="webp" quality="90" fit="cover" :loading="imgLoadingType"
           :preload="imgPreload" width="400" height="600" :alt="props.product.name"
           class="rounded-t-md duration-200 hover:scale-110" />
