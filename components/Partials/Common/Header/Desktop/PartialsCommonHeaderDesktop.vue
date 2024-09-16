@@ -45,6 +45,6 @@
 
 <script setup>
 const props = defineProps(["categories", "cart"]);
-const logoSrc = "awsproducts/1/1725865521513.jpg";
+const logoSrc = "cl/cfd082d7-37a8-4067-fafe-f214b571f700/public";
 const selectedCategory = ref(null); // selectedCategory ref olarak tanımlandı
 </script>
