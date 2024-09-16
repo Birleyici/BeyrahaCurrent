@@ -41,7 +41,7 @@
                         </p>
 
                         <div v-else class="flex space-x-2">
-                            <NuxtImg v-for="img in term.term_images" :src="'aws' + img?.path" width="42px"
+                            <NuxtImg v-for="img in term.term_images" :src="'cl/' + img?.path" width="42px"
                                 class="rounded-md" />
 
                         </div>

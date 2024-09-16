@@ -19,7 +19,7 @@
     class: images.length > 1 ? 'absolute' : 'hidden',
   }" indicators arrows class="w-full mx-auto">
     <template #default="{ item }">
-      <NuxtImg :src="'aws' + item.path" :alt="props.alt"
+      <NuxtImg :src="'cl/' + item.path" :alt="props.alt"
         class="w-full min-h-[300px] zoomable transition-transform duration-300 border lg:rounded-lg" draggable="false"
         width="600" height="900" fit="cover" alt="" loading="lazy" quality="90" format="webp" />
     </template>
@@ -40,7 +40,7 @@
       class: 'absolute -right-2',
     }">
       <template #default="{ item, index }">
-        <NuxtImg :src="'aws' + item.path" class="border-2 rounded-md cursor-pointer min-w-16" width="60" height="90"
+        <NuxtImg :src="'cl/' + item.path" class="border-2 rounded-md cursor-pointer min-w-16" width="60" height="90"
           :class="currentImageIndex === index ? 'border-orange-500' : ''" @click="goToImage(index)" size="2xs" />
       </template>
     </UCarousel>

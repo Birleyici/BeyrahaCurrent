@@ -29,7 +29,7 @@
           <div class="bg-tertiary-50 border p-2 rounded-md flex space-x-2 items-center">
             <img @click="isOpen = true" :src="placeholderImg" alt="" class="cursor-pointer w-16 rounded-md" />
             <p v-if="!item.image" class="text-sm text-center">Görsel seçilmedi...</p>
-            <NuxtImg v-else :src="'aws' + item?.image?.path" width="42px" class="rounded-md" />
+            <NuxtImg v-else :src="'cl/' + item?.image?.path" width="42px" class="rounded-md" />
           </div>
         </div>
 

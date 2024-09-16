@@ -3,7 +3,7 @@
     <div class="flex items-center justify-between lg:space-x-8 bg-tertiary-100 rounded-t-md p-4">
       <div class="flex justify-between space-x-8">
         <!-- <UAvatarGroup size="sm" :max="2">
-          <NuxtImg v-for="orderItem in props.item.order_items" :src="'aws' + orderItem.image?.path"
+          <NuxtImg v-for="orderItem in props.item.order_items" :src="'cl/' + orderItem.image?.path"
             class="w-[50px] h-[50px] object-top object-cover border border-white drop-shadow-sm rounded-full" width="50"
             height="80" />
         </UAvatarGroup> -->
@@ -15,7 +15,7 @@
       <div class="flex justify-between my-minimal lg:my-0 lg:space-x-24 items-center">
         <div>
           <p class="text-sm">Toplam tutar</p>
-          <p class="font-medium text-secondary-500">{{ formatPrice(props.item.total_with_shipping ) }}</p>
+          <p class="font-medium text-secondary-500">{{ formatPrice(props.item.total_with_shipping) }}</p>
         </div>
         <!-- <div>
           <UBadge :ui="{ rounded: 'rounded-full' }" color="orange">

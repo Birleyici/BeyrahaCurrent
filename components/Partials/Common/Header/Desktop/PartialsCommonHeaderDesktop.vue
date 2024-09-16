@@ -31,7 +31,7 @@
       <NuxtLink v-for="cat in props.categories" :key="cat.id"
         class="font-medium px-4 first:pl-0 text-center cursor-pointer inline-block align-top"
         :to="`/${cat.slug}-a${cat.id}`">
-        <NuxtImg :src="'aws' + cat.icon" width="80px"
+        <NuxtImg :src="'cl/' + cat.icon" width="80px"
           class="border  object-cover object-top min-w-20 h-20 border-orange-500 rounded-full p-1 hover:p-0 duration-200 mb-2" />
         <span class="block overflow-hidden text-ellipsis">
           {{ cat.name }}

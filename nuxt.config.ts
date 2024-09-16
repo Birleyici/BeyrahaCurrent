@@ -34,20 +34,19 @@ export default defineNuxtConfig({
   },
 
   css: ['~/assets/css/main.css'],
-  image: {
-  provider: 'cloudflare',
-    cloudflare: {
-      baseURL: 'https://pakpazar.com'
-    },
+   image: {
+   provider: 'cloudflare',
+   cloudflare:{
+    baseURL: 'https://pakpazar.com'
+   },
     domains: [
       'https://beyraha.s3.eu-central-1.amazonaws.com',
       'https://pakpazar.com',
       'https://www.pakpazar.com',
     ],
-    alias: {
-      aws: 'https://beyraha.s3.eu-central-1.amazonaws.com/images'
-    }
-
+   alias:{
+    cl: 'cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g'
+   }
   },
 
   //runtime public base url tanımlayacağız

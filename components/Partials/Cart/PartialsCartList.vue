@@ -3,7 +3,7 @@
     <div class="flex space-x-4">
       <!-- Product Image -->
       <NuxtImg v-if="props.item.image_path" width="80" height="120" fit="cover" class="object-cover rounded-md"
-        :src="`aws${props.item.image_path}`" />
+        :src="`cl/${props.item.image_path}`" />
       <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
       <div class="w-full">
         <!-- Product Name and Delete Button -->

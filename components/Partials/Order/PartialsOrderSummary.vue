@@ -4,7 +4,7 @@
       <!-- <UButton v-if="props.deletable && props.editingMode" class="absolute -right-2 -top-2" size="2xs" icon="i-heroicons-x-mark" :ui="{ rounded: 'rounded-full' }"
         @click="deleteCartItem(props.item.id)" /> -->
       <div class="flex items-center space-x-8">
-        <NuxtImg v-if="props.item.image?.path" :src="'aws' + props.item.image?.path"
+        <NuxtImg v-if="props.item.image?.path" :src="'cl/' + props.item.image?.path"
           class="w-20 h-20 object-cover  object-top rounded-md lg:rounded-full" />
         <img class="w-20 h-20 rounded-full" src="/img-placeholder.jpg" v-else>
         <div class="text-left">
@@ -22,7 +22,8 @@
               <p v-if="!props.editingMode">{{ input.value }}</p>
               <div v-else class="flex space-x-2">
                 <UInput v-model="input.new_value" :model-value="input.new_value || input.value" size="xs" />
-                <UButton :loading="input.loading" icon="i-heroicons-check" @click="orderStore.saveInput(input)" size="xs" />
+                <UButton :loading="input.loading" icon="i-heroicons-check" @click="orderStore.saveInput(input)"
+                  size="xs" />
               </div>
             </div>
           </div>
@@ -32,7 +33,9 @@
         <div>
           <p class="text-sm">Birim fiyat</p>
           <div class="flex space-x-2">
-            <PartialsProductPrice :del-price="false" type="card" :price="props.item.variation?.price || props.item.price" :sale-price="props.item.variation?.sale_price || props.item.sale_price" />
+            <PartialsProductPrice :del-price="false" type="card"
+              :price="props.item.variation?.price || props.item.price"
+              :sale-price="props.item.variation?.sale_price || props.item.sale_price" />
             <p>x {{ props.item.quantity }}</p>
           </div>
         </div>

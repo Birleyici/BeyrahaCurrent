@@ -1,5 +1,6 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop">
+    <!-- <NuxtImg width="100" src="cl/7e0a1a89-4b1e-424e-d29c-dfa42e644700/public" /> -->
     <div class="my-8">
       <UiSlidesProductSlide :lcp="true" title="Çarşaf" to="/carsaf-cilbab-a51" :is-ssr="true" :filters="{
         selectedCategoryIds: '[51]',
