@@ -39,10 +39,6 @@ const query = ref({
 });
 
 
-
-//kategori ürün listesine girildiğinde eğer yükleme devam ediyorsa
-//scroll tetiklendiğinde örneğin 2. sayfayı products e set ediyor 1. sayfa kayboluyor
-
 await useAsyncData('initDataProducts', async () => {
   try {
     categoryState.selectedCategories = []
@@ -78,7 +74,6 @@ watch(() => [query, categoryState.selectedCategoryIds, query.value.page, route.q
   loading.value = true;
   query.value.searchWord = route.query.searchWord
 
-  console.log(JSON.stringify(categoryState.selectedCategoryIds))
   await productState.getProducts({
     ...query.value,
     selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)

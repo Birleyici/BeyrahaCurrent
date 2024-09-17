@@ -3,21 +3,20 @@
     'absolute right-0 left-0 lg:!w-full lg:px-x-desktop !border-b-transparent': $mainState.isOpenSearch,
   }">
     <div class="relative">
-      <div class="items-center relative w-11/12 lg:w-full flex mx-auto">
+      <form @submit.prevent="goSearch" class="items-center relative w-11/12 lg:w-full flex mx-auto">
         <UInput ref="searchInput" @focus="$changeMainState({ isOpenSearch: true })" @blur="handleBlur" color="orange"
-          @mousedown.stop type="text" @input='evt => searchWord = evt.target.value' :value="searchWord" size="md"
-          class="w-full bg-slate-100 z-[4]" placeholder="Ara..." @keydown.enter="goSearch()" />
+          @mousedown.stop type="text" @input="evt => searchWord = evt.target.value" :value="searchWord" size="md"
+          class="w-full bg-slate-100 rounded-md z-[4]" placeholder="Ara..." />
         <Icon v-if="!$mainState.isOpenSearch || ($mainState.isOpenSearch && !searchWord)" name="ph:magnifying-glass"
           class="w-6 h-6 absolute z-[10] right-2" color="black" />
         <Icon v-if="$mainState.isOpenSearch && searchWord && !$device.isMobile" name="eos-icons:loading"
           class="w-6 h-6 absolute right-2 z-[5]" color="black" />
-
-      </div>
+      </form>
       <div v-if="searchWord && $mainState.isOpenSearch"
-        class="min-h-[20px] w-11/12 p-4 bg-white   absolute z-10 left-0 right-0 mx-auto top-[50px] rounded-xl results-container">
+        class="min-h-[20px] w-11/12 p-4 bg-white absolute z-10 left-0 right-0 mx-auto top-[50px] rounded-xl results-container">
         <p v-if="productsSearched.length == 0" class="italic">Sonuç bulunamadı...</p>
         <div v-else class="grid gap-4">
-          <div v-for="p in productsSearched.slice(0, 6)">
+          <div v-for="p in productsSearched.slice(0, 6)" :key="p.id">
             <NuxtLink @click="closeSearch" :to="p.product_url">{{ p.name }}</NuxtLink>
           </div>
           <div v-if="productsSearched.length > 1">
@@ -41,12 +40,10 @@ const route = useRoute();
 const searchWord = ref(route.query.searchWord);
 const productsSearched = ref([]);
 
-
 function closeSearch() {
   $mainState.isOpenSearch = false;
   searchInput._value.$refs.input.blur();
 }
-
 
 function goSearch() {
   router.push({
@@ -55,7 +52,7 @@ function goSearch() {
       searchWord: searchWord.value
     }
   });
-  closeSearch()
+  closeSearch();
 }
 
 function handleBlur(event) {
@@ -68,7 +65,6 @@ function handleBlur(event) {
 watch(
   () => $mainState.isOpenSearch,
   (newValue) => {
-
     if (newValue) {
       nextTick(() => {
         searchInput._value.$refs.input.focus();
@@ -76,7 +72,6 @@ watch(
     }
   }
 );
-
 
 watchEffect(async (onInvalidate) => {
   const controller = new AbortController();
@@ -99,5 +94,4 @@ watchEffect(async (onInvalidate) => {
     }
   }
 });
-
 </script>
