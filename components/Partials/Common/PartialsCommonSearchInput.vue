@@ -47,7 +47,7 @@ const productsSearched = ref([]);
 
 function closeSearch() {
   $mainState.isOpenSearch = false;
-  searchInput.value.blur();
+  searchInput._value.$refs.input.blur();
 }
 
 
@@ -71,9 +71,10 @@ function handleBlur(event) {
 watch(
   () => $mainState.isOpenSearch,
   (newValue) => {
+
     if (newValue) {
       nextTick(() => {
-        searchInput.value.focus();
+        searchInput._value.$refs.input.focus();
       });
     }
   }
