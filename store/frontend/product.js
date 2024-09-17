@@ -1,14 +1,11 @@
-import { defineStore } from "pinia";
-
+import { defineStore } from 'pinia'
 
 export const useProductState = defineStore('productState', () => {
-
-
   const product = ref({
     id: null,
-    name: "",
-    description: "",
-    additional_info: "",
+    name: '',
+    description: '',
+    additional_info: '',
     coverImageId: null,
     selectedImages: [],
     selectedCategories: [],
@@ -22,11 +19,10 @@ export const useProductState = defineStore('productState', () => {
     stock: 0,
     loading: false,
     categories: [],
-    featured_infos: [],
+    featured_infos: []
   })
 
   const newProduct = toRaw({ ...product.value })
-
 
   const products = ref([])
   const categoryProducts = ref([])
@@ -45,9 +41,6 @@ export const useProductState = defineStore('productState', () => {
   }
 
   const fetchProduct = async (params) => {
-
-    
-
     const response = await useBaseOFetch(`product/${params.slug}`, {
       params: {
         urlParams: params.urlParams
@@ -61,54 +54,52 @@ export const useProductState = defineStore('productState', () => {
   }
 
   const fetchCategoryProducts = async (catIds) => {
+    catIds = catIds.map((cat) => cat.id)
 
-    catIds = catIds.map(cat => cat.id);
-
-    const response = await useBaseOFetch('products/category',
-      {
-        params: {
-          catIds: catIds.join(','),
-          limit: 5
-        }
+    const response = await useBaseOFetch('products/category', {
+      params: {
+        catIds: catIds.join(','),
+        limit: 5
       }
-    )
+    })
 
     patchCategoryProducts(response)
-
   }
 
-
   const getProducts = async (filters, shouldReturnResponse = false) => {
-
     // Eğer filters objesinde page yoksa, varsayılan olarak 1 ayarla
     if (!('page' in filters)) {
-      filters.page = 1;
+      filters.page = 1
     }
 
-    const response = await useBaseOFetchWithAuth(`products`,
-      {
-        params: filters
-      }
-    )
-
+    const response = await useBaseOFetchWithAuth(`products`, {
+      params: filters
+    })
 
     if (shouldReturnResponse) {
-
       return response
-
     } else {
-
       //eğer sayfalama verileri yoksa
       if (!products.value.total || filters.page == 1) {
         products.value = response
       } else {
-        const dataArray = Object.values(response.data);
-        products.value.data.push(...dataArray);
+        const dataArray = Object.values(response.data)
+        products.value.data.push(...dataArray)
       }
-
     }
+  }
 
-  };
-
-  return { product, newProduct, products, categoryProducts, vendorProducts, fetchProduct, getProducts, fetchCategoryProducts, patchProduct, patchCategoryProducts, patchVendorProducts }
+  return {
+    product,
+    newProduct,
+    products,
+    categoryProducts,
+    vendorProducts,
+    fetchProduct,
+    getProducts,
+    fetchCategoryProducts,
+    patchProduct,
+    patchCategoryProducts,
+    patchVendorProducts
+  }
 })

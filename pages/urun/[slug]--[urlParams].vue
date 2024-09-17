@@ -51,6 +51,7 @@
     <div class="px-x-mobil md:px-0">
       <UiSlidesProductSlide id="product_page_slide_1" title="Benzer Ürünler" :filters="{
         selectedCategoryIds: JSON.stringify(productCategoryIds),
+        exceptId: productState.product.id,
         piece: 8
       }">
       </UiSlidesProductSlide>
