@@ -67,7 +67,8 @@ await useAsyncData('initDataProducts', async () => {
 
 
 const loading = ref(false);
-watch(() => [query, categoryState.selectedCategoryIds, query.value.page], async (newValue, oldValue) => {
+watch(() => [query, categoryState.selectedCategoryIds, query.value.page, route.query.searchWord], async (newValue, oldValue) => {
+
 
   //eğer sayfa değişmediyse ama diğer filtreler tetiklendiyse
   if (newValue?.[2] == oldValue?.[2]) {
@@ -79,8 +80,8 @@ watch(() => [query, categoryState.selectedCategoryIds, query.value.page], async 
 
   console.log(JSON.stringify(categoryState.selectedCategoryIds))
   await productState.getProducts({
-      ...query.value,
-      selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
+    ...query.value,
+    selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
   });
 
   pushQueryParams()
