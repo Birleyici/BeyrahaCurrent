@@ -9,6 +9,4 @@ birşey değişmiyor tetikleme lazım.
 -Medya modalda ürüne yada terme ait seçili fotoğraflar en başta görünmeli. örneğin 10 sayf gerideyse oraya kadar aranmamalı.
 -Yüklenen fotoğraflara belli bir sınır koyulacak.
 -renk varyantlı ürüne varsayılan bir renk ata. en baştaki rengi seçebilir.
--register olunca cartı devretmiyor
 -arama yapıldığında zaten arama sayfasındaysan tekrar arama yapmıyor
--siparişi onayla denildiğinde loading yapılacak

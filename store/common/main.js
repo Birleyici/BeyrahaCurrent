@@ -1,16 +1,9 @@
-import { defineStore } from 'pinia';
+import { defineStore } from 'pinia'
 
 export const useMainStore = defineStore({
-    id: 'main',
-    state: () => ({
-        isOpenSearch: false,
-        isLoaded: false,
-    }),
-
-
-});
-
-
-
-
-
+  id: 'main',
+  state: () => ({
+    isOpenSearch: false,
+    isLoaded: false
+  })
+})
