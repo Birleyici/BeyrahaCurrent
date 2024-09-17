@@ -11,10 +11,7 @@
           class="w-6 h-6 absolute z-[10] right-2" color="black" />
         <Icon v-if="$mainState.isOpenSearch && searchWord && !$device.isMobile" name="eos-icons:loading"
           class="w-6 h-6 absolute right-2 z-[5]" color="black" />
-        <div @click="goSearch()" class="absolute right-1 z-[5] bg-slate-100 p-2 rounded-xl"
-          v-else-if="$mainState.isOpenSearch && searchWord">
-          <UIcon name="i-heroicons-magnifying-glass" class="w-5 h-5" />
-        </div>
+
       </div>
       <div v-if="searchWord && $mainState.isOpenSearch"
         class="min-h-[20px] w-11/12 p-4 bg-white   absolute z-10 left-0 right-0 mx-auto top-[50px] rounded-xl results-container">
