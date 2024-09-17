@@ -4,10 +4,9 @@
   }">
     <div class="relative">
       <div class="items-center relative w-11/12 lg:w-full flex mx-auto">
-        <input ref="searchInput" @focus="$changeMainState({ isOpenSearch: true })" @blur="'handleBlur'" @mousedown.stop
-          type="text" @input='evt => searchWord = evt.target.value' :value="searchWord"
-          class="focus:p-3 rounded-xl w-full bg-slate-100 focus:bg-white px-4 py-2 focus:outline-0 duration-200 z-[4]"
-          placeholder="Ara..." @keydown.enter="goSearch()" />
+        <UInput ref="searchInput" @focus="$changeMainState({ isOpenSearch: true })" @blur="handleBlur" color="orange"
+          @mousedown.stop type="text" @input='evt => searchWord = evt.target.value' :value="searchWord" size="md"
+          class="w-full bg-slate-100 z-[4]" placeholder="Ara..." @keydown.enter="goSearch()" />
         <Icon v-if="!$mainState.isOpenSearch || ($mainState.isOpenSearch && !searchWord)" name="ph:magnifying-glass"
           class="w-6 h-6 absolute z-[10] right-2" color="black" />
         <Icon v-if="$mainState.isOpenSearch && searchWord && !$device.isMobile" name="eos-icons:loading"
