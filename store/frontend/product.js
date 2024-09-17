@@ -72,7 +72,7 @@ export const useProductState = defineStore('productState', () => {
       filters.page = 1
     }
 
-    const response = await useBaseOFetchWithAuth(`products`, {
+    const response = await useBaseOFetch(`products`, {
       params: filters
     })
 
