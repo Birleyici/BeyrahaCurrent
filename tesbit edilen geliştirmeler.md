@@ -9,4 +9,8 @@ birşey değişmiyor tetikleme lazım.
 -Medya modalda ürüne yada terme ait seçili fotoğraflar en başta görünmeli. örneğin 10 sayf gerideyse oraya kadar aranmamalı.
 -Yüklenen fotoğraflara belli bir sınır koyulacak.
 -renk varyantlı ürüne varsayılan bir renk ata. en baştaki rengi seçebilir.
--arama yapıldığında zaten arama sayfasındaysan tekrar arama yapmıyor
+-ürün kategori sayfasında kategori filtrelerinde gelinen kategorinin alt kategorileri yer almalı
+
+- örneğin
+  http://localhost:3000/sufle-a55?page=1&sort=default&selectedCategoryIds=55,51
+  böyle bir linke direk gidildiğinde sadece sufle-a55 gereği sufleleri geiriyor seçili olanlar push edilmiyor

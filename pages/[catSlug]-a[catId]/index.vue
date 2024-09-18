@@ -24,8 +24,15 @@ const route = useRoute();
 const router = useRouter();
 const catSlug = route.params.catSlug
 const catId = route.params.catId
+const isChangeRoute = ref(false)
 
+watch(() => router.currentRoute.value.path, (newVal, oldVal) => {
 
+  console.log(newVal, oldVal)
+  if (newVal != oldVal) {
+    isChangeRoute.value = true
+  }
+});
 
 const initCategoryIds = route.query.selectedCategoryIds
 if (initCategoryIds) {
@@ -45,6 +52,7 @@ await useAsyncData('initDataProducts', async () => {
     if ((catSlug && catId) && catSlug != 'arama') {
       categoryState.patchSelectedCategories(catId.toString(), false)
     }
+
     await Promise.all([
       productState.getProducts({
         ...query.value,
@@ -63,43 +71,65 @@ await useAsyncData('initDataProducts', async () => {
 
 
 const loading = ref(false);
-watch(() => [query, categoryState.selectedCategoryIds, query.value.page, route.query.searchWord], async (newValue, oldValue) => {
+watch([
+  () => query.value.page,
+  () => query.value.sort,
+  () => categoryState.selectedCategoryIds.slice(),
+  () => query.value.searchWord,
+  () => route.query.searchWord
+], async (newValues, oldValues) => {
+  // newValues ve oldValues dizileri aşağıdaki indekslere sahiptir:
+  // [0]: query.value.page
+  // [1]: query.value.sort
+  // [2]: categoryState.selectedCategoryIds
+  // [3]: query.value.searchWord
+  // [4]: route.query.searchWord
 
+  if (!isChangeRoute.value) {
+    // Filtreler değiştiğinde sayfayı 1'e resetlemek için kontrol
+    let filtersChanged = false;
 
-  //eğer sayfa değişmediyse ama diğer filtreler tetiklendiyse
-  if (newValue?.[2] == oldValue?.[2]) {
-    query.value.page = 1
+    if (newValues[1] !== oldValues[1] || // sort değişti mi?
+      JSON.stringify(newValues[2]) !== JSON.stringify(oldValues[2]) || // selectedCategoryIds değişti mi?
+      newValues[3] !== oldValues[3]) { // searchWord değişti mi?
+      filtersChanged = true;
+    }
+
+    if (filtersChanged) {
+      query.value.page = 1;
+    }
+
+    pushQueryParams();
+
+    loading.value = true;
+    query.value.searchWord = route.query.searchWord;
+
+    await productState.getProducts({
+      ...query.value,
+      selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
+    });
+
+    loading.value = false;
   }
-
-  loading.value = true;
-  query.value.searchWord = route.query.searchWord
-
-  await productState.getProducts({
-    ...query.value,
-    selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
-  });
-
-  pushQueryParams()
-
-  loading.value = false;
-},
-  {
-    deep: true
-  });
+}, {
+  deep: true,
+});
 
 
 
 const pushQueryParams = () => {
-
-  router.push({
-    query: {
-      ...route.query,
-      ...query.value,
-      selectedCategoryIds: categoryState.selectedCategoryIds.join(',')
-    }
-  });
-
+  if (!isChangeRoute.value) {
+    router.push({
+      query: {
+        ...route.query,
+        ...query.value,
+        selectedCategoryIds: categoryState.selectedCategoryIds.join(','),
+        searchWord: query.value.searchWord
+      }
+    });
+  }
 }
+
 
 
 const slugsCat = categoryState.categories?.find(c => c.id === parseInt(catId))
