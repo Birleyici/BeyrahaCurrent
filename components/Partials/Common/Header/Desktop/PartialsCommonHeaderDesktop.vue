@@ -17,12 +17,16 @@
           <p @click="$uiStore.state.accountSlide = true" class="cursor-pointer font-primary text-heading-4 pr-4">
             HESAP
           </p>
-          <p @click="$uiStore.state.cartSlide = true" class="cursor-pointer font-primary text-heading-4 px-4">
-            SEPET
+          <div @click="$uiStore.state.cartSlide = true" class="cursor-pointer font-primary text-heading-4 px-4">
+
             <ClientOnly>
-              <span class="text-secondary-500">{{ props.cart.cartQyt }}</span>
+              <div class="relative">
+                <p>SEPET <span class="text-orange-500">{{ props.cart.cartQyt }}</span></p>
+                <span class="text-xs absolute left-0 -bottom-6 text-orange-500 bg-slate-50 p-1 rounded-md">{{
+                  formatPrice(props.cart.cartTotalAmount) }}</span>
+              </div>
             </ClientOnly>
-          </p>
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
-    
+
     <PartialsCommonHeaderSlideNestedMenu v-model="$uiStore.state.menuSlide" :menu="props.categories" />
 
     <LazyPartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
@@ -26,14 +26,20 @@
 
           <div class="relative" @click="$uiStore.state.cartSlide = true">
             <ClientOnly>
-              <UChip :text="props.cart.cartQyt" size="2xl" position="bottom-right">
-                <UButton variant="ghost" color="gray" class="p-0 cursor-pointer select-none">
-                  <template #trailing>
-                    <UIcon name="i-heroicons-shopping-bag" class="w-8 h-8" />
-                  </template>
-                </UButton>
-              </UChip>
+              <div class="relative">
+                <UChip :text="props.cart.cartQyt" size="2xl" position="top-right">
+                  <UButton variant="ghost" color="gray" class="p-0 cursor-pointer select-none">
+                    <template #trailing>
+                      <UIcon name="i-heroicons-shopping-bag" class="w-8 h-8" />
+                    </template>
+                  </UButton>
+                </UChip>
+                <span
+                  class="text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-3 text-red-500 bg-slate-50 p-[2px] rounded-md">
+                  {{ formatPrice(props.cart.cartTotalAmount) }}</span>
+              </div>
             </ClientOnly>
+
           </div>
         </div>
       </div>
