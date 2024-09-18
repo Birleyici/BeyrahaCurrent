@@ -3,8 +3,10 @@
         class="grid lg:grid-cols-2 gap-4 items-center my-minimal border p-2 rounded-md">
         <div class="h-full flex space-x-4">
             <div class="flex space-x-4">
-                <NuxtImg v-if="props.item.image_path" width="70" class="object-cover rounded-md"
-                    :src="`cl/${props.item.image_path}`" />
+                <NuxtLink v-if="props.item.image_path" :to="props.item.product_url">
+                    <NuxtImg width="90" height="120" fit="cover" class="rounded-md"
+                        :src="`cl/${props.item.image_path}`" />
+                </NuxtLink>
                 <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
                 <div>
                     <NuxtLink :to="props.item.product_url" class="font-medium">{{ props.item.product_name }}</NuxtLink>
