@@ -1,49 +1,65 @@
 <template>
-  <div class="image-gallery">
+  <div class="max-w-[800px] mx-auto">
     <!-- Büyük Resim Gösterimi -->
-    <div class="large-image-container" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd"
+    <div class="relative overflow-hidden" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd"
       @mousedown="onMouseDown" @mousemove="onMouseMove" @mouseup="onMouseUp" @mouseleave="onMouseUp">
       <!-- Masaüstü için Sol Ok -->
-      <button v-if="!isMobile" class="nav-arrow left-arrow" @click="prevImage">❮</button>
+      <button v-if="!isMobile"
+        class="absolute top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white text-[30px] p-[10px] cursor-pointer z-10 left-[10px]"
+        @click="prevImage">
+        ❮
+      </button>
 
       <!-- Geçiş Efektiyle Resim -->
       <transition name="image-fade" mode="out-in">
         <NuxtImg :key="currentImage.path" :src="'cl/' + currentImage.path" :alt="currentImage.alt"
-          class="large-image md:rounded-md" @click="openFullscreen" format="webp" quality="90" :width="600"
-          :height="900" fit="cover" />
+          class="w-full h-auto cursor-pointer object-cover max-h-[600px] md:rounded-md" @click="openFullscreen"
+          format="webp" quality="90" :width="600" :height="900" fit="cover" />
       </transition>
 
       <!-- Masaüstü için Sağ Ok -->
-      <button v-if="!isMobile" class="nav-arrow right-arrow" @click="nextImage">❯</button>
+      <button v-if="!isMobile"
+        class="absolute top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white text-[30px] p-[10px] cursor-pointer z-10 right-[10px]"
+        @click="nextImage">
+        ❯
+      </button>
     </div>
 
     <!-- Mobil Nokta İndikatörleri -->
-    <div v-if="isMobile" class="mobile-indicators">
-      <span v-for="(image, index) in images" :key="index" class="dot"
-        :class="{ active: index === currentIndex }"></span>
+    <div v-if="isMobile" class="text-center mt-[10px]">
+      <span v-for="(image, index) in images" :key="index" class="inline-block w-[10px] h-[10px] rounded-full mx-[5px]"
+        :class="index === currentIndex ? 'bg-orange-500 !w-4' : 'bg-gray-400'"></span>
     </div>
 
     <!-- Masaüstü Küçük Resimler -->
-    <div v-else class="desktop-thumbnails">
-      <button v-if="showThumbnailNav" class="thumbnail-nav-arrow left-arrow" @click="prevThumbnailPage">❮</button>
-      <div class="thumbnails-container" ref="thumbnailsContainer">
+    <div v-else class="flex items-center justify-center mt-[10px]">
+      <button v-if="showThumbnailNav" class="cursor-pointer text-[30px] text-black px-[10px]"
+        @click="prevThumbnailPage">
+        ❮
+      </button>
+      <div class="flex flex-nowrap overflow-hidden w-full" ref="thumbnailsContainer">
         <NuxtImg v-for="(image, index) in images" :key="index" :src="'cl/' + image.path" :alt="image.alt"
-          class="thumbnail rounded-md" :class="{ active: index === currentIndex }" @click="goToImage(index)"
+          class="flex-shrink-0 w-[60px] h-[90px] object-cover mr-[10px] cursor-pointer border-2 rounded-md"
+          :class="index === currentIndex ? 'border-orange-500' : 'border-transparent'" @click="goToImage(index)"
           format="webp" quality="50" :width="60" :height="90" fit="cover" />
       </div>
-      <button v-if="showThumbnailNav" class="thumbnail-nav-arrow right-arrow" @click="nextThumbnailPage">❯</button>
+      <button v-if="showThumbnailNav" class="cursor-pointer text-[30px] text-black px-[10px]"
+        @click="nextThumbnailPage">
+        ❯
+      </button>
     </div>
 
     <!-- Tam Ekran Modal -->
     <transition name="fade">
-      <div v-if="isFullscreen" class="fullscreen-modal">
-        <UButton @click="closeFullscreen" color="gray" variant="soft" class="absolute right-4 top-4 z-[10]"
+      <div v-if="isFullscreen" class="fixed inset-0 w-full h-full bg-black bg-opacity-90 z-[1000] touch-action-none">
+        <UButton @click="closeFullscreen" color="gray" variant="soft" class="absolute right-4 top-4 z-10"
           icon="i-heroicons-x-mark" />
-        <div class="fullscreen-image-container" @touchstart="onFullscreenTouchStart" @touchmove="onFullscreenTouchMove"
-          @touchend="onFullscreenTouchEnd" @mousedown="onFullscreenMouseDown" @mousemove="onFullscreenMouseMove"
-          @mouseup="onFullscreenMouseUp" @mouseleave="onFullscreenMouseLeave">
+        <div class="flex items-center justify-center h-full overflow-hidden" @touchstart="onFullscreenTouchStart"
+          @touchmove="onFullscreenTouchMove" @touchend="onFullscreenTouchEnd" @mousedown="onFullscreenMouseDown"
+          @mousemove="onFullscreenMouseMove" @mouseup="onFullscreenMouseUp" @mouseleave="onFullscreenMouseLeave">
           <NuxtImg :src="'cl/' + currentImage.path" :alt="currentImage.alt" ref="fullscreenImage"
-            :style="fullscreenImageStyle" @click="toggleZoom" format="webp" quality="90" fit="contain" />
+            :style="fullscreenImageStyle" @click="toggleZoom" format="webp" quality="90" fit="contain"
+            class="w-auto h-full max-w-none max-h-none object-contain" />
         </div>
       </div>
     </transition>
@@ -232,13 +248,6 @@ const onFullscreenMouseMove = (event) => {
   limitPan();
 };
 
-const onFullscreenMouseEnter = () => {
-  if (isMobile.value) return;
-
-  // Yakınlaştırmayı etkinleştir
-  isZoomed.value = true;
-  zoomScale.value = 2; // Yakınlaştırma seviyesi
-};
 
 const onFullscreenMouseLeave = () => {
   if (isMobile.value) return;
@@ -330,135 +339,10 @@ onBeforeUnmount(() => {
 </script>
 
 <style scoped>
-.image-gallery {
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.large-image-container {
-  position: relative;
-  overflow: hidden;
-}
-
-.large-image {
-  width: 100%;
-  height: auto;
-  cursor: pointer;
-  object-fit: cover;
-  max-height: 600px;
-  /* Gerektiği gibi ayarlayın */
-}
-
-.nav-arrow {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  font-size: 30px;
-  padding: 10px;
-  border: none;
-  cursor: pointer;
-  z-index: 1;
-}
-
-.left-arrow {
-  left: 10px;
-}
-
-.right-arrow {
-  right: 10px;
-}
-
-.mobile-indicators {
-  text-align: center;
-  margin-top: 10px;
-}
-
-.dot {
-  display: inline-block;
-  width: 10px;
-  height: 10px;
-  background-color: #bbb;
-  border-radius: 50%;
-  margin: 0 5px;
-}
-
-.dot.active {
-  background-color: #717171;
-}
-
-.desktop-thumbnails {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-}
-
-.thumbnail-nav-arrow {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 30px;
-  color: black;
-  padding: 0 10px;
-}
-
-.thumbnails-container {
-  display: flex;
-  flex-wrap: nowrap;
-  overflow: hidden;
-  width: 100%;
-}
-
-.thumbnail {
-  flex: 0 0 auto;
-  width: 60px;
-  height: 90px;
-  object-fit: cover;
-  margin-right: 10px;
-  cursor: pointer;
-  border: 2px solid transparent;
-}
-
-.thumbnail.active {
-  border-color: orange;
-}
-
-.fullscreen-modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  z-index: 1000;
-  touch-action: none;
-}
-
-
-
-.fullscreen-image-container {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  overflow: hidden;
-  /* Taşmayı engellemek için */
-}
-
-.fullscreen-image-container img {
-  width: auto;
-  height: 100%;
-  max-width: none;
-  max-height: none;
-  object-fit: contain;
-}
-
-/* Büyük resim geçiş efekti */
+/* Geçiş efektleri için özel CSS */
 .image-fade-enter-active,
 .image-fade-leave-active {
-  transition: opacity 0.2s;
+  transition: opacity 0.1s;
 }
 
 .image-fade-enter-from,
@@ -476,6 +360,12 @@ onBeforeUnmount(() => {
   opacity: 0;
 }
 
+/* touch-action özelliği için özel CSS */
+.touch-action-none {
+  touch-action: none;
+}
+
+/* Scroll'u engellemek için */
 .no-scroll {
   overflow: hidden;
 }
