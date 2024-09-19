@@ -336,6 +336,14 @@ onBeforeUnmount(() => {
   // Bileşen kaldırıldığında sınıfı temizleyin
   document.body.classList.remove('no-scroll');
 });
+
+
+watch(
+  () => props.images,
+  (newImages, oldImages) => {
+    currentIndex.value = 0;
+  }
+);
 </script>
 
 <style scoped>
