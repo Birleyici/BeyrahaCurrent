@@ -165,3 +165,10 @@ export function parseError(error) {
     statusCode
   }
 }
+
+export function capitalizeFirstLetterTR(string) {
+  return (
+    string.charAt(0).toLocaleUpperCase('tr-TR') +
+    string.slice(1).toLocaleLowerCase('tr-TR')
+  )
+}

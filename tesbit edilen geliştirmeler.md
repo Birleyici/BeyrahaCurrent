@@ -14,3 +14,5 @@ birşey değişmiyor tetikleme lazım.
 - örneğin
   http://localhost:3000/sufle-a55?page=1&sort=default&selectedCategoryIds=55,51
   böyle bir linke direk gidildiğinde sadece sufle-a55 gereği sufleleri geiriyor seçili olanlar push edilmiyor
+
+-giriş yaparken yanlış şifre girildiğinde tüm form boşalıyor

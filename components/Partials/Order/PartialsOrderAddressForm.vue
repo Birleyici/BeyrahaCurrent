@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-4">
     <UForm :schema="schema" :state="addressObj" class="space-y-4" @submit="saveAddress()">
-      <div class="grid gap-4">
-        <div class="grid grid-cols-2 gap-4">
+      <div class=" gap-4">
+        <div class="space-y-2 md:space-y-0 md:grid gap-4">
           <UFormGroup label="Ad" name="name">
             <UInput color="orange" v-model="addressObj.name" type="text" />
           </UFormGroup>
@@ -17,13 +17,13 @@
             </UFormGroup>
           </div>
           <UFormGroup label="Şehir" name="city">
-            <USelectMenu @change="orderState.fetchDistricts(addressObj.city)" color="orange" searchable
-              searchable-placeholder="Bir nitelik seçin..." class="w-full" placeholder="Bir nitelik seçin"
-              :options="orderState.cities" v-model="addressObj.city" option-attribute="city"
-              :search-attributes="['city']" />
+            <USelectMenu :searchable="searchableHandle" @change="orderState.fetchDistricts(addressObj.city)"
+              color="orange" searchable searchable-placeholder="Bir il seçin..." class="w-full"
+              placeholder="Bir nitelik seçin" :options="orderState.cities" v-model="addressObj.city"
+              option-attribute="city" :search-attributes="['city']" />
           </UFormGroup>
           <UFormGroup label="İlçe" name="district">
-            <USelectMenu color="orange" searchable searchable-placeholder="Bir nitelik seçin..." class="w-full"
+            <USelectMenu color="orange" searchable-placeholder="Bir ilçe seçin..." class="w-full"
               placeholder="Bir nitelik seçin" :options="orderState.districts" v-model="addressObj.district"
               option-attribute="district" :search-attributes="['district']" />
           </UFormGroup>
@@ -106,9 +106,18 @@ type Schema = InferType<typeof schema>
 
 
 
+// onBeforeRouteLeave((to, from, next) => {
+//   if (confirm('Bu sayfadan ayrılmak istediğinizden emin misiniz?')) {
+//     next() // İzin verir ve sayfadan çıkış yapar
+//   } else {
+//     next(false) // Geri gitme işlemini durdurur
+//   }
+// })
 
 
+function searchableHandle(word) {
 
-
+  return orderState.cities.filter(c => c.city.includes(capitalizeFirstLetterTR(word)))
+}
 
 </script>
