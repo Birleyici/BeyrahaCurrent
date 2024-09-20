@@ -5,7 +5,7 @@
     <div class="relative">
       <form @submit.prevent="goSearch" class="items-center relative w-11/12 lg:w-full flex mx-auto">
         <UInput ref="searchInput" @focus="$changeMainState({ isOpenSearch: true })" @blur="handleBlur" color="orange"
-          @mousedown.stop type="text" @input="evt => searchWord = evt.target.value" :value="searchWord" size="md"
+          @mousedown.stop type="text" @input="onInput" :value="searchWord" size="md"
           class="w-full bg-slate-100 rounded-md z-[4]" placeholder="Ara..." />
         <Icon v-if="!$mainState.isOpenSearch || ($mainState.isOpenSearch && !searchWord)" name="ph:magnifying-glass"
           class="w-6 h-6 absolute z-[10] right-2" color="black" />
@@ -32,25 +32,26 @@
 </template>
 
 <script setup>
+import { debounce } from 'lodash';
 const productState = useProductState();
 const { $mainState } = useNuxtApp();
 const searchInput = ref(null);
 const router = useRouter();
 const route = useRoute();
-const searchWord = ref(route.query.searchWord);
+const searchWord = ref(route.query.searchWord || '');
 const productsSearched = ref([]);
 
 function closeSearch() {
   $mainState.isOpenSearch = false;
-  searchInput._value.$refs.input.blur();
+  searchInput.value.$refs.input.blur();
 }
 
 function goSearch() {
   router.push({
     path: '/arama-a0',
     query: {
-      searchWord: searchWord.value
-    }
+      searchWord: searchWord.value,
+    },
   });
   closeSearch();
 }
@@ -62,28 +63,27 @@ function handleBlur(event) {
   }
 }
 
-watch(
-  () => $mainState.isOpenSearch,
-  (newValue) => {
-    if (newValue) {
-      nextTick(() => {
-        searchInput._value.$refs.input.focus();
-      });
-    }
+// Kullanıcının girdiği değeri güncelleyen fonksiyon
+function onInput(evt) {
+  searchWord.value = evt.target.value;
+}
+
+// Debounce edilmiş arama fonksiyonu
+const debouncedSearch = debounce(async (newVal) => {
+
+  if (!newVal) {
+    productsSearched.value = [];
+    return;
   }
-);
-
-watchEffect(async (onInvalidate) => {
-  const controller = new AbortController();
-  const signal = controller.signal;
-
-  onInvalidate(() => controller.abort());
 
   try {
-    const response = await productState.getProducts({
-      searchWord: searchWord.value,
-      limit: 10
-    }, true, { signal });
+    const response = await productState.getProducts(
+      {
+        searchWord: newVal,
+        limit: 10,
+      },
+      true
+    );
 
     productsSearched.value = response.data;
   } catch (error) {
@@ -93,5 +93,23 @@ watchEffect(async (onInvalidate) => {
       console.error('Fetch error:', error);
     }
   }
-});
+}, 300); // 300ms gecikme
+
+watch(
+  () => searchWord.value,
+  (newVal, oldVal) => {
+    debouncedSearch(newVal);
+  }
+);
+
+watch(
+  () => $mainState.isOpenSearch,
+  (newValue) => {
+    if (newValue) {
+      nextTick(() => {
+        searchInput.value.$refs.input.focus();
+      });
+    }
+  }
+);
 </script>

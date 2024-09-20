@@ -17,14 +17,14 @@
             </UFormGroup>
           </div>
           <UFormGroup label="Şehir" name="city">
-            <USelectMenu :searchable="searchableHandle" @change="orderState.fetchDistricts(addressObj.city)"
-              color="orange" searchable searchable-placeholder="Bir il seçin..." class="w-full"
-              placeholder="Bir nitelik seçin" :options="orderState.cities" v-model="addressObj.city"
-              option-attribute="city" :search-attributes="['city']" />
+            <USelectMenu :searchable="searchableHandle" @change="orderState.fetchDistricts(addressObj.city)" searchable
+              searchable-placeholder="Bir il seçin..." class="w-full" placeholder="Bir il seçin"
+              :options="orderState.cities" v-model="addressObj.city" option-attribute="city"
+              :search-attributes="['city']" />
           </UFormGroup>
           <UFormGroup label="İlçe" name="district">
-            <USelectMenu color="orange" searchable-placeholder="Bir ilçe seçin..." class="w-full"
-              placeholder="Bir nitelik seçin" :options="orderState.districts" v-model="addressObj.district"
+            <USelectMenu @click="orderState.fetchDistricts(addressObj.city)" searchable-placeholder="Bir ilçe seçin..."
+              class="w-full" placeholder="Bir ilçe seçin" :options="orderState.districts" v-model="addressObj.district"
               option-attribute="district" :search-attributes="['district']" />
           </UFormGroup>
 
