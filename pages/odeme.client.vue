@@ -1,24 +1,21 @@
 <template>
   <div class="px-x-mobil lg:px-x-desktop">
     <div class="lg:grid lg:grid-cols-3 gap-16">
-      <div class="col-span-2 my-minimal">
+      <div class="col-span-2 mb-minimal" v-if="isLoaded">
         <div class="text-center lg:text-left">
           <b>Sipariş oluştur</b>
         </div>
         <div class="border rounded-md mt-minimal">
-          <Transition name="fade">
-            <div v-if="orderState.getDefaultAddress"
-              class="bg-tertiary-50 border border-orange-500 p-minimal rounded-md flex items-center w-full">
-              <PartialsOrderAddress :addressOptions="{
-                edit: true
-              }" :address="orderState.getDefaultAddress" />
-            </div>
-          </Transition>
+          <div v-if="orderState.defaultAddress"
+            class="bg-tertiary-50 border border-orange-500 p-minimal rounded-md flex items-center w-full">
+            <PartialsOrderAddress :addressOptions="{
+              edit: true
+            }" :address="orderState.defaultAddress" />
+          </div>
 
           <div class="flex justify-between ">
-            <div class="flex h-full items-center space-x-2 text-secondary-500 text-sm">
-              <button v-if="isShowNewAddressButton" @click="orderState.isOpenAddressModal = true"
-                class="flex h-full items-center font-semibold p-3">
+            <div v-if="isShowNewAddressButton" class="flex h-full items-center space-x-2 text-secondary-500 text-sm">
+              <button @click="orderState.isOpenAddressModal = true" class="flex h-full items-center font-semibold p-3">
                 Yeni adres
                 <Icon name="mdi:plus" class="font-semibold w-4 h-4"></Icon>
               </button>
@@ -32,6 +29,7 @@
             </div>
           </div>
         </div>
+
         <div class="my-orta">
           <b>Ödeme yöntemleri</b>
           <div class="my-minimal space-y-4">
@@ -51,7 +49,18 @@
           </div>
         </div>
       </div>
-      <div class="col-span-1">
+      <div v-else class="col-span-2">
+        <div class="grid gap-3 ">
+          <USkeleton class="h-4 w-28" :ui="{ rounded: 'rounded-full' }" />
+          <USkeleton class="h-[200px] w-full" :ui="{ rounded: 'rounded-md' }" />
+        </div>
+        <div class="grid gap-3 my-orta">
+          <USkeleton class="h-4 w-28" :ui="{ rounded: 'rounded-full' }" />
+          <USkeleton class="h-[100px] w-full" :ui="{ rounded: 'rounded-md' }" />
+        </div>
+      </div>
+
+      <div v-if="isLoaded" class="col-span-1">
         <div class="sticky top-4 w-full">
           <PartialsCartExtre>
             <template #button>
@@ -62,6 +71,10 @@
             </template>
           </PartialsCartExtre>
         </div>
+      </div>
+      <div v-else>
+        <USkeleton class="h-[200px] w-full" :ui="{ rounded: 'rounded-md' }" />
+        <USkeleton class="h-[40px] w-full mt-4" :ui="{ rounded: 'rounded-md' }" />
       </div>
     </div>
 
@@ -115,9 +128,11 @@ const authStore = useAuthStore()
 const isShowNewAddressButton = computed(() => {
   return (!authStore.token && orderState.addresses.length == 0) || authStore.token
 })
+const isLoaded = ref(false)
 
 onMounted(async () => {
   await orderState.fetchAddresses()
+  isLoaded.value = true
 })
 
 

@@ -24,7 +24,7 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
   const cities = ref([])
   const districts = ref([])
 
-  const getDefaultAddress = computed(() => {
+  const defaultAddress = computed(() => {
     let filteredAddresses = addresses.value?.filter(
       (address) => address.isDefault === true
     )
@@ -33,7 +33,7 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
 
   const orderOptions = ref({
     selectedPaymentMethod: 'bacs',
-    selectedAddress: getDefaultAddress?.id,
+    selectedAddress: defaultAddress?.id,
     isOpenOtherAddress: false
   })
 
@@ -158,7 +158,7 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
   return {
     orderOptions,
     addresses,
-    getDefaultAddress,
+    defaultAddress,
     newAddress,
     copyNewAddress,
     isOpenAddressModal,
