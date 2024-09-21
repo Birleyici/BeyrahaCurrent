@@ -4,7 +4,7 @@
       <div v-for="attribute in props.attrsAndVarsState" :key="attribute.name">
         <!-- Öznitelik Adı -->
         <div class="mb-4">
-          <div  class="my-minimal" v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
+          <div class="my-minimal" v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
             <div>
               <div class="flex space-x-2 items-center">
                 <p class="font-medium text-sm">Renk:</p>
@@ -13,43 +13,37 @@
 
               <UCarousel v-if="$mainState.isLoaded" v-slot="{ item }" :items="attribute.options"
                 :ui="{ item: 'snap-end' }">
-                <div
-                 :class="{
+                <div :class="{
                   'border-2 !border-secondary-500 text-white': isSelected(
                     attribute.name,
                     item.term_name
                   ),
-                }"
-                 class="mt-2 border w-[80px] h-[80px] rounded-full mr-2 overflow-hidden cursor-pointer">
-                  <NuxtImg @click="isActive(attribute.name, item.term_name) && selectColorOption(attribute.name, item.term_name, item)"
-                  :src="getTermImageSrc(item, item.term_name)"
-                  :class="{
-                    'opacity-50 cursor-not-allowed': !isActive(attribute.name, item.term_name),
-                  }"
-                  
-                  width="80"
-                  height="120"
-                  fit="cover"
-                   />
+                }" class="mt-2 border w-[80px] h-[80px] rounded-full mr-2 overflow-hidden cursor-pointer">
+                  <NuxtImg
+                    @click="isActive(attribute.name, item.term_name) && selectColorOption(attribute.name, item.term_name, item)"
+                    :src="getTermImageSrc(item, item.term_name)" :class="{
+                      'opacity-50 cursor-not-allowed': !isActive(attribute.name, item.term_name),
+                    }" width="80" height="120" fit="cover" />
                 </div>
               </UCarousel>
               <div class="flex space-x-2" v-else>
                 <SkeletonUiThumb v-for="item in 4" :key="item"></SkeletonUiThumb>
               </div>
             </div>
-        
+
           </div>
-          
-          <div class="grid gap-1" v-else-if="attribute.name.toLowerCase() != 'renk' ">
+
+          <div class="grid gap-1" v-else-if="attribute.name.toLowerCase() != 'renk'">
             <p class="font-medium text-sm">{{ attribute.name }}</p>
-            
+
             <div class="flex space-x-2">
-              <UButton class="cursor-pointer font-normal" size="md" color="gray" v-for="option in attribute.options" :key="option.term_name" :class="{
-                '!bg-secondary-500 text-white': isSelected(
-                  attribute.name,
-                  option.term_name
-                ),
-              }" :disabled="!isActive(attribute.name, option.term_name)"
+              <UButton class="cursor-pointer font-normal" size="md" color="gray" v-for="option in attribute.options"
+                :key="option.term_name" :class="{
+                  '!bg-secondary-500 text-white': isSelected(
+                    attribute.name,
+                    option.term_name
+                  ),
+                }" :disabled="!isActive(attribute.name, option.term_name)"
                 @click="selectOption(attribute.name, option.term_name)">
                 {{ option.term_name }}
               </UButton>
@@ -161,7 +155,6 @@ const addToCart = () => {
       value: inputValue,
       label: input.label,
       product_input_id: input.pivot.id,
-      input_id: input.id
     };
   }
 
@@ -170,7 +163,7 @@ const addToCart = () => {
     newCartItem = {
       ...newCartItem,
       product_id: props.productState.product.id,
-      product_name: `${props.productState.product.name} `+ (selectedColor.value?.term_name || ''), // Varyasyon adını ekle
+      product_name: `${props.productState.product.name} ` + (selectedColor.value?.term_name || ''), // Varyasyon adını ekle
       image_id: selectedVariation.images?.[0]?.id || props.productState.product.selectedColorTermImages?.[0].id || props.productState.product.selectedImages?.[0]?.id,
       qyt: parseInt(qyt.value),
       variation: selectedVariation,

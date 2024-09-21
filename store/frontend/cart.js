@@ -51,13 +51,11 @@ export const useCartState = defineStore('cartState', () => {
     }
 
     obj.id = response.cartItem.id
-    console.log(response.cartItem)
     const existObjIndex = findObjectIndex(cart.value, response.cartItem, [
       'qyt',
       'total',
       'input_value'
     ])
-    console.log(existObjIndex)
 
     if (existObjIndex === -1) {
       cart.value.push(response.cartItem)
@@ -75,7 +73,6 @@ export const useCartState = defineStore('cartState', () => {
 
   const cartDBToState = async () => {
     const response = await useBaseOFetchWithAuth('cart')
-    console.log(response)
     cart.value = response.cart
   }
 
