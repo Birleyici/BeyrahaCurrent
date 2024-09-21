@@ -14,7 +14,9 @@
       </form>
       <div v-if="searchWord && $mainState.isOpenSearch"
         class="min-h-[20px] w-11/12 p-4 bg-white absolute z-10 left-0 right-0 mx-auto top-[50px] rounded-xl results-container">
-        <p v-if="productsSearched.length == 0" class="italic">Sonuç bulunamadı...</p>
+        <p v-if="isSearching" class="italic">Aranıyor...</p>
+        <p v-else-if="productsSearched.length === 0" class="italic">Sonuç
+          bulunamadı...</p>
         <div v-else class="grid gap-4">
           <div v-for="p in productsSearched.slice(0, 6)" :key="p.id">
             <NuxtLink @click="closeSearch" :to="p.product_url">{{ p.name }}</NuxtLink>
@@ -40,6 +42,7 @@ const router = useRouter();
 const route = useRoute();
 const searchWord = ref(route.query.searchWord || '');
 const productsSearched = ref([]);
+const isSearching = ref(false);
 
 function closeSearch() {
   $mainState.isOpenSearch = false;
@@ -70,11 +73,12 @@ function onInput(evt) {
 
 // Debounce edilmiş arama fonksiyonu
 const debouncedSearch = debounce(async (newVal) => {
-
   if (!newVal) {
     productsSearched.value = [];
     return;
   }
+
+  isSearching.value = true; // Arama başlıyor
 
   try {
     const response = await productState.getProducts(
@@ -92,12 +96,15 @@ const debouncedSearch = debounce(async (newVal) => {
     } else {
       console.error('Fetch error:', error);
     }
+  } finally {
+    isSearching.value = false;
   }
 }, 300); // 300ms gecikme
 
 watch(
   () => searchWord.value,
   (newVal, oldVal) => {
+    isSearching.value = true;
     debouncedSearch(newVal);
   }
 );
