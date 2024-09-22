@@ -1,35 +1,40 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop">
-    <ClientOnly>
-      <p class="text-center font-semibold lg:text-left">Sepet</p>
-      <div v-if="cartState.cart.length > 0" class="lg:grid lg:grid-cols-3 gap-10">
-        <div class="col-span-2">
-          <TransitionGroup name="list" tag="div">
-            <PartialsCartListBig :key="cartItem" :delete-cart-item="cartState.deleteCartItem" :index="index"
-              :item="cartItem" v-for="cartItem, index in cartState.cart" />
-          </TransitionGroup>
+  <div>
 
+    <ClientOnly>
+      <div class="standart-section-spacing">
+        <UBreadcrumb class="mb-pad-2" :links="links" />
+
+        <div v-if="cartState.cart.length > 0" class="lg:grid lg:grid-cols-3 gap-10">
+          <div class="col-span-2">
+            <TransitionGroup name="list" tag="div">
+              <PartialsCartListBig :key="cartItem" :delete-cart-item="cartState.deleteCartItem" :index="index"
+                :item="cartItem" v-for="cartItem, index in cartState.cart" />
+            </TransitionGroup>
+
+          </div>
+          <PartialsCartExtre>
+            <template #button>
+              <div class="mt-2 bottom-0 fixed md:!relative  bg-white w-full right-0 left-0 ">
+                <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md"
+                  variant="solid">
+                  Ödeme</UButton>
+              </div>
+            </template>
+          </PartialsCartExtre>
         </div>
-        <PartialsCartExtre>
-          <template #button>
-            <div class="mt-2 bottom-0 fixed md:!relative  bg-white w-full right-0 left-0 p-2">
-              <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md"
-                variant="solid">
-                Ödeme</UButton>
+        <div v-else class="italic h-44 my-4 rounded-md border p-1  border-dashed">
+          <div class="text-center bg-slate-50 w-full h-full rounded-md flex items-center justify-center">
+            <div>
+              <b class="font-normal text-2xl">:(</b>
+              <p>Sepette ürün bulunmuyor...</p>
             </div>
-          </template>
-        </PartialsCartExtre>
-      </div>
-      <div v-else class="italic h-44 my-4 rounded-md border p-1  border-dashed">
-        <div class="text-center bg-slate-50 w-full h-full rounded-md flex items-center justify-center">
-          <div>
-            <b class="font-normal text-2xl">:(</b>
-            <p>Sepette ürün bulunmuyor...</p>
           </div>
         </div>
       </div>
 
-      <div class="my-maximal">
+
+      <div>
         <UiSlidesProductSlide title="İlginizi çekebilir" id="ilginizi_cekebilir" :filters="{
           piece: 8
         }">
@@ -48,6 +53,15 @@ useHead({
 
 const cartState = useCartState()
 
+
+const links = [{
+  label: 'Ana sayfa',
+  // icon: 'i-heroicons-squares-2x2',
+  // to: '/management/urunler'
+}, {
+  label: 'Sepet',
+  // icon: 'i-heroicons-squares-plus'
+}]
 </script>
 
 <style>

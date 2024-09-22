@@ -1,5 +1,5 @@
 <template>
-  <div class="my-orta flex justify-between w-[300px]">
+  <div class="my-pad-2 flex justify-between w-[300px]">
     <div>
       <p class="font-medium">Ödeme yöntemi </p>
       <p class="font-medium">Kargo </p>

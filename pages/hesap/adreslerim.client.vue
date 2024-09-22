@@ -1,13 +1,12 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop my-minimal">
-    <b>Adreslerim</b>
-
-    <div class="lg:grid lg:grid-cols-4 mt-minimal lg:mt-orta gap-10">
+  <div class="standart-section-spacing">
+    <UBreadcrumb class="mb-pad-2" :links="links" />
+    <div class="lg:grid lg:grid-cols-4 mt-pad-2  gap-10">
       <div class="col-span-1">
         <PartialsAccountMenu></PartialsAccountMenu>
       </div>
       <div class="col-span-3">
-        <UButton @click="orderState.isOpenAddressModal = true" color="orange" class="mb-minimal" size="md"
+        <UButton @click="orderState.isOpenAddressModal = true" color="orange" class="my-pad-2" size="md"
           icon="i-heroicons-plus">Yeni adres</UButton>
         <div class="grid lg:grid-cols-2 gap-10">
           <UModal v-model="orderState.isOpenAddressModal" :fullscreen="$device.isMobile">
@@ -26,7 +25,7 @@
           </UModal>
 
           <div :key="address.id" v-for="address in orderState.addresses">
-            <div class="border  p-minimal rounded-md flex items-center w-full"
+            <div class="border  p-pad-2 rounded-md flex items-center w-full"
               :class="{ 'bg-tertiary-50 border-2 border-orange-500': address.isDefault }">
               <PartialsOrderAddress :address="address" :address-options="{
                 allAction: true
@@ -47,4 +46,13 @@ const orderState = useOrderStoreFront()
 onMounted(async () => {
   await orderState.fetchAddresses()
 })
+
+const links = [{
+  label: 'Hesabım',
+  // icon: 'i-heroicons-squares-2x2',
+  // to: '/management/urunler'
+}, {
+  label: 'Adreslerim',
+  // icon: 'i-heroicons-squares-plus'
+}]
 </script>

@@ -45,10 +45,10 @@ export const useAuthStore = defineStore(
           loading.value.login = false
         }
       }).finally(() => {
-        console.log('deneme')
         loading.value.login = false
       })
 
+      console.log(user.value)
       if (!response.error) {
         apiError.value.login = []
         token.value = response.token
@@ -56,7 +56,8 @@ export const useAuthStore = defineStore(
         return true
       } else {
         token.value = null
-        console.log(response.error)
+        console.log(user.value)
+
         return false
       }
     }

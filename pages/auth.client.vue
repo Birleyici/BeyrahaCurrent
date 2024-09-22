@@ -1,9 +1,9 @@
 <template>
-  <div class="my-minimal px-8 ">
+  <div class="standart-section-spacing">
     <div>
-      <div class="mb-orta font-medium text-center ">Oturum seçenekleri</div>
+      <div class="mb-pad-2 font-medium text-center mb-pad-2">Oturum seçenekleri</div>
       <PartialsFormAuthForm></PartialsFormAuthForm>
-      <div v-if="route.query?.callback=='/odeme'" class="mt-4 flex justify-center">
+      <div v-if="route.query?.callback == '/odeme'" class="mt-4 flex justify-center">
         <div class="flex items-center space-x-2">
           <UButton to="/odeme?type=withoutMembership" size="md" variant="soft" color="orange"
             label="Üye olmadan devam et" />

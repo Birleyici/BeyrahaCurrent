@@ -8,10 +8,8 @@
         <span class="truncate">{{ item.label }}</span>
         <template #trailing>
           <div class="flex items-center">
-            <UButton icon="i-heroicons-trash" color="red" variant="ghost" 
-            @click.prevent="deleteAttr(props.item)"
-            :loading="props.item.loading"
-            />
+            <UButton icon="i-heroicons-trash" color="red" variant="ghost" @click.prevent="deleteAttr(props.item)"
+              :loading="props.item.loading" />
 
             <UIcon name="i-heroicons-chevron-right-20-solid ml-4 "
               class="w-5 h-5 transform transition-transform duration-200" :class="[open && 'rotate-90']" />
@@ -21,7 +19,7 @@
     </template>
 
     <template #attr-content>
-      <div class="border p-minimal rounded-md">
+      <div class="border p-pad-2 rounded-md">
         <div class="flex space-x-12 bg-white">
           <UiFormInput @keydown.enter="addTerm(item)" placeholder="Nitelik terimi" v-model="props.item.termWord">
           </UiFormInput>

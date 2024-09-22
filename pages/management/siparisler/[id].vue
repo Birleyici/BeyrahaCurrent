@@ -3,7 +3,7 @@
     <UBreadcrumb :links="links" />
 
     <div class="grid gap-4 ">
-      <div class="col-span-1 my-orta lg:my-0">
+      <div class="col-span-1 my-pad-2 lg:my-0">
         <div class="grid md:grid-cols-2 gap-6 ">
           <PartialsOrderAddressCard :address-options="{
             editMode: editingMode
@@ -53,7 +53,7 @@
       <!-- <div v-if="editingMode" class="flex justify-end">
         <UButton @click="isOpenAddProductModal=true" label="Ürün ekle" color="gray" />
        </div> -->
-      <div class="my-orta lg:grid lg:grid-cols-3">
+      <div class="my-pad-2 lg:grid lg:grid-cols-3">
         <div class="col-span-2"></div>
         <div class="col-span-1 gap-2 grid">
           <div class="flex justify-between">

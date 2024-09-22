@@ -1,17 +1,15 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop my-minimal">
+  <div class="px-x-mobil lg:px-x-desktop my-pad-2">
     <b>Ayarlar</b>
 
-    <div
-      class="lg:grid lg:grid-cols-4 mt-minimal lg:mt-orta gap-10 space-y-minimal lg:space-y-0"
-    >
+    <div class="lg:grid lg:grid-cols-4 mt-pad-2 lg:mt-pad-2 gap-10 space-y-pad-2 lg:space-y-0">
       <div class="col-span-1">
         <PartialsAccountMenu></PartialsAccountMenu>
       </div>
       <div class="col-span-3 lg:grid lg:grid-cols-2 gap-10">
-        <div class="p-minimal relative border rounded-md">
+        <div class="p-pad-2 relative border rounded-md">
           <p class="text-secondary-500 font-medium">Hesap bilgileri</p>
-          <div class="grid gap-4 py-minimal">
+          <div class="grid gap-4 py-pad-2">
             <div class="grid grid-cols-2 gap-4">
               <div>
                 <label for="">Ad </label>
@@ -35,12 +33,8 @@
             <div class="flex space-x-4">
               <label for="">Cinsiyet:</label>
 
-              <UiFormRadio v-model="cinsiyet" id="erkek" name="erkek" value="erkek"
-                >Erkek</UiFormRadio
-              >
-              <UiFormRadio v-model="cinsiyet" id="kadin" name="kadin" value="kadin"
-                >Kadın</UiFormRadio
-              >
+              <UiFormRadio v-model="cinsiyet" id="erkek" name="erkek" value="erkek">Erkek</UiFormRadio>
+              <UiFormRadio v-model="cinsiyet" id="kadin" name="kadin" value="kadin">Kadın</UiFormRadio>
             </div>
             <div class="grid grid-cols-3 gap-5">
               <div>
@@ -64,22 +58,20 @@
                 </UiFormSelect>
               </div>
             </div>
-            <UiButtonsBaseButton color="secondary" class="mt-minimal"
-              >Kaydet</UiButtonsBaseButton
-            >
+            <UiButtonsBaseButton color="secondary" class="mt-pad-2">Kaydet</UiButtonsBaseButton>
           </div>
         </div>
-        <div class="p-minimal relative border rounded-md my-minimal lg:my-0">
+        <div class="p-pad-2 relative border rounded-md my-pad-2 lg:my-0">
           <p class="text-secondary-500 font-medium">Şifre değiştirme</p>
 
-          <div class="grid gap-4 py-minimal">
+          <div class="grid gap-4 py-pad-2">
             <div>
               <label for="">Eski şifre</label>
 
               <UiFormPasswordInput></UiFormPasswordInput>
-              <NuxtLink to="/sifremi-unuttum"
-                ><p class="font-medium text-sm mt-1">Şifremi unuttum</p></NuxtLink
-              >
+              <NuxtLink to="/sifremi-unuttum">
+                <p class="font-medium text-sm mt-1">Şifremi unuttum</p>
+              </NuxtLink>
             </div>
 
             <div>
@@ -91,9 +83,7 @@
               <UiFormPasswordInput></UiFormPasswordInput>
             </div>
 
-            <UiButtonsBaseButton color="secondary" class="mt-minimal"
-              >Güncelle</UiButtonsBaseButton
-            >
+            <UiButtonsBaseButton color="secondary" class="mt-pad-2">Güncelle</UiButtonsBaseButton>
           </div>
         </div>
         <div></div>

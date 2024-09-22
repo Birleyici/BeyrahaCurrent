@@ -1,12 +1,12 @@
 <template>
-  <div v-if="!$device.isMobile || $mainState.isOpenSearch" class="min-w-[50px] lg:w-[500px]" :class="{
+  <div v-if="!$device.isMobile || $mainState.isOpenSearch" class="min-w-[50px] md:w-[400px]" :class="{
     'absolute right-0 left-0 lg:!w-full lg:px-x-desktop !border-b-transparent': $mainState.isOpenSearch,
   }">
     <div class="relative">
       <form @submit.prevent="goSearch" class="items-center relative w-11/12 lg:w-full flex mx-auto">
         <UInput ref="searchInput" @focus="$changeMainState({ isOpenSearch: true })" @blur="handleBlur" color="orange"
           @mousedown.stop type="text" @input="onInput" :value="searchWord" size="md"
-          class="w-full bg-slate-100 rounded-md z-[4]" placeholder="Ara..." />
+          class="w-full bg-slate-100 rounded-md z-[4]" placeholder="Aradığınız ürünü yazınız..." />
         <Icon v-if="!$mainState.isOpenSearch || ($mainState.isOpenSearch && !searchWord)" name="ph:magnifying-glass"
           class="w-6 h-6 absolute z-[10] right-2" color="black" />
         <Icon v-if="$mainState.isOpenSearch && searchWord && !$device.isMobile" name="eos-icons:loading"

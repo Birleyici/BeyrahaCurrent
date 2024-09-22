@@ -24,7 +24,7 @@
     </template>
 
     <template #attr-content>
-      <div class="grid lg:grid-cols-2 gap-4 bg-white border rounded-md p-minimal">
+      <div class="grid lg:grid-cols-2 gap-4 bg-white border rounded-md p-pad-2">
         <div class="inline-block col-span-2">
           <div class="bg-tertiary-50 border p-2 rounded-md flex space-x-2 items-center">
             <img @click="isOpen = true" :src="placeholderImg" alt="" class="cursor-pointer w-16 rounded-md" />

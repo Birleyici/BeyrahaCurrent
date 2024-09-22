@@ -64,7 +64,7 @@
               <p>Özel alanlar</p>
             </button>
           </div>
-          <div class="content p-minimal border">
+          <div class="content p-pad-2 border">
 
             <KeepAlive>
               <component :is="tabs[currentTab]"></component>
@@ -77,11 +77,11 @@
         <UButton :loading="productState.product.loading" @click="saveProduct(productState.product.id, true)"
           color="secondary" class="px-6 w-full flex justify-center">Yayınla</UButton>
 
-          <AdminPartialsMediaSelectBox v-model:is-open-modal="isOpenMediaModal"
+        <AdminPartialsMediaSelectBox v-model:is-open-modal="isOpenMediaModal"
           :selected-images="productState.product.selectedImages"
           v-model:cover-image-id="productState.product.coverImageId" />
 
-          <div class="my-minimal">
+        <div class="my-pad-2">
           <div class="h-[300px] overflow-y-scroll bg-slate-50 p-2 rounded-md">
             <UCommandPalette :emptyState="{
               queryLabel: 'Sonuç bulunamadı...'

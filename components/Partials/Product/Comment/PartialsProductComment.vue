@@ -1,19 +1,13 @@
 <template>
-  <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
+  <div class="px-6 lg:px-0 mt-pad-2 lg:mt-pad-3">
     <p class="mb-2 font-bold">Yorum yap</p>
 
-    <UiNotificationBar type="info"
-      >Ürüne yalnızca ürünü satın alan oturum açmış kullanıcılar yorum yapabilir.
+    <UiNotificationBar type="info">Ürüne yalnızca ürünü satın alan oturum açmış kullanıcılar yorum yapabilir.
     </UiNotificationBar>
 
-    <UiFormTextarea
-      class="h-60 my-minimal border-quaternary-300"
-      placeholder="Yorumunuz"
-    ></UiFormTextarea>
+    <UiFormTextarea class="h-60 my-pad-2 border-quaternary-300" placeholder="Yorumunuz"></UiFormTextarea>
 
-    <div
-      class="mb-minimal space-y-minimal lg:space-y-0 lg:flex items-center justify-between"
-    >
+    <div class="mb-pad-2 space-y-pad-2 lg:space-y-0 lg:flex items-center justify-between">
       <UiFormFileInput></UiFormFileInput>
       <UiFormSelect class="!w-full lg:!w-72">
         <option value="">Ürüne puanınız</option>
@@ -27,11 +21,11 @@
     <UiButtonsBaseButton color="secondary">Yorumu gönder</UiButtonsBaseButton>
   </div>
 
-  <div class="px-6 lg:px-0 mt-minimal lg:mt-maximal">
+  <div class="px-6 lg:px-0 mt-pad-2 lg:mt-pad-3">
     <div class="mb-2 font-bold flex items-end space-x-2">
       <p>Yorumlar</p>
     </div>
-    <div class="text-xl my-minimal font-medium flex space-x-2">
+    <div class="text-xl my-pad-2 font-medium flex space-x-2">
       <p class="text-secondary-500">3.8</p>
       <p>(253 değerlendirme)</p>
     </div>

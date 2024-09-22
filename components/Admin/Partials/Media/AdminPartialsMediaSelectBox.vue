@@ -1,6 +1,6 @@
 <template>
 
-  <div class="bg-tertiary-100 rounded-md p-minimal border space-y-4 my-minimal">
+  <div class="bg-tertiary-100 rounded-md p-pad-2 border space-y-4 my-pad-2">
     <div class="flex flex-auto flex-wrap gap-4">
       <div class="relative" v-for="(item, index) in props.selectedImages" :key="index">
         <NuxtImg :class="{
@@ -16,7 +16,7 @@
     </div>
 
     <button @click="isOpenModal = true"
-      class="w-full border-2 border-tertiary-300 p-minimal relative text-center overflow-hidden rounded-md border-dashed text-sm">
+      class="w-full border-2 border-tertiary-300 p-pad-2 relative text-center overflow-hidden rounded-md border-dashed text-sm">
       <Icon name="mdi:image" class="absolute left-0 opacity-30 w-20 h-20 -top-2">
       </Icon>
 

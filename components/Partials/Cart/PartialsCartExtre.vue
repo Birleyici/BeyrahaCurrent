@@ -2,7 +2,7 @@
     <div class="lg:col-span-1 w-full lg:grid gap-2">
         <div class="w-full">
             <div class="sticky top-4 w-full z-[2]">
-                <div class="bg-tertiary-50 w-full rounded-md p-minimal space-y-3">
+                <div class="bg-tertiary-50 w-full rounded-md p-pad-2 mt-pad-2 md:mt-0 space-y-3">
                     <b>Sipariş özeti</b>
 
                     <div class="flex justify-between">
@@ -20,7 +20,7 @@
                         <p>Toplam:</p>
                         <Transition name="slide-up" mode="out-in">
                             <p class="text-secondary-500 font-bold" :key="cartStore.cartTotalAmount">{{
-                                formatPrice(cartStore.cartTotalAmount + shippingCost)  }}</p>
+                                formatPrice(cartStore.cartTotalAmount + shippingCost) }}</p>
                         </Transition>
 
                     </div>
@@ -36,6 +36,6 @@
 <script setup>
 const cartStore = useCartState()
 const shippingCost = computed(() => {
-  return cartStore.cartTotalAmount > 1000 ? 0 : 60
+    return cartStore.cartTotalAmount > 1000 ? 0 : 60
 })
 </script>

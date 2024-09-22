@@ -1,6 +1,6 @@
 <template>
     <div :class="props.index % 2 != 0 && 'bg-slate-50'"
-        class="grid lg:grid-cols-2 gap-4 items-center my-minimal border p-2 rounded-md">
+        class="grid lg:grid-cols-2 gap-4 items-center mt-pad-1 border p-2 rounded-md">
         <div class="h-full flex space-x-4">
             <div class="flex space-x-4">
                 <NuxtLink v-if="props.item.image_path" :to="props.item.product_url">

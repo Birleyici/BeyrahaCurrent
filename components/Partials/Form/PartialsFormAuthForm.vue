@@ -44,7 +44,7 @@
 
             <UButton :loading="authStore.loading.login" color="orange" size="md" type="submit"> Giriş </UButton>
 
-            <ul class="list-disc p-4 text-red-500">
+            <ul class="list-disc  text-red-500">
               <li v-for="error in authStore.apiError.login">
                 {{ error[0] }}
               </li>
@@ -64,7 +64,7 @@
 
             <UButton :loading="authStore.loading.register" color="orange" size="md" type="submit"> Kaydol </UButton>
 
-            <ul class="list-disc p-4 text-red-500">
+            <ul class="list-disc text-red-500">
               <li v-for="error in authStore.apiError.register">
                 {{ error[0] }}
               </li>

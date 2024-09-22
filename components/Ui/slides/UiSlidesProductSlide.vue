@@ -11,12 +11,10 @@
       </div>
     </div>
 
-    <!-- Ürünler yüklendiğinde skeleton kaybolur ve ürünler gösterilir -->
     <div v-if="!isLoading && products.length > 0">
-      <div class="flex items-center space-x-4">
-        <p class="text-md font-medium my-2">{{ props.title }}</p>
-        <NuxtLink v-if="props.to" :to="props.to"
-          class="flex space-x-1 items-center text-sm font-medium text-orange-500">
+      <div class="flex justify-between items-center h-full space-x-4 px-x-mobile md:px-x-desktop">
+        <p class="text-2xl font-medium my-2">{{ props.title }}</p>
+        <NuxtLink v-if="props.to" :to="props.to" class="flex items-center h-full text-sm font-medium text-orange-500">
           <span>Tümü</span>
           <UIcon name="i-heroicons-chevron-right" />
         </NuxtLink>
@@ -25,6 +23,8 @@
         <PartialsProductCard :lcp="props.lcp" class="mr-4" :index="index" :product="item" :key="item.id" />
       </UCarousel>
     </div>
+
+
 
     <!-- Ürün yoksa hiçbir şey gösterilmez -->
   </div>

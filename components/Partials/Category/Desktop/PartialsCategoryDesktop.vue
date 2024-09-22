@@ -1,7 +1,7 @@
 <template>
   <div class="grid grid-cols-10 gap-10">
     <div class="col-span-3 ">
-      <div class="grid gap-2">
+      <div class="grid gap-2 sticky top-0">
         <p class="font-medium">Filtreler</p>
         <div class="h-[300px] overflow-y-scroll bg-slate-100 p-4 rounded-md border">
           <UCommandPalette :emptyState="{
@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="col-span-7 ">
-   
+
       <div class="grid gap-10">
         <div class="flex justify-between">
           <div></div>
@@ -29,15 +29,15 @@
             <Icon name="mdi:loading" class="w-12 h-12 animate-spin"></Icon>
           </div>
 
-          <div class="grid grid-cols-3 gap-4">
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <p v-if="props.products.data.length == 0" class="italic">
               Ürün bulunamadı...
-             </p>
+            </p>
             <PartialsProductCard :product="product" v-for="product in props.products.data">
             </PartialsProductCard>
           </div>
         </div>
-      
+
       </div>
     </div>
   </div>

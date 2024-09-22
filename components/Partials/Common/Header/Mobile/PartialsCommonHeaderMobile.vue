@@ -1,10 +1,7 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop pt-minimal pb-minimal">
-
+  <div>
     <PartialsCommonHeaderSlideNestedMenu v-model="$uiStore.state.menuSlide" :menu="props.categories" />
-
     <LazyPartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
-
     <LazyPartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
 
     <div class="flex justify-between items-center">

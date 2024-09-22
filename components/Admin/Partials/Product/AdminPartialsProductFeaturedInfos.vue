@@ -8,13 +8,13 @@
     </div>
     <p class="text-xs text-gray-500">Max. 5 adet öne çıkan bilgi ekleyebilirsiniz.</p>
 
-    <div class="my-minimal">
+    <div class="my-pad-2">
         <div class="flex items-center mb-2 space-x-2" v-for="feature in productState.product.featured_infos"
             :key="feature.id">
             <p class="px-2 py-1 rounded-md bg-gray-100 w-full">{{ feature.content }}</p>
             <div>
-                <UButton :loading="feature.loading" @click="deleteFeature(feature)" icon="i-heroicons-trash" size="2xs" color="red" variant="solid"
-                    :trailing="false" />
+                <UButton :loading="feature.loading" @click="deleteFeature(feature)" icon="i-heroicons-trash" size="2xs"
+                    color="red" variant="solid" :trailing="false" />
             </div>
         </div>
 
@@ -45,8 +45,8 @@ const deleteFeature = async (feature) => {
     feature.loading = true
     const response = await useBaseOFetchWithAuth(`product/productMeta/${feature.id}`, {
         method: 'DELETE',
-    }).finally(()=>{
-    feature.loading = false
+    }).finally(() => {
+        feature.loading = false
     })
 
     if (!response.error) {

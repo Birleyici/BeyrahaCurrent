@@ -1,44 +1,46 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop">
+  <div class="standart-section-spacing">
     <div class="lg:grid lg:grid-cols-3 gap-16">
-      <div class="col-span-2 mb-minimal" v-if="isLoaded">
-        <div class="text-center lg:text-left">
-          <b>Sipariş oluştur</b>
-        </div>
-        <div class="border rounded-md mt-minimal">
-          <div v-if="orderState.defaultAddress"
-            class="bg-tertiary-50 border border-orange-500 p-minimal rounded-md flex items-center w-full">
-            <PartialsOrderAddress :addressOptions="{
-              edit: true
-            }" :address="orderState.defaultAddress" />
+      <div class="col-span-2 space-y-section-mobile " v-if="isLoaded">
+        <div>
+          <div class="text-center lg:text-left">
+            <b>Sipariş oluştur</b>
           </div>
-
-          <div class="flex justify-between ">
-            <div v-if="isShowNewAddressButton" class="flex h-full items-center space-x-2 text-secondary-500 text-sm">
-              <button @click="orderState.isOpenAddressModal = true" class="flex h-full items-center font-semibold p-3">
-                Yeni adres
-                <Icon name="mdi:plus" class="font-semibold w-4 h-4"></Icon>
-              </button>
+          <div class="border rounded-md mt-pad-1">
+            <div v-if="orderState.defaultAddress"
+              class="bg-tertiary-50 border border-orange-500 p-pad-2 rounded-md flex items-center w-full">
+              <PartialsOrderAddress :addressOptions="{
+                edit: true
+              }" :address="orderState.defaultAddress" />
             </div>
-            <div v-if="orderState.addresses?.length > 1 && authStore.token"
-              class="flex justify-center space-x-2 items-center">
-              <UButton @click="orderState.openAllAddressModal = true" variant="link" color="orange"
-                class="text-sm font-medium p-3 h-full">
-                Diğer adresler
-              </UButton>
+            <div class="flex justify-between ">
+              <div v-if="isShowNewAddressButton" class="flex h-full items-center space-x-2 text-secondary-500 text-sm">
+                <button @click="orderState.isOpenAddressModal = true"
+                  class="flex h-full items-center font-semibold p-3">
+                  Yeni adres
+                  <Icon name="mdi:plus" class="font-semibold w-4 h-4"></Icon>
+                </button>
+              </div>
+              <div v-if="orderState.addresses?.length > 1 && authStore.token"
+                class="flex justify-center space-x-2 items-center">
+                <UButton @click="orderState.openAllAddressModal = true" variant="link" color="orange"
+                  class="text-sm font-medium p-3 h-full">
+                  Diğer adresler
+                </UButton>
+              </div>
             </div>
           </div>
         </div>
 
-        <div class="my-orta">
-          <b>Ödeme yöntemleri</b>
-          <div class="my-minimal space-y-4">
+        <div>
+          <span class="font-medium">Ödeme yöntemleri</span>
+          <div class="mt-pad-2">
             <div class="border rounded-md duration-300"
               :class="orderState.orderOptions.selectedPaymentMethod == 'bacs' && 'bg-slate-50  duration-300 border border-orange-500'">
-              <UiFormRadio label-class="p-minimal" v-model="orderState.orderOptions.selectedPaymentMethod" value="bacs"
+              <UiFormRadio label-class="p-pad-2" v-model="orderState.orderOptions.selectedPaymentMethod" value="bacs"
                 id="bacs" name="paymentMethod">
                 <div class="ml-2">
-                  <b>Havale / EFT ile ödeme</b>
+                  <p class="font-medium">Havale / EFT ile ödeme</p>
                   <p>
                     Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam
                     tutarını havale veya EFT yoluyla gönderebilirsiniz.
@@ -49,12 +51,12 @@
           </div>
         </div>
       </div>
-      <div v-else class="col-span-2">
+      <div v-else class="col-span-2 space-y-section-mobile">
         <div class="grid gap-3 ">
           <USkeleton class="h-4 w-28" :ui="{ rounded: 'rounded-full' }" />
           <USkeleton class="h-[200px] w-full" :ui="{ rounded: 'rounded-md' }" />
         </div>
-        <div class="grid gap-3 my-orta">
+        <div class="grid gap-3 ">
           <USkeleton class="h-4 w-28" :ui="{ rounded: 'rounded-full' }" />
           <USkeleton class="h-[100px] w-full" :ui="{ rounded: 'rounded-md' }" />
         </div>
@@ -107,7 +109,7 @@
 
         <div class="h-full  relative pr-4">
           <div :key="address.id" v-for="address in orderState.addresses">
-            <div class="border my-2 p-minimal rounded-md flex items-center w-full"
+            <div class="border my-2 p-pad-2 rounded-md flex items-center w-full"
               :class="{ 'bg-tertiary-50 border border-orange-500': address.isDefault }">
               <PartialsOrderAddress :address-options="{ allAction: true }" :address="address" />
             </div>

@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    .standart-section-spacing {
+      @apply my-section-mobile md:my-section-desktop px-x-mobile md:px-x-desktop;
+    }
+  }

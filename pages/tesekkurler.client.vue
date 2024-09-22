@@ -1,11 +1,8 @@
 <template>
-  <div class="my-minimal px-x-mobil lg:px-x-desktop">
-    <div v-if="orderLoaded">
-      <b>Siparişiniz alındı</b>
-
-      <div class="my-minimal">
-
-
+  <div class="standart-section-spacing">
+    <div v-if="orderLoaded" class="space-y-section-mobile md:space-y-section-desktop">
+      <div>
+        <p class="mb-pad-2 font-bold">Siparişiniz alındı ✓</p>
         <UNotification description="This is a notification." :id="2" color="red"
           :close-button="{ icon: null, variant: 'soft' }" icon="i-heroicons-information-circle" :timeout="0"
           title="Notification">
@@ -21,12 +18,11 @@
         </UNotification>
       </div>
 
-      <div class="my-orta lg:my-maximal">
-        <div class="mb-orta lg:mb-maximal">
-          <PartialsOrderBankInfo></PartialsOrderBankInfo>
-        </div>
+      <PartialsOrderBankInfo></PartialsOrderBankInfo>
+
+      <div>
         <div class="lg:grid lg:grid-cols-3 gap-10">
-          <div class="col-span-2">
+          <div class="col-span-2 space-y-section-mobile">
             <div class="grid gap-4">
               <b>Sipariş içeriği</b>
               <div class="grid gap-4" v-for="sub_order in order.sub_orders ">
@@ -35,7 +31,7 @@
             </div>
             <PartialsOrderExtre :total="order?.total" :shipping-cost="order?.shipping_cost" />
           </div>
-          <div class="col-span-1 my-orta lg:my-0">
+          <div class="col-span-1 my-pad-2 lg:my-0">
             <div class="grid gap-6 ">
               <PartialsOrderAddressCard title="Teslimat Adresi" :address="order.shipping_address || {}" :addressOptions="{
                 allAction: false
@@ -48,7 +44,6 @@
         </div>
       </div>
     </div>
-
     <div v-else>
       Yükleniyor...
     </div>

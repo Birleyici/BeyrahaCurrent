@@ -12,7 +12,7 @@
           <p class="font-medium text-sm">{{ formatDate(props.item.created_at) }}</p>
         </div>
       </div>
-      <div class="flex justify-between my-minimal lg:my-0 lg:space-x-24 items-center">
+      <div class="flex justify-between my-pad-2 lg:my-0 lg:space-x-24 items-center">
         <div>
           <p class="text-sm">Toplam tutar</p>
           <p class="font-medium text-secondary-500">{{ formatPrice(props.item.total_with_shipping) }}</p>

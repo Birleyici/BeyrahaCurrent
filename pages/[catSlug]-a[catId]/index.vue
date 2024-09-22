@@ -1,5 +1,5 @@
 <template>
-  <div class="px-x-mobil lg:px-x-desktop ">
+  <div class="standart-section-spacing">
     <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
       :loading="loading" />
     <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products" :loading="loading" />

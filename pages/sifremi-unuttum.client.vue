@@ -1,5 +1,5 @@
 <template>
-  <div class="space-y-3 w-full md:w-[400px] px-6 md:mx-auto">
+  <div class="space-y-3 w-full md:w-[400px] standart-section-spacing mx-auto">
     <UCard>
       <template #header>
         <p class="text-base font-semibold leading-6 text-gray-900 dark:text-white">

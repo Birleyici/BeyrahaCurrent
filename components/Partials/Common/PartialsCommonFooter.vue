@@ -2,7 +2,7 @@
   <div>
     <UDivider type="dashed" class="mt-section-desktop" />
 
-    <div class="mx-x-mobil grid sm:grid-cols-2 gap-10 lg:grid-cols-4 lg:mx-x-desktop py-8  ">
+    <div class=" grid sm:grid-cols-2 gap-10 lg:grid-cols-4 standart-section-spacing  ">
 
       <div class="grid gap-1">
         <b class="text-lg">Kişisel</b>
@@ -27,13 +27,13 @@
         <div class="grid gap-1">
           <b class="text-lg">İletişim / Destek</b>
           <a href="https://wa.me/05436024821" target="_blank" class="flex items-center space-x-2">
-            <UIcon name="i-heroicons-phone" class="w-6 h-6" />  
-              <span>WhatsApp Destek Hattı</span>
-            </a>
-            <a href="mailto:destek@beyraha.com" class="flex items-center space-x-2">
-              <UIcon name="i-heroicons-envelope" class="w-6 h-6" />  
-                <span>destek@beyraha.com</span>
-              </a>
+            <UIcon name="i-heroicons-phone" class="w-6 h-6" />
+            <span>WhatsApp Destek Hattı</span>
+          </a>
+          <a href="mailto:destek@beyraha.com" class="flex items-center space-x-2">
+            <UIcon name="i-heroicons-envelope" class="w-6 h-6" />
+            <span>destek@beyraha.com</span>
+          </a>
         </div>
       </div>
       <div>
@@ -51,8 +51,8 @@
             <Icon name="mdi:youtube" class="w-6 h-6"></Icon>
             <p>beyrahaislamigiyim</p>
           </a> -->
-          
-       
+
+
         </div>
       </div>
     </div>

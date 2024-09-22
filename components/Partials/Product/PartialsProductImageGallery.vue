@@ -9,12 +9,11 @@
         @click="prevImage">
         ❮
       </button>
-
       <!-- Geçiş Efektiyle Resim -->
       <transition name="image-fade" mode="out-in">
         <NuxtImg :key="currentImage.path" :src="'cl/' + currentImage.path" :alt="currentImage.alt"
-          class="w-full h-auto cursor-pointer object-cover max-h-[600px] md:rounded-md" @click="openFullscreen"
-          format="webp" quality="90" :width="600" :height="900" fit="cover" />
+          class="w-full h-auto cursor-pointer object-cover mx-auto max-w-[380px] md:max-w-full md:rounded-md"
+          @click="openFullscreen" format="webp" quality="90" :width="600" :height="900" fit="cover" />
       </transition>
 
       <!-- Masaüstü için Sağ Ok -->

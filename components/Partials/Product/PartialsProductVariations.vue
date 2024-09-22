@@ -1,10 +1,10 @@
 <template>
-  <div>
+  <div class="space-y-y-mobile md:space-y-y-desktop ">
     <div>
       <div v-for="attribute in props.attrsAndVarsState" :key="attribute.name">
         <!-- Öznitelik Adı -->
-        <div class="mb-4">
-          <div class="my-minimal" v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
+        <div>
+          <div v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
             <div>
               <div class="flex space-x-2 items-center">
                 <p class="font-medium text-sm">Renk:</p>
@@ -18,7 +18,7 @@
                     attribute.name,
                     item.term_name
                   ),
-                }" class="mt-2 border w-[80px] h-[80px] rounded-full mr-2 overflow-hidden cursor-pointer">
+                }" class=" border w-[80px] h-[80px] rounded-full mr-2 overflow-hidden cursor-pointer">
                   <NuxtImg
                     @click="isActive(attribute.name, item.term_name) && selectColorOption(attribute.name, item.term_name, item)"
                     :src="getTermImageSrc(item, item.term_name)" :class="{
@@ -33,10 +33,13 @@
 
           </div>
 
-          <div class="grid gap-1" v-else-if="attribute.name.toLowerCase() != 'renk'">
-            <p class="font-medium text-sm">{{ attribute.name }}</p>
+          <div class="p-0 duration-300 grid gap-1 mt-pad-1"
+            :class="{ 'rounded-md p-2 border border-red-400 ': selectionRequired }"
+            v-else-if="attribute.name.toLowerCase() != 'renk'">
+            <p v-if="selectionRequired" class="text-sm text-red-500">Lütfen seçim yapın</p>
 
-            <div class="flex space-x-2">
+            <p class="font-medium text-sm">{{ attribute.name }}</p>
+            <div class="flex space-x-2 ">
               <UButton class="cursor-pointer font-normal" size="md" color="gray" v-for="option in attribute.options"
                 :key="option.term_name" :class="{
                   '!bg-secondary-500 text-white': isSelected(
@@ -55,7 +58,7 @@
 
     <PartialsProductInputItem :product="props.productState.product" />
 
-    <div class="my-minimal">
+    <div>
       <div>
         <div v-if="getSelectedVariation">
           <PartialsProductPrice type="page" :sale-price="getSelectedVariation.sale_price"
@@ -72,8 +75,7 @@
         <UiFormCounter v-model="qyt"></UiFormCounter>
       </div>
 
-      <UButton :loading="cartState.addToCartloading" @click="addToCart()" :disabled="isActiveAddToCartButton"
-        color="secondary"
+      <UButton :loading="cartState.addToCartloading" @click="addToCart()" color="secondary"
         class="!rounded-full font-bold flex justify-center relative text-sm lg:!px-12 px-6 overflow-hidden min-w-[180px] ">
         <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
         </Icon>
@@ -125,7 +127,15 @@ const initialColor = () => {
 };
 initialColor()
 
+const selectionRequired = ref(false)
 const addToCart = () => {
+
+  if (!getSelectedVariation.value) {
+    selectionRequired.value = true
+    return
+  } else {
+    selectionRequired.value = false
+  }
 
   const input = props.productState.product.inputs?.[0]
   const inputValue = props.productState.product.inputValue

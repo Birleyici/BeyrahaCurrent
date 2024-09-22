@@ -1,6 +1,6 @@
 <template>
   <div>
- 
+
     <UAccordion :items="[{ label: props.item.attribute_name, slot: 'attr-content' }]"
       :ui="{ wrapper: 'flex flex-col w-full' }">
       <template #default="{ item, index, open }">
@@ -13,10 +13,8 @@
 
           <template #trailing>
             <div class="flex items-center">
-              <UButton icon="i-heroicons-trash" color="red" variant="ghost" 
-              @click.prevent="deleteAttr(props.item)"
-              :loading="props.item.loading"
-              />
+              <UButton icon="i-heroicons-trash" color="red" variant="ghost" @click.prevent="deleteAttr(props.item)"
+                :loading="props.item.loading" />
               <UIcon name="i-heroicons-chevron-right-20-solid ml-4 "
                 class="w-5 h-5  transform transition-transform duration-200 " :class="[open && 'rotate-90']" />
             </div>
@@ -27,7 +25,7 @@
       <template #attr-content>
 
 
-        <div class="border p-minimal rounded-md">
+        <div class="border p-pad-2 rounded-md">
 
           <div class="flex space-x-12 bg-white">
             <UiFormInput @keydown.enter="addTerm(item)" placeholder="Nitelik terimi" v-model="props.item.termWord">
@@ -35,7 +33,7 @@
             <UiButtonsBaseButton @click="addTerm(item)" color="secondary">Ekle</UiButtonsBaseButton>
           </div>
 
-          
+
           <div class="grid mt-4">
             <div>
               <p class="text-sm font-medium mb-2" v-if="props.item.product_attribute_terms.length > 0">
@@ -48,7 +46,7 @@
                 </div>
               </div>
             </div>
-           
+
           </div>
 
 
