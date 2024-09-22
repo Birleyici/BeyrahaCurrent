@@ -7,7 +7,7 @@
       <SkeletonProductGallery v-else></SkeletonProductGallery>
 
       <div class="col-span-5">
-        <div class="px-x-mobile md:px-x-desktop space-y-y-mobile md:space-y-y-desktop">
+        <div class="px-x-mobile md:px-x-desktop space-y-section-mobile ">
           <h1 class="text-2xl font-medium ">
             {{ productState.product.name }}
           </h1>
