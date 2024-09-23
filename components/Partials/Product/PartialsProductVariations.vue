@@ -104,8 +104,8 @@ const {
 } = useVariationsFront();
 
 
-const isActiveAddToCartButton = computed(() => {
-  return getSelectedVariation.value === null
+const isVariableProduct = computed(() => {
+  return props.attrsAndVarsState.some(i => i.useForVariation === 1)
 })
 
 const selectedColor = ref(null)
@@ -127,10 +127,12 @@ const initialColor = () => {
 };
 initialColor()
 
+
+
 const selectionRequired = ref(false)
 const addToCart = () => {
 
-  if (!getSelectedVariation.value) {
+  if (!getSelectedVariation.value && isVariableProduct.value) {
     selectionRequired.value = true
     return
   } else {
@@ -198,6 +200,8 @@ const addToCart = () => {
 
 };
 
-
+watch(getSelectedVariation, () => {
+  selectionRequired.value = false
+})
 
 </script>

@@ -23,6 +23,7 @@ export const useVariationsFront = () => {
     attributes.forEach((a) => {
       const obj = {}
       obj.name = a.attribute_name
+      obj.useForVariation = a.useForVariation
 
       // Include all terms for the Renk attribute regardless of variations
       const isRenkAttribute = a.attribute_name === 'Renk'
