@@ -59,12 +59,22 @@ const props = defineProps({
               variant="outline"
             />
           </div>
-          <!-- <UIcon class="text-[200px]   absolute opacity-5" name="i-heroicons-exclamation-triangle" /> -->
-          <p class="text-sm text-gray-500">
-            Hata Kodu: {{ props.error?.statusCode }}
-            <br />
-            {{ props.error?.message }}
-          </p>
+          <div
+            class="text-left text-sm text-gray-500 mt-4 p-4 bg-gray-50 rounded-md"
+          >
+            <p><strong>Hata Kodu:</strong> {{ props.error?.statusCode }}</p>
+            <p><strong>Hata Mesajı:</strong> {{ props.error?.message }}</p>
+            <p><strong>Sayfa:</strong> {{ window?.location?.href }}</p>
+            <p>
+              <strong>Zaman:</strong> {{ new Date().toLocaleString('tr-TR') }}
+            </p>
+            <details class="mt-2">
+              <summary class="cursor-pointer">Stack Trace</summary>
+              <pre class="text-xs mt-2 whitespace-pre-wrap">{{
+                props.error?.stack
+              }}</pre>
+            </details>
+          </div>
         </div>
       </div>
     </div>
