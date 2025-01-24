@@ -71,7 +71,7 @@ const props = defineProps({
             <details class="mt-2">
               <summary class="cursor-pointer">Stack Trace</summary>
               <pre class="text-xs mt-2 whitespace-pre-wrap">{{
-                props.error?.stack
+                props.error
               }}</pre>
             </details>
           </div>
