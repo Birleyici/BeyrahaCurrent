@@ -37,9 +37,10 @@ export default defineNuxtConfig({
    image: {
    provider: 'cloudflare',
    cloudflare:{
-    baseURL: 'https://www.pakpazar.com'
+    baseURL: 'https://cdn.beyraha.com'
    },
     domains: [
+      'https://cdn.beyraha.com',
       'https://pakpazar.com',
       'https://www.pakpazar.com',
     ],
