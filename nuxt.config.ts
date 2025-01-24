@@ -111,8 +111,16 @@ export default defineNuxtConfig({
 
   compatibilityDate: '2024-08-21',
 
+  nitro: {
+    preset: 'cloudflare-pages',
+    prerender: {
+      crawlLinks: true,
+      routes: ['/']
+    }
+  },
 
   routeRules: {
     '/management/**': { ssr: false },
+    '/**': { ssr: true }
   }
 })
