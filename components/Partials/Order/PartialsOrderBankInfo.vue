@@ -11,7 +11,7 @@
           <UIcon v-else name="i-heroicons-clipboard-document-check" class="w-6 h-6" />
           <b>IBAN </b>
         </div>
-        <p>TR67 0001 0003 9058 4674 5950 01</p>
+        <p>TR71 0001 0000 9565 6417 9850 01</p>
       </div>
     </div>
     <div class="bg-secondary-400 rounded-md p-2 lg:flex justify-between">
@@ -22,7 +22,7 @@
           <UIcon v-else name="i-heroicons-clipboard-document-check" class="w-6 h-6" />
           <b>HESAP ADI </b>
         </div>
-        <p>Muhammet Çağrı Yılmaz</p>
+        <p>Sevgi Yılmaz</p>
       </div>
     </div>
   </div>
