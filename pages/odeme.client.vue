@@ -125,7 +125,7 @@
             <div class="flex flex-col">
               <span class="text-sm text-neutral-500">Toplam</span>
               <span class="text-lg font-bold text-neutral-900">{{ formatPrice(cartState.cartTotalAmount + shippingCost)
-              }}</span>
+                }}</span>
             </div>
 
             <!-- Siparişi Onayla Butonu -->
@@ -139,7 +139,7 @@
     </div>
 
     <!-- Yeni Adres Modalı -->
-    <UModal v-model="orderState.isOpenAddressModal" :fullscreen="$device.isMobile" :prevent-close="true" :ui="{
+    <UModal v-model="orderState.isOpenAddressModal" :prevent-close="true" :ui="{
       wrapper: 'fixed inset-0 z-[9999999] overflow-y-auto',
       overlay: { base: 'fixed inset-0 transition-opacity z-[9999998]' },
       container: 'flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 z-[9999999]',
@@ -160,7 +160,7 @@
     </UModal>
 
     <!-- Tüm Adresler Modalı -->
-    <UModal v-model="orderState.openAllAddressModal" :fullscreen="$device.isMobile" :prevent-close="true" :ui="{
+    <UModal v-model="orderState.openAllAddressModal" :prevent-close="true" :ui="{
       wrapper: 'fixed inset-0 z-[9999999] overflow-y-auto',
       overlay: { base: 'fixed inset-0 transition-opacity z-[9999998]' },
       container: 'flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 z-[9999999]',
@@ -201,8 +201,7 @@
           </div>
 
           <!-- Sayfalama -->
-          <div v-if="totalPages > 1"
-            class="flex justify-center items-center space-x-2 mt-6 pt-4 border-t border-neutral-200">
+          <div v-if="totalPages > 1" class="flex justify-center items-center space-x-2 mt-6 pt-4 border-neutral-200">
             <UButton :disabled="currentPage === 1" @click="currentPage--" color="gray" variant="outline" size="sm">
               <UIcon name="i-heroicons-chevron-left" />
             </UButton>
