@@ -677,4 +677,64 @@ h3{
 .search-category-pill:hover::before {
   @apply scale-x-100;
 }
+
+/* Z-Index Layer Management */
+/* Slideover ve Modal bileşenlerini fixed elementlerin üzerinde tutmak için */
+
+/* USlideover bileşeni z-index override */
+[data-headlessui-state="open"] {
+  z-index: 999999 !important;
+}
+
+/* Slideover wrapper z-index */
+.slideover-wrapper,
+[role="dialog"][data-headlessui-state="open"] {
+  z-index: 999999 !important;
+}
+
+/* Modal wrapper z-index */
+.modal-wrapper,
+[role="dialog"] {
+  z-index: 999999 !important;
+}
+
+/* Overlay z-index */
+.slideover-overlay,
+.modal-overlay,
+[data-headlessui-state="open"] > div:first-child {
+  z-index: 999998 !important;
+}
+
+/* Nuxt UI özel slideover sınıfları */
+.slideover,
+.ui-slideover,
+.nuxt-ui-slideover {
+  z-index: 999999 !important;
+}
+
+/* Nuxt UI özel modal sınıfları */
+.modal,
+.ui-modal,
+.nuxt-ui-modal {
+  z-index: 999999 !important;
+}
+
+/* Fixed position olan tüm dialog'lar */
+div[style*="position: fixed"][role="dialog"] {
+  z-index: 999999 !important;
+}
+
+/* Teleport edilmiş elementler */
+body > div[data-v-] {
+  z-index: 999999 !important;
+}
+
+/* Headless UI portal container */
+#headlessui-portal-root {
+  z-index: 999999 !important;
+}
+
+#headlessui-portal-root > * {
+  z-index: 999999 !important;
+}
   

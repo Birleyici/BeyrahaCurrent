@@ -1,6 +1,6 @@
 <template>
   <div>
-    <USlideover v-model="isOpen">
+    <USlideover v-model="isOpen" :ui="{ wrapper: 'fixed inset-0 flex z-[999999]' }">
       <div class="p-4 flex-1">
         <slot></slot>
       </div>

@@ -1,5 +1,5 @@
 <template>
-  <USlideover side="left" v-model="model">
+  <USlideover side="left" v-model="model" :ui="{ wrapper: 'fixed inset-0 flex z-[999999]' }">
     <UCard class="flex flex-col flex-1" :ui="{
       body: { base: 'flex-1' },
       ring: '',

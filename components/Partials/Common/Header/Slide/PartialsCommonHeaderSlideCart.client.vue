@@ -1,5 +1,5 @@
 <template>
-    <USlideover v-model="model" :ui="{ width: 'w-screen max-w-md' }">
+    <USlideover v-model="model" :ui="{ width: 'w-screen max-w-md', wrapper: 'fixed inset-0 flex z-[999999]' }">
         <div class="flex flex-col h-full">
             <!-- Header -->
             <div

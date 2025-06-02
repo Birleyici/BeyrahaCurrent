@@ -14,7 +14,7 @@
     </div>
 
     <!-- Sıralama Slide Over -->
-    <USlideover side="bottom" v-model="isOpenFiltersSlideOver">
+    <USlideover side="bottom" v-model="isOpenFiltersSlideOver" :ui="{ wrapper: 'fixed inset-0 flex z-[999999]' }">
       <UCard class="flex flex-col flex-1" :ui="{
         body: { base: 'flex-1' },
         ring: '',
@@ -37,7 +37,7 @@
     </USlideover>
 
     <!-- Kategori Slide Over -->
-    <USlideover side="bottom" v-model="isOpenCategorySlideOver">
+    <USlideover side="bottom" v-model="isOpenCategorySlideOver" :ui="{ wrapper: 'fixed inset-0 flex z-[999999]' }">
       <UCard class="flex flex-col flex-1" :ui="{
         body: { base: 'flex-1' },
         ring: '',
