@@ -1,9 +1,10 @@
 <template>
-  <div class="w-full max-w-2xl mx-auto -mt-8 md:mt-0">
+  <div class="w-full max-w-2xl mx-auto">
     <!-- Ana Resim Alanı -->
     <div class="relative group">
       <!-- Ana Resim -->
-      <div class="relative aspect-[3/4] bg-neutral-100 rounded-2xl overflow-hidden">
+      <div class="relative aspect-[3/4] bg-neutral-100 rounded-2xl overflow-hidden" @touchstart="handleMainTouchStart"
+        @touchmove="handleMainTouchMove" @touchend="handleMainTouchEnd">
         <div class="flex transition-transform duration-500 ease-in-out h-full"
           :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
           <div v-for="(image, index) in images" :key="index" class="w-full h-full flex-shrink-0">
@@ -440,6 +441,60 @@ const limitPan = () => {
 
   panX.value = Math.min(maxPanX, Math.max(-maxPanX, panX.value));
   panY.value = Math.min(maxPanY, Math.max(-maxPanY, panY.value));
+};
+
+// Ana resim alanı için swipe fonksiyonları
+const mainTouchStartX = ref(0);
+const mainTouchStartY = ref(0);
+const mainTouchEndX = ref(0);
+const mainTouchEndY = ref(0);
+const isMainSwiping = ref(false);
+
+const handleMainTouchStart = (event: TouchEvent) => {
+  if (images.value.length <= 1) return;
+
+  mainTouchStartX.value = event.touches[0].clientX;
+  mainTouchStartY.value = event.touches[0].clientY;
+  isMainSwiping.value = true;
+};
+
+const handleMainTouchMove = (event: TouchEvent) => {
+  if (!isMainSwiping.value || images.value.length <= 1) return;
+
+  // Dikey scroll'u engellememek için yatay hareket kontrolü
+  const deltaX = event.touches[0].clientX - mainTouchStartX.value;
+  const deltaY = event.touches[0].clientY - mainTouchStartY.value;
+
+  // Eğer yatay hareket dikey hareketten fazlaysa scroll'u engelle
+  if (Math.abs(deltaX) > Math.abs(deltaY)) {
+    event.preventDefault();
+  }
+};
+
+const handleMainTouchEnd = (event: TouchEvent) => {
+  if (!isMainSwiping.value || images.value.length <= 1) return;
+
+  mainTouchEndX.value = event.changedTouches[0].clientX;
+  mainTouchEndY.value = event.changedTouches[0].clientY;
+
+  const deltaX = mainTouchEndX.value - mainTouchStartX.value;
+  const deltaY = mainTouchEndY.value - mainTouchStartY.value;
+
+  // Minimum swipe mesafesi (50px)
+  const minSwipeDistance = 50;
+
+  // Yatay hareket dikey hareketten fazla olmalı
+  if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > minSwipeDistance) {
+    if (deltaX > 0) {
+      // Sağa swipe - önceki resim
+      prevImage();
+    } else {
+      // Sola swipe - sonraki resim  
+      nextImage();
+    }
+  }
+
+  isMainSwiping.value = false;
 };
 </script>
 

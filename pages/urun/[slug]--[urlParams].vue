@@ -8,15 +8,15 @@
 
         <div class="lg:grid lg:grid-cols-12 lg:gap-12">
           <!-- Ürün Görselleri -->
-          <div class="col-span-5" v-if="$mainState.isLoaded">
+          <div class="col-span-5 mt-6 lg:mt-0" v-if="$mainState.isLoaded">
             <div class="sticky top-24">
               <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages" />
             </div>
           </div>
-          <SkeletonProductGallery v-else class="col-span-5"></SkeletonProductGallery>
+          <SkeletonProductGallery v-else class="col-span-5 mt-6 lg:mt-0"></SkeletonProductGallery>
 
           <!-- Ürün Bilgileri -->
-          <div class="col-span-7">
+          <div class="col-span-7 mt-6 lg:mt-0">
             <div class="space-y-8">
               <!-- Ürün Başlığı -->
               <div>
@@ -28,21 +28,6 @@
               <!-- Ürün Varyasyonları -->
               <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
                 :product-state="productState" />
-
-              <!-- Marka Bilgisi -->
-              <div class="card inline-block">
-                <div class="card-body !py-3 !px-4">
-                  <div class="flex items-center space-x-3">
-                    <img src="/logo.jpg"
-                      class="w-10 h-10 object-contain rounded-lg border border-neutral-200 bg-white p-1"
-                      alt="Beyraha Logo">
-                    <div class="flex items-center space-x-2">
-                      <span class="font-semibold text-secondary-600">Beyraha</span>
-                      <UBadge color="orange" label="9.8" size="sm" />
-                    </div>
-                  </div>
-                </div>
-              </div>
 
               <!-- Öne Çıkan Bilgiler -->
               <div class="card">
