@@ -1,22 +1,33 @@
 <template>
-  <div class="standart-section-spacing">
+  <div class="section-spacing !pt-0">
     <div class="container">
       <!-- Breadcrumb -->
-      <UiCommonBreadcrumb class="mb-6" :links="breadcrumbLinks" />
+      <UiCommonBreadcrumb class="mb-8" :links="breadcrumbLinks" />
+
+      <!-- Sayfa Başlığı -->
+      <div v-if="slugsCat || query.searchWord" class="mb-8">
+        <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 mb-2">
+          <span v-if="query.searchWord">"{{ query.searchWord }}" için arama sonuçları</span>
+          <span v-else>{{ slugsCat?.label }}</span>
+        </h1>
+        <p v-if="slugsCat && !query.searchWord" class="text-neutral-600">
+          {{ slugsCat?.description || 'Kaliteli ürünlerimizi keşfedin' }}
+        </p>
+        <p v-else-if="query.searchWord" class="text-neutral-600">
+          {{ productState.products?.total || 0 }} ürün bulundu
+        </p>
+      </div>
     </div>
 
-    <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
-      :loading="loading" />
-    <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products" :loading="loading" />
+    <div class="container">
+      <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
+        :loading="loading" />
+      <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products"
+        :loading="loading" />
 
-    <div class="text-center mt-4 bg-slate-50 p-4 rounded-md" v-if="loading">Ürünler yükleniyor</div>
-    <!-- <div class="flex justify-center">
-      <div>
-        <UPagination v-model="query.page" :page-count="query.limit" :total="productState.products.total || 0" />
-      </div>
-    </div> -->
-    <div v-if="$mainState.isLoaded" id="finishProducts"></div>
-
+      <!-- Infinite Loading Trigger -->
+      <div v-if="$mainState.isLoaded" id="finishProducts"></div>
+    </div>
   </div>
 </template>
 
@@ -32,17 +43,23 @@ const catId = route.params.catId
 const isChangeRoute = ref(false)
 
 watch(() => router.currentRoute.value.path, (newVal, oldVal) => {
-
   console.log(newVal, oldVal)
   if (newVal != oldVal) {
     isChangeRoute.value = true
+
+    // Route değiştiğinde URL parametrelerindeki kategori ID'lerini güncelle
+    const newRoute = router.currentRoute.value
+    const newCategoryIds = newRoute.query.selectedCategoryIds
+
+    if (newCategoryIds && categoryState.categories.length > 0) {
+      categoryState.selectedCategories = []
+      categoryState.patchSelectedCategories(newCategoryIds)
+      categoryState.updateSelectedCategoriesWithFullData()
+    }
   }
 });
 
 const initCategoryIds = route.query.selectedCategoryIds
-if (initCategoryIds) {
-  categoryState.patchSelectedCategories(initCategoryIds)
-}
 
 const query = ref({
   searchWord: route.query.searchWord,
@@ -54,6 +71,8 @@ const query = ref({
 await useAsyncData('initDataProducts', async () => {
   try {
     categoryState.selectedCategories = []
+
+    // Önce ana kategoriyi ekle (eğer kategori sayfasındaysak)
     if ((catSlug && catId) && catSlug != 'arama') {
       categoryState.patchSelectedCategories(catId.toString(), false)
     }
@@ -66,6 +85,14 @@ await useAsyncData('initDataProducts', async () => {
       categoryState.getCategories(),
     ]);
 
+    // Kategoriler yüklendikten sonra seçili kategorilerin tam bilgilerini güncelle
+    categoryState.updateSelectedCategoriesWithFullData();
+
+    // URL'den gelen ek kategori ID'lerini işle
+    if (initCategoryIds) {
+      categoryState.patchSelectedCategories(initCategoryIds)
+      categoryState.updateSelectedCategoriesWithFullData()
+    }
 
     return [true, true];
   } catch (error) {
