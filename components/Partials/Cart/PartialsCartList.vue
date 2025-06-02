@@ -1,34 +1,35 @@
 <template>
   <div
-    class="bg-white rounded-xl border border-neutral-200 p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
-    <div class="flex space-x-4">
+    class="bg-white rounded-xl border border-neutral-200 p-3 shadow-sm hover:shadow-md transition-shadow duration-200 relative z-1">
+    <div class="flex space-x-3">
       <!-- Product Image -->
       <div class="flex-shrink-0">
         <NuxtLink v-if="props.item.image_path" :to="props.item.product_url" class="block">
           <NuxtImg width="80" height="80" fit="cover"
-            class="w-20 h-20 object-cover rounded-lg border border-neutral-200" :src="`cl/${props.item.image_path}`" />
+            class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-neutral-200"
+            :src="`cl/${props.item.image_path}`" />
         </NuxtLink>
         <div v-else
-          class="w-20 h-20 bg-neutral-100 rounded-lg border border-neutral-200 flex items-center justify-center">
-          <UIcon name="i-heroicons-photo" class="w-8 h-8 text-neutral-400" />
+          class="w-16 h-16 sm:w-20 sm:h-20 bg-neutral-100 rounded-lg border border-neutral-200 flex items-center justify-center">
+          <UIcon name="i-heroicons-photo" class="w-6 h-6 sm:w-8 sm:h-8 text-neutral-400" />
         </div>
       </div>
 
       <!-- Product Details -->
-      <div class="flex-1 min-w-0">
+      <div class="flex-1 min-w-0 flex flex-col">
         <!-- Product Name and Delete Button -->
         <div class="flex items-start justify-between mb-2">
           <NuxtLink :to="props.item.product_url"
-            class="text-sm font-medium text-neutral-900 hover:text-secondary-600 transition-colors duration-200 line-clamp-2 pr-2">
+            class="text-sm font-medium text-neutral-900 hover:text-secondary-600 transition-colors duration-200 line-clamp-2 pr-2 flex-1">
             {{ props.item.product_name }}
           </NuxtLink>
 
           <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-trash" size="xs"
-            color="red" variant="ghost" class="flex-shrink-0 hover:bg-red-50" />
+            color="red" variant="ghost" class="flex-shrink-0 hover:bg-red-50 ml-2" />
         </div>
 
         <!-- Variation Attributes -->
-        <div v-if="props.item.variation" class="space-y-1 mb-3">
+        <div v-if="props.item.variation" class="space-y-1 mb-2">
           <div v-for="(value, key) in props.item.variation.attributes" :key="key"
             class="flex items-center space-x-2 text-xs">
             <span class="font-medium text-neutral-600">{{ key }}:</span>
@@ -37,7 +38,7 @@
         </div>
 
         <!-- Custom Input Value -->
-        <div v-if="props.item.input_value?.label" class="mb-3">
+        <div v-if="props.item.input_value?.label" class="mb-2">
           <div class="flex items-center space-x-2 text-xs">
             <span class="font-medium text-neutral-600">{{ props.item.input_value.label }}:</span>
             <span class="text-neutral-800 bg-neutral-100 px-2 py-0.5 rounded-full">
@@ -48,12 +49,15 @@
         </div>
 
         <!-- Price and Counter -->
-        <div class="flex items-center justify-between">
-          <div>
+        <div class="mt-auto space-y-2">
+          <div class="flex">
             <PartialsProductPrice type="card" :sale-price="props.item.variation?.sale_price || props.item.sale_price"
               :price="props.item.variation?.price || props.item.price" />
           </div>
-          <PartialsCartItemCounter :cart-item="props.item" />
+
+          <div class="flex">
+            <PartialsCartItemCounter :cart-item="props.item" />
+          </div>
         </div>
       </div>
     </div>

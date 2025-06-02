@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200">
+        class="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200 relative z-1">
         <div class="lg:grid lg:grid-cols-3 gap-6 items-center">
             <!-- Sol Taraf - Ürün Bilgileri -->
             <div class="lg:col-span-2 flex space-x-4">
@@ -65,7 +65,7 @@
                 </div>
 
                 <!-- Miktar Kontrolü -->
-                <div class="bg-neutral-50 rounded-full border border-neutral-200 p-1">
+                <div class="bg-neutral-50 rounded-full  p-1">
                     <PartialsCartItemCounter :cart-item="props.item" />
                 </div>
 

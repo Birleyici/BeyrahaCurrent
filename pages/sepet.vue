@@ -26,7 +26,8 @@
             <div class="lg:col-span-1 mt-8 lg:mt-0">
               <PartialsCartExtre>
                 <template #button>
-                  <div class="mt-2 bottom-0 fixed md:!relative bg-white w-full right-0 left-0 p-4 md:p-0">
+                  <!-- Desktop Button -->
+                  <div class="hidden md:block mt-2">
                     <UButton to="/auth?callback=/odeme" color="secondary" class="w-full flex justify-center font-bold"
                       size="lg" variant="solid">
                       Ödeme Yap
@@ -35,6 +36,27 @@
                 </template>
               </PartialsCartExtre>
             </div>
+
+            <!-- Mobile Fixed Button - Teleported to body -->
+            <ClientOnly>
+              <Teleport to="body">
+                <div v-if="cartState.cart.length > 0"
+                  class="md:hidden fixed bottom-0 left-0 right-0 bg-white p-4 shadow-2xl border-t border-neutral-200 flex items-center justify-between"
+                  style="z-index: 999999;">
+                  <!-- Toplam Tutar -->
+                  <div class="flex flex-col">
+                    <span class="text-sm text-neutral-500">Toplam</span>
+                    <span class="text-lg font-bold text-neutral-900">{{ formatPrice(cartState.cartTotalAmount) }}</span>
+                  </div>
+
+                  <!-- Ödeme Butonu -->
+                  <UButton to="/auth?callback=/odeme" color="secondary" class="flex justify-center font-bold px-6"
+                    size="lg" variant="solid">
+                    Ödeme Yap
+                  </UButton>
+                </div>
+              </Teleport>
+            </ClientOnly>
           </div>
 
           <!-- Boş Sepet -->
@@ -54,7 +76,7 @@
       </div>
 
       <!-- İlginizi Çekebilir -->
-      <div v-if="cartState.cart.length > 0" class="section-spacing">
+      <div v-if="cartState.cart.length > 0" class="section-spacing pb-20 md:pb-0">
         <UiSlidesProductSlide title="İlginizi çekebilir" id="ilginizi_cekebilir" :filters="{ piece: 8 }" />
       </div>
     </ClientOnly>

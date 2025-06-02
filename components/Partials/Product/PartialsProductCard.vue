@@ -20,7 +20,7 @@
       <div class="text-center">
         <NuxtLink :to="productUrl" class="block">
           <h3
-            class="font-medium text-neutral-900 group-hover:text-secondary-600 transition-colors duration-200 line-clamp-2">
+            class="font-medium text-neutral-900 group-hover:text-secondary-600 transition-colors duration-200 product-name-clamp">
             {{ props.product.name }}
           </h3>
         </NuxtLink>
@@ -64,3 +64,15 @@ const imgPreload = computed(() => {
   return props.lcp && (props.index === 0 || props.index === 1) ? true : false
 })
 </script>
+
+<style scoped>
+.product-name-clamp {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.4;
+  max-height: calc(1.4em * 2);
+}
+</style>
