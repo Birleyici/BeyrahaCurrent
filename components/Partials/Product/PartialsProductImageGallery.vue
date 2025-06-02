@@ -1,67 +1,161 @@
 <template>
-  <div class="max-w-[800px] mx-auto">
-    <!-- Büyük Resim Gösterimi -->
-    <div class="relative overflow-hidden" @touchstart="onTouchStart" @touchmove="onTouchMove" @touchend="onTouchEnd"
-      @mousedown="onMouseDown" @mousemove="onMouseMove" @mouseup="onMouseUp" @mouseleave="onMouseUp">
-      <!-- Masaüstü için Sol Ok -->
-      <button v-if="!isMobile"
-        class="absolute top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white text-[30px] p-[10px] cursor-pointer z-10 left-[10px]"
-        @click="prevImage">
-        ❮
-      </button>
-      <!-- Geçiş Efektiyle Resim -->
-      <transition name="image-fade" mode="out-in">
-        <NuxtImg :key="currentImage.path" :src="'cl/' + currentImage.path" :alt="currentImage.alt"
-          class="w-full h-auto cursor-pointer object-cover mx-auto max-w-[380px] md:max-w-full md:rounded-md"
-          @click="openFullscreen" format="webp" quality="90" :width="600" :height="900" fit="cover" />
-      </transition>
+  <div class="w-full max-w-2xl mx-auto -mt-8 md:mt-0">
+    <!-- Ana Resim Alanı -->
+    <div class="relative group">
+      <!-- Ana Resim -->
+      <div class="relative aspect-[3/4] bg-neutral-100 rounded-2xl overflow-hidden">
+        <div class="flex transition-transform duration-500 ease-in-out h-full"
+          :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
+          <div v-for="(image, index) in images" :key="index" class="w-full h-full flex-shrink-0">
+            <NuxtImg :src="'cl/' + image.path" :alt="image.alt"
+              class="w-full h-full object-cover cursor-zoom-in transition-transform duration-300 group-hover:scale-105"
+              @click="openFullscreen" format="webp" quality="90" :width="600" :height="800" fit="cover" />
+          </div>
+        </div>
 
-      <!-- Masaüstü için Sağ Ok -->
-      <button v-if="!isMobile"
-        class="absolute top-1/2 transform -translate-y-1/2 bg-black bg-opacity-50 text-white text-[30px] p-[10px] cursor-pointer z-10 right-[10px]"
-        @click="nextImage">
-        ❯
-      </button>
-    </div>
+        <!-- Zoom İkonu -->
+        <div
+          class="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer"
+          @click="openFullscreen">
+          <div class="bg-black/50 backdrop-blur-sm rounded-full p-2 hover:bg-black/60 transition-colors duration-200">
+            <UIcon name="i-heroicons-magnifying-glass-plus" class="w-5 h-5 text-white" />
+          </div>
+        </div>
 
-    <!-- Mobil Nokta İndikatörleri -->
-    <div v-if="isMobile" class="text-center mt-[10px]">
-      <span v-for="(image, index) in images" :key="index" class="inline-block w-[10px] h-[10px] rounded-full mx-[5px]"
-        :class="index === currentIndex ? 'bg-orange-500 !w-4' : 'bg-gray-400'"></span>
-    </div>
+        <!-- Navigasyon Okları (Sadece birden fazla resim varsa) -->
+        <template v-if="images.length > 1">
+          <!-- Sol Ok -->
+          <button @click="prevImage"
+            class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110">
+            <UIcon name="i-heroicons-chevron-left" class="w-5 h-5 text-neutral-700" />
+          </button>
 
-    <!-- Masaüstü Küçük Resimler -->
-    <div v-else class="flex items-center justify-center mt-[10px]">
-      <button v-if="showThumbnailNav" class="cursor-pointer text-[30px] text-black px-[10px]"
-        @click="prevThumbnailPage">
-        ❮
-      </button>
-      <div class="flex flex-nowrap overflow-hidden w-full" ref="thumbnailsContainer">
-        <NuxtImg v-for="(image, index) in images" :key="index" :src="'cl/' + image.path" :alt="image.alt"
-          class="flex-shrink-0 w-[60px] h-[90px] object-cover mr-[10px] cursor-pointer border-2 rounded-md"
-          :class="index === currentIndex ? 'border-orange-500' : 'border-transparent'" @click="goToImage(index)"
-          format="webp" quality="50" :width="60" :height="90" fit="cover" />
-      </div>
-      <button v-if="showThumbnailNav" class="cursor-pointer text-[30px] text-black px-[10px]"
-        @click="nextThumbnailPage">
-        ❯
-      </button>
-    </div>
+          <!-- Sağ Ok -->
+          <button @click="nextImage"
+            class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110">
+            <UIcon name="i-heroicons-chevron-right" class="w-5 h-5 text-neutral-700" />
+          </button>
+        </template>
 
-    <!-- Tam Ekran Modal -->
-    <transition name="fade">
-      <div v-if="isFullscreen" class="fixed inset-0 w-full h-full bg-black bg-opacity-90 z-[1000] touch-action-none">
-        <UButton @click="closeFullscreen" color="gray" variant="soft" class="absolute right-4 top-4 z-10"
-          icon="i-heroicons-x-mark" />
-        <div class="flex items-center justify-center h-full overflow-hidden" @touchstart="onFullscreenTouchStart"
-          @touchmove="onFullscreenTouchMove" @touchend="onFullscreenTouchEnd" @mousedown="onFullscreenMouseDown"
-          @mousemove="onFullscreenMouseMove" @mouseup="onFullscreenMouseUp" @mouseleave="onFullscreenMouseLeave">
-          <NuxtImg :src="'cl/' + currentImage.path" :alt="currentImage.alt" ref="fullscreenImage"
-            :style="fullscreenImageStyle" @click="toggleZoom" format="webp" quality="90" fit="contain"
-            class="w-auto h-full max-w-none max-h-none object-contain" />
+        <!-- Resim Sayacı -->
+        <div v-if="images.length > 1" class="absolute bottom-4 right-4">
+          <div class="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
+            <span class="text-white text-sm font-medium">{{ currentIndex + 1 }} / {{ images.length }}</span>
+          </div>
         </div>
       </div>
-    </transition>
+    </div>
+
+    <!-- Thumbnail Grid (Sadece masaüstünde görünür) -->
+    <div v-if="images.length > 1" class="mt-4 hidden md:block">
+      <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
+        <button v-for="(image, index) in images" :key="index" @click="goToImage(index)" :class="{
+          'ring-2 ring-secondary-500 ring-offset-2': index === currentIndex,
+          'hover:ring-2 hover:ring-neutral-300 hover:ring-offset-1': index !== currentIndex
+        }"
+          class="relative aspect-square rounded-lg overflow-hidden bg-neutral-100 transition-all duration-300 hover:scale-105">
+          <NuxtImg :src="'cl/' + image.path" :alt="image.alt" class="w-full h-full object-cover" format="webp"
+            quality="60" :width="120" :height="120" fit="cover" />
+        </button>
+      </div>
+    </div>
+
+    <!-- Navigate Dots (Sadece mobilde görünür) -->
+    <div v-if="images.length > 1" class="mt-4 flex justify-center md:hidden">
+      <div class="flex space-x-2">
+        <button v-for="(image, index) in images" :key="index" @click="goToImage(index)" :class="{
+          'bg-secondary-500 scale-110': index === currentIndex,
+          'bg-neutral-300 hover:bg-neutral-400': index !== currentIndex
+        }" class="w-3 h-3 rounded-full transition-all duration-300 hover:scale-105" />
+      </div>
+    </div>
+
+    <!-- Fullscreen Modal -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div v-if="isFullscreen" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm" @click="closeFullscreen">
+          <!-- Modal Header -->
+          <div class="absolute top-0 left-0 right-0 z-10 p-4">
+            <div class="flex items-center justify-between">
+              <div class="text-white">
+                <span class="text-sm font-medium">{{ currentIndex + 1 }} / {{ images.length }}</span>
+              </div>
+              <button @click="closeFullscreen"
+                class="bg-white/10 backdrop-blur-sm rounded-full p-2 hover:bg-white/20 transition-colors duration-200">
+                <UIcon name="i-heroicons-x-mark" class="w-6 h-6 text-white" />
+              </button>
+            </div>
+          </div>
+
+          <!-- Modal Content -->
+          <div class="flex items-center justify-center h-full p-4 pt-16 pb-16">
+            <div ref="imageContainer" class="relative w-full h-full max-w-none overflow-hidden touch-none"
+              style="touch-action: none;" @wheel="handleWheel" @mousedown="handleMouseDown" @mousemove="handleMouseMove"
+              @mouseup="handleMouseUp" @mouseleave="handleMouseUp" @touchstart="handleTouchStart"
+              @touchmove="handleTouchMove" @touchend="handleTouchEnd">
+              <NuxtImg ref="zoomImage" :src="'cl/' + currentImage.path" :alt="currentImage.alt" :style="imageStyle"
+                class="w-full h-full object-contain rounded-lg cursor-grab touch-none" :class="{
+                  'cursor-grabbing': isDragging,
+                  'transition-transform duration-200': !isDragging && zoomLevel === 1,
+                  'transition-none': isDragging || zoomLevel > 1
+                }" format="webp" quality="95" @click.stop="handleImageClick" @dragstart.prevent />
+
+              <!-- Zoom Kontrolleri -->
+              <div class="absolute bottom-4 right-4 flex flex-col space-y-3">
+                <button @click.stop="zoomIn" @touchend.stop="zoomIn"
+                  class="bg-black/50 backdrop-blur-sm rounded-full p-3 hover:bg-black/70 transition-colors duration-200 touch-none min-w-[48px] min-h-[48px] flex items-center justify-center"
+                  style="touch-action: manipulation;">
+                  <UIcon name="i-heroicons-plus" class="w-6 h-6 text-white" />
+                </button>
+                <button @click.stop="zoomOut" @touchend.stop="zoomOut"
+                  class="bg-black/50 backdrop-blur-sm rounded-full p-3 hover:bg-black/70 transition-colors duration-200 touch-none min-w-[48px] min-h-[48px] flex items-center justify-center"
+                  style="touch-action: manipulation;">
+                  <UIcon name="i-heroicons-minus" class="w-6 h-6 text-white" />
+                </button>
+                <button @click.stop="resetZoom" @touchend.stop="resetZoom"
+                  class="bg-black/50 backdrop-blur-sm rounded-full p-3 hover:bg-black/70 transition-colors duration-200 touch-none min-w-[48px] min-h-[48px] flex items-center justify-center"
+                  style="touch-action: manipulation;">
+                  <UIcon name="i-heroicons-arrow-path" class="w-6 h-6 text-white" />
+                </button>
+              </div>
+
+              <!-- Zoom Seviyesi Göstergesi -->
+              <div v-if="zoomLevel > 1" class="absolute top-4 left-4">
+                <div class="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
+                  <span class="text-white text-sm font-medium">{{ Math.round(zoomLevel * 100) }}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Modal Navigation -->
+          <template v-if="images.length > 1">
+            <button @click.stop="prevImage"
+              class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm rounded-full p-3 hover:bg-white/20 transition-all duration-200">
+              <UIcon name="i-heroicons-chevron-left" class="w-6 h-6 text-white" />
+            </button>
+
+            <button @click.stop="nextImage"
+              class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 backdrop-blur-sm rounded-full p-3 hover:bg-white/20 transition-all duration-200">
+              <UIcon name="i-heroicons-chevron-right" class="w-6 h-6 text-white" />
+            </button>
+          </template>
+
+          <!-- Modal Thumbnails -->
+          <div v-if="images.length > 1" class="absolute bottom-4 left-1/2 -translate-x-1/2">
+            <div class="flex space-x-2 bg-black/30 backdrop-blur-sm rounded-full p-2">
+              <button v-for="(image, index) in images" :key="index" @click.stop="goToImage(index)" :class="{
+                'ring-2 ring-white': index === currentIndex,
+                'opacity-60 hover:opacity-100': index !== currentIndex
+              }" class="w-12 h-12 rounded-lg overflow-hidden transition-all duration-200">
+                <NuxtImg :src="'cl/' + image.path" :alt="image.alt" class="w-full h-full object-cover" format="webp"
+                  quality="50" :width="48" :height="48" fit="cover" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
@@ -70,10 +164,10 @@ const props = defineProps(['images', 'alt']);
 
 const images = computed(() => {
   return props.images && props.images.length > 0
-    ? props.images.map((i) => ({
+    ? props.images.map((i: any) => ({
       ...i,
       path: i.path || '/img-placeholder.jpg',
-      alt: props.alt || 'Image',
+      alt: props.alt || 'Ürün Resmi',
     }))
     : [
       {
@@ -88,62 +182,22 @@ const images = computed(() => {
 const currentIndex = ref(0);
 const currentImage = computed(() => images.value[currentIndex.value]);
 
-// Cihaz algılama
-const { isMobile } = useDevice();
+const isFullscreen = ref(false);
 
-// Swipe fonksiyonelliği
-let startX = 0;
-let isSwiping = false;
+const zoomLevel = ref(1);
+const panX = ref(0);
+const panY = ref(0);
+const isDragging = ref(false);
+const lastPanX = ref(0);
+const lastPanY = ref(0);
+const dragStartX = ref(0);
+const dragStartY = ref(0);
 
-const onTouchStart = (event) => {
-  if (event.touches.length === 1) {
-    startX = event.touches[0].clientX;
-    isSwiping = true;
-  }
-};
+const lastTouchDistance = ref(0);
+const initialTouchDistance = ref(0);
 
-const onTouchMove = (event) => {
-  if (isSwiping) {
-    const deltaX = event.touches[0].clientX - startX;
-    if (deltaX > 50) {
-      // Sağa kaydırma
-      prevImage();
-      isSwiping = false;
-    } else if (deltaX < -50) {
-      // Sola kaydırma
-      nextImage();
-      isSwiping = false;
-    }
-  }
-};
-
-const onTouchEnd = () => {
-  isSwiping = false;
-};
-
-const onMouseDown = (event) => {
-  startX = event.clientX;
-  isSwiping = true;
-};
-
-const onMouseMove = (event) => {
-  if (isSwiping) {
-    const deltaX = event.clientX - startX;
-    if (deltaX > 50) {
-      // Sağa kaydırma
-      prevImage();
-      isSwiping = false;
-    } else if (deltaX < -50) {
-      // Sola kaydırma
-      nextImage();
-      isSwiping = false;
-    }
-  }
-};
-
-const onMouseUp = () => {
-  isSwiping = false;
-};
+const imageContainer = ref<HTMLElement | null>(null);
+const zoomImage = ref<HTMLElement | null>(null);
 
 const prevImage = () => {
   currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length;
@@ -153,227 +207,250 @@ const nextImage = () => {
   currentIndex.value = (currentIndex.value + 1) % images.value.length;
 };
 
-const goToImage = (index) => {
+const goToImage = (index: number) => {
   currentIndex.value = index;
 };
 
-// Tam ekran fonksiyonelliği
-const isFullscreen = ref(false);
-const isZoomed = ref(false);
-const zoomScale = ref(1);
-const panX = ref(0);
-const panY = ref(0);
-let isPanning = false;
-let panStartX = 0;
-let panStartY = 0;
-
 const openFullscreen = () => {
   isFullscreen.value = true;
-  isZoomed.value = false;
-  zoomScale.value = 1;
-  panX.value = 0;
-  panY.value = 0;
+  document.body.style.overflow = 'hidden';
 };
 
 const closeFullscreen = () => {
   isFullscreen.value = false;
-  isZoomed.value = false;
-  zoomScale.value = 1;
-  panX.value = 0;
-  panY.value = 0;
+  document.body.style.overflow = '';
+  resetZoom();
 };
 
-const toggleZoom = (clientX = null, clientY = null) => {
-  if (isZoomed.value) {
-    // Zoom'u sıfırla
-    zoomScale.value = 1;
-    panX.value = 0;
-    panY.value = 0;
-    isZoomed.value = false;
-  } else {
-    // Yakınlaştır
-    zoomScale.value = 2;
-    isZoomed.value = true;
-    if (clientX !== null && clientY !== null) {
-      // Dokunma noktasına göre pan değerlerini ayarla
-      const img = fullscreenImage.value?.$el || fullscreenImage.value?.$img;
-      if (img) {
-        const rect = img.getBoundingClientRect();
-        const offsetX = clientX - rect.left - rect.width / 2;
-        const offsetY = clientY - rect.top - rect.height / 2;
-
-        panX.value = -offsetX * (zoomScale.value - 1);
-        panY.value = -offsetY * (zoomScale.value - 1);
-
-        limitPan();
-      }
-    } else {
-      panX.value = 0;
-      panY.value = 0;
-    }
-  }
-};
-
-const fullscreenImageStyle = computed(() => ({
-  transform: `scale(${zoomScale.value}) translate(${panX.value / zoomScale.value}px, ${panY.value / zoomScale.value
-    }px)`,
-  cursor: isPanning ? 'grabbing' : isZoomed.value ? 'grab' : 'auto',
-  transition: 'none', // Transition'ı kaldırdık
-  willChange: 'transform', // Donanım hızlandırma için
-}));
-
-const onFullscreenMouseDown = (event) => {
-  if (!isZoomed.value) return;
-  isPanning = true;
-  panStartX = event.clientX - panX.value;
-  panStartY = event.clientY - panY.value;
-};
-
-const onFullscreenMouseMove = (event) => {
-  if (isMobile.value) return; // Mobil cihazlarda işlem yapma
+const handleKeydown = (event: KeyboardEvent) => {
   if (!isFullscreen.value) return;
 
-  // Her fare hareketinde yakınlaştırmayı etkinleştir
-  isZoomed.value = true;
-  zoomScale.value = 2; // Yakınlaştırma seviyesi
-
-  const rect = event.currentTarget.getBoundingClientRect();
-  const offsetX = event.clientX - rect.left - rect.width / 2;
-  const offsetY = event.clientY - rect.top - rect.height / 2;
-
-  panX.value = -offsetX * (zoomScale.value - 1);
-  panY.value = -offsetY * (zoomScale.value - 1);
-
-  limitPan();
-};
-
-
-const onFullscreenMouseLeave = () => {
-  if (isMobile.value) return;
-
-  // Yakınlaştırmayı sıfırla
-  isZoomed.value = false;
-  zoomScale.value = 1;
-  panX.value = 0;
-  panY.value = 0;
-};
-
-const onFullscreenMouseUp = () => {
-  isPanning = false;
-};
-
-const onFullscreenTouchStart = (event) => {
-  if (event.touches.length === 1) {
-    if (!isZoomed.value) {
-      // Yakınlaştırmayı başlat ve pan değerlerini ayarla
-      toggleZoom(event.touches[0].clientX, event.touches[0].clientY);
-    }
-    isPanning = true;
-    panStartX = event.touches[0].clientX - panX.value;
-    panStartY = event.touches[0].clientY - panY.value;
+  switch (event.key) {
+    case 'Escape':
+      closeFullscreen();
+      break;
+    case 'ArrowLeft':
+      prevImage();
+      break;
+    case 'ArrowRight':
+      nextImage();
+      break;
   }
 };
 
-const onFullscreenTouchMove = (event) => {
-  if (!isPanning) return;
-  panX.value = event.touches[0].clientX - panStartX;
-  panY.value = event.touches[0].clientY - panStartY;
-  limitPan();
+onMounted(() => {
+  document.addEventListener('keydown', handleKeydown);
+});
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeydown);
+  document.body.style.overflow = '';
+});
+
+watch(
+  () => props.images,
+  () => {
+    currentIndex.value = 0;
+  }
+);
+
+// Computed properties
+const imageStyle = computed(() => ({
+  transform: `scale(${zoomLevel.value}) translate(${panX.value}px, ${panY.value}px)`,
+  transformOrigin: 'center center'
+}));
+
+// Zoom functions
+const zoomIn = (event?: Event) => {
+  if (event) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+  zoomLevel.value = Math.min(zoomLevel.value * 1.5, 5)
+  limitPan()
+}
+
+const zoomOut = (event?: Event) => {
+  if (event) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+  zoomLevel.value = Math.max(zoomLevel.value / 1.5, 1)
+  if (zoomLevel.value === 1) {
+    panX.value = 0
+    panY.value = 0
+  } else {
+    limitPan()
+  }
+}
+
+const resetZoom = (event?: Event) => {
+  if (event) {
+    event.preventDefault()
+    event.stopPropagation()
+  }
+  zoomLevel.value = 1
+  panX.value = 0
+  panY.value = 0
+}
+
+// Mouse events
+const handleMouseDown = (event: MouseEvent) => {
+  if (zoomLevel.value > 1) {
+    isDragging.value = true;
+    dragStartX.value = event.clientX - panX.value;
+    dragStartY.value = event.clientY - panY.value;
+    event.preventDefault();
+  }
 };
 
-const onFullscreenTouchEnd = () => {
-  isPanning = false;
+const handleMouseMove = (event: MouseEvent) => {
+  if (isDragging.value && zoomLevel.value > 1) {
+    panX.value = event.clientX - dragStartX.value;
+    panY.value = event.clientY - dragStartY.value;
+    limitPan();
+  }
 };
 
+const handleMouseUp = () => {
+  isDragging.value = false;
+};
+
+const handleImageClick = (event: MouseEvent) => {
+  if (zoomLevel.value === 1) {
+    // Tıklanan noktaya zoom yap
+    const rect = (event.target as HTMLElement).getBoundingClientRect();
+    const x = event.clientX - rect.left - rect.width / 2;
+    const y = event.clientY - rect.top - rect.height / 2;
+
+    zoomLevel.value = 2;
+    panX.value = -x * 0.5;
+    panY.value = -y * 0.5;
+    limitPan();
+  }
+};
+
+// Wheel zoom
+const handleWheel = (event: WheelEvent) => {
+  event.preventDefault();
+  const delta = event.deltaY > 0 ? 0.9 : 1.1;
+  const newZoom = Math.min(Math.max(zoomLevel.value * delta, 1), 5);
+
+  if (newZoom !== zoomLevel.value) {
+    const rect = imageContainer.value?.getBoundingClientRect();
+    if (rect) {
+      const x = event.clientX - rect.left - rect.width / 2;
+      const y = event.clientY - rect.top - rect.height / 2;
+
+      const zoomRatio = newZoom / zoomLevel.value;
+      panX.value = panX.value * zoomRatio - x * (zoomRatio - 1);
+      panY.value = panY.value * zoomRatio - y * (zoomRatio - 1);
+
+      zoomLevel.value = newZoom;
+
+      if (zoomLevel.value === 1) {
+        panX.value = 0;
+        panY.value = 0;
+      } else {
+        limitPan();
+      }
+    }
+  }
+};
+
+// Touch events for mobile
+const getTouchDistance = (touches: TouchList) => {
+  const dx = touches[0].clientX - touches[1].clientX;
+  const dy = touches[0].clientY - touches[1].clientY;
+  return Math.sqrt(dx * dx + dy * dy);
+};
+
+const handleTouchStart = (event: TouchEvent) => {
+  if (event.touches.length === 2) {
+    // Pinch zoom başlangıcı
+    initialTouchDistance.value = getTouchDistance(event.touches);
+    lastTouchDistance.value = initialTouchDistance.value;
+    isDragging.value = false; // Pinch sırasında drag'i devre dışı bırak
+  } else if (event.touches.length === 1 && zoomLevel.value > 1) {
+    // Single touch drag başlangıcı
+    isDragging.value = true;
+    dragStartX.value = event.touches[0].clientX - panX.value;
+    dragStartY.value = event.touches[0].clientY - panY.value;
+    event.preventDefault();
+  }
+};
+
+const handleTouchMove = (event: TouchEvent) => {
+  if (event.touches.length === 2) {
+    // Pinch zoom
+    event.preventDefault();
+    const currentDistance = getTouchDistance(event.touches);
+    const scale = currentDistance / lastTouchDistance.value;
+    const newZoom = Math.min(Math.max(zoomLevel.value * scale, 1), 5);
+
+    if (Math.abs(newZoom - zoomLevel.value) > 0.01) { // Minimum değişim eşiği
+      zoomLevel.value = newZoom;
+      lastTouchDistance.value = currentDistance;
+
+      if (zoomLevel.value === 1) {
+        panX.value = 0;
+        panY.value = 0;
+      } else {
+        limitPan();
+      }
+    }
+  } else if (event.touches.length === 1 && isDragging.value && zoomLevel.value > 1) {
+    // Single touch drag
+    event.preventDefault();
+    const newPanX = event.touches[0].clientX - dragStartX.value;
+    const newPanY = event.touches[0].clientY - dragStartY.value;
+
+    // Sadece belirli bir mesafe hareket edildiğinde güncelle
+    const deltaX = Math.abs(newPanX - panX.value);
+    const deltaY = Math.abs(newPanY - panY.value);
+
+    if (deltaX > 2 || deltaY > 2) { // Minimum hareket eşiği
+      panX.value = newPanX;
+      panY.value = newPanY;
+      limitPan();
+    }
+  }
+};
+
+const handleTouchEnd = (event: TouchEvent) => {
+  if (event.touches.length === 0) {
+    isDragging.value = false;
+  } else if (event.touches.length === 1 && !isDragging.value) {
+    // Pinch'ten single touch'a geçiş
+    if (zoomLevel.value > 1) {
+      isDragging.value = true;
+      dragStartX.value = event.touches[0].clientX - panX.value;
+      dragStartY.value = event.touches[0].clientY - panY.value;
+    }
+  }
+};
+
+// Pan limiting
 const limitPan = () => {
-  const img = fullscreenImage.value?.$el || fullscreenImage.value?.$img;
-  if (!img) return;
+  if (!imageContainer.value) return;
 
-  const rect = img.getBoundingClientRect();
-  const maxPanX = ((zoomScale.value - 1) * rect.width) / 2;
-  const maxPanY = ((zoomScale.value - 1) * rect.height) / 2;
+  const containerRect = imageContainer.value.getBoundingClientRect();
+  const maxPanX = (containerRect.width * (zoomLevel.value - 1)) / 2;
+  const maxPanY = (containerRect.height * (zoomLevel.value - 1)) / 2;
 
   panX.value = Math.min(maxPanX, Math.max(-maxPanX, panX.value));
   panY.value = Math.min(maxPanY, Math.max(-maxPanY, panY.value));
 };
-
-const fullscreenImage = ref(null);
-
-onMounted(() => {
-  watch(isFullscreen, (newVal) => {
-    if (newVal) {
-      document.body.classList.add('no-scroll');
-    } else {
-      document.body.classList.remove('no-scroll');
-    }
-  });
-});
-
-// Thumbnail navigasyonu
-const thumbnailsContainer = ref(null);
-const showThumbnailNav = computed(() => {
-  if (!thumbnailsContainer.value) return false;
-  const container = thumbnailsContainer.value;
-  return container.scrollWidth > container.clientWidth;
-});
-
-const prevThumbnailPage = () => {
-  if (!thumbnailsContainer.value) return;
-  const container = thumbnailsContainer.value;
-  const scrollAmount = container.clientWidth;
-  container.scrollLeft -= scrollAmount;
-};
-
-const nextThumbnailPage = () => {
-  if (!thumbnailsContainer.value) return;
-  const container = thumbnailsContainer.value;
-  const scrollAmount = container.clientWidth;
-  container.scrollLeft += scrollAmount;
-};
-
-onBeforeUnmount(() => {
-  // Bileşen kaldırıldığında sınıfı temizleyin
-  document.body.classList.remove('no-scroll');
-});
-
-
-watch(
-  () => props.images,
-  (newImages, oldImages) => {
-    currentIndex.value = 0;
-  }
-);
 </script>
 
 <style scoped>
-/* Geçiş efektleri için özel CSS */
-.image-fade-enter-active,
-.image-fade-leave-active {
-  transition: opacity 0.1s;
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
 }
 
-.image-fade-enter-from,
-.image-fade-leave-to {
+.modal-enter-from,
+.modal-leave-to {
   opacity: 0;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-  transition: opacity 0.3s;
-}
-
-.fade-enter-from,
-.fade-leave-to {
-  opacity: 0;
-}
-
-/* touch-action özelliği için özel CSS */
-.touch-action-none {
-  touch-action: none;
-}
-
-/* Scroll'u engellemek için */
-.no-scroll {
-  overflow: hidden;
 }
 </style>

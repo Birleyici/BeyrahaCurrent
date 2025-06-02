@@ -1,42 +1,55 @@
 <template>
   <USlideover side="left" v-model="model">
-    <UCard class="flex flex-col flex-1 " :ui="{
+    <UCard class="flex flex-col flex-1" :ui="{
       body: { base: 'flex-1' },
       ring: '',
       divide: 'divide-y divide-gray-100 dark:divide-gray-800',
     }">
       <template #header>
-        <div class="flex justify-between">
+        <div class="flex justify-between items-center">
           <UButton v-if="currentLevel > 0" @click="goBack" icon="i-heroicons-chevron-left" size="sm" color="gray"
             variant="link" label="Geri" class="!p-0" :trailing="false" />
-          <p v-else class="font-medium">Menü</p>
+          <h3 v-else class="text-lg font-semibold text-neutral-900">Kategoriler</h3>
           <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
             @click="model = false" />
         </div>
       </template>
 
-      <div class="relative w-full h-full  scroll-container">
+      <div class="relative w-full h-full scroll-container">
         <div v-for="(level, index) in nestedMenus" :key="index" :class="{
           'absolute top-0 left-0 w-full h-full pr-2': true,
           'translate-x-full': index > currentLevel,
           'translate-x-0': index === currentLevel,
           '-translate-x-full': index < currentLevel,
         }">
-          <ul class="list-none">
+          <ul class="list-none space-y-2">
             <li v-for="(item, idx) in level" :key="idx"
-              class="grid grid-cols-3 items-center  mb-2 bg-slate-100 hover:bg-slate-50 rounded-l-full cursor-pointer select-none duration-200">
+              class="group relative overflow-hidden rounded-xl bg-white border border-neutral-200 hover:border-secondary-300 hover:shadow-md transition-all duration-300 cursor-pointer">
 
-              <NuxtLink :to="`/${item.slug}-a${item.id}`" class="col-span-2 flex space-x-2">
-                <NuxtImg :to="`/${item.slug}-a${item.id}`" :src="'cl/' + item.icon" width="60px"
-                  class="border  object-cover object-top w-14 h-14 border-orange-500 rounded-full p-1 hover:p-0 duration-200 " />
-                <p class="col-span-2 p-4 font-medium">{{ item.name }}</p>
+              <NuxtLink :to="`/${item.slug}-a${item.id}`" class="flex items-center justify-between p-4 w-full">
+                <div class="flex items-center space-x-3">
+                  <!-- İkon yerine modern bir indicator -->
+                  <div
+                    class="w-3 h-3 rounded-full bg-gradient-to-r from-secondary-400 to-secondary-600 group-hover:scale-110 transition-transform duration-200">
+                  </div>
+                  <span
+                    class="font-medium text-neutral-800 group-hover:text-secondary-700 transition-colors duration-200">
+                    {{ item.name }}
+                  </span>
+                </div>
+
+                <!-- Alt kategori varsa ok ikonu -->
+                <div v-if="item.children" @click.prevent="() => handleClick(item, idx, index)"
+                  class="flex items-center justify-center w-8 h-8 rounded-full bg-neutral-100 group-hover:bg-secondary-100 transition-colors duration-200">
+                  <UIcon name="i-heroicons-chevron-right"
+                    class="w-4 h-4 text-neutral-600 group-hover:text-secondary-600" />
+                </div>
               </NuxtLink>
 
-              <div v-if="item.children" @click="() => handleClick(item, idx, index)"
-                class="bg-slate-50 p-4 h-full text-right">
-                <UIcon name="i-heroicons-arrow-right" />
+              <!-- Hover efekti için gradient overlay -->
+              <div
+                class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
               </div>
-
             </li>
           </ul>
         </div>

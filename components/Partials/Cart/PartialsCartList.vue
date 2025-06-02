@@ -1,44 +1,61 @@
 <template>
-  <div class="my-2 border rounded-md p-1 last:border-b-0 border-dashed">
+  <div
+    class="bg-white rounded-xl border border-neutral-200 p-4 shadow-sm hover:shadow-md transition-shadow duration-200">
     <div class="flex space-x-4">
       <!-- Product Image -->
-      <NuxtLink v-if="props.item.image_path" :to="props.item.product_url">
-        <NuxtImg width="80" height="120" fit="cover" class="object-cover rounded-md"
-          :src="`cl/${props.item.image_path}`" />
-      </NuxtLink>
-      <img class="w-[70px] h-[70px] rounded-md" src="/img-placeholder.jpg" v-else>
-      <div class="w-full">
+      <div class="flex-shrink-0">
+        <NuxtLink v-if="props.item.image_path" :to="props.item.product_url" class="block">
+          <NuxtImg width="80" height="80" fit="cover"
+            class="w-20 h-20 object-cover rounded-lg border border-neutral-200" :src="`cl/${props.item.image_path}`" />
+        </NuxtLink>
+        <div v-else
+          class="w-20 h-20 bg-neutral-100 rounded-lg border border-neutral-200 flex items-center justify-center">
+          <UIcon name="i-heroicons-photo" class="w-8 h-8 text-neutral-400" />
+        </div>
+      </div>
+
+      <!-- Product Details -->
+      <div class="flex-1 min-w-0">
         <!-- Product Name and Delete Button -->
-        <div class="flex items-start space-x-2 justify-between w-full">
-          <NuxtLink :to="props.item.product_url" class="text-sm font-medium">{{ props.item.product_name }}</NuxtLink>
+        <div class="flex items-start justify-between mb-2">
+          <NuxtLink :to="props.item.product_url"
+            class="text-sm font-medium text-neutral-900 hover:text-secondary-600 transition-colors duration-200 line-clamp-2 pr-2">
+            {{ props.item.product_name }}
+          </NuxtLink>
 
-          <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-x-mark" size="xs"
-            color="red" square :ui="{ rounded: 'rounded-full' }" variant="soft" />
+          <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-trash" size="xs"
+            color="red" variant="ghost" class="flex-shrink-0 hover:bg-red-50" />
         </div>
 
-        <!-- Display Variation Attributes -->
-        <div v-if="props.item.variation">
+        <!-- Variation Attributes -->
+        <div v-if="props.item.variation" class="space-y-1 mb-3">
           <div v-for="(value, key) in props.item.variation.attributes" :key="key"
-            class="text-sm flex space-x-2 items-center">
-            <p class="font-medium">{{ key }} :</p>
-            <p>{{ value }}</p>
+            class="flex items-center space-x-2 text-xs">
+            <span class="font-medium text-neutral-600">{{ key }}:</span>
+            <span class="text-neutral-800 bg-neutral-100 px-2 py-0.5 rounded-full">{{ value }}</span>
           </div>
         </div>
-        <template v-if="props.item.input_value?.label">
-          <div class="flex space-x-2 items-center text-sm">
-            <p class="font-medium">{{ props.item.input_value.label }}:</p>
-            <p>{{ props.item.input_value.value?.length > 10 ? props.item.input_value.value.substring(0, 10) + '...' :
-              props.item.input_value.value }}</p>
+
+        <!-- Custom Input Value -->
+        <div v-if="props.item.input_value?.label" class="mb-3">
+          <div class="flex items-center space-x-2 text-xs">
+            <span class="font-medium text-neutral-600">{{ props.item.input_value.label }}:</span>
+            <span class="text-neutral-800 bg-neutral-100 px-2 py-0.5 rounded-full">
+              {{ props.item.input_value.value?.length > 15 ? props.item.input_value.value.substring(0, 15) + '...' :
+                props.item.input_value.value }}
+            </span>
           </div>
-        </template>
+        </div>
+
+        <!-- Price and Counter -->
+        <div class="flex items-center justify-between">
+          <div>
+            <PartialsProductPrice type="card" :sale-price="props.item.variation?.sale_price || props.item.sale_price"
+              :price="props.item.variation?.price || props.item.price" />
+          </div>
+          <PartialsCartItemCounter :cart-item="props.item" />
+        </div>
       </div>
-    </div>
-    <div class="flex items-center space-x-2 justify-between mt-2">
-      <div>
-        <PartialsProductPrice type="card" :sale-price="props.item.variation?.sale_price || props.item.sale_price"
-          :price="props.item.variation?.price || props.item.price" />
-      </div>
-      <PartialsCartItemCounter :cart-item="props.item" />
     </div>
   </div>
 </template>
@@ -55,3 +72,12 @@ const deleteHandle = async () => {
   loading.value = false
 }
 </script>
+
+<style scoped>
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>

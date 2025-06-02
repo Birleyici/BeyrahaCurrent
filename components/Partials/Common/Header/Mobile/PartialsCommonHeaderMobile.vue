@@ -1,49 +1,68 @@
 <template>
-  <div>
+  <div class="bg-white/95 backdrop-blur-md border-b border-neutral-200 sticky top-0 z-50">
     <PartialsCommonHeaderSlideNestedMenu v-model="$uiStore.state.menuSlide" :menu="props.categories" />
     <LazyPartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
     <LazyPartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
 
-    <div class="flex justify-between items-center">
-      <p class="font-primary text-heading-1 flex items-center space-x-3">
-        <Icon @click="$uiStore.state.menuSlide = true" name="ph:list" class="w-8 h-8 cursor-pointer" />
+    <!-- Ana Header -->
+    <div class="container py-4">
+      <div class="flex items-center justify-between">
+        <!-- Sol Menü -->
+        <div class="flex items-center space-x-3">
+          <button @click="$uiStore.state.menuSlide = true"
+            class="p-2 rounded-lg hover:bg-neutral-100 transition-colors duration-200">
+            <UIcon name="i-heroicons-bars-3" class="w-6 h-6 text-neutral-700" />
+          </button>
 
-        <Icon @click="$changeMainState({ isOpenSearch: true })" name="ph:magnifying-glass" class="w-7 h-7" />
-      </p>
+          <button @click="$changeMainState({ isOpenSearch: true })"
+            class="p-2 rounded-lg hover:bg-neutral-100 transition-colors duration-200">
+            <UIcon name="i-heroicons-magnifying-glass" class="w-6 h-6 text-neutral-700" />
+          </button>
+        </div>
 
-      <NuxtLink href="/">
-        <img :src="logoSrc" class="mx-auto " width="102" height="45" />
-      </NuxtLink>
+        <!-- Logo -->
+        <div class="flex-1 flex justify-center">
+          <NuxtLink href="/" class="group">
+            <NuxtImg :src="logoSrc" class="h-10 w-auto transition-transform duration-200 group-hover:scale-105"
+              format="webp" width="102" height="45" alt="Beyraha Logo" />
+          </NuxtLink>
+        </div>
 
-      <LazyPartialsCommonSearchInput></LazyPartialsCommonSearchInput>
-      <div>
-        <div class="flex items-center space-x-4 font-medium">
+        <!-- Sağ Menü -->
+        <div class="flex items-center space-x-2">
+          <!-- Hesap -->
+          <button @click="$uiStore.state.accountSlide = true"
+            class="p-2 rounded-lg hover:bg-neutral-100 transition-colors duration-200">
+            <UIcon name="i-heroicons-user" class="w-6 h-6 text-neutral-700" />
+          </button>
 
-          <UIcon @click="$uiStore.state.accountSlide = true" name="i-heroicons-user-circle" class="w-8 h-8" />
-
-          <div class="relative" @click="$uiStore.state.cartSlide = true">
+          <!-- Sepet -->
+          <button @click="$uiStore.state.cartSlide = true"
+            class="relative p-2 rounded-lg hover:bg-neutral-100 transition-colors duration-200">
+            <UIcon name="i-heroicons-shopping-bag" class="w-6 h-6 text-neutral-700" />
             <ClientOnly>
-              <div class="relative">
-                <UChip :text="props.cart.cartQyt" size="2xl" position="top-right">
-                  <UButton variant="ghost" color="gray" class="p-0 cursor-pointer select-none">
-                    <template #trailing>
-                      <UIcon name="i-heroicons-shopping-bag" class="w-8 h-8" />
-                    </template>
-                  </UButton>
-                </UChip>
+              <div v-if="props.cart.cartQyt > 0" class="absolute -top-1 -right-1">
                 <span
-                  class="text-[10px] absolute left-1/2 -translate-x-1/2 -bottom-3 text-red-500 bg-slate-50 p-[2px] rounded-md">
-                  {{ formatPrice(props.cart.cartTotalAmount) }}</span>
+                  class="bg-secondary-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-medium">
+                  {{ props.cart.cartQyt }}
+                </span>
+                <div
+                  class="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 bg-neutral-900 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                  {{ formatPrice(props.cart.cartTotalAmount) }}
+                </div>
               </div>
             </ClientOnly>
-
-          </div>
+          </button>
         </div>
       </div>
     </div>
+
+    <!-- Arama Input'u -->
+    <LazyPartialsCommonSearchInput />
   </div>
 </template>
+
 <script setup>
 const props = defineProps(["categories", "cart"]);
-const logoSrc = "/logo.jpg";
+const logoSrc = "cl/cfd082d7-37a8-4067-fafe-f214b571f700/public";
 </script>

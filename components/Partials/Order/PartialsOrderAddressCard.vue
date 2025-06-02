@@ -1,21 +1,26 @@
 <template>
-    <div :class="{ 'animate-pulse': loading }, [props.class]"
-        class="grid w-full border rounded-md relative bg-white overflow-hidden">
-        <div class="w-full bg-slate-50 absolute px-4 py-2 font-medium border-b overflow-hidden">
-            <UIcon class="absolute top-0 right-0 w-10 h-10 opacity-5"  name="i-heroicons-map-pin" />
-            {{ props.title }}
+    <div :class="{ 'animate-pulse': loading }"
+        class="bg-white border border-neutral-200 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden">
+        <div class="relative bg-gradient-to-r from-neutral-50 to-neutral-100 px-4 py-3 border-b border-neutral-200">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 bg-secondary-100 rounded-full flex items-center justify-center">
+                    <UIcon name="i-heroicons-map-pin" class="w-4 h-4 text-secondary-600" />
+                </div>
+                <h3 class="font-medium text-neutral-900">{{ props.title }}</h3>
+            </div>
+            <!-- Dekoratif ikon -->
+            <UIcon name="i-heroicons-map-pin" class="absolute top-2 right-4 w-8 h-8 text-neutral-200 opacity-30" />
         </div>
-        
-        <div class="mt-8 p-4">
-            <PartialsOrderAddress
-        :address-options="props.addressOptions"
-        :address="props.address"
-        :save-function="props.saveFunction" />
+
+        <!-- İçerik -->
+        <div class="p-4">
+            <PartialsOrderAddress :address-options="props.addressOptions" :address="props.address"
+                :save-function="props.saveFunction" />
         </div>
     </div>
 </template>
 
 <script setup>
-const props = defineProps(["address", "class",  'title', 'addressOptions', 'saveFunction']);
+const props = defineProps(["address", "class", 'title', 'addressOptions', 'saveFunction']);
 const loading = ref(false)
 </script>

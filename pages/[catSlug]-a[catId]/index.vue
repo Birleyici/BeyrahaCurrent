@@ -1,5 +1,10 @@
 <template>
   <div class="standart-section-spacing">
+    <div class="container">
+      <!-- Breadcrumb -->
+      <UiCommonBreadcrumb class="mb-6" :links="breadcrumbLinks" />
+    </div>
+
     <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
       :loading="loading" />
     <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products" :loading="loading" />
@@ -153,5 +158,26 @@ useShowElement('finishProducts', () => {
     query.value.page++;
   }
 });
+
+const breadcrumbLinks = computed(() => {
+  const links = [{
+    label: 'Ana Sayfa',
+    to: '/'
+  }]
+
+  if (query.value.searchWord) {
+    // Arama sayfası için
+    links.push({
+      label: `"${query.value.searchWord}" arama sonuçları`
+    })
+  } else if (slugsCat) {
+    // Kategori sayfası için
+    links.push({
+      label: slugsCat.label
+    })
+  }
+
+  return links
+})
 
 </script>

@@ -5,32 +5,52 @@
         <!-- Öznitelik Adı -->
         <div>
           <div v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
-            <div>
-              <div class="flex space-x-2 items-center">
-                <p class="font-medium text-sm">Renk:</p>
-                <p class="text-sm">{{ selectedOptions['Renk'] }}</p>
+            <div class="space-y-4">
+              <!-- Renk Başlığı ve Seçili Renk -->
+              <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                  <h3 class="font-semibold text-neutral-900">Renk Seçenekleri</h3>
+                  <div v-if="selectedOptions['Renk']" class="flex items-center space-x-2">
+                    <div class="w-4 h-4 bg-secondary-500 rounded-full"></div>
+                    <span class="text-sm font-medium text-secondary-600">{{ selectedOptions['Renk'] }}</span>
+                  </div>
+                </div>
+                <span class="text-xs text-neutral-500">{{ attribute.options.length }} renk mevcut</span>
               </div>
 
-              <UCarousel v-if="$mainState.isLoaded" v-slot="{ item }" :items="attribute.options"
-                :ui="{ item: 'snap-end' }">
-                <div :class="{
-                  'border-2 !border-secondary-500 text-white': isSelected(
-                    attribute.name,
-                    item.term_name
-                  ),
-                }" class=" border w-[80px] h-[80px] rounded-full mr-2 overflow-hidden cursor-pointer">
-                  <NuxtImg
-                    @click="isActive(attribute.name, item.term_name) && selectColorOption(attribute.name, item.term_name, item)"
-                    :src="getTermImageSrc(item, item.term_name)" :class="{
-                      'opacity-50 cursor-not-allowed': !isActive(attribute.name, item.term_name),
-                    }" width="80" height="120" fit="cover" />
+              <!-- Renk Seçenekleri Grid -->
+              <div v-if="$mainState.isLoaded" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
+                <div v-for="item in attribute.options" :key="item.term_name"
+                  @click="isActive(attribute.name, item.term_name) && selectColorOption(attribute.name, item.term_name, item)"
+                  :class="{
+                    'ring-2 ring-secondary-500 ring-offset-2 scale-105': isSelected(attribute.name, item.term_name),
+                    'opacity-50 cursor-not-allowed': !isActive(attribute.name, item.term_name),
+                    'cursor-pointer hover:scale-105 hover:shadow-lg': isActive(attribute.name, item.term_name)
+                  }"
+                  class="group relative aspect-square rounded-xl overflow-hidden border-2 border-neutral-200 transition-all duration-300 ease-out">
+
+                  <!-- Renk Resmi -->
+                  <NuxtImg :src="getTermImageSrc(item, item.term_name)" :alt="item.term_name" width="120" height="120"
+                    fit="cover"
+                    class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+
+                  <!-- Hover Overlay -->
+                  <div
+                    class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none">
+                  </div>
+
+                  <!-- Renk Adı -->
+                  <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                    <span class="text-xs font-medium text-white truncate block">{{ item.term_name }}</span>
+                  </div>
                 </div>
-              </UCarousel>
-              <div class="flex space-x-2" v-else>
-                <SkeletonUiThumb v-for="item in 4" :key="item"></SkeletonUiThumb>
+              </div>
+
+              <!-- Loading State -->
+              <div v-else class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
+                <div v-for="item in 6" :key="item" class="aspect-square rounded-xl bg-neutral-200 animate-pulse"></div>
               </div>
             </div>
-
           </div>
 
           <div class="p-0 duration-300 grid gap-1 mt-pad-1"
@@ -76,10 +96,10 @@
       </div>
 
       <UButton :loading="cartState.addToCartloading" @click="addToCart()" color="secondary"
-        class="!rounded-full font-bold flex justify-center relative text-sm lg:!px-12 px-6 overflow-hidden min-w-[180px] ">
+        class="!rounded-full font-bold flex justify-center relative text-sm lg:!px-12 px-6 overflow-hidden min-w-[180px] text-white">
         <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
         </Icon>
-        <p>SEPETE EKLE</p>
+        <p class="text-white">SEPETE EKLE</p>
       </UButton>
     </div>
 

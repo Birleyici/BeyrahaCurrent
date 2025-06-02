@@ -1,73 +1,56 @@
 <template>
-  <div
-    v-if="!$device.isMobile || $mainState.isOpenSearch"
-    class="min-w-[50px] md:w-[400px]"
-    :class="{
-      'absolute right-0 left-0 lg:!w-full lg:px-x-desktop !border-b-transparent':
-        $mainState.isOpenSearch
-    }"
-  >
-    <div class="relative">
-      <form
-        @submit.prevent="goSearch"
-        class="items-center relative w-11/12 lg:w-full flex mx-auto"
-      >
-        <UInput
-          ref="searchInput"
-          @focus="$changeMainState({ isOpenSearch: true })"
-          @blur="handleBlur"
-          color="orange"
-          @mousedown.stop
-          type="text"
-          @input="onInput"
-          :value="searchWord"
-          size="md"
-          class="w-full bg-slate-100 rounded-md z-[4]"
-          placeholder="Aradığınız ürünü yazınız..."
-        />
-        <Icon
-          v-if="
-            !$mainState.isOpenSearch || ($mainState.isOpenSearch && !searchWord)
-          "
-          name="ph:magnifying-glass"
-          class="w-6 h-6 absolute z-[10] right-2"
-          color="black"
-        />
-        <Icon
-          v-if="$mainState.isOpenSearch && searchWord && !$device.isMobile"
-          name="eos-icons:loading"
-          class="w-6 h-6 absolute right-2 z-[5]"
-          color="black"
-        />
-      </form>
-      <div
-        v-if="searchWord && $mainState.isOpenSearch"
-        class="min-h-[20px] w-11/12 p-4 bg-white absolute z-10 left-0 right-0 mx-auto top-[50px] rounded-xl results-container"
-      >
-        <p v-if="isSearching" class="italic">Aranıyor...</p>
-        <p v-else-if="productsSearched.length === 0" class="italic">
-          Sonuç bulunamadı...
-        </p>
-        <div v-else class="grid gap-4">
-          <div v-for="p in productsSearched.slice(0, 6)" :key="p.id">
-            <NuxtLink @click="closeSearch" :to="p.product_url">{{
-              p.name
-            }}</NuxtLink>
+  <div v-if="!$device.isMobile || $mainState.isOpenSearch" class="relative" :class="{
+    'w-full': true
+  }">
+    <!-- Mobile Search Overlay -->
+    <div v-if="$mainState.isOpenSearch && $device.isMobile" class="fixed inset-0 z-50">
+      <div class="absolute inset-0 p-4">
+        <div class="bg-white rounded-xl shadow-xl max-h-[90vh] overflow-hidden">
+          <!-- Mobile Header -->
+          <div class="flex items-center p-4 border-b border-neutral-100">
+            <button @click="closeSearch"
+              class="p-2 -ml-2 rounded-lg hover:bg-neutral-100 transition-colors duration-150">
+              <UIcon name="i-heroicons-arrow-left" class="w-5 h-5 text-neutral-600" />
+            </button>
+            <h3 class="ml-3 text-lg font-medium text-neutral-900">Ürün Ara</h3>
           </div>
-          <div v-if="productsSearched.length > 1">
-            <UDivider type="dashed" />
-            <ULink @click.prevent="goSearch()" class="text-orange-500 mt-2"
-              >Tüm sonuçları gör</ULink
-            >
+
+          <!-- Mobile Search Input -->
+          <div class="p-4">
+            <PartialsCommonSearchInputField ref="searchInput" v-model="searchWord" :is-searching="isSearching"
+              @submit="goSearch" placeholder="Aradığınız ürünü yazınız..." class="w-full" />
+          </div>
+
+          <!-- Mobile Results -->
+          <div class="flex-1 overflow-y-auto">
+            <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
+              :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch" />
           </div>
         </div>
       </div>
     </div>
+
+    <!-- Desktop Search -->
+    <div v-else class="relative w-full">
+      <PartialsCommonSearchInputField ref="searchInput" v-model="searchWord" :is-searching="isSearching"
+        @submit="goSearch" @focus="$changeMainState({ isOpenSearch: true })" @blur="handleBlur"
+        placeholder="Aradığınız ürünü yazınız..." class="w-full" />
+
+      <!-- Desktop Results Dropdown -->
+      <Transition enter-active-class="transition duration-200 ease-out"
+        enter-from-class="transform scale-98 opacity-0 translate-y-1"
+        enter-to-class="transform scale-100 opacity-100 translate-y-0"
+        leave-active-class="transition duration-150 ease-in"
+        leave-from-class="transform scale-100 opacity-100 translate-y-0"
+        leave-to-class="transform scale-98 opacity-0 translate-y-1">
+        <div v-if="searchWord && $mainState.isOpenSearch && !$device.isMobile"
+          class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-neutral-200/80 z-50 max-h-[400px] overflow-hidden results-container">
+          <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
+            :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch" />
+        </div>
+      </Transition>
+    </div>
   </div>
-  <div
-    class="opacity-40 bg-black absolute bottom-0 top-0 right-0 left-0 w-full z-[3]"
-    v-if="$mainState.isOpenSearch"
-  ></div>
 </template>
 
 <script setup>
@@ -84,14 +67,18 @@ const isSearching = ref(false)
 
 function closeSearch() {
   $mainState.isOpenSearch = false
-  searchInput.value.$refs.input.blur()
+  if (searchInput.value?.$refs?.input) {
+    searchInput.value.$refs.input.blur()
+  }
 }
 
 function goSearch() {
+  if (!searchWord.value.trim()) return
+
   router.push({
     path: '/arama-a0',
     query: {
-      searchWord: searchWord.value
+      searchWord: searchWord.value.trim()
     }
   })
   closeSearch()
@@ -103,49 +90,47 @@ function handleBlur(event) {
     !event.relatedTarget ||
     !event.relatedTarget.closest('.results-container')
   ) {
-    $mainState.isOpenSearch = false
+    setTimeout(() => {
+      $mainState.isOpenSearch = false
+    }, 150)
   }
-}
-
-// Kullanıcının girdiği değeri güncelleyen fonksiyon
-function onInput(evt) {
-  searchWord.value = evt.target.value
 }
 
 // Debounce edilmiş arama fonksiyonu
 const debouncedSearch = debounce(async (newVal) => {
-  if (!newVal) {
+  if (!newVal || newVal.length < 2) {
     productsSearched.value = []
+    isSearching.value = false
     return
   }
 
-  isSearching.value = true // Arama başlıyor
+  isSearching.value = true
 
   try {
     const response = await productState.getProducts(
       {
         searchWord: newVal,
-        limit: 10
+        limit: 8
       },
       true
     )
 
-    productsSearched.value = response.data
+    productsSearched.value = response.data || []
   } catch (error) {
     if (error.name === 'AbortError') {
       console.log('Previous request aborted')
     } else {
       console.error('Fetch error:', error)
+      productsSearched.value = []
     }
   } finally {
     isSearching.value = false
   }
-}, 300) // 300ms gecikme
+}, 300)
 
 watch(
   () => searchWord.value,
-  (newVal, oldVal) => {
-    isSearching.value = true
+  (newVal) => {
     debouncedSearch(newVal)
   }
 )
@@ -155,9 +140,26 @@ watch(
   (newValue) => {
     if (newValue) {
       nextTick(() => {
-        searchInput.value.$refs.input.focus()
+        if (searchInput.value?.$refs?.input) {
+          searchInput.value.$refs.input.focus()
+        }
       })
     }
   }
 )
+
+// Escape tuşu ile arama kapatma
+onMounted(() => {
+  const handleEscape = (e) => {
+    if (e.key === 'Escape' && $mainState.isOpenSearch) {
+      closeSearch()
+    }
+  }
+
+  document.addEventListener('keydown', handleEscape)
+
+  onUnmounted(() => {
+    document.removeEventListener('keydown', handleEscape)
+  })
+})
 </script>

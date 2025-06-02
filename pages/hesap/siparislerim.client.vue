@@ -1,23 +1,50 @@
 <template>
-  <div class="standart-section-spacing">
-    <UBreadcrumb class="mb-4" :links="links" />
+  <div class="">
+    <div class="container">
+      <UiCommonBreadcrumb class="mb-6" :links="links" />
 
-    <div class="lg:grid lg:grid-cols-4 mt-pad-2 gap-10 max-w-full">
-      <div>
-        <PartialsAccountMenu></PartialsAccountMenu>
-      </div>
-      <div class="col-span-3 mt-section-mobile lg:mt-0">
-        <div class="space-y-pad-2">
-          <PartialsOrderItem v-for="order, index in orderState.orders" :item="order" :key="order.id" :index="index">
-            <div class="grid gap-4 mt-4">
-              <PartialsOrderAddressCard title="Teslimat Adresi" :address="order.shipping_address || {}" :addressOptions="{
-                allAction: false
-              }" />
-              <PartialsOrderAddressCard title="Fatura Adresi" :addressOptions="{
-                allAction: false
-              }" :address="order.billing_address || {}" />
+      <div class="lg:grid lg:grid-cols-4 gap-8">
+        <!-- Sol Menü -->
+        <div class="lg:col-span-1">
+          <PartialsAccountMenu />
+        </div>
+
+        <!-- Ana İçerik -->
+        <div class="lg:col-span-3 lg:mt-0">
+          <!-- Sayfa Başlığı -->
+          <div class="mb-6">
+            <h1 class="text-2xl font-bold text-neutral-900 mb-2">Siparişlerim</h1>
+            <p class="text-neutral-600">Geçmiş siparişlerinizi görüntüleyebilir ve detaylarını inceleyebilirsiniz.</p>
+          </div>
+
+          <!-- Siparişler -->
+          <div v-if="paginatedOrders?.length" class="space-y-6">
+            <PartialsOrderItem v-for="(order, index) in paginatedOrders" :key="order.id" :item="order" :index="index">
+              <!-- Adres Kartları -->
+              <div class="grid md:grid-cols-2 gap-4">
+                <PartialsOrderAddressCard title="Teslimat Adresi" :address="order.shipping_address || {}"
+                  :address-options="{ allAction: false }" />
+                <PartialsOrderAddressCard title="Fatura Adresi" :address="order.billing_address || {}"
+                  :address-options="{ allAction: false }" />
+              </div>
+            </PartialsOrderItem>
+          </div>
+
+          <!-- Sayfalandırma -->
+          <div v-if="orderState.orders?.length > pageSize" class="flex justify-center py-8">
+            <UPagination v-model="currentPage" :page-count="pageSize" :total="orderState.orders?.length || 0" />
+          </div>
+
+          <!-- Boş Durum -->
+          <div v-if="!orderState.orders?.length" class="text-center py-12">
+            <div class="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <UIcon name="i-heroicons-shopping-bag" class="w-12 h-12 text-neutral-400" />
             </div>
-          </PartialsOrderItem>
+            <h3 class="text-lg font-medium text-neutral-900 mb-2">Henüz sipariş vermediniz</h3>
+            <p class="text-neutral-600 mb-6">İlk siparişinizi vermek için ürünlerimizi keşfedin.</p>
+            <UButton to="/" color="secondary" size="lg" label="Alışverişe Başla" icon="i-heroicons-arrow-right"
+              trailing />
+          </div>
         </div>
       </div>
     </div>
@@ -28,17 +55,33 @@
 useHead({
   title: 'Siparişlerim - Beyraha',
 })
+
 const orderState = useOrderStoreFront()
+
+// Sayfalandırma için state'ler
+const currentPage = ref(1)
+const pageSize = 5 // Her sayfada 5 sipariş göster
+
+// Sayfalandırılmış siparişleri hesapla
+const paginatedOrders = computed(() => {
+  if (!orderState.orders?.length) return []
+
+  const start = (currentPage.value - 1) * pageSize
+  const end = start + pageSize
+  return orderState.orders.slice(start, end)
+})
+
 useAsyncData('siparislerimInit', async () => {
   await orderState.getOrders()
 })
 
 const links = [{
-  label: 'Hesabım',
-  // icon: 'i-heroicons-squares-2x2',
-  // to: '/management/urunler'
+  label: 'Ana Sayfa',
+  to: '/'
 }, {
-  label: 'Siparişlerim',
-  // icon: 'i-heroicons-squares-plus'
+  label: 'Hesabım',
+  to: '/hesap'
+}, {
+  label: 'Siparişlerim'
 }]
 </script>

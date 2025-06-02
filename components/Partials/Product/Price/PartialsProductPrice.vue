@@ -1,6 +1,6 @@
 <template>
     <div class="flex space-x-2 items-center" :class="props.class">
-        <del  :class="delClasses" v-if="props.salePrice && props.delPrice" class="text-slate-400">
+        <del :class="delClasses" v-if="props.salePrice && props.delPrice" class="text-neutral-400">
             {{ formatPrice(props.price) }}
         </del>
         <span :class="priceClasses">
@@ -21,14 +21,15 @@ const props = defineProps({
 
 const priceClasses = computed(() => {
     return {
-        'text-3xl font-bold text-orange-500': props.type == 'page',
-        'text-orange-500': props.type == 'card',
+        'text-heading-3 font-bold text-secondary-600': props.type == 'page',
+        'text-lg font-semibold text-secondary-600': props.type == 'card',
     }
 })
 
 const delClasses = computed(() => {
     return {
-        'text-xl': props.type == 'page',
+        'text-xl text-neutral-500': props.type == 'page',
+        'text-sm text-neutral-400': props.type == 'card',
     }
 })
 

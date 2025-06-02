@@ -1,59 +1,95 @@
 <template>
-  <div>
-    <div class="lg:flex lg:justify-between items-center relative p-2 border rounded-md lg:!rounded-l-full">
-      <!-- <UButton v-if="props.deletable && props.editingMode" class="absolute -right-2 -top-2" size="2xs" icon="i-heroicons-x-mark" :ui="{ rounded: 'rounded-full' }"
-        @click="deleteCartItem(props.item.id)" /> -->
-      <div class="flex items-center space-x-8">
-        <NuxtImg v-if="props.item.image?.path" :src="'cl/' + props.item.image?.path"
-          class="w-20 h-20 object-cover  object-top rounded-md lg:rounded-full" />
-        <img class="w-20 h-20 rounded-full" src="/img-placeholder.jpg" v-else>
-        <div class="text-left">
-          <NuxtLink :to="props.item.slug" class="font-medium">{{ props.item.product_name }}</NuxtLink>
-          <div v-for="(value, key) in props.item.variation?.terms" :key="key">
-            <div class="flex space-x-2 items-center text-sm">
-              <p class="font-medium">{{ key }} :</p>
-              <p>{{ value }}</p>
+  <div class="bg-white border border-neutral-200 rounded-lg p-4 hover:shadow-sm transition-shadow duration-200">
+    <!-- Ürün Bilgileri -->
+    <div class="flex flex-col md:flex-row md:items-center gap-4">
+      <!-- Ürün Resmi -->
+      <div class="flex-shrink-0">
+        <div class="w-16 h-16 md:w-20 md:h-20 rounded-lg overflow-hidden bg-neutral-100">
+          <NuxtImg v-if="props.item.image?.path" :src="'cl/' + props.item.image?.path" :alt="props.item.product_name"
+            class="w-full h-full object-cover" format="webp" quality="80" :width="80" :height="80" fit="cover" />
+          <img v-else class="w-full h-full object-cover" src="/img-placeholder.jpg" :alt="props.item.product_name">
+        </div>
+      </div>
+
+      <!-- Ürün Detayları -->
+      <div class="flex-1 min-w-0">
+        <div class="space-y-2">
+          <!-- Ürün Adı -->
+          <h4 class="font-medium text-neutral-900 truncate">
+            <NuxtLink v-if="props.item.slug" :to="props.item.slug"
+              class="hover:text-secondary-600 transition-colors duration-200">
+              {{ props.item.product_name }}
+            </NuxtLink>
+            <span v-else>{{ props.item.product_name }}</span>
+          </h4>
+
+          <!-- Varyasyon Bilgileri -->
+          <div v-if="props.item.variation?.terms" class="space-y-1">
+            <div v-for="(value, key) in props.item.variation.terms" :key="key"
+              class="flex items-center text-sm text-neutral-600">
+              <span class="font-medium min-w-0 mr-2">{{ key }}:</span>
+              <span class="text-neutral-800">{{ value }}</span>
             </div>
           </div>
 
-          <div v-for="input in props.item.order_item_inputs" :key="input.id">
-            <div class="flex space-x-2 items-center text-sm">
-              <p class="font-medium">{{ input.label }} :</p>
-              <p v-if="!props.editingMode">{{ input.value }}</p>
-              <div v-else class="flex space-x-2">
-                <UInput v-model="input.new_value" :model-value="input.new_value || input.value" size="xs" />
+          <!-- Özel Input'lar -->
+          <div v-if="props.item.order_item_inputs?.length" class="space-y-2">
+            <div v-for="input in props.item.order_item_inputs" :key="input.id" class="flex items-center gap-2 text-sm">
+              <span class="font-medium text-neutral-600 min-w-0">{{ input.label }}:</span>
+              <span v-if="!props.editingMode" class="text-neutral-800">{{ input.value }}</span>
+              <div v-else class="flex items-center gap-2">
+                <UInput v-model="input.new_value" :model-value="input.new_value || input.value" size="xs"
+                  class="w-24" />
                 <UButton :loading="input.loading" icon="i-heroicons-check" @click="orderStore.saveInput(input)"
-                  size="xs" />
+                  size="xs" color="green" />
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="flex justify-between lg:space-x-12 border-t mt-2 pt-2 lg:p-0 lg:m-0 lg:border-none">
-        <div>
-          <p class="text-sm">Birim fiyat</p>
-          <div class="flex space-x-2">
-            <PartialsProductPrice :del-price="false" type="card"
-              :price="props.item.variation?.price || props.item.price"
-              :sale-price="props.item.variation?.sale_price || props.item.sale_price" />
-            <p>x {{ props.item.quantity }}</p>
+
+      <!-- Fiyat Bilgileri -->
+      <div class="flex-shrink-0">
+        <div class="flex flex-col md:flex-row md:items-center gap-4 md:gap-8">
+          <!-- Birim Fiyat -->
+          <div class="text-center md:text-right">
+            <p class="text-xs text-neutral-500 mb-1">Birim Fiyat</p>
+            <div class="flex items-center justify-center md:justify-end gap-1">
+              <PartialsProductPrice :del-price="false" type="card"
+                :price="props.item.variation?.price || props.item.price"
+                :sale-price="props.item.variation?.sale_price || props.item.sale_price" />
+              <span class="text-sm text-neutral-600">× {{ props.item.quantity }}</span>
+            </div>
+          </div>
+
+          <!-- Toplam Fiyat -->
+          <div class="text-center md:text-right">
+            <p class="text-xs text-neutral-500 mb-1">Toplam</p>
+            <p class="text-lg font-semibold text-secondary-600">
+              {{ formatPrice(props.item.price * props.item.quantity) }}
+            </p>
           </div>
         </div>
-        <div>
-          <p class="text-sm">Toplam</p>
-          <p class="font-medium text-secondary-500">{{ formatPrice(props.item.price * props.item.quantity) }}</p>
-        </div>
+      </div>
+    </div>
+
+    <!-- Silme Butonu (Düzenleme Modunda) -->
+    <div v-if="props.deletable && props.editingMode" class="mt-3 pt-3 border-t border-neutral-200">
+      <div class="flex justify-end">
+        <UButton @click="deleteCartItem(props.item.id)" icon="i-heroicons-trash" size="xs" color="red" variant="soft"
+          label="Kaldır" />
       </div>
     </div>
   </div>
 </template>
+
 <script setup>
 const orderStore = useOrderManagementStore()
 const props = defineProps(['item', 'deletable', 'editingMode'])
+
 const deleteCartItem = async (itemId) => {
   if (await useConfirmation("İşlem Onayı", "Sipariş öğesini silmek istediğinize emin misiniz?")) {
     await orderStore.deleteSubOrderItem(itemId)
   }
-
 }
 </script>

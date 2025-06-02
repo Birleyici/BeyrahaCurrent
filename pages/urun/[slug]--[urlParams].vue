@@ -1,68 +1,94 @@
 <template>
-  <div>
-    <div class="lg:grid lg:grid-cols-8 lg:gap-4 xl:gap-16">
-      <div class="col-span-3 md:pl-x-desktop" v-if="$mainState.isLoaded">
-        <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages" />
-      </div>
-      <SkeletonProductGallery v-else></SkeletonProductGallery>
+  <div class="bg-neutral-50 min-h-screen">
+    <!-- Ürün Detay -->
+    <section class="section-spacing !pt-0">
+      <div class="container">
+        <!-- Breadcrumb -->
+        <UiCommonBreadcrumb class="mb-6" :links="breadcrumbLinks" />
 
-      <div class="col-span-5">
-        <div class="px-x-mobile md:px-x-desktop space-y-section-mobile ">
-          <h1 class="text-2xl font-medium ">
-            {{ productState.product.name }}
-          </h1>
-          <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
-            :product-state="productState">
-          </PartialsProductVariations>
-          <div>
-            <div class="p-1  border  bg-slate-50   rounded-md  inline-block ">
-              <div class="flex items-center space-x-2 ">
-                <img src="/logo.jpg" width="100" class="border  bg-white rounded-md w-8 h-8 object-contain p-1" alt="">
-                <div class="flex space-x-2 items-center">
-                  <p class="font-medium text-sky-500 text-sm">Beyraha</p>
-                  <div>
-                    <UBadge color="orange" label="9.8" size="xs" />
+        <div class="lg:grid lg:grid-cols-12 lg:gap-12">
+          <!-- Ürün Görselleri -->
+          <div class="col-span-5" v-if="$mainState.isLoaded">
+            <div class="sticky top-24">
+              <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages" />
+            </div>
+          </div>
+          <SkeletonProductGallery v-else class="col-span-5"></SkeletonProductGallery>
+
+          <!-- Ürün Bilgileri -->
+          <div class="col-span-7">
+            <div class="space-y-8">
+              <!-- Ürün Başlığı -->
+              <div>
+                <h1 class="text-heading-1 font-bold text-neutral-900 mb-4">
+                  {{ productState.product.name }}
+                </h1>
+              </div>
+
+              <!-- Ürün Varyasyonları -->
+              <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
+                :product-state="productState" />
+
+              <!-- Marka Bilgisi -->
+              <div class="card inline-block">
+                <div class="card-body !py-3 !px-4">
+                  <div class="flex items-center space-x-3">
+                    <img src="/logo.jpg"
+                      class="w-10 h-10 object-contain rounded-lg border border-neutral-200 bg-white p-1"
+                      alt="Beyraha Logo">
+                    <div class="flex items-center space-x-2">
+                      <span class="font-semibold text-secondary-600">Beyraha</span>
+                      <UBadge color="orange" label="9.8" size="sm" />
+                    </div>
                   </div>
+                </div>
+              </div>
+
+              <!-- Öne Çıkan Bilgiler -->
+              <div class="card">
+                <div class="card-body">
+                  <h3 class="font-semibold text-neutral-900 mb-4">Öne çıkan bilgiler</h3>
+                  <ul class="space-y-2 text-neutral-700">
+                    <li class="flex items-start space-x-2">
+                      <UIcon name="i-heroicons-check-circle" class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>15 gün içerisinde ücretsiz iade</span>
+                    </li>
+                    <li v-for="feature in productState.product.featured_infos.slice(0, 2)" :key="feature.id"
+                      class="flex items-start space-x-2">
+                      <UIcon name="i-heroicons-check-circle" class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" />
+                      <span>{{ feature.content }}</span>
+                    </li>
+                  </ul>
+
+                  <button @click="goInfo()" v-if="productState.product?.featured_infos?.length > 2"
+                    class="mt-4 group flex items-center space-x-2 text-secondary-600 hover:text-secondary-700 font-medium transition-colors duration-200">
+                    <span>Tüm ürün bilgilerini gör</span>
+                    <UIcon name="i-heroicons-chevron-down"
+                      class="w-4 h-4 transition-transform duration-200 group-hover:translate-y-1" />
+                  </button>
                 </div>
               </div>
             </div>
           </div>
-
-          <div>
-            <div class=" bg-tertiary-50 border rounded-md py-pad-1 px-pad-2 ">
-              <p class="font-medium mb-2">Öne çıkan bilgiler</p>
-              <ul class="list-disc grid gap-2 text-sm">
-                <li>15 gün içerisinde ücretsiz iade</li>
-                <li v-for="feature in productState.product.featured_infos.slice(0, 2)">
-                  {{ feature.content }}
-                </li>
-                <div @click="goInfo()" v-if="productState.product?.featured_infos?.length > 2"
-                  class="cursor-pointer w-full  flex  space-x-2 items-center">
-                  <p class="underline">Tüm ürün bilgilerini gör</p>
-                  <UIcon name="i-heroicons-chevron-double-down" />
-                </div>
-              </ul>
-            </div>
-          </div>
-
         </div>
       </div>
-    </div>
+    </section>
 
+    <!-- Ürün Açıklaması -->
+    <section ref="product_information" class="section-spacing bg-white">
+      <div class="container">
+        <PartialsProductInformation :attributes="attributeState.transformedAttrs" />
+      </div>
+    </section>
 
-    <div ref="product_information" class="standart-section-spacing">
-      <PartialsProductInformation :attributes="attributeState.transformedAttrs" />
-    </div>
-    <div class="px-x-mobil md:px-0">
+    <!-- Benzer Ürünler -->
+    <section class="section-spacing">
       <UiSlidesProductSlide id="product_page_slide_1" title="Benzer Ürünler" :filters="{
         selectedCategoryIds: JSON.stringify(productCategoryIds),
         exceptId: productState.product.id,
         piece: 8
-      }">
-      </UiSlidesProductSlide>
-    </div>
-
-    <!-- <PartialsProductComment /> -->
+      }" />
+    </section>
   </div>
 </template>
 
@@ -104,8 +130,6 @@ const selectedImages = computed(() => {
     : productState.product.selectedImages;
 });
 
-
-
 useHead({
   title: `${productState.product.name}`,
   meta: [
@@ -114,8 +138,29 @@ useHead({
 })
 
 const goInfo = () => {
-  console.log(product_information)
   product_information.value?.scrollIntoView({ behavior: "smooth" })
-
 }
+
+const breadcrumbLinks = computed(() => {
+  const links = [{
+    label: 'Ana Sayfa',
+    to: '/'
+  }]
+
+  // Kategorileri ekle
+  if (productState.product.selectedCategories?.length > 0) {
+    const mainCategory = productState.product.selectedCategories[0]
+    links.push({
+      label: mainCategory.name,
+      to: `/${mainCategory.slug}-a${mainCategory.id}`
+    })
+  }
+
+  // Ürün adını ekle
+  links.push({
+    label: productState.product.name
+  })
+
+  return links
+})
 </script>

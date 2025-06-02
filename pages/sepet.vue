@@ -1,48 +1,63 @@
 <template>
   <div>
-
     <ClientOnly>
-      <div class="standart-section-spacing">
-        <UBreadcrumb class="mb-pad-2" :links="links" />
+      <div>
+        <div class="container">
+          <UiCommonBreadcrumb class="mb-6" :links="links" />
 
-        <div v-if="cartState.cart.length > 0" class="lg:grid lg:grid-cols-3 gap-10">
-          <div class="col-span-2">
-            <TransitionGroup name="list" tag="div">
-              <PartialsCartListBig :key="cartItem" :delete-cart-item="cartState.deleteCartItem" :index="index"
-                :item="cartItem" v-for="cartItem, index in cartState.cart" />
-            </TransitionGroup>
-
-          </div>
-          <PartialsCartExtre>
-            <template #button>
-              <div class="mt-2 bottom-0 fixed md:!relative  bg-white w-full right-0 left-0 ">
-                <UButton to="/auth?callback=/odeme" color="orange" class="w-full flex justify-center" size="md"
-                  variant="solid">
-                  Ödeme</UButton>
+          <div v-if="cartState.cart.length > 0" class="lg:grid lg:grid-cols-3 gap-8">
+            <div class="lg:col-span-2">
+              <!-- Sayfa Başlığı -->
+              <div class="mb-6">
+                <h1 class="text-2xl font-bold text-neutral-900 mb-2">Sepetim</h1>
+                <p class="text-neutral-600">{{ cartState.cartQyt }} ürün sepetinizde</p>
               </div>
-            </template>
-          </PartialsCartExtre>
-        </div>
-        <div v-else class="italic h-44 my-4 rounded-md border p-1  border-dashed">
-          <div class="text-center bg-slate-50 w-full h-full rounded-md flex items-center justify-center">
-            <div>
-              <b class="font-normal text-2xl">:(</b>
-              <p>Sepette ürün bulunmuyor...</p>
+
+              <!-- Sepet Öğeleri -->
+              <div class="space-y-4">
+                <TransitionGroup name="list" tag="div" class="space-y-4">
+                  <PartialsCartListBig :key="cartItem.id" :delete-cart-item="cartState.deleteCartItem" :index="index"
+                    :item="cartItem" v-for="cartItem, index in cartState.cart" />
+                </TransitionGroup>
+              </div>
+            </div>
+
+            <!-- Sepet Özeti -->
+            <div class="lg:col-span-1 mt-8 lg:mt-0">
+              <PartialsCartExtre>
+                <template #button>
+                  <div class="mt-2 bottom-0 fixed md:!relative bg-white w-full right-0 left-0 p-4 md:p-0">
+                    <UButton to="/auth?callback=/odeme" color="secondary" class="w-full flex justify-center font-bold"
+                      size="lg" variant="solid">
+                      Ödeme Yap
+                    </UButton>
+                  </div>
+                </template>
+              </PartialsCartExtre>
+            </div>
+          </div>
+
+          <!-- Boş Sepet -->
+          <div v-else class="text-center py-16">
+            <div class="max-w-md mx-auto">
+              <div class="w-24 h-24 bg-neutral-200 rounded-full flex items-center justify-center mx-auto mb-6">
+                <UIcon name="i-heroicons-shopping-bag" class="w-12 h-12 text-neutral-400" />
+              </div>
+              <h2 class="text-2xl font-bold text-neutral-900 mb-4">Sepetiniz boş</h2>
+              <p class="text-neutral-600 mb-8">Alışverişe başlamak için ürünleri sepete ekleyin</p>
+              <UButton to="/" color="secondary" size="lg" class="font-bold">
+                Alışverişe Başla
+              </UButton>
             </div>
           </div>
         </div>
       </div>
 
-
-      <div>
-        <UiSlidesProductSlide title="İlginizi çekebilir" id="ilginizi_cekebilir" :filters="{
-          piece: 8
-        }">
-        </UiSlidesProductSlide>
+      <!-- İlginizi Çekebilir -->
+      <div v-if="cartState.cart.length > 0" class="section-spacing">
+        <UiSlidesProductSlide title="İlginizi çekebilir" id="ilginizi_cekebilir" :filters="{ piece: 8 }" />
       </div>
     </ClientOnly>
-
-
   </div>
 </template>
 
@@ -55,12 +70,10 @@ const cartState = useCartState()
 
 
 const links = [{
-  label: 'Ana sayfa',
-  // icon: 'i-heroicons-squares-2x2',
-  // to: '/management/urunler'
+  label: 'Ana Sayfa',
+  to: '/'
 }, {
-  label: 'Sepet',
-  // icon: 'i-heroicons-squares-plus'
+  label: 'Sepet'
 }]
 </script>
 
