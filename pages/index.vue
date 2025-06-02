@@ -2,7 +2,7 @@
   <div class="bg-neutral-50 min-h-screen">
     <!-- Hero Section -->
     <section
-      class="relative bg-gradient-to-br from-secondary-50 to-secondary-100 min-h-screen flex items-center overflow-hidden">
+      class="relative bg-gradient-to-br from-secondary-50 to-secondary-100  flex  py-24 lg:py-44 items-center overflow-hidden">
       <!-- Background Image with Enhanced Styling -->
       <div class="absolute inset-0 z-0">
         <img src="/fiziki-magaza.jpeg" alt="Beyraha Mağaza" class="w-full h-full object-cover object-top opacity-60"
@@ -10,39 +10,24 @@
         <!-- Enhanced Gradient Overlay -->
         <div class="absolute inset-0 bg-gradient-to-br from-secondary-50/80 via-secondary-100/70 to-secondary-200/60">
         </div>
-        <!-- Animated Particles Background -->
-        <div class="absolute inset-0 hero-particles"></div>
         <!-- Dotted Pattern Overlay -->
         <div class="absolute inset-0 hero-dotted-pattern opacity-30"></div>
       </div>
 
       <!-- Floating Elements -->
-      <div class="absolute top-20 left-10 w-20 h-20 bg-secondary-200/30 rounded-full blur-xl animate-float"></div>
-      <div class="absolute top-40 right-20 w-32 h-32 bg-primary-200/20 rounded-full blur-2xl animate-float-delayed">
-      </div>
-      <div class="absolute bottom-32 left-1/4 w-16 h-16 bg-secondary-300/40 rounded-full blur-lg animate-float-slow">
-      </div>
+      <div class="absolute top-20 left-10 w-20 h-20 bg-secondary-200/30 rounded-full blur-xl"></div>
+      <div class="absolute top-40 right-20 w-32 h-32 bg-primary-200/20 rounded-full blur-2xl"></div>
+      <div class="absolute bottom-32 left-1/4 w-16 h-16 bg-secondary-300/40 rounded-full blur-lg"></div>
 
-      <div class="container relative z-10 py-20">
+      <div class="container relative z-10 ">
         <div class="text-center max-w-5xl mx-auto">
           <!-- Badge -->
 
 
-          <!-- Main Heading with Enhanced Typography -->
-          <h1
-            class="text-5xl lg:text-7xl xl:text-8xl font-bold text-neutral-900 mb-8 leading-tight animate-fade-in-up animation-delay-200">
-            <span class="block mb-2">
-              <span
-                class="text-gradient bg-gradient-to-r from-secondary-600 via-secondary-500 to-primary-600 bg-clip-text text-transparent">
-                Beyraha
-              </span>
-            </span>
 
-          </h1>
 
           <!-- Enhanced Description -->
-          <p
-            class="text-xl lg:text-2xl xl:text-3xl text-neutral-600 mb-12 leading-relaxed max-w-4xl mx-auto animate-fade-in-up animation-delay-400">
+          <p class="text-xl lg:text-2xl xl:text-3xl text-neutral-600 mb-12 leading-relaxed max-w-4xl mx-auto">
             <span class="font-medium text-neutral-800">Zarif tasarımlar</span> ve
             <span class="font-medium text-neutral-800">üstün kalite</span> ile
             <br class="hidden sm:block" />
@@ -50,22 +35,18 @@
           </p>
 
           <!-- Enhanced CTA Buttons -->
-          <div
-            class="flex flex-col sm:flex-row gap-6 justify-center items-center animate-fade-in-up animation-delay-600">
-
-
+          <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
             <NuxtLink to="/arama-a0"
               class="group bg-white/90 backdrop-blur-sm hover:bg-white text-neutral-800 px-10 py-5 rounded-2xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-md border border-white/50 min-w-[200px]">
               <span class="flex items-center gap-3">
                 <UIcon name="i-heroicons-cursor-arrow-rays" class="w-5 h-5 text-secondary-600" />
-                Koleksiyonu Keşfet
+                Alışverişe Başla
               </span>
             </NuxtLink>
           </div>
 
           <!-- Trust Indicators -->
-          <div
-            class="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-70 animate-fade-in-up animation-delay-800">
+          <div class="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-70">
             <div class="flex items-center gap-2 text-sm text-neutral-600">
               <UIcon name="i-heroicons-star-solid" class="w-4 h-4 text-yellow-500" />
               <span class="font-medium">Yüksek Müşteri Memnuniyeti</span>
@@ -79,13 +60,6 @@
               <span class="font-medium">14 Gün İade</span>
             </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Scroll Indicator -->
-      <div class="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-        <div class="w-6 h-10 border-2 border-neutral-400 rounded-full flex justify-center">
-          <div class="w-1 h-3 bg-neutral-400 rounded-full mt-2 animate-pulse"></div>
         </div>
       </div>
     </section>
@@ -208,113 +182,6 @@ useHead({
 </script>
 
 <style scoped>
-/* Hero Animations */
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes float {
-
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-
-  50% {
-    transform: translateY(-20px) rotate(180deg);
-  }
-}
-
-@keyframes float-delayed {
-
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-
-  50% {
-    transform: translateY(-30px) rotate(-180deg);
-  }
-}
-
-@keyframes float-slow {
-
-  0%,
-  100% {
-    transform: translateY(0px);
-  }
-
-  50% {
-    transform: translateY(-15px);
-  }
-}
-
-@keyframes particles {
-  0% {
-    background-position: 0% 0%;
-  }
-
-  100% {
-    background-position: 100% 100%;
-  }
-}
-
-/* Animation Classes */
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s ease-out forwards;
-}
-
-.animation-delay-200 {
-  animation-delay: 0.2s;
-  opacity: 0;
-}
-
-.animation-delay-400 {
-  animation-delay: 0.4s;
-  opacity: 0;
-}
-
-.animation-delay-600 {
-  animation-delay: 0.6s;
-  opacity: 0;
-}
-
-.animation-delay-800 {
-  animation-delay: 0.8s;
-  opacity: 0;
-}
-
-.animate-float {
-  animation: float 6s ease-in-out infinite;
-}
-
-.animate-float-delayed {
-  animation: float-delayed 8s ease-in-out infinite;
-  animation-delay: 2s;
-}
-
-.animate-float-slow {
-  animation: float-slow 10s ease-in-out infinite;
-  animation-delay: 4s;
-}
-
-/* Hero Particles Background */
-.hero-particles {
-  background-image: radial-gradient(circle at 25% 25%, rgba(var(--color-secondary-200), 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(var(--color-primary-200), 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(var(--color-secondary-300), 0.05) 0%, transparent 50%);
-  background-size: 400px 400px, 300px 300px, 200px 200px;
-  animation: particles 20s linear infinite;
-}
-
 /* Enhanced Dotted Pattern */
 .hero-dotted-pattern {
   background-image: radial-gradient(circle, rgba(var(--color-secondary-400), 0.3) 1px, transparent 1px);
@@ -329,39 +196,9 @@ useHead({
       rgb(var(--color-primary-600)) 50%,
       rgb(var(--color-secondary-600)) 75%,
       rgb(var(--color-primary-500)) 100%);
-  background-size: 200% 200%;
-  animation: gradient-shift 3s ease-in-out infinite;
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
-}
-
-@keyframes gradient-shift {
-
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Button Hover Effects */
-.group:hover .group-hover\:translate-x-1 {
-  transform: translateX(0.25rem);
-}
-
-/* Responsive Adjustments */
-@media (max-width: 640px) {
-  .animate-fade-in-up {
-    animation-duration: 0.6s;
-  }
-
-  .hero-particles {
-    background-size: 200px 200px, 150px 150px, 100px 100px;
-  }
 }
 
 /* Backdrop Blur Support */
