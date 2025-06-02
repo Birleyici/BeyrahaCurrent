@@ -48,14 +48,14 @@ ui: {
       wrapper: 'fixed inset-0 flex z-[9999]'
     },
     modal: {
-      wrapper: 'relative z-[9999]',
-      inner: 'fixed inset-0 overflow-y-auto',
-      container: 'flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0',
+      wrapper: 'relative z-[9999999]',
+      inner: 'fixed inset-0 overflow-y-auto z-[9999999]',
+      container: 'flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 z-[9999999]',
       padding: 'p-4 sm:p-6',
       margin: 'sm:my-8',
-      base: 'relative text-left rtl:text-right flex flex-col',
+      base: 'relative text-left rtl:text-right flex flex-col z-[9999999]',
       overlay: {
-        base: 'fixed inset-0 transition-opacity',
+        base: 'fixed inset-0 transition-opacity z-[9999998]',
         background: 'bg-gray-200/75 dark:bg-gray-800/75',
         transition: {
           enter: 'ease-out duration-300',

@@ -737,4 +737,48 @@ body > div[data-v-] {
 #headlessui-portal-root > * {
   z-index: 999999 !important;
 }
+
+/* Modal ve Dialog iyileştirmeleri */
+/* Modal ve dialog container'ları için güçlü z-index kuralları */
+div[role="dialog"] {
+  z-index: 9999999 !important;
+}
+
+/* Modal overlay'ları */
+div[role="dialog"] + div,
+div[role="dialog"] > div:first-child {
+  z-index: 9999998 !important;
+}
+
+/* Modal content'leri */
+div[role="dialog"] > div:not(:first-child),
+div[role="dialog"] .relative {
+  z-index: 9999999 !important;
+}
+
+/* UModal özel kuralları */
+.ui-modal-wrapper,
+[data-headlessui-state="open"][role="dialog"] {
+  z-index: 9999999 !important;
+}
+
+/* Tüm modal içerikleri için */
+.ui-modal,
+.nuxt-ui-modal,
+[data-headlessui-state="open"][role="dialog"] > * {
+  z-index: 9999999 !important;
+}
+
+/* Portal elementleri için */
+body > div[data-headlessui-portal-root],
+body > div[id^="headlessui-portal"],
+#headlessui-portal-root {
+  z-index: 9999999 !important;
+}
+
+/* Modal backdrop'lar için */
+div[data-headlessui-state="open"] + div[aria-hidden="true"],
+div[aria-hidden="true"][data-headlessui-state] {
+  z-index: 9999998 !important;
+}
   

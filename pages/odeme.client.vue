@@ -120,7 +120,7 @@
         <Teleport to="body">
           <div v-if="isLoaded"
             class="md:hidden fixed bottom-0 left-0 right-0 bg-white p-4 shadow-2xl border-t border-neutral-200 flex items-center justify-between"
-            style="z-index: 999999;">
+            style="z-index: 999;">
             <!-- Toplam Tutar -->
             <div class="flex flex-col">
               <span class="text-sm text-neutral-500">Toplam</span>
@@ -139,8 +139,12 @@
     </div>
 
     <!-- Yeni Adres Modalı -->
-    <UModal v-model="orderState.isOpenAddressModal" :fullscreen="$device.isMobile"
-      :ui="{ wrapper: 'fixed inset-0 z-[9999999] overflow-y-auto' }">
+    <UModal v-model="orderState.isOpenAddressModal" :fullscreen="$device.isMobile" :prevent-close="true" :ui="{
+      wrapper: 'fixed inset-0 z-[9999999] overflow-y-auto',
+      overlay: { base: 'fixed inset-0 transition-opacity z-[9999998]' },
+      container: 'flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 z-[9999999]',
+      base: 'relative text-left rtl:text-right flex flex-col z-[9999999]'
+    }">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
@@ -156,8 +160,12 @@
     </UModal>
 
     <!-- Tüm Adresler Modalı -->
-    <UModal v-model="orderState.openAllAddressModal" :fullscreen="$device.isMobile"
-      :ui="{ wrapper: 'fixed inset-0 z-[9999999] overflow-y-auto' }">
+    <UModal v-model="orderState.openAllAddressModal" :fullscreen="$device.isMobile" :prevent-close="true" :ui="{
+      wrapper: 'fixed inset-0 z-[9999999] overflow-y-auto',
+      overlay: { base: 'fixed inset-0 transition-opacity z-[9999998]' },
+      container: 'flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 z-[9999999]',
+      base: 'relative text-left rtl:text-right flex flex-col z-[9999999]'
+    }">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
