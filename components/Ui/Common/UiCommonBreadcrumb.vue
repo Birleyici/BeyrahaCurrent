@@ -1,5 +1,5 @@
 <template>
-    <nav class="flex items-center space-x-1 text-sm mt-10 md:mt-18" aria-label="Breadcrumb">
+    <nav class="flex items-center space-x-1 text-sm my-6 md:my-10" aria-label="Breadcrumb">
         <!-- Mobil: Sadece geri butonu ve mevcut sayfa -->
         <div class="md:hidden flex items-center space-x-3">
             <UButton v-if="links.length > 1" @click="goBack" icon="i-heroicons-arrow-left" color="gray" variant="ghost"

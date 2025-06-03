@@ -2,14 +2,9 @@
     <div class="relative">
         <UInput ref="input" :model-value="modelValue" @input="$emit('update:modelValue', $event.target.value)"
             @focus="$emit('focus', $event)" @blur="$emit('blur', $event)" @keydown.escape="$emit('escape')"
-            @keydown.enter.prevent="$emit('submit')" type="text" :placeholder="placeholder" size="md" color="white"
-            variant="outline" :ui="{
+            @keydown.enter.prevent="$emit('submit')" type="text" :placeholder="placeholder" variant="outline" :ui="{
                 icon: { trailing: { pointer: '' } },
-                color: {
-                    white: {
-                        outline: 'bg-white/80 backdrop-blur-sm focus:bg-white border-0 ring-0 focus:ring-2 focus:ring-secondary-500/20 shadow-sm hover:bg-white transition-all duration-200'
-                    }
-                }
+
             }">
             <template #trailing>
                 <Transition enter-active-class="transition duration-150 ease-out"
