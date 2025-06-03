@@ -2,59 +2,65 @@
   <div class="bg-neutral-50 min-h-screen">
     <!-- Hero Section -->
     <section
-      class="relative bg-gradient-to-br from-secondary-50 to-secondary-100  flex  py-24 lg:py-44 items-center overflow-hidden">
+      class="relative bg-gradient-to-br from-white to-neutral-50 flex py-32 lg:py-48 items-center overflow-hidden">
       <!-- Background Image with Enhanced Styling -->
       <div class="absolute inset-0 z-0">
-        <img src="/fiziki-magaza.jpeg" alt="Beyraha Mağaza" class="w-full h-full object-cover object-top opacity-60"
+        <img src="/fiziki-magaza.jpeg" alt="Beyraha Mağaza" class="w-full h-full object-cover object-top opacity-40"
           loading="eager" />
-        <!-- Enhanced Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-br from-secondary-50/80 via-secondary-100/70 to-secondary-200/60">
+        <!-- Subtle Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-neutral-50/50">
         </div>
-        <!-- Dotted Pattern Overlay -->
-        <div class="absolute inset-0 hero-dotted-pattern opacity-30"></div>
       </div>
 
-      <!-- Floating Elements -->
-      <div class="absolute top-20 left-10 w-20 h-20 bg-secondary-200/30 rounded-full blur-xl"></div>
-      <div class="absolute top-40 right-20 w-32 h-32 bg-primary-200/20 rounded-full blur-2xl"></div>
-      <div class="absolute bottom-32 left-1/4 w-16 h-16 bg-secondary-300/40 rounded-full blur-lg"></div>
+      <!-- Minimal Floating Elements -->
+      <div class="absolute top-1/4 right-1/4 w-2 h-2 bg-secondary-400 rounded-full opacity-60"></div>
+      <div class="absolute bottom-1/3 left-1/5 w-1 h-1 bg-secondary-500 rounded-full opacity-40"></div>
+      <div class="absolute top-1/2 right-1/6 w-1.5 h-1.5 bg-secondary-300 rounded-full opacity-50"></div>
 
-      <div class="container relative z-10 ">
-        <div class="text-center max-w-5xl mx-auto">
-          <!-- Badge -->
+      <div class="container relative z-10">
+        <div class="text-center max-w-4xl mx-auto">
+          <!-- Modern Badge -->
+
+          <!-- Main Heading -->
+          <h1 class="text-4xl lg:text-6xl xl:text-7xl font-bold text-neutral-900 mb-8 leading-tight">
+            <span class="block">Zarif</span>
+            <span class="text-secondary-600">Tesettür</span>
+            <span class="block">Koleksiyonu</span>
+          </h1>
 
           <!-- Enhanced Description -->
-          <p class="text-xl lg:text-2xl xl:text-3xl text-neutral-600 mb-12 leading-relaxed max-w-4xl mx-auto">
-            <span class="font-medium text-neutral-800">Zarif tasarımlar</span> ve
-            <span class="font-medium text-neutral-800">üstün kalite</span> ile
-            <br class="hidden sm:block" />
-            tesettür giyimde <span class="text-secondary-600 font-semibold">güvenilir tercih</span>
+          <p class="text-lg lg:text-xl text-neutral-600 mb-12 leading-relaxed max-w-3xl mx-auto font-light">
+            Kaliteli kumaşlar ve özenli işçilikle hazırlanmış
+            <span class="font-medium text-neutral-800">çarşaf, ferace, peçe ve sufle</span> modellerimizle tarzınızı ve
+            konforunuzu bir arada yaşayın
+
           </p>
 
-          <!-- Enhanced CTA Buttons -->
-          <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+          <!-- Modern CTA Button -->
+          <div class="flex justify-center">
             <NuxtLink to="/arama-a0"
-              class="group bg-white/90 backdrop-blur-sm hover:bg-white text-neutral-800 px-10 py-5 rounded-2xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-xl shadow-md border border-white/50 min-w-[200px]">
-              <span class="flex items-center gap-3">
-                <UIcon name="i-heroicons-cursor-arrow-rays" class="w-5 h-5 text-secondary-600" />
-                Alışverişe Başla
-              </span>
+              class="group inline-flex items-center gap-3 bg-secondary-600 hover:bg-secondary-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 transform hover:scale-105 hover:shadow-lg shadow-md hover:!text-white">
+              <UIcon name="i-heroicons-cursor-arrow-rays"
+                class="w-5 h-5 group-hover:rotate-12 transition-transform duration-300" />
+              <span>Koleksiyonu Keşfet</span>
+              <UIcon name="i-heroicons-arrow-right"
+                class="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
             </NuxtLink>
           </div>
 
-          <!-- Trust Indicators -->
-          <div class="mt-16 flex flex-wrap justify-center items-center gap-8 opacity-70">
+          <!-- Clean Trust Indicators -->
+          <div class="mt-16 flex flex-wrap justify-center items-center gap-12 opacity-60">
             <div class="flex items-center gap-2 text-sm text-neutral-600">
-              <UIcon name="i-heroicons-star-solid" class="w-4 h-4 text-yellow-500" />
+              <UIcon name="i-heroicons-star-solid" class="w-4 h-4 text-amber-500" />
               <span class="font-medium">Yüksek Müşteri Memnuniyeti</span>
             </div>
             <div class="flex items-center gap-2 text-sm text-neutral-600">
               <UIcon name="i-heroicons-truck" class="w-4 h-4 text-secondary-600" />
-              <span class="font-medium">Ücretsiz Kargo</span>
+              <span class="font-medium">Hızlı Teslimat</span>
             </div>
             <div class="flex items-center gap-2 text-sm text-neutral-600">
-              <UIcon name="i-heroicons-arrow-path" class="w-4 h-4 text-secondary-600" />
-              <span class="font-medium">14 Gün İade</span>
+              <UIcon name="i-heroicons-shield-check" class="w-4 h-4 text-secondary-600" />
+              <span class="font-medium">Güvenli Alışveriş</span>
             </div>
           </div>
         </div>
@@ -149,10 +155,10 @@
           <div class="text-center group">
             <div
               class="w-16 h-16 bg-secondary-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-secondary-200 transition-colors duration-200">
-              <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 text-secondary-600" />
+              <UIcon name="i-heroicons-star" class="w-8 h-8 text-secondary-600" />
             </div>
-            <h3 class="text-xl font-semibold text-neutral-900 mb-2">Kolay İade</h3>
-            <p class="text-neutral-600">14 gün içinde koşulsuz iade ve değişim hakkı</p>
+            <h3 class="text-xl font-semibold text-neutral-900 mb-2">Yüksek Müşteri Memnuniyeti</h3>
+            <p class="text-neutral-600">Binlerce memnun müşterimizin güveni ve desteği</p>
           </div>
 
           <div class="text-center group">
@@ -160,8 +166,8 @@
               class="w-16 h-16 bg-secondary-100 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:bg-secondary-200 transition-colors duration-200">
               <UIcon name="i-heroicons-chat-bubble-left-right" class="w-8 h-8 text-secondary-600" />
             </div>
-            <h3 class="text-xl font-semibold text-neutral-900 mb-2">7/24 Destek</h3>
-            <p class="text-neutral-600">WhatsApp ve e-posta ile kesintisiz müşteri desteği</p>
+            <h3 class="text-xl font-semibold text-neutral-900 mb-2">Hızlı Destek</h3>
+            <p class="text-neutral-600">WhatsApp ve telefon ile hızlı müşteri desteği</p>
           </div>
         </div>
       </div>

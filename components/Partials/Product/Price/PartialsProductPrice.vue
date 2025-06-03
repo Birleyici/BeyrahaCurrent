@@ -1,11 +1,11 @@
 <template>
-    <div class="flex space-x-2 items-center" :class="props.class">
-        <del :class="delClasses" v-if="props.salePrice && props.delPrice" class="text-neutral-400">
+    <div class="text-center md:flex space-x-2 md:items-center" :class="props.class">
+        <p :class="delClasses" v-if="props.salePrice && props.delPrice" class="line-through text-neutral-400">
             {{ formatPrice(props.price) }}
-        </del>
-        <span :class="priceClasses">
+        </p>
+        <p :class="priceClasses">
             {{ formatPrice(props.salePrice || props.price) }}
-        </span>
+        </p>
     </div>
 </template>
 <script setup>
