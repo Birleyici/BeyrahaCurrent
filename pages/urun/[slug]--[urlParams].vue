@@ -74,6 +74,8 @@
         piece: 8
       }" />
     </section>
+
+
   </div>
 </template>
 
@@ -83,7 +85,7 @@ const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
 const product_information = ref(null)
 const productCategoryIds = computed(() => {
-  return productState.product.selectedCategories.map(c => c.id)
+  return productState.product.categories?.map(c => c.id) || []
 })
 
 const route = useRoute();
@@ -94,6 +96,7 @@ await useAsyncData("initProductPageData", async () => {
   const response = await productState.fetchProduct(route.params)
   await variationsFrontState.fetchVariations(response.id)
   await attributeState.fetchAttributes(response.id, route.params)
+
   return true
 })
 
@@ -101,7 +104,7 @@ await useAsyncData("initProductPageData", async () => {
 await useErrorHandle(productState.product.name);
 
 onMounted(async () => {
-  await productState.fetchCategoryProducts(productState.product.selectedCategories)
+  await productState.fetchCategoryProducts(productState.product.categories || [])
 })
 
 attributeState.transformedAttrs = transform(
@@ -132,9 +135,10 @@ const breadcrumbLinks = computed(() => {
     to: '/'
   }]
 
-  // Kategorileri ekle
-  if (productState.product.selectedCategories?.length > 0) {
-    const mainCategory = productState.product.selectedCategories[0]
+  // Kategorileri ekle - product.categories kullan
+  if (productState.product.categories?.length > 0) {
+    const mainCategory = productState.product.categories[0]
+
     links.push({
       label: mainCategory.name,
       to: `/${mainCategory.slug}-a${mainCategory.id}`

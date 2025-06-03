@@ -23,15 +23,12 @@
         <div class="text-center max-w-5xl mx-auto">
           <!-- Badge -->
 
-
-
-
           <!-- Enhanced Description -->
           <p class="text-xl lg:text-2xl xl:text-3xl text-neutral-600 mb-12 leading-relaxed max-w-4xl mx-auto">
             <span class="font-medium text-neutral-800">Zarif tasarımlar</span> ve
             <span class="font-medium text-neutral-800">üstün kalite</span> ile
             <br class="hidden sm:block" />
-            tesettür modasında <span class="text-secondary-600 font-semibold">güvenilir tercih</span>
+            tesettür giyimde <span class="text-secondary-600 font-semibold">güvenilir tercih</span>
           </p>
 
           <!-- Enhanced CTA Buttons -->
