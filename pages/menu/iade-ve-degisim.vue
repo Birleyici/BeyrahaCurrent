@@ -181,8 +181,8 @@
                                         <UIcon name="i-heroicons-phone" class="w-5 h-5" />
                                         <span>Bizi Arayın</span>
                                     </a>
-                                    <a href="https://wa.me/905555555555"
-                                        class="inline-flex items-center justify-center gap-2 bg-sky-600 hover:bg-sky-700 text-white hover:!text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
+                                    <a href="https://wa.me/905436024821"
+                                        class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white hover:!text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
                                         <UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-5 h-5" />
                                         <span>WhatsApp</span>
                                     </a>
