@@ -1,12 +1,102 @@
 export default defineAppConfig({
 ui: {
     input: {
+      base: 'relative block w-full disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0',
+      form: 'form-input',
+      rounded: 'rounded-xl',
+      placeholder: 'placeholder-neutral-400 dark:placeholder-neutral-500',
+      size: {
+        '2xs': 'text-xs',
+        xs: 'text-xs',
+        sm: 'text-sm',
+        md: 'text-sm',
+        lg: 'text-sm',
+        xl: 'text-base'
+      },
+      padding: {
+        '2xs': 'px-2 py-1',
+        xs: 'px-2.5 py-1.5',
+        sm: 'px-3 py-2',
+        md: 'px-3 py-2.5',
+        lg: 'px-4 py-3.5',
+        xl: 'px-4 py-4'
+      },
+      leading: {
+        padding: {
+          '2xs': 'ps-7',
+          xs: 'ps-8',
+          sm: 'ps-9',
+          md: 'ps-10',
+          lg: 'ps-11',
+          xl: 'ps-12'
+        }
+      },
+      trailing: {
+        padding: {
+          '2xs': 'pe-7',
+          xs: 'pe-8',
+          sm: 'pe-9',
+          md: 'pe-10',
+          lg: 'pe-11',
+          xl: 'pe-12'
+        }
+      },
+      color: {
+        white: {
+          outline: 'shadow-sm bg-white ring-1 ring-neutral-200 text-neutral-900 placeholder-neutral-400 focus:ring-2 focus:ring-secondary-500 focus:ring-offset-0'
+        },
+        orange: {
+          outline: 'shadow-sm bg-white ring-1 ring-secondary-200 text-neutral-900 placeholder-neutral-400 focus:ring-2 focus:ring-secondary-500 focus:ring-offset-0'
+        },
+        gray: {
+          outline: 'shadow-sm bg-neutral-50 ring-1 ring-neutral-200 text-neutral-900 placeholder-neutral-400 focus:ring-2 focus:ring-secondary-500 focus:ring-offset-0'
+        }
+      },
       variant: {
-        custom: 'shadow-sm bg-transparent text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-{color}-400 focus:ring-2 focus:ring-{color}-500 dark:focus:ring-{color}-400'
+        outline: 'shadow-sm bg-white text-neutral-900 ring-1 ring-inset ring-neutral-200 focus:ring-2 focus:ring-secondary-500 focus:ring-offset-0',
+        none: 'bg-transparent focus:ring-0 focus:shadow-none'
+      },
+      icon: {
+        base: 'flex-shrink-0 text-neutral-400',
+        color: 'text-secondary-500',
+        size: {
+          '2xs': 'h-4 w-4',
+          xs: 'h-4 w-4',
+          sm: 'h-5 w-5',
+          md: 'h-5 w-5',
+          lg: 'h-5 w-5',
+          xl: 'h-6 w-6'
+        },
+        leading: {
+          wrapper: 'absolute inset-y-0 start-0 flex items-center',
+          pointer: 'pointer-events-none',
+          padding: {
+            '2xs': 'px-2',
+            xs: 'px-2.5',
+            sm: 'px-3',
+            md: 'px-3',
+            lg: 'px-4',
+            xl: 'px-4'
+          }
+        },
+        trailing: {
+          wrapper: 'absolute inset-y-0 end-0 flex items-center',
+          pointer: 'pointer-events-none',
+          padding: {
+            '2xs': 'px-2',
+            xs: 'px-2.5',
+            sm: 'px-3',
+            md: 'px-3',
+            lg: 'px-4',
+            xl: 'px-4'
+          }
+        }
       },
       default: {
-        variant: 'custom',
-      },
+        size: 'lg',
+        color: 'white',
+        variant: 'outline'
+      }
     },
     select: {
       variant:{

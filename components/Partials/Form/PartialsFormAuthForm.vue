@@ -1,81 +1,180 @@
 <template>
-  <UTabs :items="items" class="w-full md:w-[400px] mx-auto" :ui="{
-    list: {
-      marker: {
-        background: '!bg-orange-500'
-      },
-      tab: {
-        active: 'text-white'
-      }
-    },
-  }">
-    <template #item="{ item }">
-      <UCard>
-        <template #header>
-          <p class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-            {{ item.label }}
-          </p>
-          <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-            {{ item.description }}
-          </p>
-        </template>
+  <div class="w-full max-w-md mx-auto">
+    <!-- Tab Navigation -->
+    <div class="bg-neutral-100 p-1 rounded-2xl mb-8 shadow-inner">
+      <div class="grid grid-cols-2 gap-1">
+        <button @click="activeTab = 'login'" :class="[
+          'py-3 px-4 text-sm font-semibold rounded-full transition-all duration-300 ease-in-out',
+          activeTab === 'login'
+            ? 'bg-white text-secondary-600 shadow-md transform scale-[1.02]'
+            : 'text-neutral-600 hover:text-neutral-800'
+        ]">
+          Giriş Yap
+        </button>
+        <button @click="activeTab = 'register'" :class="[
+          'py-3 px-4 text-sm font-semibold rounded-full transition-all duration-300 ease-in-out',
+          activeTab === 'register'
+            ? 'bg-white text-secondary-600 shadow-md transform scale-[1.02]'
+            : 'text-neutral-600 hover:text-neutral-800'
+        ]">
+          Kaydol
+        </button>
+      </div>
+    </div>
 
-        <div v-if="item.key === 'login'" class="space-y-3 ">
-          <UForm :schema="schemaLogin" :state="authStore.user" class="space-y-4" @submit="onLogin">
-            <UFormGroup label="Email" name="email">
-              <UInput v-model="authStore.user.email" />
-            </UFormGroup>
+    <!-- Form Container -->
+    <div class="bg-white rounded-3xl shadow-xl border border-neutral-100 overflow-hidden">
+      <div class="p-8">
+        <!-- Login Form -->
+        <div v-if="activeTab === 'login'" class="space-y-6">
+          <div class="text-center mb-6">
+            <h2 class="text-xl font-semibold text-neutral-900 mb-1">Hesabınıza Giriş Yapın</h2>
+            <p class="text-neutral-500 text-sm">Alışverişe devam etmek için giriş yapın</p>
+          </div>
 
-            <!-- <UFormGroup label="Password" name="password">
-              <UInput :ui="{ icon: { trailing: { pointer: '' } } }" v-model="authStore.user.password"
-                :type="isShowPassword ? 'text' : 'password'">
-                <template #trailing>
-                  <UIcon @click="isShowPassword = !isShowPassword"
-                    :name="isShowPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'"
-                    class="w-5 h-5 cursor-pointer" />
-                </template>
-              </UInput>
-            </UFormGroup> -->
-
-            <UiInputPassword label="Şifre" v-model="authStore.user.password" />
-            <div>
-              <ULink class="font-medium text-sm" to="/sifremi-unuttum">Şifremi unuttum</ULink>
+          <UForm :schema="schemaLogin" :state="authStore.user" class="space-y-5" @submit="onLogin">
+            <div class="space-y-1">
+              <label class="block text-sm font-medium text-neutral-700 mb-2">E-posta Adresi</label>
+              <UFormGroup name="email">
+                <UInput v-model="authStore.user.email" type="email" placeholder="E-posta adresinizi girin"
+                  icon="i-heroicons-envelope" />
+              </UFormGroup>
             </div>
 
-            <UButton :loading="authStore.loading.login" color="orange" size="md" type="submit"> Giriş </UButton>
+            <div class="space-y-1">
+              <label class="block text-sm font-medium text-neutral-700 mb-2">Şifre</label>
+              <UFormGroup name="password">
+                <div class="relative">
+                  <UInput v-model="authStore.user.password" :type="showPassword ? 'text' : 'password'"
+                    placeholder="Şifrenizi girin" />
+                  <button type="button" @click="showPassword = !showPassword"
+                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-neutral-400 hover:text-neutral-600 transition-colors">
+                    <UIcon :name="showPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'" class="w-5 h-5" />
+                  </button>
+                </div>
+              </UFormGroup>
+            </div>
 
-            <ul class="list-disc  text-red-500">
-              <li v-for="error in authStore.apiError.login">
-                {{ error[0] }}
-              </li>
-            </ul>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center">
+                <input id="remember-me" name="remember-me" type="checkbox"
+                  class="h-4 w-4 text-secondary-600 focus:ring-secondary-500 border-neutral-300 rounded">
+                <label for="remember-me" class="ml-2 block text-sm text-neutral-700">Beni hatırla</label>
+              </div>
+              <ULink to="/sifremi-unuttum"
+                class="text-sm font-medium text-secondary-600 hover:text-secondary-500 transition-colors">
+                Şifremi unuttum
+              </ULink>
+            </div>
 
+            <!-- Error Messages -->
+            <div v-if="authStore.apiError.login?.length" class="bg-red-50 border border-red-200 rounded-xl p-4">
+              <div class="flex">
+                <UIcon name="i-heroicons-exclamation-triangle" class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+                <div class="text-sm text-red-700">
+                  <ul class="space-y-1">
+                    <li v-for="error in authStore.apiError.login" :key="error">{{ error[0] }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <UButton :loading="authStore.loading.login" type="submit" size="lg" block color="orange" :ui="{
+              base: 'focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-semibold',
+              rounded: 'rounded-xl',
+              padding: { lg: 'px-4 py-3.5' },
+              color: { orange: { solid: 'shadow-sm text-white bg-secondary-500 hover:bg-secondary-600 disabled:bg-secondary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-500 transform hover:scale-[1.02] transition-all duration-200' } }
+            }">
+              <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-5 h-5 mr-2" />
+              Giriş Yap
+            </UButton>
           </UForm>
         </div>
-        <div v-else-if="item.key === 'register'">
-          <UForm :schema="schemaRegister" :state="authStore.register" class="space-y-4" @submit="onRegister">
-            <UFormGroup label="Email" name="email">
-              <UInput v-model="authStore.register.email" />
-            </UFormGroup>
 
-            <UiInputPassword label="Şifre" v-model="authStore.register.password" />
+        <!-- Register Form -->
+        <div v-else class="space-y-6">
+          <div class="text-center mb-6">
+            <h2 class="text-xl font-semibold text-neutral-900 mb-1">Yeni Hesap Oluşturun</h2>
+            <p class="text-neutral-500 text-sm">Beyraha ailesine katılın ve özel fırsatlardan yararlanın</p>
+          </div>
 
-            <UiInputPassword label="Şifre tekrar" v-model="authStore.register.password_confirmation" />
+          <UForm :schema="schemaRegister" :state="authStore.register" class="space-y-5" @submit="onRegister">
+            <div class="space-y-1">
+              <label class="block text-sm font-medium text-neutral-700 mb-2">E-posta Adresi</label>
+              <UFormGroup name="email">
+                <UInput v-model="authStore.register.email" type="email" placeholder="ornek@email.com"
+                  icon="i-heroicons-envelope" />
+              </UFormGroup>
+            </div>
 
-            <UButton :loading="authStore.loading.register" color="orange" size="md" type="submit"> Kaydol </UButton>
+            <div class="space-y-1">
+              <label class="block text-sm font-medium text-neutral-700 mb-2">Şifre</label>
+              <UFormGroup name="password">
+                <div class="relative">
+                  <UInput v-model="authStore.register.password" :type="showRegisterPassword ? 'text' : 'password'"
+                    placeholder="Güçlü bir şifre oluşturun" />
+                  <button type="button" @click="showRegisterPassword = !showRegisterPassword"
+                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-neutral-400 hover:text-neutral-600 transition-colors">
+                    <UIcon :name="showRegisterPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'" class="w-5 h-5" />
+                  </button>
+                </div>
+              </UFormGroup>
+            </div>
 
-            <ul class="list-disc text-red-500">
-              <li v-for="error in authStore.apiError.register">
-                {{ error[0] }}
-              </li>
-            </ul>
+            <div class="space-y-1">
+              <label class="block text-sm font-medium text-neutral-700 mb-2">Şifre Tekrar</label>
+              <UFormGroup name="password_confirmation">
+                <div class="relative">
+                  <UInput v-model="authStore.register.password_confirmation"
+                    :type="showConfirmPassword ? 'text' : 'password'" placeholder="Şifrenizi tekrar girin" />
+                  <button type="button" @click="showConfirmPassword = !showConfirmPassword"
+                    class="absolute inset-y-0 right-0 flex items-center pr-4 text-neutral-400 hover:text-neutral-600 transition-colors">
+                    <UIcon :name="showConfirmPassword ? 'i-heroicons-eye-slash' : 'i-heroicons-eye'" class="w-5 h-5" />
+                  </button>
+                </div>
+              </UFormGroup>
+            </div>
 
+            <!-- Error Messages -->
+            <div v-if="authStore.apiError.register?.length" class="bg-red-50 border border-red-200 rounded-xl p-4">
+              <div class="flex">
+                <UIcon name="i-heroicons-exclamation-triangle" class="w-5 h-5 text-red-400 mr-2 mt-0.5" />
+                <div class="text-sm text-red-700">
+                  <ul class="space-y-1">
+                    <li v-for="error in authStore.apiError.register" :key="error">{{ error[0] }}</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <UButton :loading="authStore.loading.register" type="submit" size="lg" block color="orange" :ui="{
+              base: 'focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0 font-semibold',
+              rounded: 'rounded-xl',
+              padding: { lg: 'px-4 py-3.5' },
+              color: { orange: { solid: 'shadow-sm text-white bg-secondary-500 hover:bg-secondary-600 disabled:bg-secondary-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-500 transform hover:scale-[1.02] transition-all duration-200' } }
+            }">
+              <UIcon name="i-heroicons-user-plus" class="w-5 h-5 mr-2" />
+              Hesap Oluştur
+            </UButton>
           </UForm>
         </div>
-      </UCard>
-    </template>
-  </UTabs>
+      </div>
 
+      <!-- Footer -->
+      <div class="bg-neutral-50 px-8 py-6 border-t border-neutral-100">
+        <div class="text-center">
+          <p class="text-xs text-neutral-500">
+            Güvenli alışveriş için SSL sertifikası ile korunmaktayız
+          </p>
+          <div class="flex items-center justify-center mt-2 space-x-4">
+            <UIcon name="i-heroicons-shield-check" class="w-4 h-4 text-green-500" />
+            <UIcon name="i-heroicons-lock-closed" class="w-4 h-4 text-green-500" />
+            <UIcon name="i-heroicons-check-badge" class="w-4 h-4 text-green-500" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -85,56 +184,82 @@ const props = defineProps({
     default: true
   }
 })
+
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
+
 const router = useRouter()
 const authStore = useAuthStore()
+
+// Reactive states
+const activeTab = ref('login')
+const showPassword = ref(false)
+const showRegisterPassword = ref(false)
+const showConfirmPassword = ref(false)
+
+// Validation schemas
 const schemaLogin = object({
-  email: string().trim().email('Geçersiz email').required('Zorunlu'),
+  email: string().trim().email('Geçersiz email').required('Email adresi zorunludur'),
   password: string()
-    .min(8, 'Şifre minimum 8 karakter olmalıdır.')
-    .required('Zorunlu')
+    .min(8, 'Şifre minimum 8 karakter olmalıdır')
+    .required('Şifre zorunludur')
+});
+
+const schemaRegister = object({
+  email: string().trim().email('Geçersiz email').required('Email adresi zorunludur'),
+  password: string()
+    .min(8, 'Şifre minimum 8 karakter olmalıdır')
+    .required('Şifre zorunludur'),
+  password_confirmation: string()
+    .min(8, 'Şifre minimum 8 karakter olmalıdır')
+    .required('Şifre tekrarı zorunludur')
 });
 
 type LoginSchema = InferType<typeof schemaLogin>;
-
-const schemaRegister = object({
-  email: string().trim().email('Geçersiz email').required('Zorunlu'),
-  password: string()
-    .min(8, 'Şifre minimum 8 karakter olmalıdır.')
-    .required('Zorunlu'),
-  password_confirmation: string()
-    .min(8, 'Şifre minimum 8 karakter olmalıdır.')
-    .required('Zorunlu')
-});
-
 type RegisterSchema = InferType<typeof schemaRegister>;
 
-
+// Form handlers
 async function onLogin(event: FormSubmitEvent<LoginSchema>) {
-  // Do something with event.data
   const response = await authStore.login()
   if (response && props.redirect) {
-    navigateTo(router.currentRoute.value.query.callback || '/')
+    const callback = router.currentRoute.value.query.callback
+    navigateTo(typeof callback === 'string' ? callback : '/')
   }
 }
 
 async function onRegister(event: FormSubmitEvent<RegisterSchema>) {
-
   const response = await authStore.registerUser()
-
   if (response && props.redirect) {
-    navigateTo(router.currentRoute.value.query.callback || '/')
+    const callback = router.currentRoute.value.query.callback
+    navigateTo(typeof callback === 'string' ? callback : '/')
+  }
+}
+</script>
+
+<style scoped>
+/* Custom animations */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-const items = [{
-  key: 'login',
-  label: 'Giriş',
-  description: 'Mevcut hesabınıza giriş yapın'
-}, {
-  key: 'register',
-  label: 'Kaydol',
-  description: 'Yeni bir hesap oluşturun'
-}]
-</script>
+.slide-in {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Debug: Force icon visibility in slideover */
+:deep(.relative .absolute) {
+  z-index: 999999999 !important;
+}
+
+:deep([data-headlessui-state]) .relative .absolute {
+  z-index: 999999999 !important;
+}
+</style>

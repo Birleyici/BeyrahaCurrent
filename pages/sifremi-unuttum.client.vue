@@ -1,69 +1,112 @@
 <template>
-  <div class="space-y-3 w-full md:w-[400px] standart-section-spacing mx-auto">
-    <UCard>
-      <template #header>
-        <p class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-          {{ route.query.token ? 'Yeni şifre oluşturma' : 'Şifre hatırlatma' }}
+  <div
+    class="py-12 bg-gradient-to-br from-neutral-50 via-secondary-50/30 to-neutral-100 min-h-screen flex items-center justify-center p-4">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 overflow-hidden">
+      <div class="absolute top-20 left-10 w-32 h-32 bg-secondary-200/20 rounded-full blur-3xl"></div>
+      <div class="absolute top-40 right-20 w-48 h-48 bg-primary-200/15 rounded-full blur-3xl"></div>
+      <div class="absolute bottom-32 left-1/4 w-24 h-24 bg-secondary-300/25 rounded-full blur-2xl"></div>
+      <div class="absolute bottom-20 right-1/3 w-36 h-36 bg-accent-200/20 rounded-full blur-3xl"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 w-full max-w-lg">
+      <!-- Logo/Brand Section -->
+      <div class="text-center mb-8">
+        <div
+          class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-3xl mb-6 shadow-xl">
+          <UIcon name="i-heroicons-key" class="w-10 h-10 text-white" />
+        </div>
+        <h1 class="text-3xl font-bold text-neutral-900 mb-3">
+          {{ pageTitle }}
+        </h1>
+        <p class="text-neutral-600 text-lg max-w-md mx-auto">
+          {{ pageDescription }}
         </p>
-        <p class="mt-1 text-sm text-gray-500 dark:text-gray-400">
-          {{ route.query.token ? `Lütfen yeni şifrenizi oluşturun` : `Kayıtlı olduğunuz email adresinize bir şifre
-          yenileme bağlantısı göndereceğiz.` }}
-        </p>
-      </template>
-      <div v-if="!route.query.token">
-        <UForm :schema="schemaRemind" :state="form" class="space-y-4" @submit="onRemind">
-          <UFormGroup label="Email" name="email">
-            <UInput v-model="form.email" color="orange" />
-            <ul v-for="err in remindFormErrors?.email" class="text-red-500 text-sm my-1 w-full">
-              <li>{{ err }}</li>
-            </ul>
-          </UFormGroup>
-
-          <!-- <UiInputPassword label="Şifre" v-model="authStore.user.password" /> -->
-          <UButton :loading="authStore.loading.remind" color="orange" size="md" type="submit"> Gönder </UButton>
-          <UNotification :timeout="0" color="green"
-            description="Şifre yenileme bağlantısı e-mail adresinize gönderildi." id="reset_notification"
-            v-if="remindNotification" @close="remindNotification = false" />
-
-
-        </UForm>
       </div>
-      <div v-else>
-        <UForm :schema="schemaChange" :state="changeForm" class="space-y-4" @submit="onChange">
-          <UFormGroup label="Şifre" name="password">
-            <UInput v-model="changeForm.password" color="orange" />
-          </UFormGroup>
 
-          <UFormGroup label="Şifre tekrarı" name="password_confirmation">
-            <UInput v-model="changeForm.password_confirmation" color="orange" />
-          </UFormGroup>
+      <!-- Form Card -->
+      <div class="bg-white/80 backdrop-blur-sm rounded-3xl shadow-2xl border border-white/20 p-8">
+        <!-- Email Hatırlatma Formu -->
+        <div v-if="!route.query.token">
+          <UForm :schema="schemaRemind" :state="form" class="space-y-6" @submit="onRemind">
+            <UFormGroup label="Email Adresiniz" name="email">
+              <UInput v-model="form.email" placeholder="ornek@email.com" icon="i-heroicons-envelope" />
+              <div v-if="remindFormErrors?.email" class="mt-2">
+                <p v-for="(err, index) in remindFormErrors.email" :key="index" class="text-red-500 text-sm">
+                  {{ err }}
+                </p>
+              </div>
+            </UFormGroup>
 
-          <!-- <UiInputPassword label="Şifre" v-model="authStore.user.password" /> -->
-          <UButton :loading="authStore.loading.remind" color="orange" size="md" type="submit"> Değiştir </UButton>
-          <UNotification :timeout="0" color="green" description="Şifre yenileme başarılı girişe yönlendiriliyorsunuz."
-            id="reset_notification2" v-if="resetNotification" @close="resetNotification = false" />
-        </UForm>
+            <UButton :loading="authStore.loading.remind" color="orange" size="lg" type="submit" class="w-full" :ui="{
+              rounded: 'rounded-2xl',
+              padding: { lg: 'px-6 py-4' }
+            }">
+              Şifre Yenileme Bağlantısı Gönder
+            </UButton>
+
+            <UNotification v-if="remindNotification" id="remind_notification" :timeout="0" color="green"
+              title="Başarılı!" description="Şifre yenileme bağlantısı e-mail adresinize gönderildi."
+              @close="remindNotification = false" />
+          </UForm>
+        </div>
+
+        <!-- Şifre Değiştirme Formu -->
+        <div v-else>
+          <UForm :schema="schemaChange" :state="changeForm" class="space-y-6" @submit="onChange">
+            <UFormGroup label="Yeni Şifre" name="password">
+              <UInput v-model="changeForm.password" type="password" color="orange" placeholder="Yeni şifrenizi girin"
+                icon="i-heroicons-lock-closed" />
+            </UFormGroup>
+
+            <UFormGroup label="Şifre Tekrarı" name="password_confirmation">
+              <UInput v-model="changeForm.password_confirmation" type="password" color="orange"
+                placeholder="Şifrenizi tekrar girin" icon="i-heroicons-lock-closed" />
+            </UFormGroup>
+
+            <UButton :loading="authStore.loading.remind" color="orange" size="lg" type="submit" class="w-full">
+              Şifreyi Değiştir
+            </UButton>
+
+            <UNotification v-if="resetNotification" id="reset_notification" :timeout="0" color="green" title="Başarılı!"
+              description="Şifre yenileme başarılı, giriş sayfasına yönlendiriliyorsunuz."
+              @close="resetNotification = false" />
+          </UForm>
+        </div>
+
+        <!-- Hata Mesajları -->
+        <div v-if="errorObject.length > 0" class="mt-6">
+          <div v-for="(err, index) in errorObject" :key="index" class="text-red-500 text-sm mb-2">
+            {{ err }}
+          </div>
+        </div>
+
+        <!-- Geri Dön Linki -->
+        <div class="mt-6 text-center">
+          <NuxtLink to="/auth"
+            class="text-secondary-600 hover:text-secondary-700 text-sm transition-colors duration-200">
+            ← Giriş sayfasına dön
+          </NuxtLink>
+        </div>
       </div>
-      <div class="mt-4">
-        <ul v-for="err in errorObject" class="text-red-500 text-sm my-1 w-full">
-          <li>{{ err }}</li>
-        </ul>
-      </div>
-    </UCard>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
+
 const authStore = useAuthStore()
 const route = useRoute()
-const toast = useToast()
 const remindNotification = ref(false)
 const resetNotification = ref(false)
+
 const form = ref({
   email: ''
 })
+
 const changeForm = ref({
   password: '',
   password_confirmation: '',
@@ -71,7 +114,16 @@ const changeForm = ref({
   token: route.query.token
 })
 
+// Computed properties for dynamic content
+const pageTitle = computed(() => {
+  return route.query.token ? 'Yeni Şifre Oluştur' : 'Şifremi Unuttum'
+})
 
+const pageDescription = computed(() => {
+  return route.query.token
+    ? 'Lütfen yeni şifrenizi oluşturun'
+    : 'Kayıtlı email adresinize şifre yenileme bağlantısı göndereceğiz'
+})
 
 type RemindSchema = InferType<typeof schemaRemind>;
 type ChangeSchema = InferType<typeof schemaChange>;
@@ -89,47 +141,40 @@ const schemaChange = object({
     .required('Zorunlu')
 });
 
-const remindFormErrors = ref([]);
+const remindFormErrors = ref<any>({});
+const changeFormErrors = ref<any>({});
+
 async function onRemind(event: FormSubmitEvent<RemindSchema>) {
   try {
     await authStore.remind(form.value.email);
     remindNotification.value = true;
-    remindFormErrors.value = []
+    remindFormErrors.value = {}
     form.value.email = '';
   } catch (error) {
     remindNotification.value = false;
-
-    // parseError fonksiyonunu kullanarak hatayı işleyelim
     const parsedError = parseError(error);
-
     if (parsedError.errorType) {
-      remindFormErrors.value = parsedError.errors; // Eğer başka bir hata türü geldiyse
+      remindFormErrors.value = parsedError.errors || {};
     }
   }
 }
 
-
-const changeFormErrors = ref([]);
 async function onChange(event: FormSubmitEvent<ChangeSchema>) {
   try {
     await authStore.changePassword(changeForm.value);
     resetNotification.value = true;
-    changeFormErrors.value = []
+    changeFormErrors.value = {}
     setTimeout(() => {
       navigateTo('/auth');
     }, 2000);
   } catch (error) {
-
-
     resetNotification.value = false;
-    // parseError fonksiyonunu kullanarak hatayı işleyelim
     const parsedError = parseError(error);
     if (parsedError.errorType) {
-      changeFormErrors.value = parsedError.errors; // Eğer başka bir hata türü geldiyse
+      changeFormErrors.value = parsedError.errors || {};
     }
   }
 }
-
 
 const errorObject = computed(() => {
   if (Object.keys(changeFormErrors.value).length > 0) {
@@ -141,4 +186,16 @@ const errorObject = computed(() => {
   return [];
 });
 
+// SEO Meta
+useHead({
+  title: pageTitle.value + ' | Beyraha',
+  meta: [
+    {
+      name: 'description',
+      content: route.query.token
+        ? 'Yeni şifrenizi oluşturun ve hesabınıza güvenli erişim sağlayın.'
+        : 'Şifrenizi mi unuttunuz? Email adresinize şifre yenileme bağlantısı gönderelim.'
+    }
+  ]
+})
 </script>
