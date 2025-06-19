@@ -24,7 +24,7 @@
         <!-- Logo -->
         <div class="flex-1 flex justify-center">
           <NuxtLink href="/" class="group">
-            <NuxtImg :src="logoSrc" class="h-10 w-auto transition-transform duration-200 group-hover:scale-105"
+            <img :src="logoSrc" class="h-10 w-auto transition-transform duration-200 group-hover:scale-105"
               format="webp" width="102" height="45" alt="Beyraha Logo" />
           </NuxtLink>
         </div>
