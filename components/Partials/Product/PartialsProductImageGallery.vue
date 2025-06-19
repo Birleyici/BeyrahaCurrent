@@ -10,7 +10,8 @@
           <div v-for="(image, index) in images" :key="index" class="w-full h-full flex-shrink-0">
             <NuxtImg :src="'cl/' + image.path" :alt="image.alt"
               class="w-full h-full object-cover cursor-zoom-in transition-transform duration-300 group-hover:scale-105"
-              @click="openFullscreen" format="webp" quality="90" :width="600" :height="800" fit="inside" />
+              @click="openFullscreen" format="webp" quality="90" :width="600" :height="800" fit="inside"
+              :background="backgroundColor" />
           </div>
         </div>
 
@@ -162,6 +163,41 @@
 
 <script setup lang="ts">
 const props = defineProps(['images', 'alt']);
+
+// Dark mode reactive tracking
+const isDarkMode = ref(false);
+
+// Dynamic background color based on theme
+const backgroundColor = computed(() => {
+  return isDarkMode.value ? '#262626' : '#f5f5f5';
+});
+
+// Dark mode durumunu kontrol et
+const checkDarkMode = () => {
+  if (process.client) {
+    isDarkMode.value = document.documentElement.classList.contains('dark');
+  }
+};
+
+// Component mount edildiğinde ve theme değiştiğinde kontrol et
+onMounted(() => {
+  checkDarkMode();
+
+  // Theme değişikliklerini izle
+  const observer = new MutationObserver(() => {
+    checkDarkMode();
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  // Cleanup
+  onUnmounted(() => {
+    observer.disconnect();
+  });
+});
 
 const images = computed(() => {
   return props.images && props.images.length > 0

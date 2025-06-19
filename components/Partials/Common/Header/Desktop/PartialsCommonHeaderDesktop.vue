@@ -57,15 +57,8 @@
                 </span>
               </ClientOnly>
             </div>
-            <div class="flex flex-col items-start hidden lg:block">
-              <span
-                class="font-medium text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white">Sepet</span>
-              <ClientOnly>
-                <span class="text-xs text-secondary-600 dark:text-secondary-400 font-medium">
-                  {{ formatPrice(props.cart.cartTotalAmount) }}
-                </span>
-              </ClientOnly>
-            </div>
+            <span
+              class="font-medium text-neutral-700 dark:text-neutral-300 group-hover:text-neutral-900 dark:group-hover:text-white hidden lg:block">Sepet</span>
           </button>
         </div>
       </div>

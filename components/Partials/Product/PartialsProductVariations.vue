@@ -97,14 +97,27 @@
         <div class="lg:hidden space-y-4">
           <!-- Sayaç -->
           <div class="flex justify-center">
-            <UInput type="number" v-model="qyt" min="1" max="99" class="w-fit counter-height" size="sm" />
+            <div
+              class="flex items-center bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700">
+              <button @click="decreaseQty" :disabled="qyt <= 1"
+                class="flex items-center justify-center w-10 h-10 text-neutral-600 dark:text-neutral-400 hover:text-secondary-600 dark:hover:text-secondary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <UIcon name="i-heroicons-minus" class="w-4 h-4" />
+              </button>
+              <input v-model="qyt" type="number" min="1" max="99"
+                class="w-16 h-10 text-center bg-transparent border-0 text-neutral-900 dark:text-neutral-100 font-medium focus:outline-none focus:ring-0"
+                @input="validateQty" />
+              <button @click="increaseQty" :disabled="qyt >= 99"
+                class="flex items-center justify-center w-10 h-10 text-neutral-600 dark:text-neutral-400 hover:text-secondary-600 dark:hover:text-secondary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+                <UIcon name="i-heroicons-plus" class="w-4 h-4" />
+              </button>
+            </div>
           </div>
 
           <!-- Butonlar -->
           <div class="flex flex-col space-y-3">
             <!-- Sepete Ekle Butonu -->
             <UButton :loading="cartState.addToCartloading" @click="addToCart()" color="secondary"
-              class="!rounded-full font-bold flex justify-center relative text-sm px-6 overflow-hidden w-full text-white">
+              class="!rounded-full font-bold flex justify-center relative text-sm px-6 overflow-hidden w-full text-white h-12">
               <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
               </Icon>
               <p class="text-white">SEPETE EKLE</p>
@@ -112,75 +125,48 @@
 
             <!-- WhatsApp Sipariş Butonu -->
             <UButton @click="orderViaWhatsApp()"
-              class="group relative !rounded-full font-bold flex justify-center items-center text-sm px-6  w-full bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 ">
-              <!-- WhatsApp Icon with Animation -->
-              <div class="relative flex items-center">
-                <svg class="w-5 h-5 mr-2 group-hover:animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.787" />
-                </svg>
-                <span class="relative">
-                  WhatsApp Sipariş
-                  <!-- Shimmer Effect -->
-                  <div
-                    class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700">
-                  </div>
-                </span>
-              </div>
-
-              <!-- Background Decoration -->
-              <div
-                class="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/20 to-green-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              </div>
-
-              <!-- Floating Dots -->
-              <div
-                class="absolute -top-1 -right-1 w-3 h-3 bg-green-300 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping">
-              </div>
+              class="!rounded-full font-bold flex justify-center items-center text-sm px-6 w-full h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 transition-all duration-200">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.787" />
+              </svg>
+              <span>WhatsApp Sipariş</span>
             </UButton>
           </div>
         </div>
 
         <!-- Desktop Düzen (lg ve üstü) -->
         <div class="hidden lg:flex lg:flex-row lg:items-center lg:space-x-4">
-          <div>
-            <UInput type="number" v-model="qyt" min="1" max="99" class="counter-height"></UInput>
+          <div
+            class="flex items-center bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700">
+            <button @click="decreaseQty" :disabled="qyt <= 1"
+              class="flex items-center justify-center w-11 h-11 text-neutral-600 dark:text-neutral-400 hover:text-secondary-600 dark:hover:text-secondary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              <UIcon name="i-heroicons-minus" class="w-5 h-5" />
+            </button>
+            <input v-model="qyt" type="number" min="1" max="99"
+              class="w-20 h-11 text-center bg-transparent border-0 text-neutral-900 dark:text-neutral-100 font-medium focus:outline-none focus:ring-0"
+              @input="validateQty" />
+            <button @click="increaseQty" :disabled="qyt >= 99"
+              class="flex items-center justify-center w-11 h-11 text-neutral-600 dark:text-neutral-400 hover:text-secondary-600 dark:hover:text-secondary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
+              <UIcon name="i-heroicons-plus" class="w-5 h-5" />
+            </button>
           </div>
 
           <div class="flex space-x-4">
             <UButton :loading="cartState.addToCartloading" @click="addToCart()" color="secondary"
-              class="!rounded-full font-bold flex justify-center relative text-sm lg:!px-12 px-6 overflow-hidden min-w-[180px] text-white">
+              class="!rounded-full font-bold flex justify-center relative text-sm px-8 overflow-hidden min-w-[180px] h-12 text-white">
               <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
               </Icon>
               <p class="text-white">SEPETE EKLE</p>
             </UButton>
 
             <UButton @click="orderViaWhatsApp()"
-              class="group relative !rounded-full font-bold flex justify-center items-center text-sm lg:!px-8 px-6 min-w-[180px] bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
-              <!-- WhatsApp Icon with Animation -->
-              <div class="relative flex items-center">
-                <svg class="w-5 h-5 mr-2 group-hover:animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-                  <path
-                    d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.787" />
-                </svg>
-                <span class="relative">
-                  WhatsApp Sipariş
-                  <!-- Shimmer Effect -->
-                  <div
-                    class="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700">
-                  </div>
-                </span>
-              </div>
-
-              <!-- Background Decoration -->
-              <div
-                class="absolute inset-0 rounded-full bg-gradient-to-r from-green-400/20 to-green-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-              </div>
-
-              <!-- Floating Dots -->
-              <div
-                class="absolute -top-1 -right-1 w-3 h-3 bg-green-300 rounded-full opacity-0 group-hover:opacity-100 group-hover:animate-ping">
-              </div>
+              class="!rounded-full font-bold flex justify-center items-center text-sm px-8 min-w-[180px] h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 transition-all duration-200">
+              <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                <path
+                  d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0020.885 3.787" />
+              </svg>
+              <span>WhatsApp Sipariş</span>
             </UButton>
           </div>
         </div>
@@ -234,6 +220,29 @@ initialColor()
 
 
 const selectionRequired = ref(false)
+
+// Counter fonksiyonları
+const increaseQty = () => {
+  if (qyt.value < 99) {
+    qyt.value++
+  }
+}
+
+const decreaseQty = () => {
+  if (qyt.value > 1) {
+    qyt.value--
+  }
+}
+
+const validateQty = () => {
+  // Input'tan gelen değeri kontrol et
+  if (qyt.value < 1) {
+    qyt.value = 1
+  } else if (qyt.value > 99) {
+    qyt.value = 99
+  }
+}
+
 const addToCart = () => {
 
   if (!getSelectedVariation.value && isVariableProduct.value) {
@@ -414,13 +423,5 @@ watch(getSelectedVariation, () => {
 </script>
 
 <style scoped>
-.counter-height :deep(.ui-form-counter) {
-  height: 2.75rem;
-  /* UButton'ların varsayılan yüksekliği ile eşleşir */
-}
-
-.counter-height :deep(.ui-form-counter button),
-.counter-height :deep(.ui-form-counter input) {
-  height: 2.75rem;
-}
+/* Counter stilleri artık gerekli değil - kaldırıldı */
 </style>
