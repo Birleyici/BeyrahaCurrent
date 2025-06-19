@@ -1,7 +1,7 @@
 export const useBaseUrl = () => {
   if (process.env.NODE_ENV === 'production') {
-    return 'http://localhost/api/'
+    return 'https://api.beyraha.com/'
   } else {
-    return 'http://localhost/api/'
+    return 'https://api.beyraha.com/'
   }
 }
