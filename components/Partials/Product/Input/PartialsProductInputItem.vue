@@ -6,7 +6,8 @@
         <span v-if="props.product.selectedInput.isRequired" class=" text-red-500"> *</span>
       </div>
       <div class="grid gap-1">
-        <UInput id="input" :placeholder="props.product.selectedInput.placeholder" v-model="props.product.inputValue" />
+        <UInput id="input" :placeholder="props.product.selectedInput.placeholder" v-model="props.product.inputValue"
+          size="md" />
         <p class="text-xs text-gray-400">*{{ props.product.selectedInput.description || 'Açıklama' }}</p>
       </div>
     </div>

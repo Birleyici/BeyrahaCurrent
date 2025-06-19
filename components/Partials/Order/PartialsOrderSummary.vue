@@ -1,14 +1,16 @@
 <template>
-  <div class="bg-white border border-neutral-200 rounded-xl p-4 lg:p-6 hover:shadow-soft transition-all duration-200">
+  <div
+    class="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl p-4 lg:p-6 hover:shadow-soft dark:hover:shadow-lg transition-all duration-200">
     <!-- Ana İçerik -->
     <div class="flex flex-col lg:flex-row gap-4">
       <!-- Ürün Resmi -->
       <div class="flex-shrink-0">
-        <div class="w-20 h-20 lg:w-24 lg:h-24 rounded-xl overflow-hidden bg-neutral-100 ring-1 ring-neutral-200">
+        <div
+          class="w-20 h-20 lg:w-24 lg:h-24 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-700 ring-1 ring-neutral-200 dark:ring-neutral-600">
           <NuxtImg v-if="props.item.image?.path" :src="'cl/' + props.item.image?.path" :alt="props.item.product_name"
             class="w-full h-full object-cover" format="webp" quality="80" :width="96" :height="96" fit="cover" />
-          <div v-else class="w-full h-full flex items-center justify-center bg-neutral-100">
-            <UIcon name="i-heroicons-photo" class="w-8 h-8 text-neutral-400" />
+          <div v-else class="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-700">
+            <UIcon name="i-heroicons-photo" class="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
           </div>
         </div>
       </div>
@@ -19,9 +21,9 @@
 
           <!-- Ürün Adı -->
           <div>
-            <h4 class="font-semibold text-neutral-900 text-base lg:text-lg leading-tight">
+            <h4 class="font-semibold text-neutral-900 dark:text-neutral-100 text-base lg:text-lg leading-tight">
               <NuxtLink v-if="props.item.slug" :to="props.item.slug"
-                class="hover:text-secondary-600 transition-colors duration-200">
+                class="hover:text-secondary-600 dark:hover:text-secondary-400 transition-colors duration-200">
                 {{ props.item.product_name }}
               </NuxtLink>
               <span v-else>{{ props.item.product_name }}</span>
@@ -32,19 +34,20 @@
           <div v-if="props.item.variation?.terms" class="flex flex-wrap gap-2">
             <div v-for="(value, key) in props.item.variation.terms" :key="key" class="inline-flex items-center gap-2">
               <span
-                class="inline-flex items-center px-2 py-1 rounded-md bg-neutral-100 text-xs font-medium text-neutral-700">
+                class="inline-flex items-center px-2 py-1 rounded-md bg-neutral-100 dark:bg-neutral-700 text-xs font-medium text-neutral-700 dark:text-neutral-300">
                 {{ key }}
               </span>
-              <span class="text-sm font-medium text-neutral-900">{{ value }}</span>
+              <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">{{ value }}</span>
             </div>
           </div>
 
           <!-- Özel Input'lar -->
           <div v-if="props.item.order_item_inputs?.length" class="space-y-2">
-            <div v-for="input in props.item.order_item_inputs" :key="input.id" class="bg-neutral-50 rounded-lg p-3">
+            <div v-for="input in props.item.order_item_inputs" :key="input.id"
+              class="bg-neutral-50 dark:bg-neutral-700 rounded-lg p-3">
               <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                <span class="text-sm font-medium text-neutral-700">{{ input.label }}:</span>
-                <div v-if="!props.editingMode" class="text-sm font-semibold text-neutral-900">
+                <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ input.label }}:</span>
+                <div v-if="!props.editingMode" class="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
                   {{ input.value }}
                 </div>
                 <div v-else class="flex items-center gap-2">
@@ -58,19 +61,20 @@
           </div>
 
           <!-- Mobilde Fiyat Bilgileri -->
-          <div class="lg:hidden space-y-3 pt-3 border-t border-neutral-200">
+          <div class="lg:hidden space-y-3 pt-3 border-t border-neutral-200 dark:border-neutral-700">
             <!-- Miktar -->
             <div class="flex items-center justify-between">
-              <span class="text-sm text-neutral-600">Miktar:</span>
-              <div class="inline-flex items-center gap-2 bg-neutral-100 rounded-lg px-3 py-1">
-                <UIcon name="i-heroicons-cube" class="w-4 h-4 text-neutral-600" />
-                <span class="text-sm font-medium text-neutral-700">{{ props.item.quantity }} adet</span>
+              <span class="text-sm text-neutral-600 dark:text-neutral-400">Miktar:</span>
+              <div class="inline-flex items-center gap-2 bg-neutral-100 dark:bg-neutral-700 rounded-lg px-3 py-1">
+                <UIcon name="i-heroicons-cube" class="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+                <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ props.item.quantity }}
+                  adet</span>
               </div>
             </div>
 
             <!-- Birim Fiyat -->
             <div class="flex items-center justify-between">
-              <span class="text-sm text-neutral-600">Birim Fiyat:</span>
+              <span class="text-sm text-neutral-600 dark:text-neutral-400">Birim Fiyat:</span>
               <PartialsProductPrice :del-price="false" type="card"
                 :price="props.item.variation?.price || props.item.price"
                 :sale-price="props.item.variation?.sale_price || props.item.sale_price" />
@@ -78,9 +82,10 @@
 
             <!-- Toplam Fiyat -->
             <div class="flex items-center justify-between">
-              <span class="text-sm font-medium text-neutral-700">Toplam:</span>
-              <div class="bg-secondary-50 border border-secondary-200 rounded-lg px-3 py-2">
-                <p class="text-lg font-bold text-secondary-600">
+              <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Toplam:</span>
+              <div
+                class="bg-secondary-50 dark:bg-secondary-900/50 border border-secondary-200 dark:border-secondary-700 rounded-lg px-3 py-2">
+                <p class="text-lg font-bold text-secondary-600 dark:text-secondary-400">
                   {{ formatPrice(props.item.price * props.item.quantity) }}
                 </p>
               </div>
@@ -94,14 +99,15 @@
         <div class="space-y-4">
 
           <!-- Miktar -->
-          <div class="inline-flex items-center gap-2 bg-neutral-100 rounded-lg px-3 py-2">
-            <UIcon name="i-heroicons-cube" class="w-4 h-4 text-neutral-600" />
-            <span class="text-sm font-medium text-neutral-700">{{ props.item.quantity }} adet</span>
+          <div class="inline-flex items-center gap-2 bg-neutral-100 dark:bg-neutral-700 rounded-lg px-3 py-2">
+            <UIcon name="i-heroicons-cube" class="w-4 h-4 text-neutral-600 dark:text-neutral-400" />
+            <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ props.item.quantity }}
+              adet</span>
           </div>
 
           <!-- Birim Fiyat -->
           <div class="space-y-1">
-            <p class="text-xs text-neutral-500 font-medium">Birim Fiyat</p>
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Birim Fiyat</p>
             <div class="flex items-center justify-end">
               <PartialsProductPrice :del-price="false" type="card"
                 :price="props.item.variation?.price || props.item.price"
@@ -111,9 +117,10 @@
 
           <!-- Toplam Fiyat -->
           <div class="space-y-1">
-            <p class="text-xs text-neutral-500 font-medium">Toplam</p>
-            <div class="bg-secondary-50 border border-secondary-200 rounded-lg px-3 py-2">
-              <p class="text-lg font-bold text-secondary-600">
+            <p class="text-xs text-neutral-500 dark:text-neutral-400 font-medium">Toplam</p>
+            <div
+              class="bg-secondary-50 dark:bg-secondary-900/50 border border-secondary-200 dark:border-secondary-700 rounded-lg px-3 py-2">
+              <p class="text-lg font-bold text-secondary-600 dark:text-secondary-400">
                 {{ formatPrice(props.item.price * props.item.quantity) }}
               </p>
             </div>
@@ -123,7 +130,8 @@
     </div>
 
     <!-- Silme Butonu (Düzenleme Modunda) -->
-    <div v-if="props.deletable && props.editingMode" class="mt-4 pt-4 border-t border-neutral-200">
+    <div v-if="props.deletable && props.editingMode"
+      class="mt-4 pt-4 border-t border-neutral-200 dark:border-neutral-700">
       <div class="flex justify-end">
         <UButton @click="deleteCartItem(props.item.id)" icon="i-heroicons-trash" size="sm" color="red" variant="soft"
           label="Ürünü Kaldır" class="hover:!text-white" />

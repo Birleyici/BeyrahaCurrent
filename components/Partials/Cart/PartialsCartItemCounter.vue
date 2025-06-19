@@ -1,16 +1,18 @@
 <template>
-  <div class="flex items-center bg-neutral-50 rounded-full border border-neutral-200 p-1 min-w-0">
+  <div
+    class="flex items-center bg-neutral-50 dark:bg-neutral-700 rounded-full border border-neutral-200 dark:border-neutral-600 p-1 min-w-0">
     <!-- Azalt Butonu -->
     <button :disabled="loadingMinus || props.cartItem.qyt <= 1" @click="props.cartItem.qyt > 1 && decrease()"
-      class="w-7 h-7 rounded-full bg-white border border-neutral-200 flex items-center justify-center hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0">
-      <UIcon v-if="!loadingMinus" name="i-heroicons-minus" class="w-3 h-3 text-neutral-600" />
-      <UIcon v-else name="i-heroicons-arrow-path" class="w-3 h-3 text-neutral-600 animate-spin" />
+      class="w-7 h-7 rounded-full bg-white dark:bg-neutral-600 border border-neutral-200 dark:border-neutral-500 flex items-center justify-center hover:bg-neutral-50 dark:hover:bg-neutral-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0">
+      <UIcon v-if="!loadingMinus" name="i-heroicons-minus" class="w-3 h-3 text-neutral-600 dark:text-neutral-300" />
+      <UIcon v-else name="i-heroicons-arrow-path" class="w-3 h-3 text-neutral-600 dark:text-neutral-300 animate-spin" />
     </button>
 
     <!-- Miktar -->
     <div class="px-2 min-w-[40px] flex justify-center">
       <Transition name="slide-up" mode="out-in">
-        <span class="text-sm font-medium text-neutral-900 whitespace-nowrap" :key="props.cartItem.qyt">
+        <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100 whitespace-nowrap"
+          :key="props.cartItem.qyt">
           {{ props.cartItem.qyt }}
         </span>
       </Transition>
@@ -18,9 +20,9 @@
 
     <!-- Artır Butonu -->
     <button :disabled="loadingPlus" @click="increase()"
-      class="w-7 h-7 rounded-full bg-white border border-neutral-200 flex items-center justify-center hover:bg-neutral-50 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0">
-      <UIcon v-if="!loadingPlus" name="i-heroicons-plus" class="w-3 h-3 text-neutral-600" />
-      <UIcon v-else name="i-heroicons-arrow-path" class="w-3 h-3 text-neutral-600 animate-spin" />
+      class="w-7 h-7 rounded-full bg-white dark:bg-neutral-600 border border-neutral-200 dark:border-neutral-500 flex items-center justify-center hover:bg-neutral-50 dark:hover:bg-neutral-500 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 flex-shrink-0">
+      <UIcon v-if="!loadingPlus" name="i-heroicons-plus" class="w-3 h-3 text-neutral-600 dark:text-neutral-300" />
+      <UIcon v-else name="i-heroicons-arrow-path" class="w-3 h-3 text-neutral-600 dark:text-neutral-300 animate-spin" />
     </button>
   </div>
 </template>

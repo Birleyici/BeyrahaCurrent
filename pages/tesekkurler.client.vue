@@ -201,5 +201,8 @@ const getOrder = async () => {
 
 onMounted(async () => {
   await getOrder();
+  console.log('Order verisi:', order.value);
+  console.log('Shipping address:', order.value.shipping_address);
+  console.log('Billing address:', order.value.billing_address);
 });
 </script>

@@ -10,7 +10,7 @@
           <div v-for="(image, index) in images" :key="index" class="w-full h-full flex-shrink-0">
             <NuxtImg :src="'cl/' + image.path" :alt="image.alt"
               class="w-full h-full object-cover cursor-zoom-in transition-transform duration-300 group-hover:scale-105"
-              @click="openFullscreen" format="webp" quality="90" :width="600" :height="800" fit="cover" />
+              @click="openFullscreen" format="webp" quality="90" :width="600" :height="800" fit="inside" />
           </div>
         </div>
 

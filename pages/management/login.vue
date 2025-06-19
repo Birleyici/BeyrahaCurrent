@@ -5,8 +5,10 @@
       class="absolute top-[50%] left-[50%] -translate-x-[50%] -translate-y-[50%] bg-tertiary-100 p-pad-2 rounded-md w-11/12 lg:w-[500px]">
       <b>Giriş</b>
       <div class="mt-pad-2 grid gap-4">
-        <UiFormInput v-model="authStore.user.email" placeholder="Kullanıcı adı"></UiFormInput>
-        <UiFormPasswordInput v-model="authStore.user.password" placeholder="Şifre"></UiFormPasswordInput>
+        <div class="space-y-4">
+          <UInput v-model="authStore.user.email" placeholder="Kullanıcı adı" size="lg" />
+          <UInput v-model="authStore.user.password" placeholder="Şifre" type="password" size="lg" />
+        </div>
         <UiButtonsBaseButton :loading="loading" @click.stop="loginHandler()" color="secondary">Giriş
         </UiButtonsBaseButton>
         <p v-if="errorStatus" class="text-red-500 text-sm">

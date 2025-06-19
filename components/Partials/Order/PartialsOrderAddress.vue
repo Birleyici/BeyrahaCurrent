@@ -5,11 +5,12 @@
             <!-- Ad Soyad -->
             <div class="flex items-start gap-3">
                 <div class="w-5 h-5 mt-0.5 flex-shrink-0">
-                    <UIcon name="i-heroicons-user" class="w-5 h-5 text-secondary-600" />
+                    <UIcon name="i-heroicons-user" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Ad Soyad</p>
-                    <p class="text-neutral-900 font-semibold">
+                    <p class="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">
+                        Ad Soyad</p>
+                    <p class="text-neutral-900 dark:text-neutral-100 font-semibold">
                         {{ props.address.name }} {{ props.address.last_name }}
                     </p>
                 </div>
@@ -18,14 +19,15 @@
             <!-- Adres -->
             <div class="flex items-start gap-3">
                 <div class="w-5 h-5 mt-0.5 flex-shrink-0">
-                    <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600" />
+                    <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Adres</p>
-                    <p class="text-neutral-900 leading-relaxed">
+                    <p class="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">
+                        Adres</p>
+                    <p class="text-neutral-900 dark:text-neutral-100 leading-relaxed">
                         {{ props.address.address }}
                     </p>
-                    <p class="text-neutral-600 text-sm mt-1">
+                    <p class="text-neutral-600 dark:text-neutral-400 text-sm mt-1">
                         {{ props.address.city?.city }} / {{ props.address.district?.district }}
                     </p>
                 </div>
@@ -34,18 +36,19 @@
             <!-- Telefon -->
             <div class="flex items-start gap-3">
                 <div class="w-5 h-5 mt-0.5 flex-shrink-0">
-                    <UIcon name="i-heroicons-phone" class="w-5 h-5 text-secondary-600" />
+                    <UIcon name="i-heroicons-phone" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
                 </div>
                 <div class="flex-1 min-w-0">
-                    <p class="text-xs font-medium text-neutral-500 uppercase tracking-wide mb-1">Telefon</p>
-                    <p class="text-neutral-900 font-medium">{{ props.address.phone }}</p>
+                    <p class="text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wide mb-1">
+                        Telefon</p>
+                    <p class="text-neutral-900 dark:text-neutral-100 font-medium">{{ props.address.phone }}</p>
                 </div>
             </div>
 
             <!-- Varsayılan Adres Badge -->
             <div v-if="props.address.isDefault" class="flex items-center gap-2">
                 <div
-                    class="bg-secondary-100 text-secondary-700 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
+                    class="bg-secondary-100 dark:bg-secondary-900 text-secondary-700 dark:text-secondary-300 px-3 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                     <UIcon name="i-heroicons-star-solid" class="w-3 h-3" />
                     Varsayılan Adres
                 </div>
@@ -53,7 +56,8 @@
         </div>
 
         <!-- Aksiyonlar -->
-        <div v-if="isActiveEditingButton || isActiveSetDefaultButton" class="pt-4 mt-4 border-t border-neutral-200">
+        <div v-if="isActiveEditingButton || isActiveSetDefaultButton"
+            class="pt-4 mt-4 border-t border-neutral-200 dark:border-neutral-700">
             <div class="flex flex-wrap gap-2">
                 <UButton v-if="isActiveEditingButton" @click="isOpenEditModal = true" color="secondary" variant="soft"
                     size="sm" icon="i-heroicons-pencil-square">
@@ -76,7 +80,7 @@
             <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                 <template #header>
                     <div class="flex items-center justify-between">
-                        <h3 class="text-lg font-semibold text-neutral-900">
+                        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                             Adres Düzenle
                         </h3>
                         <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"

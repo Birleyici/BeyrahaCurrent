@@ -45,7 +45,8 @@
                 Kısa Açıklama
               </label>
               <UTextarea v-model="productState.product.description"
-                placeholder="Ürün hakkında kısa bir açıklama yazın..." :rows="3" resize />
+                placeholder="Ürün hakkında kısa bir açıklama yazın..." :rows="3" resize size="lg"
+                :ui="{ base: 'disabled:cursor-not-allowed disabled:opacity-75 focus:outline-none border-0 form-textarea' }" />
             </div>
           </div>
         </div>
@@ -57,10 +58,9 @@
             <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Detaylı Açıklama</h2>
           </div>
 
-          <div class="border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden">
-            <TiptapEditor :inital-data="productState.product.additional_info"
-              @updated-content="e => productState.product.additional_info = e" />
-          </div>
+          <TiptapEditor :inital-data="productState.product.additional_info"
+            placeholder="Ürününüzün detaylı açıklamasını buraya yazın..."
+            @updated-content="e => productState.product.additional_info = e" />
         </div>
 
         <!-- Product Data Tabs -->
@@ -95,13 +95,57 @@
           <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">İşlemler</h3>
 
           <div class="space-y-3">
-            <UButton :loading="productState.product.loading" @click="saveProduct(productState.product.id, true)"
-              color="primary" size="lg" icon="i-heroicons-check" block class="justify-center">
+            <UButton :loading="productState.product.loading" @click="handleSaveProduct(true)" color="primary" size="lg"
+              icon="i-heroicons-check" block class="justify-center">
               {{ isNewProduct ? 'Ürünü Oluştur' : 'Değişiklikleri Kaydet' }}
             </UButton>
 
-            <UButton :loading="productState.product.loading" @click="saveProduct(productState.product.id, false)"
-              color="gray" variant="outline" size="lg" icon="i-heroicons-document" block class="justify-center">
+            <UButton :loading="productState.product.loading" @click="handlePublishProduct()" color="orange"
+              variant="solid" size="lg" icon="i-heroicons-globe-alt" block class="justify-center"
+              v-if="productState.product.is_active !== 1" :disabled="!canPublishProduct"
+              :title="canPublishProduct ? 'Ürünü yayınla' : 'Yayınlamak için: ürün adı, fiyat, kategori ve görsel gerekli'">
+              Ürünü Yayınla
+            </UButton>
+
+            <!-- Yayınlama Gereklilikleri -->
+            <div v-if="productState.product.is_active !== 1 && !canPublishProduct"
+              class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm">
+              <div class="flex items-center gap-2 mb-2">
+                <Icon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-amber-600" />
+                <span class="font-medium text-amber-800">Yayınlamak için eksik:</span>
+              </div>
+              <ul class="space-y-1 text-amber-700">
+                <li v-if="!productState.product.name || productState.product.name.trim() === ''"
+                  class="flex items-center gap-2">
+                  <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
+                  Ürün adı
+                </li>
+                <li v-if="!productState.product.price || productState.product.price <= 0"
+                  class="flex items-center gap-2">
+                  <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
+                  Fiyat
+                </li>
+                <li
+                  v-if="!productState.product.selectedCategories || productState.product.selectedCategories.length === 0"
+                  class="flex items-center gap-2">
+                  <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
+                  En az bir kategori
+                </li>
+                <li
+                  v-if="!hasColorAttribute && (!productState.product.selectedImages || productState.product.selectedImages.length === 0)"
+                  class="flex items-center gap-2">
+                  <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
+                  En az bir görsel
+                </li>
+                <li v-if="hasColorAttribute" class="flex items-center gap-2 text-green-700">
+                  <Icon name="i-heroicons-check" class="w-3 h-3" />
+                  Görseller renk nitelikleri için atanacak
+                </li>
+              </ul>
+            </div>
+
+            <UButton :loading="productState.product.loading" @click="handleSaveDraft()" color="gray" variant="outline"
+              size="lg" icon="i-heroicons-document" block class="justify-center">
               Taslak Olarak Kaydet
             </UButton>
 
@@ -113,7 +157,8 @@
         </div>
 
         <!-- Product Images -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div v-if="!hasColorAttribute"
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-2">
               <Icon name="i-heroicons-photo" class="w-5 h-5 text-purple-500" />
@@ -129,6 +174,21 @@
             @update:selected-images="productState.product.selectedImages = $event" />
         </div>
 
+        <!-- Color Attribute Info -->
+        <div v-if="hasColorAttribute"
+          class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-6">
+          <div class="flex items-center gap-2 mb-3">
+            <Icon name="i-heroicons-information-circle" class="w-5 h-5 text-amber-600 dark:text-amber-400" />
+            <h3 class="text-lg font-semibold text-amber-900 dark:text-amber-100">Renk Niteliği Bilgisi</h3>
+          </div>
+          <p class="text-sm text-amber-800 dark:text-amber-200 mb-2">
+            Bu ürün renk niteliğine sahip olduğu için genel ürün görselleri kısmı gizlenmiştir.
+          </p>
+          <p class="text-xs text-amber-700 dark:text-amber-300">
+            Her renk için özel görseller "Nitelikler" sekmesinden atanabilir.
+          </p>
+        </div>
+
         <!-- Categories -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
           <div class="flex items-center gap-2 mb-4">
@@ -137,17 +197,23 @@
           </div>
 
           <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 max-h-64 overflow-y-auto">
-            <UCommandPalette :emptyState="{ queryLabel: 'Kategori bulunamadı...' }" placeholder="Kategorilerde ara..."
-              v-model="productState.product.selectedCategories" multiple nullable :autoselect="false"
-              :groups="[{ key: 'label', commands: categoryState?.sortedCategories }]" :fuse="{ resultLimit: 30 }" />
+            <div v-if="!categoryState?.sortedCategories?.length" class="flex items-center justify-center py-8">
+              <div class="text-center">
+                <Icon name="i-heroicons-arrow-path" class="w-5 h-5 animate-spin mx-auto mb-2 text-gray-400" />
+                <p class="text-sm text-gray-500">Kategoriler yükleniyor...</p>
+              </div>
+            </div>
+            <UCommandPalette v-else :emptyState="{ queryLabel: 'Kategori bulunamadı...' }"
+              placeholder="Kategorilerde ara..." v-model="selectedCategoriesProxy" multiple nullable :autoselect="false"
+              :groups="[{ key: 'label', commands: categoryState.sortedCategories }]" :fuse="{ resultLimit: 30 }" />
           </div>
 
           <!-- Selected Categories Display -->
-          <div v-if="productState.product.selectedCategories?.length" class="mt-4">
+          <div v-if="selectedCategoriesProxy?.length" class="mt-4">
             <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Seçili Kategoriler:</p>
             <div class="flex flex-wrap gap-2">
-              <UBadge v-for="category in productState.product.selectedCategories" :key="category.id" color="blue"
-                variant="soft" size="sm">
+              <UBadge v-for="category in selectedCategoriesProxy" :key="category.id" color="blue" variant="soft"
+                size="sm">
                 {{ category.label }}
               </UBadge>
             </div>
@@ -189,24 +255,65 @@
 
     <!-- Media Modal -->
     <UModal v-model="isOpenMediaModal" fullscreen>
-      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
-              Medya Galerisi
-            </h3>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-              @click="isOpenMediaModal = false" />
-          </div>
-        </template>
-        <AdminPartialsMedia v-model="productState.product.selectedImages" />
-      </UCard>
+      <div class="h-full bg-white dark:bg-gray-900 flex flex-col">
+        <!-- Modal Header -->
+        <div
+          class="flex-shrink-0 flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-10">
+          <h3 class="text-base sm:text-lg font-semibold leading-6 text-gray-900 dark:text-white">
+            Medya Galerisi
+          </h3>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+            @click="isOpenMediaModal = false" />
+        </div>
+
+        <!-- Modal Content -->
+        <div class="flex-1 overflow-y-auto">
+          <AdminPartialsMedia v-model="productState.product.selectedImages" />
+        </div>
+      </div>
     </UModal>
 
     <!-- Delete Confirmation Modal -->
     <PartialsUiModalConfirmation v-model:is-open="showDeleteModal"
       :message="`'${productState.product.name || 'Bu ürün'}' ürünü kalıcı olarak silmek istediğinizden emin misiniz?`"
       confirm-text="Evet, Sil" cancel-text="İptal" @is-confirm="handleDeleteConfirm" />
+
+    <!-- Exit Warning Modal for New Product -->
+    <UModal v-model="showExitWarningModal" :ui="{ width: 'sm:max-w-md' }">
+      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+        <template #header>
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">
+              Sayfadan Ayrılıyor Musunuz?
+            </h3>
+          </div>
+        </template>
+
+        <div class="space-y-4">
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {{ isAutoCreatedProduct && (!productState.product.name || productState.product.name.trim() === '')
+              ? 'Otomatik olarak oluşturulan ürün var. Ne yapmak istersiniz?'
+              : 'Kaydedilmemiş değişiklikleriniz var. Ne yapmak istersiniz?' }}
+          </p>
+
+          <div class="flex flex-col gap-3">
+            <UButton color="red" variant="solid" size="lg" icon="i-heroicons-trash" block class="justify-center"
+              :loading="isDeleting" @click="deleteAndExit">
+              Ürünü Sil ve Çık
+            </UButton>
+
+            <UButton color="orange" variant="solid" size="lg" icon="i-heroicons-document" block class="justify-center"
+              :loading="isSavingDraft" @click="saveDraftAndExit">
+              Taslak Olarak Kaydet ve Çık
+            </UButton>
+
+            <UButton color="gray" variant="outline" size="lg" block class="justify-center" @click="cancelExit">
+              Vazgeç
+            </UButton>
+          </div>
+        </div>
+      </UCard>
+    </UModal>
   </div>
 </template>
 
@@ -217,17 +324,43 @@ definePageMeta({
 
 const productState = useProductState();
 const categoryState = useCategoryState();
+const attributeState = useAttributeState();
 const route = useRoute();
 
+// Import the composable function
 const { tabs, saveProduct, getProduct, deleteProduct } = useProductCreate();
 
 // Reactive data
 const isOpenMediaModal = ref(false);
 const currentTab = ref("GeneralTab");
 const showDeleteModal = ref(false);
+const showExitWarningModal = ref(false);
+const isDeleting = ref(false);
+const isSavingDraft = ref(false);
+const isAutoCreatedProduct = ref(false);
+const pendingNavigation = ref(null);
+const bypassNavigationGuard = ref(false); // Navigation guard'ı bypass etmek için
+const originalProduct = ref(null); // Orijinal ürün verilerini saklamak için
 
 // Computed
 const isNewProduct = computed(() => route.params.id === "yeni");
+
+// Check if product has color attribute
+const hasColorAttribute = computed(() => {
+  return attributeState.attributes?.some(attr =>
+    attr.attribute_name && attr.attribute_name.toLowerCase() === 'renk'
+  );
+});
+
+// Categories proxy to handle null/undefined values safely
+const selectedCategoriesProxy = computed({
+  get() {
+    return productState.product.selectedCategories || [];
+  },
+  set(value) {
+    productState.product.selectedCategories = value;
+  }
+});
 
 // Tab configuration
 const tabList = [
@@ -272,7 +405,64 @@ const links = computed(() => [
 ]);
 
 // Methods
+const hasUnsavedChanges = () => {
+  if (!originalProduct.value || !productState.product) {
+    return false;
+  }
+
+  // Önemli alanları karşılaştır
+  const fieldsToCheck = [
+    'name', 'description', 'price', 'sale_price', 'stock',
+    'stock_management', 'sku', 'is_active', 'discount',
+    'discount_start_date', 'discount_end_date', 'additional_info'
+  ];
+
+  for (const field of fieldsToCheck) {
+    if (originalProduct.value[field] !== productState.product[field]) {
+      console.log(`Değişiklik tespit edildi - ${field}:`, {
+        orijinal: originalProduct.value[field],
+        mevcut: productState.product[field]
+      });
+      return true;
+    }
+  }
+
+  // Kategori değişikliklerini kontrol et
+  const originalCategoryIds = originalProduct.value.selectedCategories?.map(cat => cat.id).sort() || [];
+  const currentCategoryIds = productState.product.selectedCategories?.map(cat => cat.id).sort() || [];
+
+  if (JSON.stringify(originalCategoryIds) !== JSON.stringify(currentCategoryIds)) {
+    console.log('Kategori değişikliği tespit edildi');
+    return true;
+  }
+
+  // Görsel değişikliklerini kontrol et
+  const originalImageIds = originalProduct.value.selectedImages?.map(img => img.id).sort() || [];
+  const currentImageIds = productState.product.selectedImages?.map(img => img.id).sort() || [];
+
+  if (JSON.stringify(originalImageIds) !== JSON.stringify(currentImageIds)) {
+    console.log('Görsel değişikliği tespit edildi');
+    return true;
+  }
+
+  return false;
+};
+
+const saveOriginalProduct = () => {
+  // Ürün verilerinin derin kopyasını al
+  originalProduct.value = JSON.parse(JSON.stringify(productState.product));
+  console.log('Orijinal ürün verileri kaydedildi:', originalProduct.value);
+};
+
 const getStatusLabel = (status) => {
+  // is_active değerine göre status belirle
+  if (productState.product.is_active === 1) {
+    return 'Yayında';
+  } else if (productState.product.is_active === 0) {
+    return 'Taslak';
+  }
+
+  // Eski status sistemi için fallback
   const labels = {
     active: 'Aktif',
     draft: 'Taslak',
@@ -282,6 +472,14 @@ const getStatusLabel = (status) => {
 };
 
 const getStatusColor = (status) => {
+  // is_active değerine göre renk belirle
+  if (productState.product.is_active === 1) {
+    return 'green';
+  } else if (productState.product.is_active === 0) {
+    return 'yellow';
+  }
+
+  // Eski status sistemi için fallback
   const colors = {
     active: 'green',
     draft: 'yellow',
@@ -307,18 +505,290 @@ const handleDeleteConfirm = async (confirmed) => {
       await navigateTo('/management/urunler');
     } catch (error) {
       console.error('Ürün silinirken hata oluştu:', error);
+
+      // 404 hatası ise ürün zaten silinmiş demektir, ürünler sayfasına git
+      if (error.status === 404 || error.statusCode === 404) {
+        console.log('Ürün zaten silinmiş, ürünler sayfasına yönlendiriliyor...');
+        await navigateTo('/management/urunler');
+      } else {
+        // Diğer hatalar için toast göster
+        try {
+          useNuxtApp().$toast.error('Ürün silinirken beklenmeyen bir hata oluştu');
+        } catch (toastError) {
+          console.error('Toast error:', toastError);
+          alert('Ürün silinirken beklenmeyen bir hata oluştu');
+        }
+      }
     }
   }
   showDeleteModal.value = false;
 };
 
+// Exit warning modal methods
+const deleteAndExit = async () => {
+  isDeleting.value = true;
+  try {
+    console.log('deleteAndExit başlıyor, product ID:', productState.product.id);
+
+    if (productState.product.id) {
+      console.log('Ürün siliniyor...');
+      await deleteProduct(productState.product.id);
+      console.log('Ürün başarıyla silindi');
+    }
+
+    showExitWarningModal.value = false;
+
+    // Navigation guard'ı bypass et
+    bypassNavigationGuard.value = true;
+
+    // Ürün silindikten sonra her durumda ürünler sayfasına git
+    console.log('Ürünler sayfasına yönlendiriliyor...');
+    await navigateTo('/management/urunler');
+
+  } catch (error) {
+    console.error('Ürün silinirken hata oluştu:', error);
+
+    // 404 hatası ise ürün zaten silinmiş demektir, sayfadan çık
+    if (error.status === 404 || error.statusCode === 404) {
+      console.log('Ürün zaten silinmiş, sayfadan çıkılıyor...');
+      showExitWarningModal.value = false;
+      bypassNavigationGuard.value = true; // Navigation guard'ı bypass et
+      await navigateTo('/management/urunler');
+    } else {
+      // Diğer hatalar için toast göster ama yine de sayfadan çık
+      try {
+        useNuxtApp().$toast.error('Ürün silinirken beklenmeyen bir hata oluştu');
+      } catch (toastError) {
+        console.error('Toast error:', toastError);
+        alert('Ürün silinirken beklenmeyen bir hata oluştu');
+      }
+
+      // Hata olsa bile modal'ı kapat ve sayfadan çık
+      showExitWarningModal.value = false;
+      bypassNavigationGuard.value = true; // Navigation guard'ı bypass et
+      await navigateTo('/management/urunler');
+    }
+  } finally {
+    console.log('deleteAndExit finally bloğu');
+    isDeleting.value = false;
+  }
+};
+
+const saveDraftAndExit = async () => {
+  isSavingDraft.value = true;
+  try {
+    console.log('saveDraftAndExit başlıyor, mevcut product:', productState.product);
+
+    // is_active = 0 olarak kaydet (taslak) ve sale_price problemini çöz
+    const originalIsActive = productState.product.is_active;
+    const originalSalePrice = productState.product.sale_price;
+
+    productState.product.is_active = 0;
+    // Eğer sale_price 0 ise null yap ki validation problemi olmasın
+    if (productState.product.sale_price === 0) {
+      console.log('sale_price 0 bulundu, null yapılıyor');
+      productState.product.sale_price = null;
+    }
+
+    console.log('saveProduct çağrılıyor...');
+    await saveProduct(productState.product.id, false);
+
+    console.log('saveProduct başarılı, modal kapatılıyor...');
+    showExitWarningModal.value = false;
+
+    // Navigation guard'ı bypass et
+    bypassNavigationGuard.value = true;
+
+    // Taslak kaydedildikten sonra ürünler sayfasına git
+    console.log('Ürünler sayfasına yönlendiriliyor...');
+    await navigateTo('/management/urunler');
+
+  } catch (error) {
+    console.error('Taslak kaydedilirken hata oluştu:', error);
+
+    // 422 validation hatası ise detayları göster
+    if (error.status === 422 || error.statusCode === 422) {
+      const errorMessage = error.data?.errors ?
+        Object.values(error.data.errors).flat().join(', ') :
+        'Validation hatası oluştu';
+
+      console.log('422 hatası alındı, error message:', errorMessage);
+
+      // Toast varsa kullan, yoksa console'a yaz
+      try {
+        useNuxtApp().$toast.error(`Validation Hatası: ${errorMessage}`);
+      } catch (toastError) {
+        console.error('Toast error:', toastError);
+        alert(`Validation Hatası: ${errorMessage}`);
+      }
+    } else {
+      // Diğer hatalar için
+      try {
+        useNuxtApp().$toast.error('Taslak kaydedilirken bir hata oluştu');
+      } catch (toastError) {
+        console.error('Toast error:', toastError);
+        alert('Taslak kaydedilirken bir hata oluştu');
+      }
+    }
+  } finally {
+    console.log('saveDraftAndExit finally bloğu');
+    isSavingDraft.value = false;
+  }
+};
+
+const cancelExit = () => {
+  showExitWarningModal.value = false;
+  pendingNavigation.value = null;
+};
+
+// Navigation guard
+onBeforeRouteLeave((to, from, next) => {
+  // Eğer bypass flag aktifse veya normal koşullar varsa geç
+  if (bypassNavigationGuard.value) {
+    console.log('Navigation guard bypass edildi');
+    next(); // Bypass, navigasyona izin ver
+    return;
+  }
+
+  // Değişiklik kontrolü yap
+  const hasChanges = hasUnsavedChanges();
+
+  // Eğer otomatik oluşturulmuş ürün varsa ve henüz kaydedilmemişse uyarı göster
+  const isEmptyAutoCreated = isAutoCreatedProduct.value &&
+    productState.product.id &&
+    (!productState.product.name || productState.product.name.trim() === '');
+
+  if (isEmptyAutoCreated || hasChanges) {
+    console.log('Navigation guard - modal açılıyor', {
+      isEmptyAutoCreated,
+      hasChanges
+    });
+    pendingNavigation.value = to.path;
+    showExitWarningModal.value = true;
+    next(false); // Navigasyonu durdur
+  } else {
+    console.log('Navigation guard - normal navigasyon');
+    next(); // Normal navigasyona izin ver
+  }
+});
+
+// Window beforeunload event for browser close/refresh
+onMounted(() => {
+  const handleBeforeUnload = (event) => {
+    if (isAutoCreatedProduct.value && productState.product.id && (!productState.product.name || productState.product.name.trim() === '')) {
+      event.preventDefault();
+      event.returnValue = 'Otomatik oluşturulan ürün var. Sayfayı kapatmak istediğinizden emin misiniz?';
+      return event.returnValue;
+    }
+  };
+
+  window.addEventListener('beforeunload', handleBeforeUnload);
+
+  onUnmounted(() => {
+    window.removeEventListener('beforeunload', handleBeforeUnload);
+  });
+});
+
 // Initialize
+// Önce kategorileri yükle
+await categoryState.getCategories();
+
 if (isNewProduct.value) {
-  productState.product = {};
-  await saveProduct(productState.product.id, true);
+  productState.product = {
+    name: '', // Boş string (null değil)
+    description: '',
+    price: 0,
+    sale_price: null,
+    stock: 0,
+    stock_management: 0,
+    sku: '',
+    is_active: 0,
+    discount: null,
+    discount_start_date: null,
+    discount_end_date: null,
+    additional_info: '',
+    coverImageId: null,
+    selectedCategories: [], // Güvenli varsayılan değer
+    selectedImages: []
+  };
+  await saveProduct(productState.product.id, false);
+  isAutoCreatedProduct.value = true; // Otomatik oluşturuldu işaretle
+
+  // Yeni ürün için orijinal verileri kaydet
+  saveOriginalProduct();
 } else {
   await getProduct(route.params.id);
+  isAutoCreatedProduct.value = false;
+  // Eğer selectedCategories null ise boş array yap
+  if (!productState.product.selectedCategories) {
+    productState.product.selectedCategories = [];
+  }
+
+  // Mevcut ürün için orijinal verileri kaydet
+  saveOriginalProduct();
 }
 
-await categoryState.getCategories();
+// Ürün yayınlama için gerekli alanları kontrol et
+const canPublishProduct = computed(() => {
+  if (!productState.product) return false;
+
+  // Temel gereklilikler
+  const hasName = productState.product.name && productState.product.name.trim() !== '';
+  const hasPrice = productState.product.price && productState.product.price > 0;
+  const hasCategories = productState.product.selectedCategories && productState.product.selectedCategories.length > 0;
+
+  // Renk niteliği varsa görsel kontrolünü atla (her renk için ayrı görsel atanıyor)
+  const hasImages = hasColorAttribute.value ? true :
+    (productState.product.selectedImages && productState.product.selectedImages.length > 0);
+
+  console.log('Yayınlama gereklilikleri kontrolü:', {
+    hasName,
+    hasPrice,
+    hasCategories,
+    hasImages,
+    hasColorAttribute: hasColorAttribute.value,
+    canPublish: hasName && hasPrice && hasCategories && hasImages
+  });
+
+  return hasName && hasPrice && hasCategories && hasImages;
+});
+
+// Save button wrapper functions
+const handleSaveProduct = async (isActive = true) => {
+  try {
+    await saveProduct(productState.product.id, isActive);
+    // Başarılı kayıt sonrası orijinal verileri güncelle
+    saveOriginalProduct();
+    console.log('Ürün başarıyla kaydedildi, orijinal veriler güncellendi');
+  } catch (error) {
+    console.error('Ürün kaydedilirken hata oluştu:', error);
+    throw error;
+  }
+};
+
+const handleSaveDraft = async () => {
+  try {
+    await saveProduct(productState.product.id, false);
+    // Başarılı kayıt sonrası orijinal verileri güncelle
+    saveOriginalProduct();
+    console.log('Taslak başarıyla kaydedildi, orijinal veriler güncellendi');
+  } catch (error) {
+    console.error('Taslak kaydedilirken hata oluştu:', error);
+    throw error;
+  }
+};
+
+const handlePublishProduct = async () => {
+  try {
+    // is_active'i 1 yap (yayınla)
+    productState.product.is_active = 1;
+    await saveProduct(productState.product.id, true);
+    // Başarılı kayıt sonrası orijinal verileri güncelle
+    saveOriginalProduct();
+    console.log('Ürün başarıyla yayınlandı, orijinal veriler güncellendi');
+  } catch (error) {
+    console.error('Ürün yayınlanırken hata oluştu:', error);
+    throw error;
+  }
+};
 </script>

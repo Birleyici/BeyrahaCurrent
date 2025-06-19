@@ -1,16 +1,10 @@
 <template>
   <div class="grid gap-4">
-    <UiFormInput placeholder="Stok kodu"></UiFormInput>
-    <UiFormCheckbox
-      v-model="isStockManagement"
-      id="stock"
-      name="stock"
-      value="myStringValue"
-      >Stok yönetimini etkinleştir</UiFormCheckbox
-    >
+    <UInput placeholder="Stok kodu" size="md" />
+    <UCheckbox v-model="isStockManagement" :value="true" label="Stok yönetimini etkinleştir" />
 
     <div v-if="isStockManagement">
-      <UiFormInput placeholder="Stok miktarı"></UiFormInput>
+      <UInput placeholder="Stok miktarı" size="md" />
     </div>
   </div>
 </template>

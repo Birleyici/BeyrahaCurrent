@@ -1,7 +1,7 @@
 <template>
   <div class="standart-section-spacing">
     <div class="container">
-      <UiCommonBreadcrumb class="mb-6" :links="links" />
+      <UiCommonBreadcrumb class="mb-3 md:mb-6" :links="links" />
 
       <div class="lg:grid lg:grid-cols-4 gap-8">
         <div class="lg:col-span-1">
@@ -16,84 +16,85 @@
           </div>
 
           <div class="lg:grid lg:grid-cols-2 gap-8">
-            <div class="p-6 relative border rounded-md">
+            <div class="p-6 relative border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800">
               <p class="text-secondary-500 font-medium mb-4">Hesap bilgileri</p>
               <div class="grid gap-4">
                 <div class="grid grid-cols-2 gap-4">
                   <div>
-                    <label for="">Ad </label>
-                    <UiFormInput value="Muhammet Çağrı"></UiFormInput>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Ad</label>
+                    <UInput value="Muhammet Çağrı" size="md" />
                   </div>
 
                   <div>
-                    <label for="">Soyad</label>
-                    <UiFormInput value="Yılmaz"></UiFormInput>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Soyad</label>
+                    <UInput value="Yılmaz" size="md" />
                   </div>
                 </div>
                 <div>
-                  <label for="">E-mail</label>
-                  <UiFormInput value="davudtevhid@gmail.com"></UiFormInput>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">E-mail</label>
+                  <UInput value="davudtevhid@gmail.com" size="md" />
                 </div>
                 <div>
-                  <label for="">Telefon</label>
-                  <UiFormInput></UiFormInput>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Telefon</label>
+                  <UInput size="md" />
                 </div>
 
-                <div class="flex space-x-4">
-                  <label for="">Cinsiyet:</label>
-
-                  <UiFormRadio v-model="cinsiyet" id="erkek" name="erkek" value="erkek">Erkek</UiFormRadio>
-                  <UiFormRadio v-model="cinsiyet" id="kadin" name="kadin" value="kadin">Kadın</UiFormRadio>
+                <div class="flex space-x-4 items-center">
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Cinsiyet:</label>
+                  <URadio v-model="cinsiyet" value="erkek" label="Erkek" />
+                  <URadio v-model="cinsiyet" value="kadin" label="Kadın" />
                 </div>
+
                 <div class="grid grid-cols-3 gap-5">
                   <div>
-                    <label for="">Gün</label>
-                    <UiFormSelect>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Gün</label>
+                    <USelect size="md">
                       <option value="">28</option>
-                    </UiFormSelect>
+                    </USelect>
                   </div>
 
                   <div>
-                    <label for="">Ay</label>
-                    <UiFormSelect>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Ay</label>
+                    <USelect size="md">
                       <option value="">07</option>
-                    </UiFormSelect>
+                    </USelect>
                   </div>
 
                   <div>
-                    <label for="">Yıl</label>
-                    <UiFormSelect>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Yıl</label>
+                    <USelect size="md">
                       <option value="">1993</option>
-                    </UiFormSelect>
+                    </USelect>
                   </div>
                 </div>
-                <UiButtonsBaseButton color="secondary" class="mt-4">Kaydet</UiButtonsBaseButton>
+                <UButton color="orange" class="mt-4" size="md">Kaydet</UButton>
               </div>
             </div>
 
-            <div class="p-6 relative border rounded-md mt-8 lg:mt-0">
+            <div
+              class="p-6 relative border border-gray-200 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 mt-8 lg:mt-0">
               <p class="text-secondary-500 font-medium mb-4">Şifre değiştirme</p>
 
               <div class="grid gap-4">
                 <div>
-                  <label for="">Eski şifre</label>
-
-                  <UiFormPasswordInput></UiFormPasswordInput>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Eski şifre</label>
+                  <UInput type="password" size="md" />
                   <NuxtLink to="/sifremi-unuttum">
-                    <p class="font-medium text-sm mt-1">Şifremi unuttum</p>
+                    <p class="font-medium text-sm mt-1 text-orange-600 hover:text-orange-700">Şifremi unuttum</p>
                   </NuxtLink>
                 </div>
 
                 <div>
-                  <label for="">Yeni şifre</label>
-                  <UiFormPasswordInput></UiFormPasswordInput>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Yeni şifre</label>
+                  <UInput type="password" size="md" />
                 </div>
                 <div>
-                  <label for="">Yeni şifre tekrar</label>
-                  <UiFormPasswordInput></UiFormPasswordInput>
+                  <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Yeni şifre
+                    tekrar</label>
+                  <UInput type="password" size="md" />
                 </div>
 
-                <UiButtonsBaseButton color="secondary" class="mt-4">Güncelle</UiButtonsBaseButton>
+                <UButton color="orange" class="mt-4" size="md">Güncelle</UButton>
               </div>
             </div>
           </div>

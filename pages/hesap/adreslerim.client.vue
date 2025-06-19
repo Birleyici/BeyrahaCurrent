@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="bg-neutral-50 dark:bg-neutral-900 min-h-screen transition-colors duration-300">
     <div class="container">
-      <UiCommonBreadcrumb class="mb-6" :links="links" />
+      <UiCommonBreadcrumb class="mb-3 md:mb-6" :links="links" />
 
       <div class="lg:grid lg:grid-cols-4 gap-8">
         <div class="lg:col-span-1">
@@ -11,8 +11,10 @@
         <div class="lg:col-span-3 lg:mt-0">
           <!-- Sayfa Başlığı -->
           <div class="mb-6">
-            <h1 class="text-2xl font-bold text-neutral-900 mb-2">Adreslerim</h1>
-            <p class="text-neutral-600">Kayıtlı adreslerinizi görüntüleyebilir ve yönetebilirsiniz.</p>
+            <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-2 transition-colors duration-300">
+              Adreslerim</h1>
+            <p class="text-neutral-600 dark:text-neutral-400 transition-colors duration-300">Kayıtlı adreslerinizi
+              görüntüleyebilir ve yönetebilirsiniz.</p>
           </div>
 
           <UButton @click="orderState.isOpenAddressModal = true" color="orange" class="mb-6" size="md"
@@ -36,8 +38,9 @@
             </UModal>
 
             <div :key="address.id" v-for="address in paginatedAddresses">
-              <div class="border p-4 rounded-md flex items-center w-full bg-white"
-                :class="{ 'bg-tertiary-50 border-2 border-orange-500': address.isDefault }">
+              <div
+                class="border p-4 rounded-md flex items-center w-full bg-white dark:bg-neutral-800 border-neutral-200 dark:border-neutral-700 transition-colors duration-300"
+                :class="{ 'bg-tertiary-50 dark:bg-tertiary-900/30 border-2 border-orange-500 dark:border-orange-400': address.isDefault }">
                 <PartialsOrderAddress :address="address" :address-options="{
                   allAction: true
                 }" />
@@ -49,13 +52,17 @@
             <UPagination v-model="currentPage" :page-count="pageSize" :total="orderState.addresses?.length || 0" />
           </div>
           <!-- Boş Durum -->
-          <!-- Boş Durum -->
           <div v-if="!orderState.addresses?.length" class="text-center py-12">
-            <div class="w-24 h-24 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <UIcon name="i-heroicons-map-pin" class="w-12 h-12 text-neutral-400" />
+            <div
+              class="w-24 h-24 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4 transition-colors duration-300">
+              <UIcon name="i-heroicons-map-pin" class="w-12 h-12 text-neutral-400 dark:text-neutral-500" />
             </div>
-            <h3 class="text-lg font-medium text-neutral-900 mb-2">Henüz adres eklemediniz</h3>
-            <p class="text-neutral-600 mb-6">İlk adresinizi eklemek için yukarıdaki butonu kullanın.</p>
+            <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2 transition-colors duration-300">
+              Henüz adres
+              eklemediniz</h3>
+            <p class="text-neutral-600 dark:text-neutral-400 mb-6 transition-colors duration-300">İlk adresinizi eklemek
+              için
+              yukarıdaki butonu kullanın.</p>
           </div>
         </div>
       </div>

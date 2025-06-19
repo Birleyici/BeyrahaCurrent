@@ -110,7 +110,7 @@
       </div>
 
       <!-- Ürün Grid -->
-      <div class="grid grid-cols-2 gap-4">
+      <div class="grid grid-cols-2 gap-4 lg:gap-6">
         <!-- Ürün Bulunamadı Durumu -->
         <div v-if="props.products.data?.length === 0 && !props.loading" class="col-span-full">
           <div class="text-center py-12 bg-white rounded-xl border border-neutral-200 shadow-sm">

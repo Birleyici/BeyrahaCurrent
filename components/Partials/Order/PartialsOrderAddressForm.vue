@@ -3,27 +3,28 @@
     <!-- Form Progress Indicator -->
     <div class="mb-8">
       <div class="flex items-center justify-between mb-2">
-        <h3 class="text-lg font-semibold text-neutral-900">Adres Bilgileri</h3>
+        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Adres Bilgileri</h3>
         <div class="flex items-center space-x-2">
-          <UIcon name="i-heroicons-shield-check" class="w-4 h-4 text-green-600" />
-          <span class="text-sm text-green-600 font-medium">Güvenli</span>
+          <UIcon name="i-heroicons-shield-check" class="w-4 h-4 text-green-600 dark:text-green-400" />
+          <span class="text-sm text-green-600 dark:text-green-400 font-medium">Güvenli</span>
         </div>
       </div>
-      <div class="w-full bg-neutral-200 rounded-full h-2">
-        <div class="bg-secondary-500 h-2 rounded-full transition-all duration-500" :style="`width: ${formProgress}%`">
+      <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+        <div class="bg-secondary-500 dark:bg-secondary-400 h-2 rounded-full transition-all duration-500"
+          :style="`width: ${formProgress}%`">
         </div>
       </div>
-      <p class="text-sm text-neutral-500 mt-2">{{ formProgress }}% tamamlandı</p>
+      <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-2">{{ formProgress }}% tamamlandı</p>
     </div>
 
     <UForm :schema="schema" :state="addressObj" class="space-y-6" @submit="saveAddress()">
       <!-- Kişisel Bilgiler -->
-      <div class="bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+      <div class="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-6 border border-neutral-200 dark:border-neutral-700">
         <div class="flex items-center space-x-3 mb-4">
-          <div class="w-8 h-8 bg-secondary-100 rounded-full flex items-center justify-center">
-            <UIcon name="i-heroicons-user" class="w-4 h-4 text-secondary-600" />
+          <div class="w-8 h-8 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center">
+            <UIcon name="i-heroicons-user" class="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
           </div>
-          <h4 class="text-base font-semibold text-neutral-900">Kişisel Bilgiler</h4>
+          <h4 class="text-base font-semibold text-neutral-900 dark:text-neutral-100">Kişisel Bilgiler</h4>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -40,12 +41,12 @@
       </div>
 
       <!-- İletişim Bilgileri -->
-      <div class="bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+      <div class="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-6 border border-neutral-200 dark:border-neutral-700">
         <div class="flex items-center space-x-3 mb-4">
-          <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-            <UIcon name="i-heroicons-phone" class="w-4 h-4 text-green-600" />
+          <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+            <UIcon name="i-heroicons-phone" class="w-4 h-4 text-green-600 dark:text-green-400" />
           </div>
-          <h4 class="text-base font-semibold text-neutral-900">İletişim Bilgileri</h4>
+          <h4 class="text-base font-semibold text-neutral-900 dark:text-neutral-100">İletişim Bilgileri</h4>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -62,12 +63,12 @@
       </div>
 
       <!-- Adres Bilgileri -->
-      <div class="bg-neutral-50 rounded-xl p-6 border border-neutral-200">
+      <div class="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-6 border border-neutral-200 dark:border-neutral-700">
         <div class="flex items-center space-x-3 mb-4">
-          <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-            <UIcon name="i-heroicons-map-pin" class="w-4 h-4 text-blue-600" />
+          <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
+            <UIcon name="i-heroicons-map-pin" class="w-4 h-4 text-blue-600 dark:text-blue-400" />
           </div>
-          <h4 class="text-base font-semibold text-neutral-900">Adres Detayları</h4>
+          <h4 class="text-base font-semibold text-neutral-900 dark:text-neutral-100">Adres Detayları</h4>
         </div>
 
         <div class="space-y-4">
@@ -104,13 +105,15 @@
       </div>
 
       <!-- Kaydet Butonu -->
-      <div class="bg-gradient-to-r from-secondary-50 to-secondary-100 rounded-xl p-6 border border-secondary-200">
+      <div
+        class="bg-gradient-to-r from-secondary-50 to-secondary-100 dark:from-secondary-900/50 dark:to-secondary-800/50 rounded-xl p-6 border border-secondary-200 dark:border-secondary-700">
         <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div class="flex items-start space-x-3">
-            <UIcon name="i-heroicons-information-circle" class="w-5 h-5 text-secondary-600 mt-0.5" />
+            <UIcon name="i-heroicons-information-circle"
+              class="w-5 h-5 text-secondary-600 dark:text-secondary-400 mt-0.5" />
             <div>
-              <p class="text-sm font-medium text-secondary-900">Adres Kaydı</p>
-              <p class="text-xs text-secondary-700 mt-1">
+              <p class="text-sm font-medium text-secondary-900 dark:text-secondary-100">Adres Kaydı</p>
+              <p class="text-xs text-secondary-700 dark:text-secondary-300 mt-1">
                 Bu adres hesabınıza kaydedilecek ve gelecekteki siparişlerinizde kullanabileceksiniz.
               </p>
             </div>

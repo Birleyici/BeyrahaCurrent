@@ -2,15 +2,15 @@
     <div class="space-y-4">
         <!-- Selected Images Display -->
         <div v-if="props.selectedImages && props.selectedImages.length > 0">
-            <div class="flex items-center justify-between mb-3">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-0 mb-3">
                 <h4 class="text-sm font-medium text-gray-900 dark:text-white">
                     Seçili Görseller ({{ props.selectedImages.length }})
                 </h4>
                 <UButton size="xs" color="gray" variant="ghost" icon="i-heroicons-x-mark" label="Tümünü Kaldır"
-                    @click="clearAllImages" />
+                    @click="clearAllImages" class="self-end sm:self-auto" />
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
                 <div v-for="(item, index) in props.selectedImages" :key="index"
                     class="group relative aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border-2 transition-all duration-200"
                     :class="{
@@ -26,26 +26,28 @@
 
                     <!-- Cover Badge -->
                     <div v-if="item.id === coverImageId"
-                        class="absolute top-2 left-2 bg-primary-500 text-white text-xs px-2 py-1 rounded-md font-medium">
+                        class="absolute top-1 left-1 sm:top-2 sm:left-2 bg-primary-500 text-white text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md font-medium">
                         <Icon name="i-heroicons-star" class="w-3 h-3 inline mr-1" />
-                        Kapak
+                        <span class="hidden sm:inline">Kapak</span>
                     </div>
 
                     <!-- Actions -->
                     <div
-                        class="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        class="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <div class="flex gap-1">
-                            <UButton v-if="item.id !== coverImageId" icon="i-heroicons-star" size="xs" color="yellow"
-                                variant="solid" @click="setCoverImage(item.id)" class="backdrop-blur-sm"
-                                :ui="{ rounded: 'rounded-md' }" />
-                            <UButton icon="i-heroicons-trash" size="xs" color="red" variant="solid"
-                                @click="removeImage(index)" class="backdrop-blur-sm" :ui="{ rounded: 'rounded-md' }" />
+                            <UButton v-if="item.id !== coverImageId" icon="i-heroicons-star" size="2xs" color="yellow"
+                                variant="solid" @click="setCoverImage(item.id)"
+                                class="backdrop-blur-sm h-6 w-6 sm:h-auto sm:w-auto"
+                                :ui="{ rounded: 'rounded-md', padding: { '2xs': 'p-1' } }" />
+                            <UButton icon="i-heroicons-trash" size="2xs" color="red" variant="solid"
+                                @click="removeImage(index)" class="backdrop-blur-sm h-6 w-6 sm:h-auto sm:w-auto"
+                                :ui="{ rounded: 'rounded-md', padding: { '2xs': 'p-1' } }" />
                         </div>
                     </div>
 
                     <!-- Image Info -->
                     <div
-                        class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-1 sm:p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <p class="text-white text-xs truncate">
                             {{ getImageName(item.path) }}
                         </p>
@@ -55,26 +57,27 @@
         </div>
 
         <!-- Add Images Button -->
-        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-6 text-center hover:border-primary-400 dark:hover:border-primary-500 transition-colors duration-200 cursor-pointer"
+        <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 sm:p-6 text-center hover:border-primary-400 dark:hover:border-primary-500 transition-colors duration-200 cursor-pointer"
             @click="openMediaModal">
-            <div class="space-y-3">
+            <div class="space-y-2 sm:space-y-3">
                 <div class="relative">
-                    <Icon name="i-heroicons-photo" class="w-12 h-12 mx-auto text-gray-400" />
+                    <Icon name="i-heroicons-photo" class="w-10 h-10 sm:w-12 sm:h-12 mx-auto text-gray-400" />
                     <div class="absolute -bottom-1 -right-1 bg-primary-500 rounded-full p-1">
                         <Icon name="i-heroicons-plus" class="w-3 h-3 text-white" />
                     </div>
                 </div>
 
                 <div>
-                    <p class="text-lg font-medium text-gray-900 dark:text-white">
+                    <p class="text-base sm:text-lg font-medium text-gray-900 dark:text-white">
                         {{ getButtonText() }}
                     </p>
-                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                    <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mt-1">
                         Medya galerisinden görsel seçin veya yeni görseller yükleyin
                     </p>
                 </div>
 
-                <UButton icon="i-heroicons-photo" color="primary" variant="outline" size="sm" label="Galeriyi Aç" />
+                <UButton icon="i-heroicons-photo" color="primary" variant="outline" size="sm" label="Galeriyi Aç"
+                    class="text-xs sm:text-sm" />
             </div>
         </div>
     </div>

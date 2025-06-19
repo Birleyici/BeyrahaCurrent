@@ -1,4 +1,0 @@
-<template>
-Melaba
-</template>
-

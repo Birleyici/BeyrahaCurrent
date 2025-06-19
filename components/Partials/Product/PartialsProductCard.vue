@@ -1,31 +1,34 @@
 <template>
-  <div class="card group cursor-pointer max-w-[280px] w-full">
-    <div class="relative overflow-hidden">
+  <div
+    class="card group cursor-pointer max-w-[280px] w-full bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-300">
+    <div class="relative overflow-hidden rounded-t-xl">
       <NuxtLink :to="productUrl">
         <NuxtImg sizes="390px sm:300px md:390px" v-if="props.product.coverImage" :src="`cl/${props.product.coverImage}`"
-          format="webp" quality="90" fit="cover" :loading="imgLoadingType" :preload="imgPreload" width="400"
-          height="600" :alt="props.product.name" class=" object-cover transition-transform duration-300 " />
-        <img v-else :src="img_placeholder" class="w-full h-[320px] object-cover transition-transform duration-300 "
+          format="webp" quality="90" fit="inside" :loading="imgLoadingType" :preload="imgPreload" width="400"
+          height="600" :alt="props.product.name"
+          class="w-full h-[320px] object-cover transition-transform duration-300 group-hover:scale-105" />
+        <img v-else :src="img_placeholder"
+          class="w-full h-[320px] object-cover transition-transform duration-300 group-hover:scale-105"
           alt="Ürün görseli yer tutucusu" />
       </NuxtLink>
 
       <!-- Hover overlay -->
       <div
-        class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none">
+        class="absolute inset-0 bg-black/0 group-hover:bg-black/10 dark:group-hover:bg-black/20 transition-colors duration-300 pointer-events-none">
       </div>
     </div>
 
-    <div class="card-body space-y-3">
+    <div class="p-4 space-y-3">
       <div class="text-center">
         <NuxtLink :to="productUrl" class="block">
           <h3
-            class="font-medium text-neutral-900 group-hover:text-secondary-600 transition-colors duration-200 product-name-clamp">
+            class="font-medium text-neutral-900 dark:text-neutral-100 group-hover:text-secondary-600 dark:group-hover:text-secondary-400 transition-colors duration-200 product-name-clamp line-clamp-2">
             {{ props.product.name }}
           </h3>
         </NuxtLink>
       </div>
 
-      <div class="flex justify-center">
+      <div class="flex justify-center pt-2">
         <PartialsProductPrice type="card" :sale-price="props.product.sale_price" :price="props.product.price" />
       </div>
     </div>

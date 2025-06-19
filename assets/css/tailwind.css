@@ -4,6 +4,22 @@
 
 @layer components {
     .standart-section-spacing {
-      @apply my-section-mobile md:my-section-desktop px-x-mobile md:px-x-desktop;
+      @apply py-section-mobile lg:py-section-desktop px-x-mobile lg:px-x-desktop;
     }
-  }
+    
+    .enhanced-section-spacing {
+      @apply py-12 lg:py-16 px-x-mobile lg:px-x-desktop;
+    }
+    
+    .page-content-spacing {
+      @apply py-8 lg:py-12 px-x-mobile lg:px-x-desktop;
+    }
+    
+    .section-gap {
+      @apply mb-8 lg:mb-12;
+    }
+    
+    .content-gap {
+      @apply space-y-8 lg:space-y-12;
+    }
+}

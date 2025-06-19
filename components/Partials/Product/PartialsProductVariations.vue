@@ -97,7 +97,7 @@
         <div class="lg:hidden space-y-4">
           <!-- Sayaç -->
           <div class="flex justify-center">
-            <UiFormCounter v-model="qyt" class="w-fit counter-height"></UiFormCounter>
+            <UInput type="number" v-model="qyt" min="1" max="99" class="w-fit counter-height" size="sm" />
           </div>
 
           <!-- Butonlar -->
@@ -144,7 +144,7 @@
         <!-- Desktop Düzen (lg ve üstü) -->
         <div class="hidden lg:flex lg:flex-row lg:items-center lg:space-x-4">
           <div>
-            <UiFormCounter v-model="qyt" class="counter-height"></UiFormCounter>
+            <UInput type="number" v-model="qyt" min="1" max="99" class="counter-height"></UInput>
           </div>
 
           <div class="flex space-x-4">

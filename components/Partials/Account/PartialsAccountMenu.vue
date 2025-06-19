@@ -6,24 +6,25 @@
         <!-- Siparişlerim -->
         <NuxtLink to="/hesap/siparislerim" class="flex-shrink-0">
           <div
-            class="group relative overflow-hidden rounded-xl bg-white border border-neutral-200 hover:border-secondary-300 hover:shadow-md transition-all duration-300 w-[200px]"
-            :class="{ 'border-secondary-300 shadow-md bg-secondary-50': useRoute().fullPath == '/hesap/siparislerim' }">
+            class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:shadow-md transition-all duration-300 w-[200px]"
+            :class="{ 'border-secondary-300 dark:border-secondary-600 shadow-md bg-secondary-50 dark:bg-secondary-900/30': useRoute().fullPath == '/hesap/siparislerim' }">
             <div class="flex items-center space-x-3 p-4">
               <!-- İkon -->
               <div
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 group-hover:from-secondary-200 group-hover:to-secondary-300 transition-all duration-200"
-                :class="{ 'from-secondary-200 to-secondary-300': useRoute().fullPath == '/hesap/siparislerim' }">
-                <UIcon name="i-heroicons-shopping-bag" class="w-5 h-5 text-secondary-600" />
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 dark:from-secondary-800/50 dark:to-secondary-700/50 group-hover:from-secondary-200 group-hover:to-secondary-300 dark:group-hover:from-secondary-700/70 dark:group-hover:to-secondary-600/70 transition-all duration-200"
+                :class="{ 'from-secondary-200 to-secondary-300 dark:from-secondary-700/70 dark:to-secondary-600/70': useRoute().fullPath == '/hesap/siparislerim' }">
+                <UIcon name="i-heroicons-shopping-bag" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
               </div>
               <!-- Menü adı -->
-              <span class="font-medium text-neutral-800 group-hover:text-secondary-700 transition-colors duration-200"
-                :class="{ 'text-secondary-700': useRoute().fullPath == '/hesap/siparislerim' }">
+              <span
+                class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-secondary-700 dark:group-hover:text-secondary-300 transition-colors duration-200"
+                :class="{ 'text-secondary-700 dark:text-secondary-300': useRoute().fullPath == '/hesap/siparislerim' }">
                 Siparişlerim
               </span>
             </div>
             <!-- Hover efekti için gradient overlay -->
             <div
-              class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+              class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 dark:from-secondary-900/0 dark:to-secondary-800/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               :class="{ 'opacity-100': useRoute().fullPath == '/hesap/siparislerim' }"></div>
           </div>
         </NuxtLink>
@@ -31,49 +32,51 @@
         <!-- Adreslerim -->
         <NuxtLink to="/hesap/adreslerim" class="flex-shrink-0">
           <div
-            class="group relative overflow-hidden rounded-xl bg-white border border-neutral-200 hover:border-secondary-300 hover:shadow-md transition-all duration-300 w-[200px]"
-            :class="{ 'border-secondary-300 shadow-md bg-secondary-50': useRoute().fullPath == '/hesap/adreslerim' }">
+            class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:shadow-md transition-all duration-300 w-[200px]"
+            :class="{ 'border-secondary-300 dark:border-secondary-600 shadow-md bg-secondary-50 dark:bg-secondary-900/30': useRoute().fullPath == '/hesap/adreslerim' }">
             <div class="flex items-center space-x-3  p-4">
               <!-- İkon -->
               <div
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 group-hover:from-secondary-200 group-hover:to-secondary-300 transition-all duration-200"
-                :class="{ 'from-secondary-200 to-secondary-300': useRoute().fullPath == '/hesap/adreslerim' }">
-                <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600" />
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 dark:from-secondary-800/50 dark:to-secondary-700/50 group-hover:from-secondary-200 group-hover:to-secondary-300 dark:group-hover:from-secondary-700/70 dark:group-hover:to-secondary-600/70 transition-all duration-200"
+                :class="{ 'from-secondary-200 to-secondary-300 dark:from-secondary-700/70 dark:to-secondary-600/70': useRoute().fullPath == '/hesap/adreslerim' }">
+                <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
               </div>
               <!-- Menü adı -->
-              <span class="font-medium text-neutral-800 group-hover:text-secondary-700 transition-colors duration-200"
-                :class="{ 'text-secondary-700': useRoute().fullPath == '/hesap/adreslerim' }">
+              <span
+                class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-secondary-700 dark:group-hover:text-secondary-300 transition-colors duration-200"
+                :class="{ 'text-secondary-700 dark:text-secondary-300': useRoute().fullPath == '/hesap/adreslerim' }">
                 Adreslerim
               </span>
             </div>
             <!-- Hover efekti için gradient overlay -->
             <div
-              class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+              class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 dark:from-secondary-900/0 dark:to-secondary-800/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
               :class="{ 'opacity-100': useRoute().fullPath == '/hesap/adreslerim' }"></div>
           </div>
         </NuxtLink>
 
         <!-- Çıkış Yap -->
-        <button @click="authStore.logout()" class="flex-shrink-0">
+        <div @click="authStore.logout()" class="flex-shrink-0 cursor-pointer">
           <div
-            class="group relative overflow-hidden rounded-xl bg-white border border-red-200 hover:border-red-300 hover:shadow-md transition-all duration-300 w-[200px]">
+            class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-red-200 dark:border-red-800/50 hover:border-red-300 dark:hover:border-red-700 hover:shadow-md transition-all duration-300 w-[200px]">
             <div class="flex items-center space-x-3 p-4">
               <!-- İkon -->
               <div
-                class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 group-hover:from-red-200 group-hover:to-red-300 transition-all duration-200">
-                <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-5 h-5 text-red-600" />
+                class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 group-hover:from-red-200 group-hover:to-red-300 dark:group-hover:from-red-800/50 dark:group-hover:to-red-700/50 transition-all duration-200">
+                <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-5 h-5 text-red-600 dark:text-red-400" />
               </div>
               <!-- Menü adı -->
-              <span class="font-medium text-neutral-800 group-hover:text-red-700 transition-colors duration-200">
+              <span
+                class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-red-700 dark:group-hover:text-red-300 transition-colors duration-200">
                 Çıkış Yap
               </span>
             </div>
             <!-- Hover efekti için gradient overlay -->
             <div
-              class="absolute inset-0 bg-gradient-to-r from-red-50/0 to-red-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+              class="absolute inset-0 bg-gradient-to-r from-red-50/0 to-red-50/50 dark:from-red-900/0 dark:to-red-800/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
             </div>
           </div>
-        </button>
+        </div>
 
       </div>
     </div>
@@ -84,30 +87,31 @@
       <!-- Siparişlerim -->
       <NuxtLink to="/hesap/siparislerim">
         <div
-          class="group relative overflow-hidden rounded-xl bg-white border border-neutral-200 hover:border-secondary-300 hover:shadow-md transition-all duration-300 w-full"
-          :class="{ 'border-secondary-300 shadow-md bg-secondary-50': useRoute().fullPath == '/hesap/siparislerim' }">
+          class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:shadow-md transition-all duration-300 w-full"
+          :class="{ 'border-secondary-300 dark:border-secondary-600 shadow-md bg-secondary-50 dark:bg-secondary-900/30': useRoute().fullPath == '/hesap/siparislerim' }">
           <div class="flex items-center space-x-3 p-4">
             <!-- İkon -->
             <div
-              class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 group-hover:from-secondary-200 group-hover:to-secondary-300 transition-all duration-200"
-              :class="{ 'from-secondary-200 to-secondary-300': useRoute().fullPath == '/hesap/siparislerim' }">
-              <UIcon name="i-heroicons-shopping-bag" class="w-5 h-5 text-secondary-600" />
+              class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 dark:from-secondary-800/50 dark:to-secondary-700/50 group-hover:from-secondary-200 group-hover:to-secondary-300 dark:group-hover:from-secondary-700/70 dark:group-hover:to-secondary-600/70 transition-all duration-200"
+              :class="{ 'from-secondary-200 to-secondary-300 dark:from-secondary-700/70 dark:to-secondary-600/70': useRoute().fullPath == '/hesap/siparislerim' }">
+              <UIcon name="i-heroicons-shopping-bag" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
             </div>
             <!-- Menü adı -->
-            <span class="font-medium text-neutral-800 group-hover:text-secondary-700 transition-colors duration-200"
-              :class="{ 'text-secondary-700': useRoute().fullPath == '/hesap/siparislerim' }">
+            <span
+              class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-secondary-700 dark:group-hover:text-secondary-300 transition-colors duration-200"
+              :class="{ 'text-secondary-700 dark:text-secondary-300': useRoute().fullPath == '/hesap/siparislerim' }">
               Siparişlerim
             </span>
             <!-- Ok ikonu -->
             <div class="ml-auto">
               <UIcon name="i-heroicons-chevron-right"
-                class="w-4 h-4 text-neutral-400 group-hover:text-secondary-500 transition-colors duration-200"
-                :class="{ 'text-secondary-500': useRoute().fullPath == '/hesap/siparislerim' }" />
+                class="w-4 h-4 text-neutral-400 dark:text-neutral-500 group-hover:text-secondary-500 dark:group-hover:text-secondary-400 transition-colors duration-200"
+                :class="{ 'text-secondary-500 dark:text-secondary-400': useRoute().fullPath == '/hesap/siparislerim' }" />
             </div>
           </div>
           <!-- Hover efekti için gradient overlay -->
           <div
-            class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 dark:from-secondary-900/0 dark:to-secondary-800/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
             :class="{ 'opacity-100': useRoute().fullPath == '/hesap/siparislerim' }"></div>
         </div>
       </NuxtLink>
@@ -115,60 +119,60 @@
       <!-- Adreslerim -->
       <NuxtLink to="/hesap/adreslerim">
         <div
-          class="group relative overflow-hidden rounded-xl mt-3 bg-white border border-neutral-200 hover:border-secondary-300 hover:shadow-md transition-all duration-300 w-full"
-          :class="{ 'border-secondary-300 shadow-md bg-secondary-50': useRoute().fullPath == '/hesap/adreslerim' }">
+          class="group relative overflow-hidden rounded-xl mt-3 bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:shadow-md transition-all duration-300 w-full"
+          :class="{ 'border-secondary-300 dark:border-secondary-600 shadow-md bg-secondary-50 dark:bg-secondary-900/30': useRoute().fullPath == '/hesap/adreslerim' }">
           <div class="flex items-center space-x-3 p-4">
             <!-- İkon -->
             <div
-              class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 group-hover:from-secondary-200 group-hover:to-secondary-300 transition-all duration-200"
-              :class="{ 'from-secondary-200 to-secondary-300': useRoute().fullPath == '/hesap/adreslerim' }">
-              <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600" />
+              class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 dark:from-secondary-800/50 dark:to-secondary-700/50 group-hover:from-secondary-200 group-hover:to-secondary-300 dark:group-hover:from-secondary-700/70 dark:group-hover:to-secondary-600/70 transition-all duration-200"
+              :class="{ 'from-secondary-200 to-secondary-300 dark:from-secondary-700/70 dark:to-secondary-600/70': useRoute().fullPath == '/hesap/adreslerim' }">
+              <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
             </div>
             <!-- Menü adı -->
-            <span class="font-medium text-neutral-800 group-hover:text-secondary-700 transition-colors duration-200"
-              :class="{ 'text-secondary-700': useRoute().fullPath == '/hesap/adreslerim' }">
+            <span
+              class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-secondary-700 dark:group-hover:text-secondary-300 transition-colors duration-200"
+              :class="{ 'text-secondary-700 dark:text-secondary-300': useRoute().fullPath == '/hesap/adreslerim' }">
               Adreslerim
             </span>
             <!-- Ok ikonu -->
             <div class="ml-auto">
               <UIcon name="i-heroicons-chevron-right"
-                class="w-4 h-4 text-neutral-400 group-hover:text-secondary-500 transition-colors duration-200"
-                :class="{ 'text-secondary-500': useRoute().fullPath == '/hesap/adreslerim' }" />
+                class="w-4 h-4 text-neutral-400 dark:text-neutral-500 group-hover:text-secondary-500 dark:group-hover:text-secondary-400 transition-colors duration-200"
+                :class="{ 'text-secondary-500 dark:text-secondary-400': useRoute().fullPath == '/hesap/adreslerim' }" />
             </div>
           </div>
           <!-- Hover efekti için gradient overlay -->
           <div
-            class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+            class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 dark:from-secondary-900/0 dark:to-secondary-800/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
             :class="{ 'opacity-100': useRoute().fullPath == '/hesap/adreslerim' }"></div>
         </div>
       </NuxtLink>
 
       <!-- Çıkış Yap -->
-      <button @click="authStore.logout()" class="w-full">
-        <div
-          class="group relative overflow-hidden rounded-xl bg-white border border-red-200 hover:border-red-300 hover:shadow-md transition-all duration-300 w-full">
-          <div class="flex items-center space-x-3 p-4">
-            <!-- İkon -->
-            <div
-              class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 group-hover:from-red-200 group-hover:to-red-300 transition-all duration-200">
-              <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-5 h-5 text-red-600" />
-            </div>
-            <!-- Menü adı -->
-            <span class="font-medium text-neutral-800 group-hover:text-red-700 transition-colors duration-200">
-              Çıkış Yap
-            </span>
-            <!-- Ok ikonu -->
-            <div class="ml-auto">
-              <UIcon name="i-heroicons-chevron-right"
-                class="w-4 h-4 text-neutral-400 group-hover:text-red-500 transition-colors duration-200" />
-            </div>
-          </div>
-          <!-- Hover efekti için gradient overlay -->
+      <div @click="authStore.logout()"
+        class="group relative overflow-hidden rounded-xl mt-3 bg-white dark:bg-neutral-800 border border-red-200 dark:border-red-800/50 hover:border-red-300 dark:hover:border-red-700 hover:shadow-md transition-all duration-300 w-full cursor-pointer">
+        <div class="flex items-center space-x-3 p-4">
+          <!-- İkon -->
           <div
-            class="absolute inset-0 bg-gradient-to-r from-red-50/0 to-red-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+            class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 group-hover:from-red-200 group-hover:to-red-300 dark:group-hover:from-red-800/50 dark:group-hover:to-red-700/50 transition-all duration-200">
+            <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-5 h-5 text-red-600 dark:text-red-400" />
+          </div>
+          <!-- Menü adı -->
+          <span
+            class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-red-700 dark:group-hover:text-red-300 transition-colors duration-200">
+            Çıkış Yap
+          </span>
+          <!-- Ok ikonu -->
+          <div class="ml-auto">
+            <UIcon name="i-heroicons-chevron-right"
+              class="w-4 h-4 text-neutral-400 dark:text-neutral-500 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors duration-200" />
           </div>
         </div>
-      </button>
+        <!-- Hover efekti için gradient overlay -->
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-red-50/0 to-red-50/50 dark:from-red-900/0 dark:to-red-800/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        </div>
+      </div>
 
     </div>
   </div>

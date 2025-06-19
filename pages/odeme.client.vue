@@ -2,29 +2,32 @@
   <div class="standart-section-spacing !mt-0 pb-20 md:pb-0">
     <div class="container">
       <!-- Breadcrumb -->
-      <UiCommonBreadcrumb class="mb-6" :links="links" />
+      <UiCommonBreadcrumb class="mb-3 md:mb-6" :links="links" />
 
       <!-- Sayfa Başlığı -->
       <div class="mb-8">
-        <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 mb-2">Ödeme</h1>
-        <p class="text-neutral-600">Sipariş bilgilerinizi kontrol edin ve ödeme yöntemini seçin</p>
+        <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">Ödeme</h1>
+        <p class="text-neutral-600 dark:text-neutral-400">Sipariş bilgilerinizi kontrol edin ve ödeme yöntemini seçin
+        </p>
       </div>
 
       <div class="lg:grid lg:grid-cols-3 gap-8">
         <!-- Sol Taraf - Sipariş Formu -->
         <div class="lg:col-span-2 space-y-8" v-if="isLoaded">
           <!-- Teslimat Adresi -->
-          <div class="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm">
+          <div
+            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
             <div class="flex items-center space-x-3 mb-6">
-              <div class="w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center">
-                <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600" />
+              <div
+                class="w-10 h-10 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center">
+                <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
               </div>
-              <h2 class="text-lg font-semibold text-neutral-900">Teslimat Adresi</h2>
+              <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Teslimat Adresi</h2>
             </div>
 
             <!-- Varsayılan Adres -->
             <div v-if="orderState.defaultAddress"
-              class="bg-secondary-50 border border-secondary-200 rounded-lg p-4 mb-4">
+              class="bg-secondary-50 dark:bg-secondary-900/50 border border-secondary-200 dark:border-secondary-700 rounded-lg p-4 mb-4">
               <PartialsOrderAddress :addressOptions="{ edit: true }" :address="orderState.defaultAddress" />
             </div>
 
@@ -44,26 +47,28 @@
           </div>
 
           <!-- Ödeme Yöntemleri -->
-          <div class="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm">
+          <div
+            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
             <div class="flex items-center space-x-3 mb-6">
-              <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                <UIcon name="i-heroicons-credit-card" class="w-5 h-5 text-green-600" />
+              <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                <UIcon name="i-heroicons-credit-card" class="w-5 h-5 text-green-600 dark:text-green-400" />
               </div>
-              <h2 class="text-lg font-semibold text-neutral-900">Ödeme Yöntemi</h2>
+              <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Ödeme Yöntemi</h2>
             </div>
 
             <!-- Havale/EFT Seçeneği -->
-            <div class="border rounded-lg transition-all duration-200 hover:border-secondary-300"
-              :class="orderState.orderOptions.selectedPaymentMethod == 'bacs' ? 'bg-secondary-50 border-secondary-300' : 'border-neutral-200'">
+            <div
+              class="border rounded-lg transition-all duration-200 hover:border-secondary-300 dark:hover:border-secondary-600"
+              :class="orderState.orderOptions.selectedPaymentMethod == 'bacs' ? 'bg-secondary-50 dark:bg-secondary-900/50 border-secondary-300 dark:border-secondary-600' : 'border-neutral-200 dark:border-neutral-700'">
               <label class="flex items-start space-x-4 p-4 cursor-pointer">
                 <URadio v-model="orderState.orderOptions.selectedPaymentMethod" value="bacs" name="paymentMethod"
                   class="mt-1" />
                 <div class="flex-1">
                   <div class="flex items-center space-x-2 mb-2">
-                    <UIcon name="i-heroicons-building-library" class="w-5 h-5 text-neutral-600" />
-                    <h3 class="font-semibold text-neutral-900">Havale / EFT ile Ödeme</h3>
+                    <UIcon name="i-heroicons-building-library" class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+                    <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">Havale / EFT ile Ödeme</h3>
                   </div>
-                  <p class="text-sm text-neutral-600 leading-relaxed">
+                  <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
                     Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam tutarını
                     havale veya EFT yoluyla gönderebilirsiniz.
                   </p>
@@ -75,7 +80,8 @@
 
         <!-- Loading State -->
         <div v-else class="lg:col-span-2 space-y-8">
-          <div class="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm">
+          <div
+            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
             <div class="space-y-4">
               <USkeleton class="h-6 w-32" />
               <USkeleton class="h-32 w-full" />
@@ -85,7 +91,8 @@
               </div>
             </div>
           </div>
-          <div class="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm">
+          <div
+            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
             <div class="space-y-4">
               <USkeleton class="h-6 w-32" />
               <USkeleton class="h-24 w-full" />
@@ -108,7 +115,8 @@
               </template>
             </PartialsCartExtre>
           </div>
-          <div v-else class="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm">
+          <div v-else
+            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
             <USkeleton class="h-48 w-full" />
             <USkeleton class="h-12 w-full mt-4" />
           </div>
@@ -119,13 +127,15 @@
       <ClientOnly>
         <Teleport to="body">
           <div v-if="isLoaded"
-            class="md:hidden fixed bottom-0 left-0 right-0 bg-white p-4 shadow-2xl border-t border-neutral-200 flex items-center justify-between"
+            class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-800 p-4 shadow-2xl border-t border-neutral-200 dark:border-neutral-700 flex items-center justify-between"
             style="z-index: 999;">
             <!-- Toplam Tutar -->
             <div class="flex flex-col">
-              <span class="text-sm text-neutral-500">Toplam</span>
-              <span class="text-lg font-bold text-neutral-900">{{ formatPrice(cartState.cartTotalAmount + shippingCost)
-                }}</span>
+              <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
+              <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
+                formatPrice(cartState.cartTotalAmount
+                  + shippingCost)
+              }}</span>
             </div>
 
             <!-- Siparişi Onayla Butonu -->
@@ -148,7 +158,7 @@
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold text-neutral-900">
+            <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
               Yeni Adres Ekle
             </h3>
             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
@@ -170,10 +180,10 @@
         <template #header>
           <div class="flex items-center justify-between">
             <div>
-              <h3 class="text-lg font-semibold text-neutral-900">
+              <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
                 Kayıtlı Adreslerim
               </h3>
-              <p class="text-sm text-neutral-500 mt-1">
+              <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
                 {{ paginatedAddresses.length }} / {{ orderState.addresses?.length || 0 }} adres gösteriliyor
               </p>
             </div>
@@ -186,22 +196,23 @@
           <!-- Adres Listesi -->
           <div class="max-h-96 overflow-y-auto space-y-4">
             <div v-if="paginatedAddresses.length === 0" class="text-center py-8">
-              <UIcon name="i-heroicons-map-pin" class="w-12 h-12 text-neutral-400 mx-auto mb-3" />
-              <p class="text-neutral-600">
+              <UIcon name="i-heroicons-map-pin" class="w-12 h-12 text-neutral-400 dark:text-neutral-500 mx-auto mb-3" />
+              <p class="text-neutral-600 dark:text-neutral-400">
                 Henüz kayıtlı adresiniz yok
               </p>
             </div>
 
             <div v-for="address in paginatedAddresses" :key="address.id">
               <div class="border rounded-lg p-4 transition-all duration-200"
-                :class="address.isDefault ? 'bg-secondary-50 border-secondary-300' : 'border-neutral-200 hover:border-neutral-300'">
+                :class="address.isDefault ? 'bg-secondary-50 dark:bg-secondary-900/50 border-secondary-300 dark:border-secondary-600' : 'border-neutral-200 dark:border-neutral-700 hover:border-neutral-300 dark:hover:border-neutral-600'">
                 <PartialsOrderAddress :address-options="{ allAction: true }" :address="address" />
               </div>
             </div>
           </div>
 
           <!-- Sayfalama -->
-          <div v-if="totalPages > 1" class="flex justify-center items-center space-x-2 mt-6 pt-4 border-neutral-200">
+          <div v-if="totalPages > 1"
+            class="flex justify-center items-center space-x-2 mt-6 pt-4 border-neutral-200 dark:border-neutral-700">
             <UButton :disabled="currentPage === 1" @click="currentPage--" color="gray" variant="outline" size="sm">
               <UIcon name="i-heroicons-chevron-left" />
             </UButton>
@@ -221,7 +232,7 @@
           </div>
 
           <!-- Sayfa Bilgisi -->
-          <div v-if="totalPages > 1" class="text-center text-sm text-neutral-500 mt-3">
+          <div v-if="totalPages > 1" class="text-center text-sm text-neutral-500 dark:text-neutral-400 mt-3">
             Sayfa {{ currentPage }} / {{ totalPages }}
           </div>
         </div>

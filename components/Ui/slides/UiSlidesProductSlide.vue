@@ -1,5 +1,5 @@
 <template>
-  <div :id="props.id" class="section-spacing">
+  <div :id="props.id" class="component-spacing">
     <!-- Skeleton ekranı, yükleme sırasında gösterilir -->
     <div v-if="isLoading" class="w-full overflow-x-hidden">
       <div class="flex gap-6">
@@ -16,7 +16,7 @@
     <div v-if="!isLoading && products?.length > 0" class="space-y-8">
       <!-- Header -->
       <div class="container">
-        <div class="flex justify-between items-center">
+        <div class="flex justify-between items-center mb-8">
           <h2 class="text-heading-2 font-semibold text-neutral-900">{{ props.title }}</h2>
           <NuxtLink v-if="props.to" :to="props.to"
             class="group flex items-center space-x-2 text-secondary-600 hover:text-secondary-700 font-medium transition-colors duration-200">
@@ -31,7 +31,7 @@
       <div class="container">
         <UCarousel arrows v-slot="{ item, index }" :items="products" :ui="{
           item: 'snap-end',
-          container: 'gap-6'
+          container: 'gap-6 px-2'
         }">
           <PartialsProductCard :lcp="props.lcp" :index="index" :product="item" :key="item.id" />
         </UCarousel>

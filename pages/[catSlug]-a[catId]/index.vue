@@ -1,19 +1,19 @@
 <template>
-  <div class="section-spacing !pt-0">
+  <div class="page-content-spacing">
     <div class="container">
       <!-- Breadcrumb -->
-      <UiCommonBreadcrumb class="mb-8" :links="breadcrumbLinks" />
+      <UiCommonBreadcrumb class="mb-3 md:mb-8" :links="breadcrumbLinks" />
 
       <!-- Sayfa Başlığı -->
       <div v-if="slugsCat || query.searchWord" class="mb-8">
-        <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 mb-2">
+        <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
           <span v-if="query.searchWord">"{{ query.searchWord }}" için arama sonuçları</span>
           <span v-else>{{ slugsCat?.label }}</span>
         </h1>
-        <p v-if="slugsCat && !query.searchWord" class="text-neutral-600">
+        <p v-if="slugsCat && !query.searchWord" class="text-neutral-600 dark:text-neutral-400">
           {{ slugsCat?.description || 'Kaliteli ürünlerimizi keşfedin' }}
         </p>
-        <p v-else-if="query.searchWord" class="text-neutral-600">
+        <p v-else-if="query.searchWord" class="text-neutral-600 dark:text-neutral-400">
           {{ productState.products?.total || 0 }} ürün bulundu
         </p>
       </div>

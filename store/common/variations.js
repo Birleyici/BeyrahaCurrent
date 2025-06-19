@@ -9,19 +9,60 @@ export const useVariationState = defineStore('variationState', () => {
 
         if (productId == null) { return }
 
+        console.log('🔄 FETCHING VARIATIONS FOR PRODUCT:', productId);
+
         const response = await useBaseOFetchWithAuth(`products/${productId}/variations`);
+
+        console.log('📦 RECEIVED VARIATIONS:', response.variations?.length || 0, 'items');
 
         variations.value = response.variations
 
+        console.log('✅ STATE UPDATED. VARIATION COUNT:', variations.value?.length || 0);
     }
 
-    const deleteVariation = async (item) => {
-        item.loading = true
-        await useBaseOFetchWithAuth("variations/" + item.id, { method: "DELETE" }).finally(()=>{
-        item.loading = false
-        })
+    const deleteVariation = async (variationData) => {
+        try {
+            const response = await useBaseOFetchWithAuth("variations/" + variationData.id, { method: "DELETE" });
+            
+            // Backend'den gelen senkronizasyon sonucunu işle
+            const syncDetails = response.sync_details || {};
+            let cleanupMessage = '';
+            
+            if (syncDetails.total_cleaned > 0) {
+                const details = [];
+                if (syncDetails.orphaned > 0) details.push(`${syncDetails.orphaned} yetim`);
+                if (syncDetails.duplicates > 0) details.push(`${syncDetails.duplicates} tekrar eden`);
+                if (syncDetails.invalid > 0) details.push(`${syncDetails.invalid} geçersiz`);
+                if (syncDetails.deactivated > 0) details.push(`${syncDetails.deactivated} deaktif`);
+                
+                cleanupMessage = ` (${details.join(', ')} varyasyon temizlendi)`;
+            }
 
-        deleteVariationOnState(item.id)
+            // Varyasyonları state'den kaldır
+            deleteVariationOnState(variationData.id);
+
+            // Toast bildirimi göster
+            const toast = useToast();
+            toast.add({
+                title: 'Varyasyon silindi!',
+                description: `Varyasyon başarıyla silindi${cleanupMessage}`,
+                color: 'red',
+            });
+
+            return response;
+
+        } catch (error) {
+            console.error('Varyasyon silme hatası:', error);
+            
+            const toast = useToast();
+            toast.add({
+                title: 'Hata!',
+                description: 'Varyasyon silinirken bir hata oluştu.',
+                color: 'red',
+            });
+            
+            throw error;
+        }
     };
 
     function deleteVariationOnState(id) {
@@ -29,8 +70,23 @@ export const useVariationState = defineStore('variationState', () => {
         variations.value = variations.value.filter(variation => variation.id !== id)
     }
 
+    // Orphaned varyasyonları temizleme fonksiyonu
+    const cleanupOrphanedVariations = (validAttributeTermIds) => {
+        variations.value = variations.value.filter(variation => {
+            // Eğer varyasyonun hiç termi yoksa orphaned
+            if (!variation.terms || variation.terms.length === 0) {
+                return false;
+            }
 
-    return { variations, transformedVariations, fetchVariations, deleteVariation }
+            // Varyasyonun tüm termlerinin hala mevcut olup olmadığını kontrol et
+            return variation.terms.every(term => {
+                return validAttributeTermIds.includes(term.product_attribute_term_id);
+            });
+        });
+    }
+
+
+    return { variations, transformedVariations, fetchVariations, deleteVariation, cleanupOrphanedVariations }
 })
 
 

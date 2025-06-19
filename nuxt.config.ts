@@ -41,8 +41,6 @@ export default defineNuxtConfig({
    },
     domains: [
       'https://cdn.beyraha.com',
-      'https://pakpazar.com',
-      'https://www.pakpazar.com',
     ],
    alias:{
     cl: 'cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g'
@@ -70,15 +68,14 @@ export default defineNuxtConfig({
 
   modules: [
     '@pinia/nuxt',
-    'nuxt-icon',
-    '@nuxt/image',
-    // "@sidebase/nuxt-auth"
+    'pinia-plugin-persistedstate/nuxt',
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
+    'nuxt-icon',
+    '@nuxt/image',
     '@nuxtjs/device',
-    '@pinia/nuxt',
-    'pinia-plugin-persistedstate/nuxt',
     'nuxt-tiptap-editor',
+    // "@sidebase/nuxt-auth"
   ],
 
 

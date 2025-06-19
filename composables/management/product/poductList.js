@@ -10,7 +10,8 @@ export function useProductList() {
         { key: "price", label: "Fiyat", sortable: true },
         { key: "sale_price", label: "İndirimli fiyat", sortable: true },
         { key: "sku", label: "SKU", sortable: true },
-        { key: "delete", label: "İşlemler" },
+        { key: "status", label: "Durum" },
+        { key: "actions", label: "İşlemler" },
     ];
 
 

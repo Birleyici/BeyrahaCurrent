@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white rounded-xl border border-neutral-200 p-6 shadow-sm hover:shadow-md transition-shadow duration-200 relative z-1">
+        class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-shadow duration-200 relative z-1">
         <div class="lg:grid lg:grid-cols-3 gap-6 items-center">
             <!-- Sol Taraf - Ürün Bilgileri -->
             <div class="lg:col-span-2 flex space-x-4">
@@ -8,12 +8,12 @@
                 <div class="flex-shrink-0">
                     <NuxtLink v-if="props.item.image_path" :to="props.item.product_url" class="block">
                         <NuxtImg width="120" height="120" fit="cover"
-                            class="w-24 h-24 lg:w-30 lg:h-30 object-cover rounded-lg border border-neutral-200"
+                            class="w-24 h-24 lg:w-30 lg:h-30 object-cover rounded-lg border border-neutral-200 dark:border-neutral-600"
                             :src="`cl/${props.item.image_path}`" />
                     </NuxtLink>
                     <div v-else
-                        class="w-24 h-24 lg:w-30 lg:h-30 bg-neutral-100 rounded-lg border border-neutral-200 flex items-center justify-center">
-                        <UIcon name="i-heroicons-photo" class="w-8 h-8 text-neutral-400" />
+                        class="w-24 h-24 lg:w-30 lg:h-30 bg-neutral-100 dark:bg-neutral-700 rounded-lg border border-neutral-200 dark:border-neutral-600 flex items-center justify-center">
+                        <UIcon name="i-heroicons-photo" class="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
                     </div>
                 </div>
 
@@ -21,7 +21,7 @@
                 <div class="flex-1 min-w-0">
                     <!-- Ürün Adı -->
                     <NuxtLink :to="props.item.product_url"
-                        class="text-lg font-semibold text-neutral-900 hover:text-secondary-600 transition-colors duration-200 line-clamp-2 mb-3">
+                        class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 hover:text-secondary-600 dark:hover:text-secondary-400 transition-colors duration-200 line-clamp-2 mb-3">
                         {{ props.item.product_name }}
                     </NuxtLink>
 
@@ -29,16 +29,20 @@
                     <div v-if="props.item.variation" class="space-y-2 mb-4">
                         <div v-for="(value, key) in props.item.variation.attributes" :key="key"
                             class="flex items-center space-x-2 text-sm">
-                            <span class="font-medium text-neutral-600">{{ key }}:</span>
-                            <span class="text-neutral-800 bg-neutral-100 px-3 py-1 rounded-full">{{ value }}</span>
+                            <span class="font-medium text-neutral-600 dark:text-neutral-400">{{ key }}:</span>
+                            <span
+                                class="text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-700 px-3 py-1 rounded-full">{{
+                                    value }}</span>
                         </div>
                     </div>
 
                     <!-- Özel Input Değeri -->
                     <div v-if="props.item.input_value?.label" class="mb-4">
                         <div class="flex items-center space-x-2 text-sm">
-                            <span class="font-medium text-neutral-600">{{ props.item.input_value.label }}:</span>
-                            <span class="text-neutral-800 bg-neutral-100 px-3 py-1 rounded-full">
+                            <span class="font-medium text-neutral-600 dark:text-neutral-400">{{
+                                props.item.input_value.label }}:</span>
+                            <span
+                                class="text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-700 px-3 py-1 rounded-full">
                                 {{ props.item.input_value.value?.length > 20 ? props.item.input_value.value.substring(0,
                                     20) + '...' : props.item.input_value.value }}
                             </span>
@@ -65,13 +69,13 @@
                 </div>
 
                 <!-- Miktar Kontrolü -->
-                <div class="bg-neutral-50 rounded-full  p-1">
+                <div class="bg-neutral-50 dark:bg-neutral-700 rounded-full p-1">
                     <PartialsCartItemCounter :cart-item="props.item" />
                 </div>
 
                 <!-- Silme Butonu -->
                 <UButton :disabled="loading" :loading="loading" @click="deleteHandle()" icon="i-heroicons-trash"
-                    size="sm" color="red" variant="ghost" class="hover:bg-red-50" />
+                    size="sm" color="red" variant="ghost" class="hover:bg-red-50 dark:hover:bg-red-900/20" />
             </div>
         </div>
     </div>

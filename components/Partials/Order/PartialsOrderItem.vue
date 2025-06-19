@@ -1,35 +1,37 @@
 <template>
-  <div class="bg-white border border-neutral-200 rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300">
+  <div
+    class="bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 rounded-xl shadow-sm hover:shadow-md dark:hover:shadow-lg transition-shadow duration-300">
     <!-- Sipariş Header -->
-    <div class="bg-gradient-to-r from-neutral-50 to-neutral-100 rounded-t-xl p-4 md:p-6">
+    <div
+      class="bg-gradient-to-r from-neutral-50 to-neutral-100 dark:from-neutral-800 dark:to-neutral-700 rounded-t-xl p-4 md:p-6">
       <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <!-- Sol Taraf - Sipariş Bilgileri -->
         <div class="flex flex-col sm:flex-row sm:items-center gap-4">
           <div class="flex items-center space-x-3">
-            <div class="w-10 h-10 bg-secondary-100 rounded-full flex items-center justify-center">
-              <UIcon name="i-heroicons-shopping-bag" class="w-5 h-5 text-secondary-600" />
+            <div class="w-10 h-10 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center">
+              <UIcon name="i-heroicons-shopping-bag" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
             </div>
             <div>
-              <p class="text-sm text-neutral-600">Sipariş No</p>
-              <p class="font-semibold text-neutral-900">#{{ props.item.id }}</p>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400">Sipariş No</p>
+              <p class="font-semibold text-neutral-900 dark:text-neutral-100">#{{ props.item.id }}</p>
             </div>
           </div>
 
-          <div class="hidden sm:block w-px h-8 bg-neutral-300"></div>
+          <div class="hidden sm:block w-px h-8 bg-neutral-300 dark:bg-neutral-600"></div>
 
           <div>
-            <p class="text-sm text-neutral-600">Sipariş Tarihi</p>
-            <p class="font-medium text-neutral-900">{{ formatDate(props.item.created_at) }}</p>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400">Sipariş Tarihi</p>
+            <p class="font-medium text-neutral-900 dark:text-neutral-100">{{ formatDate(props.item.created_at) }}</p>
           </div>
 
           <!-- Ürün Resimleri -->
-          <div class="hidden sm:block w-px h-8 bg-neutral-300"></div>
+          <div class="hidden sm:block w-px h-8 bg-neutral-300 dark:bg-neutral-600"></div>
 
           <div class="flex items-center">
             <div class="flex -space-x-2">
               <!-- İlk 3 ürün resmi -->
               <div v-for="(product, index) in displayedProducts" :key="index"
-                class="relative w-8 h-8 rounded-full border-2 border-white shadow-sm overflow-hidden bg-neutral-100"
+                class="relative w-8 h-8 rounded-full border-2 border-white dark:border-neutral-800 shadow-sm overflow-hidden bg-neutral-100 dark:bg-neutral-700"
                 :style="{ zIndex: 10 - index }">
                 <NuxtImg v-if="product.image?.path" :src="'cl/' + product.image.path" :alt="product.name"
                   class="w-full h-full object-cover" format="webp" quality="80" :width="32" :height="32" fit="cover" />
@@ -38,13 +40,13 @@
 
               <!-- Kalan ürün sayısı -->
               <div v-if="remainingProductCount > 0"
-                class="relative w-8 h-8 rounded-full border-2 border-white shadow-sm bg-secondary-500 flex items-center justify-center"
+                class="relative w-8 h-8 rounded-full border-2 border-white dark:border-neutral-800 shadow-sm bg-secondary-500 dark:bg-secondary-600 flex items-center justify-center"
                 style="z-index: 7">
                 <span class="text-xs font-medium text-white">+{{ remainingProductCount }}</span>
               </div>
             </div>
 
-            <span class="ml-3 text-sm text-neutral-600">
+            <span class="ml-3 text-sm text-neutral-600 dark:text-neutral-400">
               {{ totalProductCount }} ürün
             </span>
           </div>
@@ -53,15 +55,16 @@
         <!-- Sağ Taraf - Toplam Tutar -->
         <div class="flex items-center justify-between sm:justify-end">
           <div class="text-right">
-            <p class="text-sm text-neutral-600">Toplam Tutar</p>
-            <p class="text-lg font-bold text-secondary-600">{{ formatPrice(props.item.total_with_shipping) }}</p>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400">Toplam Tutar</p>
+            <p class="text-lg font-bold text-secondary-600 dark:text-secondary-400">{{
+              formatPrice(props.item.total_with_shipping) }}</p>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Sipariş Detayları Accordion -->
-    <div class="border-t border-neutral-200">
+    <div class="border-t border-neutral-200 dark:border-neutral-700">
       <UAccordion :items="[
         {
           label: 'Sipariş Detayları',
@@ -73,20 +76,20 @@
             base: '',
             padding: 'p-0',
             size: 'text-sm',
-            color: 'text-neutral-700',
+            color: 'text-neutral-700 dark:text-neutral-300',
             ring: '',
             rounded: ''
           }
         }">
         <template #default="{ item, open }">
           <button
-            class="w-full flex items-center justify-between p-4 md:p-6 hover:bg-neutral-50 transition-colors duration-200">
+            class="w-full flex items-center justify-between p-4 md:p-6 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors duration-200">
             <div class="flex items-center space-x-3">
-              <UIcon name="i-heroicons-list-bullet" class="w-5 h-5 text-neutral-500" />
-              <span class="font-medium text-neutral-900">{{ item.label }}</span>
+              <UIcon name="i-heroicons-list-bullet" class="w-5 h-5 text-neutral-500 dark:text-neutral-400" />
+              <span class="font-medium text-neutral-900 dark:text-neutral-100">{{ item.label }}</span>
             </div>
             <UIcon name="i-heroicons-chevron-down"
-              class="w-5 h-5 text-neutral-500 transform transition-transform duration-200"
+              class="w-5 h-5 text-neutral-500 dark:text-neutral-400 transform transition-transform duration-200"
               :class="{ 'rotate-180': open }" />
           </button>
         </template>
@@ -100,7 +103,7 @@
             </div>
 
             <!-- Slot İçeriği (Adres Kartları) -->
-            <div class="pt-4 border-t border-neutral-200">
+            <div class="pt-4 border-t border-neutral-200 dark:border-neutral-700">
               <slot />
             </div>
           </div>

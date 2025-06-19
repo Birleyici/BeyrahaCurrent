@@ -5,14 +5,15 @@
     <!-- Mobile Search Overlay -->
     <div v-if="$mainState.isOpenSearch && $device.isMobile" class="fixed inset-0 z-50">
       <div class="absolute inset-0 p-4">
-        <div class="bg-white rounded-xl shadow-xl max-h-[90vh] overflow-hidden">
+        <div
+          class="bg-white dark:bg-neutral-800 rounded-xl shadow-xl max-h-[90vh] overflow-hidden transition-colors duration-300">
           <!-- Mobile Header -->
-          <div class="flex items-center p-4 border-b border-neutral-100">
+          <div class="flex items-center p-4 border-b border-neutral-100 dark:border-neutral-700">
             <button @click="closeSearch"
-              class="p-2 -ml-2 rounded-lg hover:bg-neutral-100 transition-colors duration-150">
-              <UIcon name="i-heroicons-arrow-left" class="w-5 h-5 text-neutral-600" />
+              class="p-2 -ml-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-150">
+              <UIcon name="i-heroicons-arrow-left" class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
             </button>
-            <h3 class="ml-3 text-lg font-medium text-neutral-900">Ürün Ara</h3>
+            <h3 class="ml-3 text-lg font-medium text-neutral-900 dark:text-neutral-100">Ürün Ara</h3>
           </div>
 
           <!-- Mobile Search Input -->
@@ -44,7 +45,7 @@
         leave-from-class="transform scale-100 opacity-100 translate-y-0"
         leave-to-class="transform scale-98 opacity-0 translate-y-1">
         <div v-if="searchWord && $mainState.isOpenSearch && !$device.isMobile"
-          class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-neutral-200/80 z-50 max-h-[400px] overflow-hidden results-container">
+          class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200/80 dark:border-neutral-700/80 z-50 max-h-[400px] overflow-hidden results-container transition-colors duration-300">
           <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
             :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch" />
         </div>

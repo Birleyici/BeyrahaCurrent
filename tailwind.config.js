@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: 'class',
   content: [
     './components/**/*.{js,vue,ts}',
     './layouts/**/*.vue',
@@ -130,13 +131,13 @@ module.exports = {
         'caption': ['0.75rem', { lineHeight: '1.4' }]
       },
       spacing: {
-        'x-mobile': '1rem',
+        'x-mobile': '0.75rem',
         'x-desktop': '2rem',
         'y-mobile': '0.75rem',
         'y-desktop': '1.25rem',
-        'section-mobile': '3rem',
+        'section-mobile': '2rem',
         'section-desktop': '5rem',
-        'container-mobile': '1.5rem',
+        'container-mobile': '0.75rem',
         'container-desktop': '2.5rem',
         'pad-1': '0.75rem',
         'pad-2': '1rem',

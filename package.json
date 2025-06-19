@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@nuxt/image": "^1.6.0",
+    "@tiptap/extension-placeholder": "^2.14.0",
     "aws-sdk": "^2.1508.0",
     "jsonwebtoken": "^9.0.2",
     "mobile-detect": "^1.4.5",

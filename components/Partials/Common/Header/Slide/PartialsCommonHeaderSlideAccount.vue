@@ -3,23 +3,25 @@
         <div class="flex flex-col h-full">
             <!-- Header -->
             <div
-                class="bg-gradient-to-r from-secondary-50 to-secondary-100 border-b border-secondary-200 px-6 py-4 flex-shrink-0">
+                class="bg-gradient-to-r from-secondary-50 to-secondary-100 dark:from-secondary-900/50 dark:to-secondary-800/50 border-b border-secondary-200 dark:border-secondary-700 px-6 py-4 flex-shrink-0 transition-colors duration-300">
                 <div class="flex items-center justify-between">
                     <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-secondary-500 rounded-full flex items-center justify-center">
+                        <div
+                            class="w-10 h-10 bg-secondary-500 dark:bg-secondary-600 rounded-full flex items-center justify-center">
                             <UIcon name="i-heroicons-user-circle" class="w-5 h-5 text-white" />
                         </div>
-                        <h3 class="text-lg font-bold text-neutral-900">
+                        <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
                             Hesabım
                         </h3>
                     </div>
                     <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
-                        class="hover:bg-white/50 transition-colors duration-200" @click="model = false" />
+                        class="hover:bg-white/50 dark:hover:bg-neutral-700/50 transition-colors duration-200"
+                        @click="model = false" />
                 </div>
             </div>
 
             <!-- Content -->
-            <div class="flex-1 overflow-y-auto bg-neutral-50">
+            <div class="flex-1 overflow-y-auto bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
                 <!-- Giriş yapmamış kullanıcılar için form -->
                 <div v-if="!authStore.token" class="p-4">
                     <PartialsFormAuthForm :redirect="false" />
@@ -29,58 +31,59 @@
                 <div v-else class="p-4 space-y-2">
                     <ul class="list-none space-y-2">
                         <li v-for="menu in menuItems" :key="menu.link"
-                            class="group relative overflow-hidden rounded-xl bg-white border border-neutral-200 hover:border-secondary-300 hover:shadow-md transition-all duration-300">
+                            class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:shadow-md transition-all duration-300">
                             <NuxtLink :to="menu.link" class="flex items-center p-4 w-full">
                                 <div class="flex items-center space-x-3 w-full">
                                     <!-- İkon -->
                                     <div
-                                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 group-hover:from-secondary-200 group-hover:to-secondary-300 transition-all duration-200">
-                                        <UIcon :name="getMenuIcon(menu.name)" class="w-5 h-5 text-secondary-600" />
+                                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 dark:from-secondary-800/50 dark:to-secondary-700/50 group-hover:from-secondary-200 group-hover:to-secondary-300 dark:group-hover:from-secondary-700/70 dark:group-hover:to-secondary-600/70 transition-all duration-200">
+                                        <UIcon :name="getMenuIcon(menu.name)"
+                                            class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
                                     </div>
                                     <!-- Menü adı -->
                                     <span
-                                        class="font-medium text-neutral-800 group-hover:text-secondary-700 transition-colors duration-200">
+                                        class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-secondary-700 dark:group-hover:text-secondary-300 transition-colors duration-200">
                                         {{ menu.name }}
                                     </span>
                                     <!-- Ok ikonu -->
                                     <div class="ml-auto">
                                         <UIcon name="i-heroicons-chevron-right"
-                                            class="w-4 h-4 text-neutral-400 group-hover:text-secondary-500 transition-colors duration-200" />
+                                            class="w-4 h-4 text-neutral-400 dark:text-neutral-500 group-hover:text-secondary-500 dark:group-hover:text-secondary-400 transition-colors duration-200" />
                                     </div>
                                 </div>
                             </NuxtLink>
                             <!-- Hover efekti için gradient overlay -->
                             <div
-                                class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                                class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 dark:from-secondary-900/0 dark:to-secondary-800/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                             </div>
                         </li>
 
                         <!-- Çıkış yap butonu -->
                         <li @click="authStore.logout()"
-                            class="group relative overflow-hidden rounded-xl bg-white border border-red-200 hover:border-red-300 hover:shadow-md transition-all duration-300 cursor-pointer">
+                            class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-red-200 dark:border-red-800/50 hover:border-red-300 dark:hover:border-red-700 hover:shadow-md transition-all duration-300 cursor-pointer">
                             <div class="flex items-center p-4 w-full">
                                 <div class="flex items-center space-x-3 w-full">
                                     <!-- İkon -->
                                     <div
-                                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 group-hover:from-red-200 group-hover:to-red-300 transition-all duration-200">
+                                        class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-red-200 dark:from-red-900/30 dark:to-red-800/30 group-hover:from-red-200 group-hover:to-red-300 dark:group-hover:from-red-800/50 dark:group-hover:to-red-700/50 transition-all duration-200">
                                         <UIcon name="i-heroicons-arrow-right-on-rectangle"
-                                            class="w-5 h-5 text-red-600" />
+                                            class="w-5 h-5 text-red-600 dark:text-red-400" />
                                     </div>
                                     <!-- Menü adı -->
                                     <span
-                                        class="font-medium text-neutral-800 group-hover:text-red-700 transition-colors duration-200">
+                                        class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-red-700 dark:group-hover:text-red-300 transition-colors duration-200">
                                         Çıkış Yap
                                     </span>
                                     <!-- Ok ikonu -->
                                     <div class="ml-auto">
                                         <UIcon name="i-heroicons-chevron-right"
-                                            class="w-4 h-4 text-neutral-400 group-hover:text-red-500 transition-colors duration-200" />
+                                            class="w-4 h-4 text-neutral-400 dark:text-neutral-500 group-hover:text-red-500 dark:group-hover:text-red-400 transition-colors duration-200" />
                                     </div>
                                 </div>
                             </div>
                             <!-- Hover efekti için gradient overlay -->
                             <div
-                                class="absolute inset-0 bg-gradient-to-r from-red-50/0 to-red-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                                class="absolute inset-0 bg-gradient-to-r from-red-50/0 to-red-50/50 dark:from-red-900/0 dark:to-red-800/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                             </div>
                         </li>
                     </ul>
