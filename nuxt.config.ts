@@ -1,4 +1,5 @@
 import vsharp from 'vite-plugin-vsharp';
+import pwaConfig from './pwa.config';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -7,6 +8,21 @@ export default defineNuxtConfig({
     head: {
       charset: 'utf-8',
       viewport: 'width=device-width, initial-scale=1',
+      link: [
+        { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+        { rel: 'icon', type: 'image/png', sizes: '16x16', href: '/favicon-16x16.png' },
+        { rel: 'icon', type: 'image/png', sizes: '32x32', href: '/favicon-32x32.png' },
+        { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+        { rel: 'mask-icon', href: '/logo-for-light.png', color: '#4F46E5' }
+      ],
+      meta: [
+        { name: 'theme-color', content: '#4F46E5' },
+        { name: 'apple-mobile-web-app-capable', content: 'yes' },
+        { name: 'apple-mobile-web-app-status-bar-style', content: 'default' },
+        { name: 'apple-mobile-web-app-title', content: 'Beyraha' },
+        { name: 'msapplication-TileColor', content: '#4F46E5' },
+        { name: 'msapplication-TileImage', content: '/pwa-144x144.png' }
+      ]
     }
   },
   
@@ -24,7 +40,7 @@ export default defineNuxtConfig({
 
 
   vite: {
-    plugins: [vsharp()],
+    // plugins: [vsharp()], // Geçici olarak devre dışı
     vue: {
       script: {
           defineModel: true,
@@ -75,9 +91,10 @@ export default defineNuxtConfig({
     '@nuxt/image',
     '@nuxtjs/device',
     'nuxt-tiptap-editor',
-    // "@sidebase/nuxt-auth"
+    '@vite-pwa/nuxt'
   ],
 
+  pwa: pwaConfig,
 
   tiptap: {
     prefix: 'Tiptap', //prefix for Tiptap imports, composables not included
@@ -112,4 +129,4 @@ export default defineNuxtConfig({
   routeRules: {
     '/management/**': { ssr: false },
   }
-})
+} as any)

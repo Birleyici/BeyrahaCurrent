@@ -204,7 +204,7 @@
 useHead({
   title: 'Beyraha Tesettür Giyim - Ana Sayfa',
   meta: [
-    { name: 'description', content: 'En sevdiğiniz tesettür mağazaları artık yeni Beyraha da sizleri bekliyor. Kaliteli çarşaf, peçe ve sufle modellerimizi keşfedin.' }
+    { name: 'description', content: 'Kaliteli kumaşlar ve özenli işçilikle hazırlanmış çarşaf, ferace, peçe ve sufle modellerimizle tarzınızı ve konforunuzu bir arada yaşayın' }
   ],
 })
 </script>

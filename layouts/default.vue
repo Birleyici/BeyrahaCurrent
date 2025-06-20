@@ -10,6 +10,11 @@
       <NuxtPage />
     </main>
 
+    <!-- PWA Install Prompt -->
+    <ClientOnly>
+      <PartialsCommonPwaInstallPrompt />
+    </ClientOnly>
+
     <!-- Footer -->
     <footer class="flex-shrink-0 mt-8">
       <LazyPartialsCommonFooter />

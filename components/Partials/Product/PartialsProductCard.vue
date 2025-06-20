@@ -75,8 +75,6 @@ onMounted(() => {
 });
 
 // Debug için product_url'yi kontrol et
-console.log('Product URL:', props.product.product_url)
-console.log('Product:', props.product)
 
 // Eğer product_url yoksa manuel olarak oluştur
 const productUrl = computed(() => {

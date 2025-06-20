@@ -1,11 +1,14 @@
 <template>
   <div>
+    <VitePwaManifest />
     <NuxtLoadingIndicator />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
     <UNotifications icon="i-heroicons-check-badge" color="orange" />
     <DialogWrapper />
+    <PwaInstallPrompt />
+    <PwaUpdatePrompt />
   </div>
 </template>
 

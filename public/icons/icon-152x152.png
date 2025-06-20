@@ -1,0 +1,10 @@
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Arka plan -->
+  <rect width="512" height="512" rx="80" fill="#f97316"/>
+  
+  <!-- Ana ikon - Shopping bag -->
+  <path d="M160 192C160 139.3 203.3 96 256 96C308.7 96 352 139.3 352 192V224H384C397.3 224 408 234.7 408 248V424C408 437.3 397.3 448 384 448H128C114.7 448 104 437.3 104 424V248C104 234.7 114.7 224 128 224H160V192ZM192 192V224H320V192C320 157.1 291.9 128 256 128C220.1 128 192 157.1 192 192Z" fill="white"/>
+  
+  <!-- Beyraha yazısı -->
+  <text x="256" y="480" text-anchor="middle" font-family="Arial, sans-serif" font-size="32" font-weight="bold" fill="white">Beyraha</text>
+</svg> 
