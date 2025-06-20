@@ -48,7 +48,7 @@
                             <p class="text-neutral-600 dark:text-neutral-400 text-sm">Alışverişe başlamak için ürünleri
                                 sepete ekleyin</p>
                         </div>
-                        <UButton @click="goToHome" color="secondary" variant="outline" class="mt-4">
+                        <UButton href="/" color="secondary" variant="outline" class="mt-4">
                             Alışverişe Başla
                         </UButton>
                     </div>
@@ -68,11 +68,11 @@
 
                 <!-- Butonlar -->
                 <div class="grid grid-cols-2 gap-3">
-                    <UButton @click="goToCart" color="gray" variant="outline" size="md"
+                    <UButton href="/sepet" color="gray" variant="outline" size="md"
                         class="w-full flex items-center justify-center">
                         Sepeti Gör
                     </UButton>
-                    <UButton @click="goToCheckout" color="secondary" size="md"
+                    <UButton href="/auth?callback=/odeme" color="secondary" size="md"
                         class="w-full font-bold flex items-center justify-center">
                         Ödeme
                     </UButton>
@@ -87,7 +87,9 @@
 const cartState = useCartState();
 const model = defineModel();
 
-
+// Native back button handler - TEMİZ ÇÖZÜM!
+const { useBackHandler, useSmartNavigation } = await import('~/composables/useNativeBackHandler.js')
+useBackHandler(model)
 
 
 </script>
