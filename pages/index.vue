@@ -93,7 +93,7 @@
           <UiSlidesProductSlide :lcp="true" title="Çarşaf" to="/carsaf-cilbab-a51" :is-ssr="true" :filters="{
             selectedCategoryIds: '[51]',
             piece: 8
-          }" class="card" />
+          }" />
         </div>
 
         <!-- Peçe Koleksiyonu -->
@@ -110,7 +110,7 @@
           <UiSlidesProductSlide title="Peçe" to="/pece-a56" :is-ssr="true" :filters="{
             selectedCategoryIds: '[56]',
             piece: 8
-          }" class="card" />
+          }" />
         </div>
 
         <!-- Sufle Koleksiyonu -->
@@ -127,7 +127,7 @@
           <UiSlidesProductSlide :is-ssr="true" title="Sufle" to="/sufle-a55" :filters="{
             selectedCategoryIds: '[55]',
             piece: 8
-          }" class="card" />
+          }" />
         </div>
       </div>
     </section>

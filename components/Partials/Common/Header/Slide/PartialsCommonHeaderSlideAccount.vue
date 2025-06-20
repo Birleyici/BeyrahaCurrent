@@ -88,6 +88,42 @@
                         </li>
                     </ul>
                 </div>
+
+                <!-- Theme Toggle - Hem giriş yapmış hem yapmamış kullanıcılar için -->
+                <div class="p-4 border-t border-neutral-200 dark:border-neutral-700">
+                    <div @click="toggleDarkMode"
+                        class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:shadow-md transition-all duration-300 cursor-pointer">
+                        <div class="flex items-center p-4 w-full">
+                            <div class="flex items-center space-x-3 w-full">
+                                <!-- İkon -->
+                                <div
+                                    class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 dark:from-secondary-800/50 dark:to-secondary-700/50 group-hover:from-secondary-200 group-hover:to-secondary-300 dark:group-hover:from-secondary-700/70 dark:group-hover:to-secondary-600/70 transition-all duration-200">
+                                    <UIcon :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'"
+                                        class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
+                                </div>
+                                <!-- Menü adı -->
+                                <span
+                                    class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-secondary-700 dark:group-hover:text-secondary-300 transition-colors duration-200">
+                                    {{ isDark ? 'Açık Tema' : 'Koyu Tema' }}
+                                </span>
+                                <!-- Toggle Switch -->
+                                <div class="ml-auto">
+                                    <div
+                                        class="relative w-12 h-6 bg-neutral-200 dark:bg-neutral-600 rounded-full transition-colors duration-200">
+                                        <div :class="[
+                                            'absolute top-1 w-4 h-4 bg-white rounded-full transition-transform duration-200 shadow-sm',
+                                            isDark ? 'translate-x-7' : 'translate-x-1'
+                                        ]"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Hover efekti için gradient overlay -->
+                        <div
+                            class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 dark:from-secondary-900/0 dark:to-secondary-800/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </USlideover>
@@ -98,6 +134,9 @@ const authStore = useAuthStore()
 const router = useRouter()
 const { nextNotRegister } = defineProps(["nextNotRegister"]);
 const model = defineModel();
+
+// Dark mode composable
+const { isDark, toggleDarkMode } = useDarkMode();
 
 const menuItems = [
     {

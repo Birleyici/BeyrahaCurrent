@@ -31,13 +31,6 @@
 
         <!-- Sağ Menü -->
         <div class="flex items-center space-x-3">
-          <!-- Theme Toggle (Mobile) -->
-          <button @click="toggleDarkMode"
-            class="p-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200 shadow-sm">
-            <UIcon :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'"
-              class="w-6 h-6 text-neutral-700 dark:text-neutral-300" />
-          </button>
-
           <!-- Hesap -->
           <button @click="$uiStore.state.accountSlide = true"
             class="p-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200 shadow-sm">

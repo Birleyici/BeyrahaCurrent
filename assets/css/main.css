@@ -464,10 +464,6 @@ body {
   }
 }
 
-
-
-
-
 /* Modern Print Styles */
 @media print {
   .no-print {
@@ -865,5 +861,55 @@ textarea:disabled {
 
 .u-button-start {
   justify-content: flex-start !important;
+}
+
+/* Mobile Breakout Utilities */
+/* 
+  Kullanım: Mobile'da tam genişlik için container ve component spacing'den kurtulma
+  
+  // Sadece container padding'den kurtul
+  <div class="mobile-breakout-container">İçerik</div>
+  
+  // Hem container hem component spacing'den kurtul  
+  <div class="mobile-breakout-full">İçerik</div>
+  
+  // Sadece yatay boşluklardan kurtul
+  <div class="mobile-breakout-x">İçerik</div>
+*/
+
+/* Container padding'den kurtulma (mobile) */
+.mobile-breakout-container {
+  @apply -mx-container-mobile lg:mx-0;
+}
+
+/* Component spacing'den kurtulma (mobile) */
+.mobile-breakout-spacing {
+  @apply -my-8 lg:my-0;
+}
+
+/* Tam breakout (hem container hem spacing) */
+.mobile-breakout-full {
+  @apply -mx-container-mobile -my-8 lg:mx-0 lg:my-0;
+}
+
+/* Sadece yatay breakout */
+.mobile-breakout-x {
+  @apply -mx-container-mobile lg:mx-0;
+}
+
+/* Viewport genişliğinde breakout */
+.mobile-breakout-viewport {
+  @apply -mx-container-mobile lg:-mx-container-desktop;
+  width: calc(100vw - 0px);
+  margin-left: calc(-50vw + 50%);
+  margin-right: calc(-50vw + 50%);
+}
+
+@media (max-width: 1023px) {
+  .mobile-breakout-viewport {
+    width: calc(100vw);
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+  }
 }
   

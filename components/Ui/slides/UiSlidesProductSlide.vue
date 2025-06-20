@@ -2,7 +2,19 @@
   <div :id="props.id" class="component-spacing">
     <!-- Skeleton ekranı, yükleme sırasında gösterilir -->
     <div v-if="isLoading" class="w-full overflow-x-hidden">
-      <div class="flex gap-6">
+      <!-- Mobile Skeleton -->
+      <div class="flex gap-4 lg:hidden overflow-x-auto mobile-breakout-x px-container-mobile">
+        <div v-for="item in 6" :key="item" class="flex-shrink-0 space-y-4 w-[280px] first:ml-0">
+          <USkeleton class="w-full h-[320px]" :ui="{ rounded: 'rounded-xl' }" />
+          <div class="p-4 lg:p-6 space-y-3">
+            <USkeleton class="w-4/6 mx-auto h-4" :ui="{ rounded: 'rounded-md' }" />
+            <USkeleton class="w-2/6 mx-auto h-4" :ui="{ rounded: 'rounded-md' }" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Skeleton -->
+      <div class="hidden lg:flex gap-6">
         <div v-for="item in 6" :key="item" class="flex-shrink-0 space-y-4 w-[280px] card">
           <USkeleton class="w-full h-[320px]" :ui="{ rounded: 'rounded-xl' }" />
           <div class="p-6 space-y-3">
@@ -17,9 +29,9 @@
       <!-- Header -->
       <div class="container">
         <div class="flex justify-between items-center mb-8">
-          <h2 class="text-heading-2 font-semibold text-neutral-900">{{ props.title }}</h2>
+          <h2 class="text-heading-2 font-semibold text-neutral-900 dark:text-neutral-100">{{ props.title }}</h2>
           <NuxtLink v-if="props.to" :to="props.to"
-            class="group flex items-center space-x-2 text-secondary-600 hover:text-secondary-700 font-medium transition-colors duration-200">
+            class="group flex items-center space-x-2 text-secondary-600 hover:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-300 font-medium transition-colors duration-200">
             <span>Tümünü Gör</span>
             <UIcon name="i-heroicons-chevron-right"
               class="w-4 h-4 transition-transform duration-200 group-hover:translate-x-1" />
@@ -27,14 +39,29 @@
         </div>
       </div>
 
-      <!-- Carousel -->
-      <div class="container">
-        <UCarousel arrows v-slot="{ item, index }" :items="products" :ui="{
-          item: 'snap-end',
-          container: 'gap-6 px-2'
-        }">
-          <PartialsProductCard :lcp="props.lcp" :index="index" :product="item" :key="item.id" />
-        </UCarousel>
+      <!-- Mobile Carousel - Tam viewport genişliği -->
+      <div class="lg:hidden mobile-breakout-viewport">
+        <div class="overflow-x-auto scrollbar-hide">
+          <div class="flex gap-4 pb-4 pl-x-mobile" style="scroll-snap-type: x mandatory;">
+            <div v-for="(item, index) in products" :key="item.id"
+              class="flex-shrink-0 w-[280px] sm:w-[320px] snap-start"
+              :class="{ 'pr-x-mobile': index === products.length - 1 }" style="scroll-snap-align: start;">
+              <PartialsProductCard :lcp="props.lcp" :index="index" :product="item" :key="item.id" />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desktop Carousel - Mevcut görünüm -->
+      <div class="hidden lg:block">
+        <div class="container">
+          <UCarousel arrows v-slot="{ item, index }" :items="products" :ui="{
+            item: 'snap-end',
+            container: 'gap-6 px-2'
+          }">
+            <PartialsProductCard :lcp="props.lcp" :index="index" :product="item" :key="item.id" />
+          </UCarousel>
+        </div>
       </div>
     </div>
 
@@ -65,3 +92,20 @@ useShowElement(props.id, async () => {
   }
 })
 </script>
+
+<style scoped>
+/* Scrollbar gizleme */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+/* Smooth scrolling */
+.overflow-x-auto {
+  scroll-behavior: smooth;
+}
+</style>
