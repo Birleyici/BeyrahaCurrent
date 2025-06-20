@@ -87,14 +87,8 @@
 const cartState = useCartState();
 const model = defineModel();
 
-// Native back button handler - TEMİZ ÇÖZÜM!
-const { useBackHandler, useSmartNavigation } = await import('~/composables/useNativeBackHandler.js')
-useBackHandler(model)
 
-// Smart navigation fonksiyonları - TEK SATIR!
-const goToCart = useSmartNavigation(model, '/sepet')
-const goToCheckout = useSmartNavigation(model, '/auth?callback=/odeme')
-const goToHome = useSmartNavigation(model, '/')
+
 
 </script>
 

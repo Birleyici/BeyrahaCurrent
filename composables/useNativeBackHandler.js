@@ -302,30 +302,4 @@ export const useBackHandler = (isOpen, priority, onClose) => {
     console.error('useBackHandler başlatma hatası:', error)
     return
   }
-}
-
-/**
- * Smart Navigation - Back handler ile uyumlu navigation
- * Modal/slideover kapatma + navigation işlemini güvenli yapar
- * @param {Ref} isOpen - Modal/slideover'ın açık/kapalı durumu
- * @param {string} path - Gidilecek route
- */
-export const useSmartNavigation = (isOpen, path) => {
-  const { markNavigationStart } = useNativeBackHandler()
-  
-  return async () => {
-    // Navigation başladığını işaretle (back handler'ı devre dışı bırak)
-    markNavigationStart()
-    
-    // Modal'ı kapat
-    if (isOpen && typeof isOpen === 'object' && 'value' in isOpen) {
-      isOpen.value = false
-    }
-    
-    // Kısa bekleme (modal kapanma animasyonu)
-    await new Promise(resolve => setTimeout(resolve, 100))
-    
-    // Navigate et
-    await navigateTo(path)
-  }
 } 
