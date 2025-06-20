@@ -184,23 +184,61 @@ export const useAutoBackHandler = (isOpen, options = {}) => {
   const { pushBackHandler, removeBackHandler } = useNativeBackHandler()
 
   const closeHandler = () => {
-    if (onClose) {
-      onClose()
-    } else {
-      isOpen.value = false
+    try {
+      if (onClose) {
+        onClose()
+      } else {
+        // Güvenli değer atama - reactive kontrolü
+        if (isOpen && typeof isOpen === 'object' && 'value' in isOpen) {
+          // Computed değer kontrolü
+          if (isOpen.effect && isOpen.effect.fn) {
+            console.warn('useBackHandler: Computed değer kullanılamaz, toRef() kullanın')
+            return
+          }
+          isOpen.value = false
+        } else if (typeof isOpen === 'function') {
+          // Fonksiyon ise çağır
+          isOpen(false)
+        } else {
+          console.warn('useBackHandler: Geçersiz isOpen tipi:', typeof isOpen)
+        }
+      }
+    } catch (error) {
+      console.error('useBackHandler closeHandler hatası:', error)
+      // Fallback: custom handler varsa onu çağır
+      if (onClose) {
+        try {
+          onClose()
+        } catch (fallbackError) {
+          console.error('useBackHandler fallback hatası:', fallbackError)
+        }
+      }
     }
   }
 
-  watch(isOpen, (open) => {
-    if (open) {
-      pushBackHandler(id, closeHandler, priority)
-    } else {
-      removeBackHandler(id)
+  // Watch ile reactive izleme - güvenli kontrol
+  const watchEffect = watch(isOpen, (open) => {
+    try {
+      if (open) {
+        pushBackHandler(id, closeHandler, priority)
+      } else {
+        removeBackHandler(id)
+      }
+    } catch (error) {
+      console.error('useBackHandler watch hatası:', error)
     }
   }, { immediate: true })
 
   onUnmounted(() => {
-    removeBackHandler(id)
+    try {
+      removeBackHandler(id)
+      // Watch'i durdur
+      if (watchEffect && typeof watchEffect === 'function') {
+        watchEffect()
+      }
+    } catch (error) {
+      console.error('useBackHandler unmount hatası:', error)
+    }
   })
 
   return { closeHandler }
@@ -215,6 +253,12 @@ export const useAutoBackHandler = (isOpen, options = {}) => {
 export const useBackHandler = (isOpen, priority, onClose) => {
   if (process.server) return
 
+  // Parametre validasyonu
+  if (!isOpen) {
+    console.warn('useBackHandler: isOpen parametresi gerekli')
+    return
+  }
+
   const options = {}
   
   // Flexible parameter handling
@@ -228,5 +272,16 @@ export const useBackHandler = (isOpen, priority, onClose) => {
     options.onClose = onClose
   }
 
-  return useAutoBackHandler(isOpen, options)
+  // Computed değer kontrolü
+  if (isOpen && typeof isOpen === 'object' && isOpen.effect && isOpen.effect.fn) {
+    console.error('useBackHandler: Computed değer kullanılamaz! toRef(store, "propertyName") kullanın.')
+    return
+  }
+
+  try {
+    return useAutoBackHandler(isOpen, options)
+  } catch (error) {
+    console.error('useBackHandler başlatma hatası:', error)
+    return
+  }
 } 
