@@ -243,13 +243,20 @@
 </template>
 
 <script setup>
+
+
 useHead({
-  title: 'Ödeme - Beyraha',
+  title: 'Ödeme - Beyraha'
 })
 
 const orderState = useOrderStoreFront()
 const authStore = useAuthStore()
 const cartState = useCartState()
+
+// Native back button handlers - TEK SATIRLAR!
+const { useBackHandler, BACK_HANDLER_PRIORITIES } = await import('~/composables/useNativeBackHandler.js')
+useBackHandler(toRef(orderState, 'isOpenAddressModal'), BACK_HANDLER_PRIORITIES.MODAL)
+useBackHandler(toRef(orderState, 'openAllAddressModal'), BACK_HANDLER_PRIORITIES.MODAL)
 
 const shippingCost = computed(() => {
   return cartState.cartTotalAmount > 1000 ? 0 : 60
@@ -314,16 +321,6 @@ onMounted(async () => {
   await orderState.fetchAddresses()
   isLoaded.value = true
 })
-
-
-// onBeforeRouteLeave((to, from, next) => {
-//   if (orderState.openAllAddressModal) {
-//     orderState.openAllAddressModal = false
-//     next(false) // Geri gitme işlemini durdurur
-//   } else {
-//     next()
-//   }
-// })
 
 </script>
 

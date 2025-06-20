@@ -67,6 +67,21 @@ const model = defineModel();
 const nestedMenus = ref([props.menu]);
 const currentLevel = ref(0);
 
+// Custom back handler - nested menu seviyesinde geri git, üst seviyede slideover'ı kapat
+const handleBackButton = () => {
+  if (currentLevel.value > 0) {
+    // Nested menu seviyesinde geri git
+    goBack()
+  } else {
+    // Üst seviyede slideover'ı kapat
+    model.value = false
+  }
+}
+
+// Native back button handler - TEK SATIR!
+const { useBackHandler } = await import('~/composables/useNativeBackHandler.js')
+useBackHandler(model, handleBackButton)
+
 watch(
   () => props.selectedCategory,
   (newCategory) => {

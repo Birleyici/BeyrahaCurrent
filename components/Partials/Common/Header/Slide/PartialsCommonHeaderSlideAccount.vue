@@ -130,6 +130,7 @@
 </template>
 
 <script setup>
+
 const authStore = useAuthStore()
 const router = useRouter()
 const { nextNotRegister } = defineProps(["nextNotRegister"]);
@@ -137,6 +138,10 @@ const model = defineModel();
 
 // Dark mode composable
 const { isDark, toggleDarkMode } = useDarkMode();
+
+// Native back button handler - TEK SATIR!
+const { useBackHandler } = await import('~/composables/useNativeBackHandler.js')
+useBackHandler(model)
 
 const menuItems = [
     {

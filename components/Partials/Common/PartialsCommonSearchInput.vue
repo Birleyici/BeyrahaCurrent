@@ -58,7 +58,7 @@
 import pkg from 'lodash'
 const { debounce } = pkg
 const productState = useProductState()
-const { $mainState } = useNuxtApp()
+const { $mainState, $changeMainState } = useNuxtApp()
 const searchInput = ref(null)
 const router = useRouter()
 const route = useRoute()
@@ -66,8 +66,20 @@ const searchWord = ref(route.query.searchWord || '')
 const productsSearched = ref([])
 const isSearching = ref(false)
 
+// Computed property for SSR compatibility
+const isOpenSearch = computed(() => {
+  if (process.server) return false
+  return $mainState?.value?.isOpenSearch || false
+})
+
+// Native back button handler - TEK SATIR!
+const { useBackHandler, BACK_HANDLER_PRIORITIES } = await import('~/composables/useNativeBackHandler.js')
+useBackHandler(isOpenSearch, BACK_HANDLER_PRIORITIES.SEARCH, () => $changeMainState({ isOpenSearch: false }))
+
 function closeSearch() {
-  $mainState.isOpenSearch = false
+  if (process.client && $mainState) {
+    $mainState.isOpenSearch = false
+  }
   if (searchInput.value?.$refs?.input) {
     searchInput.value.$refs.input.blur()
   }
@@ -92,7 +104,9 @@ function handleBlur(event) {
     !event.relatedTarget.closest('.results-container')
   ) {
     setTimeout(() => {
-      $mainState.isOpenSearch = false
+      if (process.client && $mainState) {
+        $mainState.isOpenSearch = false
+      }
     }, 150)
   }
 }
@@ -137,7 +151,7 @@ watch(
 )
 
 watch(
-  () => $mainState.isOpenSearch,
+  () => isOpenSearch.value,
   (newValue) => {
     if (newValue) {
       nextTick(() => {
@@ -152,7 +166,7 @@ watch(
 // Escape tuşu ile arama kapatma
 onMounted(() => {
   const handleEscape = (e) => {
-    if (e.key === 'Escape' && $mainState.isOpenSearch) {
+    if (e.key === 'Escape' && isOpenSearch.value) {
       closeSearch()
     }
   }
@@ -162,5 +176,16 @@ onMounted(() => {
   onUnmounted(() => {
     document.removeEventListener('keydown', handleEscape)
   })
+})
+
+// Aramayı temizle
+const clearSearch = () => {
+  searchWord.value = ""
+  productsSearched.value = []
+}
+
+// Sayfa değiştiğinde search'ü kapat
+watch(() => route.path, () => {
+  closeSearch()
 })
 </script>

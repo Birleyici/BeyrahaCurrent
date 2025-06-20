@@ -147,6 +147,11 @@ const isOpenCategorySlideOver = ref(false);
 const props = defineProps(["products", "loading"]);
 const uSelect = defineModel("uSelect");
 
+// Native back button handlers - TEK SATIRLAR!
+const { useBackHandler } = await import('~/composables/useNativeBackHandler.js')
+useBackHandler(isOpenFiltersSlideOver)
+useBackHandler(isOpenCategorySlideOver)
+
 const sortOptions = [
   { name: 'Varsayılan', value: 'default' },
   { name: 'Fiyat (Düşükten Yükseğe)', value: 'price_asc' },
