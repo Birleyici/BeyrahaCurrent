@@ -170,7 +170,7 @@
     </UAccordion>
 
     <!-- Image Selection Modal -->
-    <UModal v-model="isMediaModalOpen" fullscreen>
+    <UModal v-model="isMediaModalOpen">
       <div class="h-full bg-white dark:bg-gray-900 flex flex-col">
         <!-- Modal Header -->
         <div

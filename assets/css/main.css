@@ -464,90 +464,9 @@ body {
   }
 }
 
-/* Z-Index Management for Modals */
-[data-headlessui-state="open"] {
-  z-index: 999999 !important;
-}
 
-.slideover-wrapper,
-[role="dialog"][data-headlessui-state="open"] {
-  z-index: 999999 !important;
-}
 
-.modal-wrapper,
-[role="dialog"] {
-  z-index: 999999 !important;
-}
 
-.slideover-overlay,
-.modal-overlay,
-[data-headlessui-state="open"] > div:first-child {
-  z-index: 999998 !important;
-}
-
-.slideover,
-.ui-slideover,
-.nuxt-ui-slideover {
-  z-index: 999999 !important;
-}
-
-.modal,
-.ui-modal,
-.nuxt-ui-modal {
-  z-index: 999999 !important;
-}
-
-div[style*="position: fixed"][role="dialog"] {
-  z-index: 999999 !important;
-}
-
-body > div[data-v-] {
-  z-index: 999999 !important;
-}
-
-#headlessui-portal-root {
-  z-index: 999999 !important;
-}
-
-#headlessui-portal-root > * {
-  z-index: 999999 !important;
-}
-
-div[role="dialog"] {
-  z-index: 9999999 !important;
-}
-
-div[role="dialog"] + div,
-div[role="dialog"] > div:first-child {
-  z-index: 9999998 !important;
-}
-
-div[role="dialog"] > div:not(:first-child),
-div[role="dialog"] .relative {
-  z-index: 9999999 !important;
-}
-
-.ui-modal-wrapper,
-[data-headlessui-state="open"][role="dialog"] {
-  z-index: 9999999 !important;
-}
-
-.ui-modal,
-.nuxt-ui-modal,
-[data-headlessui-state="open"][role="dialog"] > * {
-  z-index: 9999999 !important;
-}
-
-body > div[data-headlessui-portal-root],
-body > div[id^="headlessui-portal"],
-#headlessui-portal-root {
-  z-index: 9999999 !important;
-}
-
-div[data-headlessui-state="open"] + div[aria-hidden="true"],
-div[aria-hidden="true"][data-headlessui-state] {
-  z-index: 9999998 !important;
-}
 
 /* Modern Print Styles */
 @media print {
@@ -908,5 +827,43 @@ textarea:disabled {
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* UButton Content Alignment Utilities */
+/* 
+  Kullanım:
+  
+  // İçeriği ortala (varsayılan olarak sola yaslı)
+  <UButton class="u-button-center">Buton Metni</UButton>
+  
+  // İçeriği sola yasla (varsayılan davranış)  
+  <UButton class="u-button-start">Buton Metni</UButton>
+  
+  // Wrapper ile merkez hizalama
+  <div class="btn-content-center">
+    <UButton>Buton Metni</UButton>
+  </div>
+*/
+
+.btn-content-center button {
+  @apply justify-center;
+}
+
+.btn-content-start button {
+  @apply justify-start;
+}
+
+/* UButton global merkez hizalama (isteğe bağlı) */
+.btn-center-default [data-component="button"] {
+  @apply justify-center;
+}
+
+/* Tailwind component overrides for UButton */
+.u-button-center {
+  justify-content: center !important;
+}
+
+.u-button-start {
+  justify-content: flex-start !important;
 }
   

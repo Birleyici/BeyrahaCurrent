@@ -34,13 +34,13 @@
             <!-- Adres Butonları -->
             <div class="flex flex-col sm:flex-row gap-3">
               <UButton v-if="isShowNewAddressButton" @click="orderState.isOpenAddressModal = true" color="secondary"
-                variant="outline" icon="i-heroicons-plus" class="flex-1 sm:flex-none">
+                variant="outline" icon="i-heroicons-plus" class="flex-1 sm:flex-none u-button-center">
                 Yeni Adres Ekle
               </UButton>
 
               <UButton v-if="orderState.addresses?.length > 1 && authStore.token"
                 @click="orderState.openAllAddressModal = true" color="gray" variant="outline"
-                icon="i-heroicons-list-bullet" class="flex-1 sm:flex-none">
+                icon="i-heroicons-list-bullet" class="flex-1 sm:flex-none u-button-center">
                 Diğer Adresler
               </UButton>
             </div>
@@ -108,7 +108,7 @@
                 <!-- Desktop Button -->
                 <div class="hidden md:block">
                   <UButton :loading="orderState.createOrderLoading" @click="orderState.createOrder()" color="secondary"
-                    class="font-bold w-full flex justify-center" size="lg">
+                    class="font-bold w-full flex justify-center u-button-center" size="lg">
                     Siparişi Onayla
                   </UButton>
                 </div>
@@ -140,7 +140,7 @@
 
             <!-- Siparişi Onayla Butonu -->
             <UButton :loading="orderState.createOrderLoading" @click="orderState.createOrder()" color="secondary"
-              class="flex justify-center font-bold px-6" size="lg" variant="solid">
+              class="flex justify-center font-bold px-6 u-button-center" size="lg" variant="solid">
               Siparişi Onayla
             </UButton>
           </div>
@@ -162,7 +162,7 @@
               Yeni Adres Ekle
             </h3>
             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
-              @click="orderState.isOpenAddressModal = false" />
+              @click="orderState.isOpenAddressModal = false" class="u-button-center" />
           </div>
         </template>
         <PartialsOrderAddressForm />
@@ -188,7 +188,7 @@
               </p>
             </div>
             <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
-              @click="orderState.openAllAddressModal = false" />
+              @click="orderState.openAllAddressModal = false" class="u-button-center" />
           </div>
         </template>
 
@@ -213,20 +213,21 @@
           <!-- Sayfalama -->
           <div v-if="totalPages > 1"
             class="flex justify-center items-center space-x-2 mt-6 pt-4 border-neutral-200 dark:border-neutral-700">
-            <UButton :disabled="currentPage === 1" @click="currentPage--" color="gray" variant="outline" size="sm">
+            <UButton :disabled="currentPage === 1" @click="currentPage--" color="gray" variant="outline" size="sm"
+              class="u-button-center">
               <UIcon name="i-heroicons-chevron-left" />
             </UButton>
 
             <div class="flex space-x-1">
               <UButton v-for="page in visiblePages" :key="page" @click="currentPage = page"
                 :variant="currentPage === page ? 'solid' : 'outline'"
-                :color="currentPage === page ? 'secondary' : 'gray'" size="sm">
+                :color="currentPage === page ? 'secondary' : 'gray'" size="sm" class="u-button-center">
                 {{ page }}
               </UButton>
             </div>
 
             <UButton :disabled="currentPage === totalPages" @click="currentPage++" color="gray" variant="outline"
-              size="sm">
+              size="sm" class="u-button-center">
               <UIcon name="i-heroicons-chevron-right" />
             </UButton>
           </div>
