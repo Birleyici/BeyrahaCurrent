@@ -48,7 +48,7 @@
                             <p class="text-neutral-600 dark:text-neutral-400 text-sm">Alışverişe başlamak için ürünleri
                                 sepete ekleyin</p>
                         </div>
-                        <UButton @click="safeNavigate('/')" color="secondary" variant="outline" class="mt-4">
+                        <UButton @click="goToHome" color="secondary" variant="outline" class="mt-4">
                             Alışverişe Başla
                         </UButton>
                     </div>
@@ -68,11 +68,11 @@
 
                 <!-- Butonlar -->
                 <div class="grid grid-cols-2 gap-3">
-                    <UButton @click="safeNavigate('/sepet')" color="gray" variant="outline" size="md"
+                    <UButton @click="goToCart" color="gray" variant="outline" size="md"
                         class="w-full flex items-center justify-center">
                         Sepeti Gör
                     </UButton>
-                    <UButton @click="safeNavigate('/auth?callback=/odeme')" color="secondary" size="md"
+                    <UButton @click="goToCheckout" color="secondary" size="md"
                         class="w-full font-bold flex items-center justify-center">
                         Ödeme
                     </UButton>
@@ -87,23 +87,14 @@
 const cartState = useCartState();
 const model = defineModel();
 
-// Native back button handler - Çakışma önlendi
-const { useBackHandler } = await import('~/composables/useNativeBackHandler.js')
-const backHandlerControl = useBackHandler(model)
+// Native back button handler - TEMİZ ÇÖZÜM!
+const { useBackHandler, useSmartNavigation } = await import('~/composables/useNativeBackHandler.js')
+useBackHandler(model)
 
-// Router çakışmasını önleyen navigation fonksiyonları
-const safeNavigate = async (path) => {
-    // Modal'ı kapat
-    model.value = false;
-
-    // Kısa bir bekleme
-    await new Promise(resolve => setTimeout(resolve, 200));
-
-    // Direct navigation - router bypass
-    if (process.client) {
-        window.location.href = path;
-    }
-}
+// Smart navigation fonksiyonları - TEK SATIR!
+const goToCart = useSmartNavigation(model, '/sepet')
+const goToCheckout = useSmartNavigation(model, '/auth?callback=/odeme')
+const goToHome = useSmartNavigation(model, '/')
 
 </script>
 

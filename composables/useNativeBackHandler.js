@@ -7,9 +7,21 @@
 
 // Global state - tüm component'ler arasında paylaşılır
 const globalBackHandlerStack = ref([])
+const navigationInProgress = ref(false) // Navigation durumu
 let isEventListenerAdded = false
 
 export const useNativeBackHandler = () => {
+  /**
+   * Navigation başladığını işaretle (buton click'leri için)
+   */
+  const markNavigationStart = () => {
+    navigationInProgress.value = true
+    // 500ms sonra otomatik olarak sıfırla
+    setTimeout(() => {
+      navigationInProgress.value = false
+    }, 500)
+  }
+
   /**
    * UI elementi açıldığında back handler stack'ine ekler
    * @param {string} id - UI elementinin benzersiz ID'si
@@ -87,6 +99,11 @@ export const useNativeBackHandler = () => {
    * Popstate event listener'ı
    */
   const handlePopState = (event) => {
+    // Eğer navigation devam ediyorsa back handler'ı çalıştırma
+    if (navigationInProgress.value) {
+      return
+    }
+
     // Eğer mevcut durumda aktif handler'lar varsa, onları çalıştır
     if (globalBackHandlerStack.value.length > 0) {
       event.preventDefault() // Default davranışı engelle
@@ -119,6 +136,7 @@ export const useNativeBackHandler = () => {
   return {
     pushBackHandler,
     removeBackHandler,
+    markNavigationStart,
     backHandlerStack: readonly(globalBackHandlerStack)
   }
 }
@@ -283,5 +301,31 @@ export const useBackHandler = (isOpen, priority, onClose) => {
   } catch (error) {
     console.error('useBackHandler başlatma hatası:', error)
     return
+  }
+}
+
+/**
+ * Smart Navigation - Back handler ile uyumlu navigation
+ * Modal/slideover kapatma + navigation işlemini güvenli yapar
+ * @param {Ref} isOpen - Modal/slideover'ın açık/kapalı durumu
+ * @param {string} path - Gidilecek route
+ */
+export const useSmartNavigation = (isOpen, path) => {
+  const { markNavigationStart } = useNativeBackHandler()
+  
+  return async () => {
+    // Navigation başladığını işaretle (back handler'ı devre dışı bırak)
+    markNavigationStart()
+    
+    // Modal'ı kapat
+    if (isOpen && typeof isOpen === 'object' && 'value' in isOpen) {
+      isOpen.value = false
+    }
+    
+    // Kısa bekleme (modal kapanma animasyonu)
+    await new Promise(resolve => setTimeout(resolve, 100))
+    
+    // Navigate et
+    await navigateTo(path)
   }
 } 
