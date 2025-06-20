@@ -9,7 +9,7 @@
         <div class="flex justify-between items-center">
           <UButton v-if="currentLevel > 0" @click="goBack" icon="i-heroicons-chevron-left" size="sm" color="gray"
             variant="link" label="Geri" class="!p-0" :trailing="false" />
-          <h3 v-else class="text-lg font-semibold text-neutral-900">Kategoriler</h3>
+          <h3 v-else class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Kategoriler</h3>
           <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
             @click="model = false" />
         </div>
@@ -24,7 +24,7 @@
         }">
           <ul class="list-none space-y-2">
             <li v-for="(item, idx) in level" :key="idx"
-              class="group relative overflow-hidden rounded-xl bg-white border border-neutral-200 hover:border-secondary-300 hover:shadow-md transition-all duration-300 cursor-pointer">
+              class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:shadow-md dark:hover:shadow-lg transition-all duration-300 cursor-pointer">
 
               <NuxtLink :to="`/${item.slug}-a${item.id}`" class="flex items-center justify-between p-4 w-full">
                 <div class="flex items-center space-x-3">
@@ -33,22 +33,22 @@
                     class="w-3 h-3 rounded-full bg-gradient-to-r from-secondary-400 to-secondary-600 group-hover:scale-110 transition-transform duration-200">
                   </div>
                   <span
-                    class="font-medium text-neutral-800 group-hover:text-secondary-700 transition-colors duration-200">
+                    class="font-medium text-neutral-800 dark:text-neutral-200 group-hover:text-secondary-700 dark:group-hover:text-secondary-400 transition-colors duration-200">
                     {{ item.name }}
                   </span>
                 </div>
 
                 <!-- Alt kategori varsa ok ikonu -->
                 <div v-if="item.children" @click.prevent="() => handleClick(item, idx, index)"
-                  class="flex items-center justify-center w-8 h-8 rounded-full bg-neutral-100 group-hover:bg-secondary-100 transition-colors duration-200">
+                  class="flex items-center justify-center w-8 h-8 rounded-full bg-neutral-100 dark:bg-neutral-700 group-hover:bg-secondary-100 dark:group-hover:bg-secondary-800 transition-colors duration-200">
                   <UIcon name="i-heroicons-chevron-right"
-                    class="w-4 h-4 text-neutral-600 group-hover:text-secondary-600" />
+                    class="w-4 h-4 text-neutral-600 dark:text-neutral-400 group-hover:text-secondary-600 dark:group-hover:text-secondary-400" />
                 </div>
               </NuxtLink>
 
               <!-- Hover efekti için gradient overlay -->
               <div
-                class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                class="absolute inset-0 bg-gradient-to-r from-secondary-50/0 to-secondary-50/50 dark:from-secondary-900/0 dark:to-secondary-900/30 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
               </div>
             </li>
           </ul>

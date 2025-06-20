@@ -5,17 +5,26 @@
         <!-- Öznitelik Adı -->
         <div>
           <div v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
-            <div class="space-y-4">
+            <div class="space-y-4"
+              :class="{ 'p-2 border border-red-400 rounded-md bg-red-50 dark:bg-red-900/20': selectionRequired && !selectedOptions['Renk'] }">
               <!-- Renk Başlığı ve Seçili Renk -->
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                  <h3 class="font-semibold text-neutral-900">Renk Seçenekleri</h3>
+                  <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">Renk Seçenekleri</h3>
                   <div v-if="selectedOptions['Renk']" class="flex items-center space-x-2">
                     <div class="w-4 h-4 bg-secondary-500 rounded-full"></div>
-                    <span class="text-sm font-medium text-secondary-600">{{ selectedOptions['Renk'] }}</span>
+                    <span class="text-sm font-medium text-secondary-600 dark:text-secondary-400">{{
+                      selectedOptions['Renk'] }}</span>
                   </div>
                 </div>
-                <span class="text-xs text-neutral-500">{{ attribute.options.length }} renk mevcut</span>
+                <span class="text-xs text-neutral-500 dark:text-neutral-400">{{ attribute.options.length }} renk
+                  mevcut</span>
+              </div>
+
+              <!-- Hata mesajı -->
+              <div v-if="selectionRequired && !selectedOptions['Renk']" class="flex items-center space-x-2">
+                <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-500" />
+                <p class="text-sm text-red-500 dark:text-red-400">Lütfen bir renk seçin</p>
               </div>
 
               <!-- Renk Seçenekleri Grid -->
@@ -54,11 +63,15 @@
           </div>
 
           <div class="p-0 duration-300 grid gap-1 mt-pad-1"
-            :class="{ 'rounded-md p-2 border border-red-400 ': selectionRequired }"
+            :class="{ 'rounded-md p-2 border border-red-400 bg-red-50 dark:bg-red-900/20': selectionRequired && !selectedOptions[attribute.name] }"
             v-else-if="attribute.name.toLowerCase() != 'renk'">
-            <p v-if="selectionRequired" class="text-sm text-red-500">Lütfen seçim yapın</p>
+            <p v-if="selectionRequired && !selectedOptions[attribute.name]" class="flex items-center space-x-2">
+              <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-500" />
+              <span class="text-sm text-red-500 dark:text-red-400">Lütfen {{ attribute.name.toLowerCase() }}
+                seçin</span>
+            </p>
 
-            <p class="font-medium text-sm">{{ attribute.name }}</p>
+            <p class="font-medium text-sm text-neutral-900 dark:text-neutral-100">{{ attribute.name }}</p>
             <div class="flex space-x-2 ">
               <UButton class="cursor-pointer font-normal" size="md" color="gray" v-for="option in attribute.options"
                 :key="option.term_name" :class="{
@@ -195,8 +208,18 @@ const {
 
 
 const isVariableProduct = computed(() => {
-  return props.attrsAndVarsState.some(i => i.useForVariation === 1)
-})
+  const hasVariationAttrs = props.attrsAndVarsState.some(i => {
+    // Farklı veri tipleri için kontrol
+    return i.useForVariation === 1 ||
+      i.useForVariation === "1" ||
+      i.useForVariation === true ||
+      i.use_for_variation === 1 ||
+      i.use_for_variation === "1" ||
+      i.use_for_variation === true;
+  });
+
+  return hasVariationAttrs;
+});
 
 const selectedColor = ref(null)
 const selectColorOption = (attributeName, termName, item) => {
@@ -244,13 +267,56 @@ const validateQty = () => {
 }
 
 const addToCart = () => {
-
-  if (!getSelectedVariation.value && isVariableProduct.value) {
-    selectionRequired.value = true
-    return
-  } else {
-    selectionRequired.value = false
+  // Ürünün hiç attribute'u yoksa direkt devam et
+  if (!props.attrsAndVarsState || props.attrsAndVarsState.length === 0) {
+    // Normal sepete ekleme devam eder
   }
+  // Varyasyonlu ürün kontrolü - daha detaylı
+  else if (isVariableProduct.value) {
+    // Gerekli varyantların seçilip seçilmediğini kontrol et
+    const requiredAttributes = props.attrsAndVarsState.filter(attr => {
+      return attr.useForVariation === 1 ||
+        attr.useForVariation === "1" ||
+        attr.useForVariation === true ||
+        attr.use_for_variation === 1 ||
+        attr.use_for_variation === "1" ||
+        attr.use_for_variation === true;
+    });
+
+    const missingSelections = [];
+
+    requiredAttributes.forEach(attr => {
+      if (!selectedOptions.value[attr.name]) {
+        missingSelections.push(attr.name);
+      }
+    });
+
+    if (missingSelections.length > 0) {
+      selectionRequired.value = true;
+      toast.add({
+        title: 'Varyant seçimi gerekli!',
+        description: `Lütfen şu seçenekleri belirleyin: ${missingSelections.join(', ')}`,
+        color: 'red',
+        icon: "i-heroicons-exclamation-triangle",
+      });
+      return;
+    }
+
+    // Varyant seçilmiş ama geçerli varyasyon yok
+    if (!getSelectedVariation.value) {
+      selectionRequired.value = true;
+      toast.add({
+        title: 'Geçersiz varyant kombinasyonu!',
+        description: 'Seçtiğiniz varyant kombinasyonu mevcut değil. Lütfen farklı seçenekler deneyin.',
+        color: 'red',
+        icon: "i-heroicons-exclamation-triangle",
+      });
+      return;
+    }
+  }
+
+  // Başarılı seçim
+  selectionRequired.value = false;
 
   const input = props.productState.product.inputs?.[0]
   const inputValue = props.productState.product.inputValue
@@ -314,18 +380,51 @@ const addToCart = () => {
 };
 
 const orderViaWhatsApp = () => {
-  // Varyasyon kontrolü
-  if (!getSelectedVariation.value && isVariableProduct.value) {
-    selectionRequired.value = true
-    toast.add({
-      title: 'Lütfen ürün seçeneklerini belirleyin!',
-      color: 'red',
-      icon: "i-heroicons-exclamation-triangle",
-    })
-    return
-  } else {
-    selectionRequired.value = false
+  // Varyasyonlu ürün kontrolü - addToCart ile aynı
+  if (isVariableProduct.value) {
+    // Gerekli varyantların seçilip seçilmediğini kontrol et
+    const requiredAttributes = props.attrsAndVarsState.filter(attr => {
+      return attr.useForVariation === 1 ||
+        attr.useForVariation === "1" ||
+        attr.useForVariation === true ||
+        attr.use_for_variation === 1 ||
+        attr.use_for_variation === "1" ||
+        attr.use_for_variation === true;
+    });
+    const missingSelections = [];
+
+    requiredAttributes.forEach(attr => {
+      if (!selectedOptions.value[attr.name]) {
+        missingSelections.push(attr.name);
+      }
+    });
+
+    if (missingSelections.length > 0) {
+      selectionRequired.value = true;
+      toast.add({
+        title: 'Varyant seçimi gerekli!',
+        description: `Lütfen şu seçenekleri belirleyin: ${missingSelections.join(', ')}`,
+        color: 'red',
+        icon: "i-heroicons-exclamation-triangle",
+      });
+      return;
+    }
+
+    // Varyant seçilmiş ama geçerli varyasyon yok
+    if (!getSelectedVariation.value) {
+      selectionRequired.value = true;
+      toast.add({
+        title: 'Geçersiz varyant kombinasyonu!',
+        description: 'Seçtiğiniz varyant kombinasyonu mevcut değil. Lütfen farklı seçenekler deneyin.',
+        color: 'red',
+        icon: "i-heroicons-exclamation-triangle",
+      });
+      return;
+    }
   }
+
+  // Başarılı seçim
+  selectionRequired.value = false;
 
   const input = props.productState.product.inputs?.[0]
   const inputValue = props.productState.product.inputValue

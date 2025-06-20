@@ -9,8 +9,8 @@
             <div class="lg:col-span-2">
               <!-- Sayfa Başlığı -->
               <div class="mb-6">
-                <h1 class="text-2xl font-bold text-neutral-900 mb-2">Sepetim</h1>
-                <p class="text-neutral-600">{{ cartState.cartQyt }} ürün sepetinizde</p>
+                <h1 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">Sepetim</h1>
+                <p class="text-neutral-600 dark:text-neutral-400">{{ cartState.cartQyt }} ürün sepetinizde</p>
               </div>
 
               <!-- Sepet Öğeleri -->
@@ -41,12 +41,14 @@
             <ClientOnly>
               <Teleport to="body">
                 <div v-if="cartState.cart.length > 0"
-                  class="md:hidden fixed bottom-0 left-0 right-0 bg-white p-4 shadow-2xl border-t border-neutral-200 flex items-center justify-between"
+                  class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-800 p-4 shadow-2xl border-t border-neutral-200 dark:border-neutral-700 flex items-center justify-between"
                   style="z-index: 999999;">
                   <!-- Toplam Tutar -->
                   <div class="flex flex-col">
-                    <span class="text-sm text-neutral-500">Toplam</span>
-                    <span class="text-lg font-bold text-neutral-900">{{ formatPrice(cartState.cartTotalAmount) }}</span>
+                    <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
+                    <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
+                      formatPrice(cartState.cartTotalAmount)
+                      }}</span>
                   </div>
 
                   <!-- Ödeme Butonu -->
@@ -62,11 +64,13 @@
           <!-- Boş Sepet -->
           <div v-else class="text-center py-16">
             <div class="max-w-md mx-auto">
-              <div class="w-24 h-24 bg-neutral-200 rounded-full flex items-center justify-center mx-auto mb-6">
-                <UIcon name="i-heroicons-shopping-bag" class="w-12 h-12 text-neutral-400" />
+              <div
+                class="w-24 h-24 bg-neutral-200 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-6">
+                <UIcon name="i-heroicons-shopping-bag" class="w-12 h-12 text-neutral-400 dark:text-neutral-500" />
               </div>
-              <h2 class="text-2xl font-bold text-neutral-900 mb-4">Sepetiniz boş</h2>
-              <p class="text-neutral-600 mb-8">Alışverişe başlamak için ürünleri sepete ekleyin</p>
+              <h2 class="text-2xl font-bold text-neutral-900 dark:text-neutral-100 mb-4">Sepetiniz boş</h2>
+              <p class="text-neutral-600 dark:text-neutral-400 mb-8">Alışverişe başlamak için ürünleri sepete ekleyin
+              </p>
               <UButton to="/" color="secondary" size="lg" class="font-bold">
                 Alışverişe Başla
               </UButton>

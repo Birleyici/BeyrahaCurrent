@@ -5,7 +5,7 @@
       <NuxtLink :to="productUrl">
         <NuxtImg sizes="390px sm:300px md:390px" v-if="props.product.coverImage" :src="`cl/${props.product.coverImage}`"
           format="webp" quality="90" fit="inside" :loading="imgLoadingType" :preload="imgPreload" width="400"
-          height="600" :alt="props.product.name"
+          height="600" :alt="props.product.name" :background="backgroundColor"
           class="w-full h-[320px] object-cover transition-transform duration-300 group-hover:scale-105" />
         <img v-else :src="img_placeholder"
           class="w-full h-[320px] object-cover transition-transform duration-300 group-hover:scale-105"
@@ -38,6 +38,41 @@
 <script setup>
 const props = defineProps(['product', 'index', 'lcp'])
 const img_placeholder = '/img-placeholder.jpg'
+
+// Dark mode reactive tracking
+const isDarkMode = ref(false);
+
+// Dynamic background color based on theme
+const backgroundColor = computed(() => {
+  return isDarkMode.value ? '#262626' : '#f5f5f5';
+});
+
+// Dark mode durumunu kontrol et
+const checkDarkMode = () => {
+  if (process.client) {
+    isDarkMode.value = document.documentElement.classList.contains('dark');
+  }
+};
+
+// Component mount edildiğinde ve theme değiştiğinde kontrol et
+onMounted(() => {
+  checkDarkMode();
+
+  // Theme değişikliklerini izle
+  const observer = new MutationObserver(() => {
+    checkDarkMode();
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class']
+  });
+
+  // Cleanup
+  onUnmounted(() => {
+    observer.disconnect();
+  });
+});
 
 // Debug için product_url'yi kontrol et
 console.log('Product URL:', props.product.product_url)
