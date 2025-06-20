@@ -59,7 +59,7 @@
             <div class="mb-8">
               <div class="card">
                 <div class="card-header">
-                  <div class="flex items-center space-x-3">
+                  <div class="flex items-center space-x-3 p-4">
                     <div
                       class="w-10 h-10 bg-secondary-100 dark:bg-secondary-900/30 rounded-full flex items-center justify-center">
                       <UIcon name="i-heroicons-building-library"
@@ -87,7 +87,7 @@
                 <!-- Sipariş İçeriği -->
                 <div class="card">
                   <div class="card-header">
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 p-4">
                       <div
                         class="w-10 h-10 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center">
                         <UIcon name="i-heroicons-shopping-bag" class="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -105,7 +105,7 @@
                 <!-- Sipariş Özeti -->
                 <div class="card">
                   <div class="card-header">
-                    <div class="flex items-center space-x-3">
+                    <div class="flex items-center space-x-3 p-4">
                       <div
                         class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
                         <UIcon name="i-heroicons-calculator" class="w-5 h-5 text-green-600 dark:text-green-400" />
