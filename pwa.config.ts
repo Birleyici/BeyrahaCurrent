@@ -8,7 +8,7 @@ export default {
     enabled: true,
     suppressWarnings: true,
     type: 'module',
-    navigateFallback: 'index.html'
+    navigateFallback: undefined
   },
   manifest: {
     name: 'Beyraha - Zarif Tesettür Koleksiyonu',
@@ -94,7 +94,8 @@ export default {
     ]
   },
   workbox: {
-    navigateFallback: '/',
+    navigateFallback: undefined,
+    navigateFallbackDenylist: [/^\/management\//],
     globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2,woff}'],
     runtimeCaching: [
       {
