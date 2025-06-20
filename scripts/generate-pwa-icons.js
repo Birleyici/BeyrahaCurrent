@@ -15,7 +15,7 @@ const sizes = [
 ];
 
 async function generatePwaIcons() {
-  const inputPath = path.join(__dirname, '../public/logo-for-light.png');
+  const inputPath = path.join(__dirname, '../public/logo-for-pwa.png');
   const outputDir = path.join(__dirname, '../public');
 
   // Kaynak dosyasının varlığını kontrol et
