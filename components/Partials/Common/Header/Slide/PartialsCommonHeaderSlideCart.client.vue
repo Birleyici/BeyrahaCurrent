@@ -68,14 +68,17 @@
 
                 <!-- Butonlar -->
                 <div class="grid grid-cols-2 gap-3">
-                    <UButton href="/sepet" color="gray" variant="outline" size="md"
-                        class="w-full flex items-center justify-center">
-                        Sepeti Gör
-                    </UButton>
-                    <UButton href="/auth?callback=/odeme" color="secondary" size="md"
-                        class="w-full font-bold flex items-center justify-center">
-                        Ödeme
-                    </UButton>
+                    <NuxtLink href="/sepet">
+                        <UButton color="gray" variant="outline" size="md"
+                            class="w-full flex items-center justify-center">
+                            Sepeti Gör
+                        </UButton>
+                    </NuxtLink>
+                    <NuxtLink href="/auth?callback=/odeme">
+                        <UButton color="secondary" size="md" class="w-full font-bold flex items-center justify-center">
+                            Ödeme
+                        </UButton>
+                    </NuxtLink>
                 </div>
             </div>
         </div>
