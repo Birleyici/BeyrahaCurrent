@@ -15,6 +15,8 @@ export default function usePwa() {
       cancelInstall: () => {},
       updateServiceWorker: () => Promise.resolve(),
       closePrompt: () => {},
+      setInstalled: () => {},
+      checkInstallation: () => {},
       pwaStore: null
     }
   }
@@ -142,13 +144,52 @@ export default function usePwa() {
     }
   }
 
+  const setInstalled = (installed = true) => {
+    try {
+      pwaStore.setInstalled(installed)
+    } catch (error) {
+      console.warn('PWA setInstalled hatası:', error)
+    }
+  }
+
+  const checkInstallation = () => {
+    try {
+      pwaStore.checkInstallation()
+    } catch (error) {
+      console.warn('PWA checkInstallation hatası:', error)
+    }
+  }
+
   // Lifecycle hooks
   onMounted(() => {
     try {
       // PWA session güncelle
       pwaStore.updateSession()
+      
+      // PWA kurulum durumunu kontrol et
+      checkInstallation()
+      
+      // beforeinstallprompt event listener ekle
+      const handleBeforeInstallPrompt = (event) => {
+        event.preventDefault()
+        pwaStore.setInstallEvent(event)
+      }
+      
+      // appinstalled event listener ekle
+      const handleAppInstalled = () => {
+        pwaStore.setInstalled(true)
+      }
+      
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.addEventListener('appinstalled', handleAppInstalled)
+      
+      // Cleanup function
+      onUnmounted(() => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+        window.removeEventListener('appinstalled', handleAppInstalled)
+      })
     } catch (error) {
-      console.warn('PWA session güncelleme hatası:', error)
+      console.warn('PWA initialization hatası:', error)
     }
   })
 
@@ -169,6 +210,8 @@ export default function usePwa() {
     cancelInstall,
     updateServiceWorker,
     closePrompt,
+    setInstalled,
+    checkInstallation,
     
     // Store reference
     pwaStore

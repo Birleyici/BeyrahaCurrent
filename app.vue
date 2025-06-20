@@ -23,9 +23,15 @@ const cartState = useCartState()
 // Dark mode support
 const { initDarkMode } = useDarkMode();
 
+// PWA support
+const { checkInstallation } = usePwa()
+
 onMounted(async () => {
   // Dark mode'u initialize et
   initDarkMode();
+
+  // PWA durumunu kontrol et
+  checkInstallation();
 
   $changeMainState({ isLoaded: true });
   await cartState.cartDBToState()
