@@ -89,15 +89,20 @@ const model = defineModel();
 
 // Native back button handler - Çakışma önlendi
 const { useBackHandler } = await import('~/composables/useNativeBackHandler.js')
-useBackHandler(model)
+const backHandlerControl = useBackHandler(model)
 
 // Router çakışmasını önleyen navigation fonksiyonları
-const safeNavigate = (path) => {
+const safeNavigate = async (path) => {
+    // Modal'ı kapat
     model.value = false;
-    // Modal kapanma animasyonunu bekle, sonra navigate et
-    setTimeout(() => {
-        navigateTo(path);
-    }, 100);
+
+    // Kısa bir bekleme
+    await new Promise(resolve => setTimeout(resolve, 200));
+
+    // Direct navigation - router bypass
+    if (process.client) {
+        window.location.href = path;
+    }
 }
 
 </script>
