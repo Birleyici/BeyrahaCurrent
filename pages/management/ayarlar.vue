@@ -312,12 +312,16 @@ const saveSettings = async () => {
             value: String(localSettings.value[key] || '')
         }))
 
+        console.log('🔧 Gönderilecek ayarlar:', settingsToUpdate)
+
         const response = await useBaseOFetchWithAuth('settings', {
             method: 'PUT',
             body: {
                 settings: settingsToUpdate
             }
         })
+
+        console.log('📡 API Response:', response)
 
         if (response && !response.error) {
             const toast = useToast()
@@ -327,14 +331,20 @@ const saveSettings = async () => {
                 color: 'green',
                 icon: 'i-heroicons-check-circle'
             })
+
+            // Ayarları tekrar yükle
+            await fetchSettings()
+        } else {
+            console.error('❌ API hatası:', response)
+            throw new Error(response?.message || 'API hatası')
         }
 
     } catch (error) {
-        console.error('Ayarlar kaydedilirken hata:', error)
+        console.error('💥 Ayarlar kaydedilirken hata:', error)
         const toast = useToast()
         toast.add({
             title: 'Hata',
-            description: 'Ayarlar kaydedilirken bir hata oluştu',
+            description: error.message || 'Ayarlar kaydedilirken bir hata oluştu',
             color: 'red'
         })
     } finally {
