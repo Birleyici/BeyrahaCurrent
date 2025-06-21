@@ -26,7 +26,7 @@
                                 <div>
                                     <p class="text-xs text-neutral-500 dark:text-neutral-400">Toplam</p>
                                     <p class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
-                                        orderState.vendorOrders?.length || 0 }}</p>
+                                        orderState.pagination.total || 0 }}</p>
                                 </div>
                             </div>
                         </div>
@@ -34,8 +34,65 @@
                 </div>
             </div>
 
+            <!-- Filtreler -->
+            <div class="mb-6">
+                <div
+                    class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm p-4">
+                    <div class="flex flex-col lg:flex-row gap-4">
+                        <!-- Status Filtresi -->
+                        <div class="flex-1">
+                            <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
+                                Sipariş Durumu
+                            </label>
+                            <USelectMenu v-model="orderState.filters.statuses" :options="orderState.statusOptions"
+                                multiple placeholder="Durum seçin..." option-attribute="label" value-attribute="value"
+                                class="w-full">
+                                <template #label>
+                                    <span v-if="orderState.filters.statuses.length === 0">Tüm durumlar</span>
+                                    <span v-else-if="orderState.filters.statuses.length === 1">
+                                        {{orderState.statusOptions.find(s => s.value ===
+                                            orderState.filters.statuses[0])?.label}}
+                                    </span>
+                                    <span v-else>
+                                        {{ orderState.filters.statuses.length }} durum seçili
+                                    </span>
+                                </template>
+                                <template #option="{ option }">
+                                    <div class="flex items-center gap-2">
+                                        <UBadge :color="option.color" size="xs" />
+                                        <span>{{ option.label }}</span>
+                                    </div>
+                                </template>
+                            </USelectMenu>
+                        </div>
+
+                        <!-- Filtre Butonları -->
+                        <div class="flex items-end gap-2">
+                            <UButton @click="orderState.applyFilters()" :loading="orderState.loading" color="secondary"
+                                icon="i-heroicons-funnel" size="md">
+                                Filtrele
+                            </UButton>
+                            <UButton @click="orderState.clearFilters()" variant="outline" color="gray"
+                                icon="i-heroicons-x-mark" size="md">
+                                Temizle
+                            </UButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Yükleniyor Durumu -->
+            <div v-if="orderState.loading" class="text-center py-12">
+                <div
+                    class="w-16 h-16 bg-secondary-100 dark:bg-secondary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                    <UIcon name="i-heroicons-arrow-path"
+                        class="w-8 h-8 text-secondary-600 dark:text-secondary-400 animate-spin" />
+                </div>
+                <p class="text-lg font-medium text-neutral-600 dark:text-neutral-400">Siparişler yükleniyor...</p>
+            </div>
+
             <!-- Masaüstü Görünüm - Tablo -->
-            <div class="hidden lg:block">
+            <div v-else-if="!orderState.loading" class="hidden lg:block">
                 <div
                     class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm overflow-hidden">
                     <!-- Tablo Başlığı -->
@@ -54,15 +111,8 @@
 
                     <!-- Tablo İçeriği -->
                     <div class="p-6">
-                        <UTable sort-asc-icon="i-heroicons-arrow-up-20-solid"
-                            sort-desc-icon="i-heroicons-arrow-down-20-solid" :sort-button="{
-                                icon: 'i-heroicons-sparkles-20-solid',
-                                color: 'primary',
-                                variant: 'outline',
-                                size: '2xs',
-                                square: false,
-                                ui: { rounded: 'rounded-full' },
-                            }" class="w-full" :columns="orderState.orderListColumns" :rows="orders" :ui="{
+                        <UTable class="w-full" :columns="orderState.orderListColumns" :rows="orderState.vendorOrders"
+                            :ui="{
                                 th: {
                                     base: 'text-left rtl:text-right',
                                     padding: 'px-4 py-3.5',
@@ -127,12 +177,11 @@
                         class="bg-gradient-to-r from-neutral-50 to-neutral-100 dark:from-neutral-800 dark:to-neutral-700 px-6 py-4 border-t border-neutral-200 dark:border-neutral-700">
                         <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
                             <div class="text-sm text-neutral-600 dark:text-neutral-400 text-center sm:text-left">
-                                {{ (page - 1) * pageCount + 1 }}-{{ Math.min(page * pageCount,
-                                    orderState.vendorOrders?.length || 0) }} / {{
-                                    orderState.vendorOrders?.length || 0 }} sipariş
+                                {{ orderState.pagination.from }}-{{ orderState.pagination.to }} / {{
+                                    orderState.pagination.total }} sipariş
                             </div>
-                            <UPagination v-model="page" :page-count="pageCount" :total="orderState.vendorOrders?.length"
-                                :max="5" :ui="{
+                            <UPagination v-model="currentPage" :page-count="orderState.pagination.per_page"
+                                :total="orderState.pagination.total" :max="5" :ui="{
                                     wrapper: 'flex items-center gap-1',
                                     rounded: '!rounded-md',
                                     default: {
@@ -145,8 +194,8 @@
             </div>
 
             <!-- Mobil Görünüm - Kart Listesi -->
-            <div class="lg:hidden space-y-4">
-                <div v-for="order in orders" :key="order.id"
+            <div v-else-if="!orderState.loading" class="lg:hidden space-y-4">
+                <div v-for="order in orderState.vendorOrders" :key="order.id"
                     class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-shadow duration-300">
 
                     <!-- Kart Header -->
@@ -206,16 +255,15 @@
                 </div>
 
                 <!-- Mobil Pagination -->
-                <div v-if="orderState.vendorOrders?.length > pageCount"
+                <div v-if="orderState.pagination.total > orderState.pagination.per_page"
                     class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 shadow-sm">
                     <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
                         <div class="text-sm text-neutral-600 dark:text-neutral-400 text-center sm:text-left">
-                            {{ (page - 1) * pageCount + 1 }}-{{ Math.min(page * pageCount,
-                                orderState.vendorOrders?.length || 0) }}
-                            / {{ orderState.vendorOrders?.length || 0 }} sipariş
+                            {{ orderState.pagination.from }}-{{ orderState.pagination.to }}
+                            / {{ orderState.pagination.total }} sipariş
                         </div>
-                        <UPagination v-model="page" :page-count="pageCount" :total="orderState.vendorOrders?.length"
-                            :max="5" :ui="{
+                        <UPagination v-model="currentPage" :page-count="orderState.pagination.per_page"
+                            :total="orderState.pagination.total" :max="5" :ui="{
                                 wrapper: 'flex items-center gap-1',
                                 rounded: '!rounded-md',
                                 default: {
@@ -227,7 +275,7 @@
             </div>
 
             <!-- Boş Durum -->
-            <div v-if="!orderState.vendorOrders?.length" class="text-center py-12">
+            <div v-if="!orderState.loading && !orderState.vendorOrders?.length" class="text-center py-12">
                 <div
                     class="w-24 h-24 bg-neutral-100 dark:bg-neutral-800 rounded-full flex items-center justify-center mx-auto mb-4">
                     <UIcon name="i-heroicons-shopping-bag" class="w-12 h-12 text-neutral-400 dark:text-neutral-500" />
@@ -248,19 +296,36 @@
 definePageMeta({
     layout: "admin",
 });
+
 const orderState = useOrderManagementStore();
-const page = ref(1);
-const pageCount = 10;
+const route = useRoute()
+
+const currentPage = computed({
+    get: () => orderState.pagination.current_page,
+    set: (value) => {
+        if (value !== orderState.pagination.current_page) {
+            orderState.changePage(value)
+        }
+    }
+})
 
 await useAsyncData('orderListInManagement', async () => {
+    // URL parametrelerinden filtreleri başlat
+    const initialPage = orderState.initializeFromUrl(route)
 
-    await orderState.fetchVendorOrders()
+    // Verilerileri getir (filtreleri sıfırlama)
+    await orderState.fetchVendorOrders(initialPage, false)
     return true
 })
 
-const orders = computed(() => {
-    return orderState.vendorOrders.slice((page.value - 1) * pageCount, page.value * pageCount);
-});
+// URL değişikliklerini dinle
+watch(() => route.query, async (newQuery, oldQuery) => {
+    // Eğer query parametreleri değiştiyse, filtreleri güncelle
+    if (JSON.stringify(newQuery) !== JSON.stringify(oldQuery)) {
+        const page = orderState.initializeFromUrl(route)
+        await orderState.fetchVendorOrders(page, false)
+    }
+}, { deep: true })
 
 async function deleteHandling(subOrderId) {
     if (await useConfirmation("İşlem Onayı", "Siparişi silmek istediğinize emin misiniz?")) {

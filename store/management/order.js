@@ -5,7 +5,23 @@ export const useOrderManagementStore = defineStore(
   () => {
     const vendorOrders = ref([])
     const vendorOrder = ref(null)
+    const pagination = ref({
+      current_page: 1,
+      per_page: 10,
+      total: 0,
+      last_page: 1,
+      from: 0,
+      to: 0,
+      has_more_pages: false
+    })
+    const filters = ref({
+      statuses: [],
+      sort_by: 'id',
+      sort_order: 'desc'
+    })
+    const loading = ref(false)
     const toast = useToast()
+    
     const statuses = {
       pending: { color: 'gray', text: 'Beklemede' },
       processing: { color: 'blue', text: 'Hazırlanıyor' },
@@ -16,19 +32,130 @@ export const useOrderManagementStore = defineStore(
       failed: { color: 'black', text: 'Başarısız' }
     }
 
+    const statusOptions = computed(() => {
+      return Object.entries(statuses).map(([key, value]) => ({
+        value: key,
+        label: value.text,
+        color: value.color
+      }))
+    })
+
     const orderListColumns = [
       { key: 'id', label: 'ID' },
-      { key: 'full_name', label: 'Ad Soyad', sortable: true },
-      { key: 'total', label: 'Toplam', sortable: true },
-      { key: 'status', label: 'Durum', sortable: true },
-      { key: 'created_at', label: 'Tarih', sortable: true },
+      { key: 'full_name', label: 'Ad Soyad' },
+      { key: 'total', label: 'Toplam' },
+      { key: 'status', label: 'Durum' },
+      { key: 'created_at', label: 'Tarih' },
       { key: 'actions', label: 'İşlemler' }
     ]
 
-    const fetchVendorOrders = async () => {
-      const response = await useBaseOFetchWithAuth('vendor/orders')
+    const initializeFromUrl = (route) => {
+      // URL parametrelerinden filtreleri ayarla
+      if (route.query.statuses) {
+        filters.value.statuses = route.query.statuses.split(',')
+      }
+      
+      if (route.query.sort_by) {
+        filters.value.sort_by = route.query.sort_by
+      }
+      
+      if (route.query.sort_order) {
+        filters.value.sort_order = route.query.sort_order
+      }
+      
+      // Sayfa numarasını ayarla
+      const page = parseInt(route.query.page) || 1
+      pagination.value.current_page = page
+      
+      return page
+    }
 
-      vendorOrders.value = response
+    const fetchVendorOrders = async (page = 1, resetFilters = false) => {
+      if (resetFilters) {
+        filters.value = {
+          statuses: [],
+          sort_by: 'id',
+          sort_order: 'desc'
+        }
+      }
+
+      loading.value = true
+      
+      try {
+        const params = {
+          page,
+          per_page: pagination.value.per_page,
+          sort_by: filters.value.sort_by,
+          sort_order: filters.value.sort_order
+        }
+
+        // Status filtresi varsa ekle
+        if (filters.value.statuses && filters.value.statuses.length > 0) {
+          params.statuses = filters.value.statuses.join(',')
+        }
+
+        const response = await useBaseOFetchWithAuth('vendor/orders', {
+          query: params
+        })
+
+        vendorOrders.value = response.data
+        pagination.value = response.meta
+      } catch (error) {
+        console.error('Siparişler yüklenirken hata:', error)
+        toast.add({
+          title: 'Siparişler yüklenemedi!',
+          color: 'red',
+          icon: 'i-heroicons-exclamation-triangle'
+        })
+      } finally {
+        loading.value = false
+      }
+    }
+
+    const applyFilters = async () => {
+      // URL'yi güncelle
+      await navigateTo({
+        path: '/management/siparisler',
+        query: {
+          page: 1,
+          ...(filters.value.statuses.length > 0 && { statuses: filters.value.statuses.join(',') }),
+          ...(filters.value.sort_by !== 'id' && { sort_by: filters.value.sort_by }),
+          ...(filters.value.sort_order !== 'desc' && { sort_order: filters.value.sort_order })
+        }
+      })
+      
+      await fetchVendorOrders(1) // Filtreleme yapılırken ilk sayfaya git
+    }
+
+    const clearFilters = async () => {
+      filters.value = {
+        statuses: [],
+        sort_by: 'id',
+        sort_order: 'desc'
+      }
+      
+      // URL'yi temizle
+      await navigateTo({
+        path: '/management/siparisler',
+        query: {}
+      })
+      
+      await fetchVendorOrders(1)
+    }
+
+    const changePage = async (page) => {
+      // URL'yi güncelle
+      await navigateTo({
+        path: '/management/siparisler',
+        query: {
+          page,
+          ...(filters.value.statuses.length > 0 && { statuses: filters.value.statuses.join(',') }),
+          ...(filters.value.sort_by !== 'id' && { sort_by: filters.value.sort_by }),
+          ...(filters.value.sort_order !== 'desc' && { sort_order: filters.value.sort_order })
+        }
+      })
+      
+      await fetchVendorOrders(page)
     }
 
     const fetchVendorOrder = async (orderId) => {
@@ -42,7 +169,8 @@ export const useOrderManagementStore = defineStore(
         method: 'DELETE'
       })
 
-      vendorOrders.value = vendorOrders.value.filter((o) => o.id !== subOrderId)
+      // Mevcut sayfayı yeniden yükle
+      await fetchVendorOrders(pagination.value.current_page)
     }
 
     const saveAddress = async (item) => {
@@ -149,8 +277,16 @@ export const useOrderManagementStore = defineStore(
       saveAddress,
       vendorOrders,
       vendorOrder,
+      pagination,
+      filters,
+      loading,
       orderListColumns,
       statuses,
+      statusOptions,
+      initializeFromUrl,
+      applyFilters,
+      clearFilters,
+      changePage,
       deleteSubOrder,
       deleteSubOrderItem,
       saveInput,
