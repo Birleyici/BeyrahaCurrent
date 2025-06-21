@@ -92,7 +92,7 @@
             </div>
 
             <!-- Masaüstü Görünüm - Tablo -->
-            <div v-else-if="!orderState.loading" class="hidden lg:block">
+            <div v-if="!orderState.loading" class="hidden lg:block">
                 <div
                     class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm overflow-hidden">
                     <!-- Tablo Başlığı -->
@@ -194,7 +194,7 @@
             </div>
 
             <!-- Mobil Görünüm - Kart Listesi -->
-            <div v-else-if="!orderState.loading" class="lg:hidden space-y-4">
+            <div v-if="!orderState.loading" class="lg:hidden space-y-4">
                 <div v-for="order in orderState.vendorOrders" :key="order.id"
                     class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md transition-shadow duration-300">
 
