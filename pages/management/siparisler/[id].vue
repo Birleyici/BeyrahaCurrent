@@ -66,15 +66,20 @@
               <div v-if="orderState.vendorOrder.shipping_code" class="mb-6">
                 <div
                   class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
-                  <div class="flex items-start space-x-3">
-                    <UIcon name="i-heroicons-truck" class="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
-                    <div>
-                      <h4 class="text-sm font-medium text-green-900 dark:text-green-100 mb-1">Kargo Takip Kodu</h4>
-                      <p
-                        class="text-sm text-green-700 dark:text-green-300 font-mono bg-green-100 dark:bg-green-800 px-2 py-1 rounded">
-                        {{ orderState.vendorOrder.shipping_code }}
-                      </p>
+                  <div class="flex items-start justify-between">
+                    <div class="flex items-start space-x-3">
+                      <UIcon name="i-heroicons-truck" class="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+                      <div>
+                        <h4 class="text-sm font-medium text-green-900 dark:text-green-100 mb-1">Kargo Referans Kodu</h4>
+                        <p
+                          class="text-sm text-green-700 dark:text-green-300 font-mono bg-green-100 dark:bg-green-800 px-2 py-1 rounded">
+                          {{ orderState.vendorOrder.shipping_code }}
+                        </p>
+                      </div>
                     </div>
+                    <UButton @click="copyShippingCode(orderState.vendorOrder.shipping_code)"
+                      icon="i-heroicons-clipboard-document" color="green" variant="soft" size="xs"
+                      :ui="{ rounded: 'rounded-full' }" />
                   </div>
                 </div>
               </div>
@@ -187,9 +192,12 @@
 
 <script setup>
 const route = useRoute()
+const toast = useToast()
+
 definePageMeta({
   layout: "admin",
 });
+
 const orderId = route.params.id
 const orderState = useOrderManagementStore();
 const editingMode = ref(false)
@@ -198,7 +206,6 @@ const isOpenAddProductModal = ref(false)
 const badge = computed(() => {
   return orderState.statuses[orderState.vendorOrder.status] || { color: 'gray', text: 'Bilinmeyen' };
 });
-
 
 await useAsyncData('orderInManagement', async () => {
   await orderState.fetchVendorOrder(orderId)
@@ -220,10 +227,25 @@ const links = [{
 }]
 
 const cancelHandling = async () => {
-
   if (await useConfirmation("İşlem Onayı", "Siparişi iptal etmek istediğinize emin misiniz? Bu işlem geri alınamaz.")) {
     orderState.updateStatus(orderState.vendorOrder, 'cancelled')
   }
 }
 
+const copyShippingCode = async (code) => {
+  try {
+    await navigator.clipboard.writeText(code)
+    toast.add({
+      title: 'Referans kodu kopyalandı!',
+      icon: 'i-heroicons-check-badge',
+      color: 'green'
+    })
+  } catch (error) {
+    toast.add({
+      title: 'Kopyalama başarısız!',
+      color: 'red',
+      icon: 'i-heroicons-exclamation-triangle'
+    })
+  }
+}
 </script>
