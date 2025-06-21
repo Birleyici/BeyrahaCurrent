@@ -68,6 +68,13 @@
       </div>
     </section>
 
+    <!-- Ürün Yorumları -->
+    <section class="enhanced-section-spacing bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
+      <div class="container">
+        <ProductReviewsSection v-if="productState.product && productState.product.id" :product="productState.product" />
+      </div>
+    </section>
+
     <!-- Benzer Ürünler -->
     <UiSlidesProductSlide id="similar-products" :is-ssr="false" title="Benzer Ürünler"
       :filters="similarProductsFilters" />

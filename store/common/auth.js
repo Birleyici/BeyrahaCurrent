@@ -12,6 +12,8 @@ export const useAuthStore = defineStore(
       password: ''
     })
 
+    const currentUser = ref(null)
+
     const register = ref({
       email: '',
       password: '',
@@ -32,8 +34,26 @@ export const useAuthStore = defineStore(
     const loading = ref({
       login: false,
       register: false,
-      remind: false
+      remind: false,
+      fetchUser: false
     })
+
+    const fetchUser = async () => {
+      if (!token.value) return null
+
+      loading.value.fetchUser = true
+      try {
+        const response = await useBaseOFetchWithAuth('auth/me')
+        currentUser.value = response
+        return response
+      } catch (error) {
+        console.error('User fetch error:', error)
+        currentUser.value = null
+        return null
+      } finally {
+        loading.value.fetchUser = false
+      }
+    }
 
     const login = async () => {
       loading.value.login = true
@@ -52,7 +72,7 @@ export const useAuthStore = defineStore(
       if (!response.error) {
         apiError.value.login = []
         token.value = response.token
-        actionsOnLogin()
+        await actionsOnLogin()
         return true
       } else {
         token.value = null
@@ -63,11 +83,13 @@ export const useAuthStore = defineStore(
     }
 
     const actionsOnLogin = async () => {
+      await fetchUser()
       await orderState.fetchAddresses()
       await cartState.cartDBToState()
     }
 
     const actionsOnLogout = async () => {
+      currentUser.value = null
       await orderState.fetchAddresses()
       await cartState.cartDBToState()
     }
@@ -87,6 +109,7 @@ export const useAuthStore = defineStore(
       if (!response.error) {
         apiError.value.register = null
         token.value = response.token
+        await actionsOnLogin()
         return true
       } else {
         token.value = null
@@ -133,6 +156,7 @@ export const useAuthStore = defineStore(
 
     const logout = (callback = null) => {
       token.value = null
+      currentUser.value = null
       user.value = {
         email: '',
         password: ''
@@ -149,6 +173,7 @@ export const useAuthStore = defineStore(
 
     return {
       user,
+      currentUser,
       anon,
       register,
       loading,
@@ -158,13 +183,14 @@ export const useAuthStore = defineStore(
       registerUser,
       remind,
       logout,
-      changePassword
+      changePassword,
+      fetchUser
     }
   },
   {
     persist: {
       storage: piniaPluginPersistedstate.localStorage(),
-      pick: ['token', 'anon']
+      pick: ['token', 'anon', 'currentUser']
     }
   }
 )
