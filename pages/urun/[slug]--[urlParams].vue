@@ -79,6 +79,7 @@ const productState = useProductState();
 const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
 const product_information = ref(null)
+const { settings } = useSettings()
 const productCategoryIds = computed(() => {
   const categoryIds = productState.product.categories?.map(c => c.id) || []
   console.log('Product categories:', productState.product.categories)
@@ -117,10 +118,13 @@ const selectedImages = computed(() => {
 });
 
 useHead({
-  title: `${productState.product.name}`,
+  title: computed(() => `${productState.product.name} - ${settings.value.siteName}`),
   meta: [
-    { name: 'description', content: productState.product.description }
-  ],
+    {
+      name: 'description',
+      content: computed(() => productState.product.short_description || productState.product.name)
+    }
+  ]
 })
 
 const goInfo = () => {

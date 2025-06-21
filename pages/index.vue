@@ -201,10 +201,17 @@
 </template>
 
 <script setup>
+// Settings composable'ını kullan
+const { settings } = useSettings()
+
+// SEO meta tags
 useHead({
-  title: 'Beyraha Tesettür Giyim - Ana Sayfa',
+  title: settings.value.siteTitle + ' - ' + settings.value.siteName,
   meta: [
-    { name: 'description', content: 'Kaliteli kumaşlar ve özenli işçilikle hazırlanmış çarşaf, ferace, peçe ve sufle modellerimizle tarzınızı ve konforunuzu bir arada yaşayın' }
+    {
+      name: 'description',
+      content: computed(() => settings.value.siteDescription || 'Kaliteli kumaşlar ve özenli işçilikle hazırlanmış çarşaf, ferace, peçe ve sufle modellerimizle tarzınızı ve konforunuzu bir arada yaşayın')
+    }
   ],
 })
 </script>

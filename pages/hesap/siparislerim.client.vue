@@ -1,6 +1,19 @@
 <template>
   <div class="bg-neutral-50 dark:bg-neutral-900 min-h-screen transition-colors duration-300">
-    <div class="container">
+    <!-- Yükleniyor Durumu -->
+    <div v-if="!ordersLoaded" class="min-h-screen flex items-center justify-center">
+      <div class="text-center">
+        <div
+          class="w-16 h-16 bg-secondary-100 dark:bg-secondary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <UIcon name="i-heroicons-arrow-path"
+            class="w-8 h-8 text-secondary-600 dark:text-secondary-400 animate-spin" />
+        </div>
+        <p class="text-lg font-medium text-neutral-600 dark:text-neutral-400">Siparişleriniz yükleniyor...</p>
+      </div>
+    </div>
+
+    <!-- Ana İçerik -->
+    <div v-else class="container">
       <UiCommonBreadcrumb class="mb-3 md:mb-6" :links="links" />
 
       <div class="lg:grid lg:grid-cols-4 gap-8">
@@ -57,11 +70,14 @@
 </template>
 
 <script setup>
+const { siteName } = useSettings()
+
 useHead({
-  title: 'Siparişlerim - Beyraha',
+  title: computed(() => `Siparişlerim - ${siteName.value}`)
 })
 
 const orderState = useOrderStoreFront()
+const ordersLoaded = ref(false)
 
 // Sayfalandırma için state'ler
 const currentPage = ref(1)
@@ -78,6 +94,7 @@ const paginatedOrders = computed(() => {
 
 useAsyncData('siparislerimInit', async () => {
   await orderState.getOrders()
+  ordersLoaded.value = true
 })
 
 const links = [{

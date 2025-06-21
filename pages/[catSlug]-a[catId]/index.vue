@@ -33,11 +33,11 @@
 
 <script setup>
 
-
 const productState = useProductState();
 const categoryState = useCategoryState();
 const route = useRoute();
 const router = useRouter();
+const { settings } = useSettings()
 const catSlug = route.params.catSlug
 const catId = route.params.catId
 const isChangeRoute = ref(false)
@@ -164,21 +164,37 @@ const pushQueryParams = () => {
 
 
 
-const slugsCat = categoryState.categories?.find(c => c.id === parseInt(catId))
-let meta
-if (query.value.searchWord) {
-  meta = {
-    title: `${query.value.searchWord} arama sonuçları`,
+const slugsCat = computed(() => {
+  return categoryState.categories?.find(c => c.id === parseInt(catId))
+})
+
+const pageTitle = computed(() => {
+  if (query.value.searchWord) {
+    return `${query.value.searchWord} arama sonuçları`
+  } else if (slugsCat.value) {
+    return `${slugsCat.value.label} fiyatları ve modelleri`
   }
-} else if (slugsCat) {
-  meta = {
-    title: `${slugsCat?.label} fiyatları ve modelleri`,
-    meta: [
-      { name: 'description', content: slugsCat?.description }
-    ],
+  return 'Beyraha'
+})
+
+const pageDescription = computed(() => {
+  if (query.value.searchWord) {
+    return `${query.value.searchWord} için ${productState.products?.total || 0} ürün bulundu`
+  } else if (slugsCat.value) {
+    return slugsCat.value.description || 'Kaliteli ürünlerimizi keşfedin'
   }
-}
-useHead(meta)
+  return ''
+})
+
+useHead({
+  title: computed(() => `${route.params.catSlug} - ${settings.value.siteName}`),
+  meta: [
+    {
+      name: 'description',
+      content: computed(() => `${route.params.catSlug} kategorisindeki ürünleri keşfedin. ${settings.value.siteDescription || 'Kaliteli tesettür giyim ürünleri'}.`)
+    }
+  ]
+})
 
 useShowElement('finishProducts', () => {
   if (!loading.value && query.value.page < productState.products.last_page) {
@@ -197,10 +213,10 @@ const breadcrumbLinks = computed(() => {
     links.push({
       label: `"${query.value.searchWord}" arama sonuçları`
     })
-  } else if (slugsCat) {
+  } else if (slugsCat.value) {
     // Kategori sayfası için
     links.push({
-      label: slugsCat.label
+      label: slugsCat.value.label
     })
   }
 

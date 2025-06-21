@@ -1,6 +1,19 @@
 <template>
   <div class="standart-section-spacing !mt-0 pb-20 md:pb-0">
-    <div class="container">
+    <!-- Yükleniyor Durumu -->
+    <div v-if="!isLoaded" class="min-h-screen flex items-center justify-center">
+      <div class="text-center">
+        <div
+          class="w-16 h-16 bg-secondary-100 dark:bg-secondary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+          <UIcon name="i-heroicons-arrow-path"
+            class="w-8 h-8 text-secondary-600 dark:text-secondary-400 animate-spin" />
+        </div>
+        <p class="text-lg font-medium text-neutral-600 dark:text-neutral-400">Ödeme sayfası yükleniyor...</p>
+      </div>
+    </div>
+
+    <!-- Ana İçerik -->
+    <div v-else class="container">
       <!-- Breadcrumb -->
       <UiCommonBreadcrumb class="mb-3 md:mb-6" :links="links" />
 
@@ -133,8 +146,8 @@
             <div class="flex flex-col">
               <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
               <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
-                formatPrice(cartState.cartTotalAmount + settingsStore.calculateShippingCost(cartState.cartTotalAmount))
-              }}</span>
+                formatPrice(cartState.cartTotalAmount + calculateShippingCost(cartState.cartTotalAmount))
+                }}</span>
             </div>
 
             <!-- Siparişi Onayla Butonu -->
@@ -242,16 +255,15 @@
 </template>
 
 <script setup>
+const authStore = useAuthStore()
+const orderState = useOrderStoreFront()
+const cartState = useCartState()
+const { settings, calculateShippingCost, siteName } = useSettings()
 
 
 useHead({
-  title: 'Ödeme - Beyraha'
+  title: computed(() => `Ödeme - ${siteName.value}`)
 })
-
-const orderState = useOrderStoreFront()
-const authStore = useAuthStore()
-const cartState = useCartState()
-const settingsStore = useSettingsStore()
 
 // Native back button handlers - TEK SATIRLAR!
 const { useBackHandler, BACK_HANDLER_PRIORITIES } = await import('~/composables/useNativeBackHandler.js')

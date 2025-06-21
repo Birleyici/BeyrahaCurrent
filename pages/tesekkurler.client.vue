@@ -187,8 +187,12 @@
 </template>
 
 <script setup>
+import { useSettings } from '~/composables/useSettings'
+
+const { siteName } = useSettings()
+
 useHead({
-  title: 'Siparişiniz alındı - Beyraha',
+  title: computed(() => `Siparişiniz alındı - ${siteName.value}`),
   meta: [
     { name: 'description', content: 'Siparişiniz başarıyla alındı. Ödeme bilgileri ve sipariş detayları.' }
   ],

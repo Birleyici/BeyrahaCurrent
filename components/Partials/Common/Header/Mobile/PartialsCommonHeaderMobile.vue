@@ -1,16 +1,16 @@
 <template>
   <div
     class="bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-700 sticky top-0 z-50 transition-colors duration-300">
-    <PartialsCommonHeaderSlideNestedMenu v-model="$uiStore.state.menuSlide" :menu="props.categories" />
-    <LazyPartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
-    <LazyPartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
+    <PartialsCommonHeaderSlideNestedMenu v-model="uiStore.menuSlide" :menu="props.categories" />
+    <LazyPartialsCommonHeaderSlideAccount v-model="uiStore.accountSlide" />
+    <LazyPartialsCommonHeaderSlideCart v-model="uiStore.cartSlide" />
 
     <!-- Ana Header -->
     <div class="container py-5">
       <div class="flex items-center justify-between">
         <!-- Sol Menü -->
         <div class="flex items-center space-x-3">
-          <button @click="$uiStore.state.menuSlide = true"
+          <button @click="uiStore.menuSlide = true"
             class="p-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200 shadow-sm">
             <UIcon name="i-heroicons-bars-3" class="w-6 h-6 text-neutral-700 dark:text-neutral-300" />
           </button>
@@ -32,13 +32,13 @@
         <!-- Sağ Menü -->
         <div class="flex items-center space-x-3">
           <!-- Hesap -->
-          <button @click="$uiStore.state.accountSlide = true"
+          <button @click="uiStore.accountSlide = true"
             class="p-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200 shadow-sm">
             <UIcon name="i-heroicons-user" class="w-6 h-6 text-neutral-700 dark:text-neutral-300" />
           </button>
 
           <!-- Sepet -->
-          <button @click="$uiStore.state.cartSlide = true"
+          <button @click="uiStore.cartSlide = true"
             class="relative p-2 rounded-lg bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200 shadow-sm">
             <UIcon name="i-heroicons-shopping-bag" class="w-6 h-6 text-neutral-700 dark:text-neutral-300" />
             <ClientOnly>
@@ -61,6 +61,9 @@
 import { computed } from 'vue';
 
 const props = defineProps(["categories", "cart"]);
+
+// UI Store
+const uiStore = useUIStore();
 
 // Dark mode composable
 const { isDark, toggleDarkMode } = useDarkMode();

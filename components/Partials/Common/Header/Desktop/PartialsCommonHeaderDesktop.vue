@@ -1,8 +1,8 @@
 <template>
   <div
     class="bg-white/95 dark:bg-neutral-900/95 backdrop-blur-md border-b border-neutral-200 dark:border-neutral-700 sticky top-0 z-50 transition-colors duration-300">
-    <LazyPartialsCommonHeaderSlideAccount v-model="$uiStore.state.accountSlide" />
-    <LazyPartialsCommonHeaderSlideCart v-model="$uiStore.state.cartSlide" />
+    <LazyPartialsCommonHeaderSlideAccount v-model="uiStore.accountSlide" />
+    <LazyPartialsCommonHeaderSlideCart v-model="uiStore.cartSlide" />
 
     <!-- Ana Header -->
     <div class="container">
@@ -36,7 +36,7 @@
           </button>
 
           <!-- Hesap -->
-          <button @click="$uiStore.state.accountSlide = true"
+          <button @click="uiStore.accountSlide = true"
             class="group flex items-center space-x-2 px-4 py-2 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200">
             <UIcon name="i-heroicons-user"
               class="w-5 h-5 text-neutral-600 dark:text-neutral-400 group-hover:text-secondary-600 dark:group-hover:text-secondary-400" />
@@ -45,7 +45,7 @@
           </button>
 
           <!-- Sepet -->
-          <button @click="$uiStore.state.cartSlide = true"
+          <button @click="uiStore.cartSlide = true"
             class="group relative flex items-center space-x-2 px-4 py-2 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-all duration-200">
             <div class="relative">
               <UIcon name="i-heroicons-shopping-bag"
@@ -84,13 +84,16 @@
       </div>
     </div>
 
-    <PartialsCommonHeaderSlideNestedMenu v-model="$uiStore.state.menuSlide" :menu="props.categories"
+    <PartialsCommonHeaderSlideNestedMenu v-model="uiStore.menuSlide" :menu="props.categories"
       :selected-category="selectedCategory" />
   </div>
 </template>
 
 <script setup>
 const props = defineProps(["categories", "cart"]);
+
+// UI Store
+const uiStore = useUIStore();
 
 // Dark mode composable
 const { isDark, toggleDarkMode } = useDarkMode();

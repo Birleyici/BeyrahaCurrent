@@ -214,6 +214,13 @@ const settingsConfig = {
             placeholder: 'Beyraha'
         },
         {
+            key: 'site_name',
+            label: 'Site Adı',
+            description: 'Web sitesinin kısa adı',
+            type: 'text',
+            placeholder: 'Beyraha'
+        },
+        {
             key: 'site_description',
             label: 'Site Açıklaması',
             description: 'Web sitesinin kısa açıklaması',
@@ -312,16 +319,12 @@ const saveSettings = async () => {
             value: String(localSettings.value[key] || '')
         }))
 
-        console.log('🔧 Gönderilecek ayarlar:', settingsToUpdate)
-
         const response = await useBaseOFetchWithAuth('settings', {
             method: 'PUT',
             body: {
                 settings: settingsToUpdate
             }
         })
-
-        console.log('📡 API Response:', response)
 
         if (response && !response.error) {
             const toast = useToast()
@@ -335,12 +338,11 @@ const saveSettings = async () => {
             // Ayarları tekrar yükle
             await fetchSettings()
         } else {
-            console.error('❌ API hatası:', response)
             throw new Error(response?.message || 'API hatası')
         }
 
     } catch (error) {
-        console.error('💥 Ayarlar kaydedilirken hata:', error)
+        console.error('Ayarlar kaydedilirken hata:', error)
         const toast = useToast()
         toast.add({
             title: 'Hata',

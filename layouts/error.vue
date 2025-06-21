@@ -2,14 +2,19 @@
   <header>
     <PartialsCommonHeader></PartialsCommonHeader>
   </header>
-  <slot/>
+  <slot />
   <footer>
     <LazyPartialsCommonFooter></LazyPartialsCommonFooter>
   </footer>
 </template>
 
 <script setup>
+import { useSettings } from '~/composables/useSettings'
+import { computed } from 'vue'
+
+const { siteName } = useSettings()
+
 useHead({
-  title: 'Hata - Sayfa bulunamadı'
+  title: computed(() => `Hata - Sayfa bulunamadı - ${siteName.value}`)
 })
 </script>

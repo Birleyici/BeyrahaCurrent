@@ -4,6 +4,7 @@ export const useCartState = defineStore('cartState', () => {
   const cart = ref([])
   const toast = useToast()
   const addToCartloading = ref(false)
+  const uiStore = useUIStore()
 
   const cartQyt = computed(() => {
     return cart.value.reduce((total, item) => total + item.qyt, 0)
@@ -67,7 +68,7 @@ export const useCartState = defineStore('cartState', () => {
     }
 
     if (openSlide) {
-      useUIStore().cartSlide = true
+      uiStore.cartSlide = true
     }
   }
 

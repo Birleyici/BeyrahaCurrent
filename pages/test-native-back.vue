@@ -127,8 +127,12 @@
 </template>
 
 <script setup>
+import { useSettings } from '~/composables/useSettings'
+
+const { siteName } = useSettings()
+
 useHead({
-    title: 'Native Back Button Test - Beyraha'
+    title: computed(() => `Native Back Button Test - ${siteName.value}`)
 })
 
 // Native back button handler

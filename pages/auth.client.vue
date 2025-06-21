@@ -67,15 +67,15 @@
 </template>
 
 <script setup>
+import { computed } from 'vue'
+
 const authStore = useAuthStore()
 const route = useRoute()
+const { siteName } = useSettings()
 
 // SEO Meta
 useHead({
-  title: 'Giriş Yap | Beyraha Tesettür Giyim',
-  meta: [
-    { name: 'description', content: 'Beyraha hesabınıza giriş yapın veya yeni hesap oluşturun. Güvenli ve hızlı alışveriş deneyimi için hemen üye olun.' }
-  ]
+  title: computed(() => `Giriş Yap - ${siteName.value}`)
 })
 
 // Redirect if already logged in

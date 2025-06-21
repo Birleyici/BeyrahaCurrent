@@ -214,12 +214,12 @@
                                     ilgili herhangi bir sorunuz olursa, lütfen bizimle iletişime geçmekten çekinmeyin.
                                 </p>
                                 <div class="flex flex-col sm:flex-row gap-4 justify-center">
-                                    <a href="tel:+905555555555"
+                                    <a :href="`tel:${settings.contactPhone}`" v-if="settings.contactPhone"
                                         class="inline-flex items-center justify-center gap-2 bg-secondary-600 hover:bg-secondary-700 dark:bg-secondary-700 dark:hover:bg-secondary-600 text-white hover:!text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
                                         <UIcon name="i-heroicons-phone" class="w-5 h-5" />
                                         <span>Bizi Arayın</span>
                                     </a>
-                                    <a href="https://wa.me/905436024821"
+                                    <a :href="`https://wa.me/${settings.whatsappNumber}`" v-if="settings.whatsappNumber"
                                         class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white hover:!text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200">
                                         <UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-5 h-5" />
                                         <span>WhatsApp</span>
@@ -235,10 +235,15 @@
 </template>
 
 <script setup>
+const { settings, siteName } = useSettings()
+
 useHead({
-    title: 'İade ve değişim şartları - Beyraha',
+    title: computed(() => `İade ve Değişim - ${siteName.value}`),
     meta: [
-        { name: 'description', content: 'Beyraha iade ve değişim şartları. Müşteri memnuniyeti odaklı iade ve değişim politikamız hakkında detaylı bilgiler.' }
-    ],
+        {
+            name: 'description',
+            content: 'Beyraha iade ve değişim koşulları. Ürün iade ve değişim işlemleri hakkında detaylı bilgi.'
+        }
+    ]
 })
 </script>

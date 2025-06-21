@@ -105,8 +105,16 @@
 </template>
 
 <script setup>
+import { useSettings } from '~/composables/useSettings'
+
+const { siteName } = useSettings()
+
+definePageMeta({
+  middleware: 'auth'
+})
+
 useHead({
-  title: 'Hesap Ayarları - Beyraha',
+  title: computed(() => `Hesap Ayarları - ${siteName.value}`)
 })
 
 const cinsiyet = ref(null);

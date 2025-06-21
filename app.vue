@@ -20,6 +20,9 @@ const nuxtApp = useNuxtApp()
 const router = useRouter()
 const cartState = useCartState()
 
+// UI Store
+const uiStore = useUIStore()
+
 // Dark mode support
 const { initDarkMode } = useDarkMode();
 
@@ -38,6 +41,6 @@ onMounted(async () => {
 });
 
 watch(router.currentRoute, () => {
-  nuxtApp.$uiStore.closeAll()
+  uiStore.closeAll()
 })
 </script>

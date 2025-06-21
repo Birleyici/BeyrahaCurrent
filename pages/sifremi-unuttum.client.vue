@@ -113,6 +113,7 @@ const authStore = useAuthStore()
 const route = useRoute()
 const remindNotification = ref(false)
 const resetNotification = ref(false)
+const { siteName } = useSettings()
 
 const form = ref({
   email: ''
@@ -199,14 +200,9 @@ const errorObject = computed(() => {
 
 // SEO Meta
 useHead({
-  title: pageTitle.value + ' | Beyraha',
+  title: computed(() => `${pageTitle.value} - ${siteName.value}`),
   meta: [
-    {
-      name: 'description',
-      content: route.query.token
-        ? 'Yeni şifrenizi oluşturun ve hesabınıza güvenli erişim sağlayın.'
-        : 'Şifrenizi mi unuttunuz? Email adresinize şifre yenileme bağlantısı gönderelim.'
-    }
+    { name: 'description', content: 'Şifrenizi mi unuttunuz? E-posta adresinizi girerek yeni şifre oluşturabilirsiniz.' }
   ]
 })
 </script>

@@ -19,7 +19,7 @@
                     <div class="flex justify-between items-center">
                         <span class="text-neutral-600 dark:text-neutral-400">Ürün toplam:</span>
                         <span class="font-medium text-neutral-900 dark:text-neutral-100">{{
-                            formatPrice(cartStore.cartTotalAmount) }}</span>
+                            formatPrice(cartState.cartTotalAmount) }}</span>
                     </div>
 
                     <!-- Kargo Ücreti -->
@@ -32,13 +32,13 @@
                     </div>
 
                     <!-- Ücretsiz Kargo Bilgisi -->
-                    <div v-if="shippingCost > 0 && remainingForFreeShipping > 0"
+                    <div v-if="shippingCost > 0 && remainingAmount > 0"
                         class="bg-secondary-50 dark:bg-secondary-900/50 border border-secondary-200 dark:border-secondary-700 rounded-lg p-3">
                         <div class="flex items-center space-x-2">
                             <UIcon name="i-heroicons-truck"
                                 class="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
                             <span class="text-sm text-secondary-700 dark:text-secondary-300">
-                                {{ formatPrice(remainingForFreeShipping) }} daha alışveriş yapın,
+                                {{ formatPrice(remainingAmount) }} daha alışveriş yapın,
                                 <span class="font-semibold">ücretsiz kargo</span> kazanın!
                             </span>
                         </div>
@@ -50,8 +50,8 @@
                             <span class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Toplam:</span>
                             <Transition name="slide-up" mode="out-in">
                                 <span class="text-xl font-bold text-secondary-600 dark:text-secondary-400"
-                                    :key="cartStore.cartTotalAmount">
-                                    {{ formatPrice(cartStore.cartTotalAmount + shippingCost) }}
+                                    :key="cartState.cartTotalAmount">
+                                    {{ formatPrice(cartState.cartTotalAmount + shippingCost) }}
                                 </span>
                             </Transition>
                         </div>
@@ -69,30 +69,27 @@
 </template>
 
 <script setup>
-const cartStore = useCartState()
-const settingsStore = useSettingsStore()
-
-// Settings'i başlangıçta yükle
-await settingsStore.fetchSettings()
+const cartState = useCartState()
+const { settings, calculateShippingCost, remainingForFreeShipping } = useSettings()
 
 const shippingCost = computed(() => {
-    return settingsStore.calculateShippingCost(cartStore.cartTotalAmount)
+    return calculateShippingCost(cartState.cartTotalAmount)
 })
 
-const remainingForFreeShipping = computed(() => {
-    return settingsStore.remainingForFreeShipping(cartStore.cartTotalAmount)
+const remainingAmount = computed(() => {
+    return remainingForFreeShipping(cartState.cartTotalAmount)
 })
 
 // Test amaçlı refresh fonksiyonu
 const refreshSettings = async () => {
     console.log('Ayarlar yenileniyor...')
-    await settingsStore.refreshSettings()
-    console.log('Yeni shipping cost:', settingsStore.settings.shippingCost)
+    await settings.refreshSettings()
+    console.log('Yeni shipping cost:', settings.shippingCost)
 }
 
 // Dev mode'da console'a log at
 if (process.dev) {
-    console.log('Current shipping cost:', settingsStore.settings.shippingCost)
+    console.log('Current shipping cost:', settings.shippingCost)
 }
 </script>
 

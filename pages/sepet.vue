@@ -48,7 +48,7 @@
                     <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
                     <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
                       formatPrice(cartState.cartTotalAmount +
-                        settingsStore.calculateShippingCost(cartState.cartTotalAmount))
+                        calculateShippingCost(cartState.cartTotalAmount))
                     }}</span>
                   </div>
 
@@ -89,20 +89,15 @@
 </template>
 
 <script setup>
+
+const { settings, siteName } = useSettings()
+
 useHead({
-  title: 'Sepet - Beyraha',
+  title: computed(() => `Sepet - ${siteName.value}`),
 })
 
 const cartState = useCartState()
-const settingsStore = useSettingsStore()
-
-// Settings'i yükle - KALDIRIYORUM: Bu gereksiz çünkü PartialsCartExtre zaten yüklüyor
-// await settingsStore.fetchSettings()
-
-// KALDIRIYORUM: Çünkü bu hesaplama PartialsCartExtre'da yapılıyor
-// const shippingCost = computed(() => {
-//   return settingsStore.calculateShippingCost(cartState.cartTotalAmount)
-// })
+const { calculateShippingCost } = useSettings()
 
 const links = [{
   label: 'Ana Sayfa',

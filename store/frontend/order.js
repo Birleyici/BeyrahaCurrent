@@ -6,9 +6,8 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
   const isOpenAddressModal = ref(false)
   const openAllAddressModal = ref(false)
   const createOrderLoading = ref(false)
-  const settingsStore = useSettingsStore()
 
-  let newAddress = ref({
+  const newAddress = ref({
     name: null,
     last_name: null,
     phone: null,
@@ -19,7 +18,16 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
     isDefault: true
   })
 
-  const copyNewAddress = toRaw({ ...newAddress.value })
+  const copyNewAddress = {
+    name: null,
+    last_name: null,
+    phone: null,
+    address: null,
+    city: null,
+    district: null,
+    email: null,
+    isDefault: true
+  }
 
   const addresses = ref([])
   const cities = ref([])
@@ -39,11 +47,6 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
   })
 
   const orders = ref([])
-
-  // Settings'i başlangıçta yükle
-  if (process.client) {
-    settingsStore.fetchSettings()
-  }
 
   const saveAddress = async (item) => {
     const response = await useBaseOFetchWithAuth('address', {
@@ -122,7 +125,8 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
     }
 
     // Kargo ücretini hesapla
-    const shippingCost = settingsStore.calculateShippingCost(cartState.cartTotalAmount)
+    const { calculateShippingCost } = await useSettings()
+    const shippingCost = calculateShippingCost(cartState.cartTotalAmount)
 
     const newOrderObj = {
       address: addresses.value[0],
