@@ -12,10 +12,10 @@
               <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">IBAN</span>
             </div>
             <p class="text-neutral-900 dark:text-neutral-100 font-mono text-base tracking-wide">
-              TR71 0001 0000 9565 6417 9850 01
+              {{ settings.bankIban || 'IBAN bilgisi yükleniyor...' }}
             </p>
           </div>
-          <button @click="copyIbanCode"
+          <button v-if="settings.bankIban" @click="copyIbanCode"
             class="ml-4 p-2 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 dark:hover:bg-neutral-500 rounded-lg transition-all duration-200"
             :class="{ 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500': copyIban }">
             <UIcon v-if="!copyIban" name="i-heroicons-clipboard-document"
@@ -36,10 +36,10 @@
               <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Hesap Sahibi</span>
             </div>
             <p class="text-neutral-900 dark:text-neutral-100 font-semibold text-base">
-              Sevgi Yılmaz
+              {{ settings.bankAccountName || 'Hesap sahibi bilgisi yükleniyor...' }}
             </p>
           </div>
-          <button @click="copyAccountName"
+          <button v-if="settings.bankAccountName" @click="copyAccountName"
             class="ml-4 p-2 bg-neutral-200 hover:bg-neutral-300 dark:bg-neutral-600 dark:hover:bg-neutral-500 rounded-lg transition-all duration-200"
             :class="{ 'bg-green-500 hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-500': copyName }">
             <UIcon v-if="!copyName" name="i-heroicons-clipboard-document"
@@ -53,12 +53,12 @@
       </div>
 
       <!-- Banka Logosu -->
-      <div class="flex items-center justify-center py-4">
+      <div v-if="settings.bankName" class="flex items-center justify-center py-4">
         <div
           class="bg-white dark:bg-neutral-700 border border-neutral-200 dark:border-neutral-600 rounded-lg p-3 shadow-sm dark:shadow-neutral-900/20">
-          <img class="h-6 w-auto"
-            src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/ff/Ziraat_Bankas%C4%B1_logo.svg/2560px-Ziraat_Bankas%C4%B1_logo.svg.png"
-            alt="Ziraat Bankası" />
+          <div class="text-center">
+            <p class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ settings.bankName }}</p>
+          </div>
         </div>
       </div>
 
@@ -83,20 +83,28 @@
 
 <script setup>
 import { ref, watch } from 'vue'
+import { useSettings } from '~/composables/useSettings'
+
+// Settings composable'ından verileri al
+const { settings } = useSettings()
 
 const copyIban = ref(false)
 const copyName = ref(false)
 
 // IBAN kopyalama işlemi
 const copyIbanCode = () => {
-  navigator.clipboard.writeText('TR71 0001 0000 9565 6417 9850 01')
-  copyIban.value = true
+  if (settings.value.bankIban) {
+    navigator.clipboard.writeText(settings.value.bankIban)
+    copyIban.value = true
+  }
 }
 
 // Hesap adı kopyalama işlemi
 const copyAccountName = () => {
-  navigator.clipboard.writeText('Sevgi Yılmaz')
-  copyName.value = true
+  if (settings.value.bankAccountName) {
+    navigator.clipboard.writeText(settings.value.bankAccountName)
+    copyName.value = true
+  }
 }
 
 watch(copyIban, () => {

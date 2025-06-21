@@ -145,12 +145,12 @@
                       Sipariş sürecinizle ilgili sorularınız için bizimle iletişime geçin
                     </p>
                     <div class="flex flex-col gap-2">
-                      <a href="tel:+905436024821"
+                      <a v-if="settings.contactPhone" :href="`tel:${settings.contactPhone}`"
                         class="inline-flex items-center justify-center gap-2 bg-secondary-600 hover:bg-secondary-700 dark:bg-secondary-700 dark:hover:bg-secondary-600 text-white hover:!text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                         <UIcon name="i-heroicons-phone" class="w-4 h-4" />
                         <span>Bizi Arayın</span>
                       </a>
-                      <a href="https://wa.me/905436024821"
+                      <a v-if="settings.whatsappNumber" :href="`https://wa.me/${settings.whatsappNumber}`"
                         class="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 dark:bg-green-700 dark:hover:bg-green-600 text-white hover:!text-white px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200">
                         <UIcon name="i-heroicons-chat-bubble-left-ellipsis" class="w-4 h-4" />
                         <span>WhatsApp</span>
@@ -189,7 +189,7 @@
 <script setup>
 import { useSettings } from '~/composables/useSettings'
 
-const { siteName } = useSettings()
+const { siteName, settings } = useSettings()
 
 useHead({
   title: computed(() => `Siparişiniz alındı - ${siteName.value}`),

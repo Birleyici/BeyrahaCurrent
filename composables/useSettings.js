@@ -27,6 +27,15 @@ export const useSettings = () => {
     remainingForFreeShipping,
     // Kolaylık için computed değerler
     siteName: computed(() => settings.value.siteName || 'Beyraha'),
-    siteTitle: computed(() => settings.value.siteTitle || 'Beyraha')
+    siteTitle: computed(() => settings.value.siteTitle || 'Beyraha'),
+    siteDescription: computed(() => settings.value.siteDescription || ''),
+    contactPhone: computed(() => settings.value.contactPhone || ''),
+    contactEmail: computed(() => settings.value.contactEmail || ''),
+    whatsappNumber: computed(() => settings.value.whatsappNumber || ''),
+    bankName: computed(() => settings.value.bankName || ''),
+    bankAccountName: computed(() => settings.value.bankAccountName || ''),
+    bankIban: computed(() => settings.value.bankIban || ''),
+    freeShippingLimit: computed(() => settings.value.freeShippingLimit || null),
+    shippingCost: computed(() => settings.value.shippingCost || null)
   }
 } 

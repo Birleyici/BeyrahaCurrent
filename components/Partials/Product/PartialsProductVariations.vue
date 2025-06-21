@@ -190,12 +190,16 @@
 </template>
 
 <script setup>
+import { useSettings } from '~/composables/useSettings'
+
 const props = defineProps(["attrsAndVarsState", "productState"]);
 const cartState = useCartState()
 const qyt = ref(1)
 const currentRoute = useRouter().currentRoute.value
 const toast = useToast()
 
+// Settings composable'ından verileri al
+const { settings } = useSettings()
 
 const {
   isActive,
@@ -485,6 +489,9 @@ const orderViaWhatsApp = () => {
     colorText = `\n🎨 Renk: ${colorName}`;
   }
 
+  // WhatsApp numarası - API'den gelen veri
+  const whatsappNumber = settings.value.whatsappNumber || '905436024821'; // Fallback numara
+
   // WhatsApp mesajını oluştur
   const message = `🛍️ *Sipariş Talebi*
 
@@ -496,9 +503,6 @@ const orderViaWhatsApp = () => {
 🌐 *Ürün Linki:* ${window.location.href}
 
 Merhaba! Yukarıdaki ürün için sipariş vermek istiyorum. Detayları inceleyip bana geri dönüş yapabilir misiniz?`;
-
-  // WhatsApp numarası (bu değeri kendi numaranızla değiştirin)
-  const whatsappNumber = '905436024821'; // Gerçek numara
 
   // WhatsApp URL'sini oluştur
   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;

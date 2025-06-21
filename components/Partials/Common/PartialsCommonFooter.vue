@@ -59,7 +59,7 @@
             <div class="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary-500 rounded-full"></div>
           </h3>
           <div class="space-y-3">
-            <a href="https://wa.me/05436024821" target="_blank"
+            <a v-if="settings.whatsappNumber" :href="`https://wa.me/${settings.whatsappNumber}`" target="_blank"
               class="flex items-center space-x-3 text-neutral-300 hover:text-white hover:translate-x-1 transition-all duration-200 group">
               <div
                 class="flex-shrink-0 w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center group-hover:bg-green-500 transition-colors duration-200">
@@ -67,10 +67,10 @@
               </div>
               <div>
                 <div class="font-medium">WhatsApp Destek</div>
-                <div class="text-sm text-neutral-400">0543 602 48 21</div>
+                <div class="text-sm text-neutral-400">{{ formatPhoneNumber(settings.whatsappNumber) }}</div>
               </div>
             </a>
-            <a href="mailto:destek@beyraha.com"
+            <a v-if="settings.contactEmail" :href="`mailto:${settings.contactEmail}`"
               class="flex items-center space-x-3 text-neutral-300 hover:text-white hover:translate-x-1 transition-all duration-200 group">
               <div
                 class="flex-shrink-0 w-10 h-10 bg-secondary-600 rounded-lg flex items-center justify-center group-hover:bg-secondary-500 transition-colors duration-200">
@@ -78,7 +78,7 @@
               </div>
               <div>
                 <div class="font-medium">E-posta</div>
-                <div class="text-sm text-neutral-400">destek@beyraha.com</div>
+                <div class="text-sm text-neutral-400">{{ settings.contactEmail }}</div>
               </div>
             </a>
           </div>
@@ -124,7 +124,8 @@
         <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <div class="text-center md:text-left">
             <p class="text-neutral-400 text-sm">
-              © 2017 - 2024 <span class="text-white font-medium">Beyraha</span>. Tüm hakları saklıdır.
+              © 2017 - 2024 <span class="text-white font-medium">{{ settings.siteName || 'Beyraha' }}</span>. Tüm
+              hakları saklıdır.
             </p>
           </div>
           <div class="flex items-center space-x-6">
@@ -154,9 +155,14 @@
 </template>
 
 <script setup>
+import { useSettings } from '~/composables/useSettings'
+
 // PWA Store
 const pwaStore = usePwaStore()
 const isInstalling = ref(false)
+
+// Settings composable'ından verileri al
+const { settings } = useSettings()
 
 // PWA'yı yükle
 const installPwa = async () => {
@@ -172,5 +178,21 @@ const installPwa = async () => {
   } finally {
     isInstalling.value = false
   }
+}
+
+// Telefon numarasını formatla
+const formatPhoneNumber = (phoneNumber) => {
+  if (!phoneNumber) return ''
+
+  // Eğer 90 ile başlıyorsa, onu +90 yapıp formatla
+  if (phoneNumber.startsWith('90')) {
+    const cleaned = phoneNumber.replace(/\D/g, '')
+    if (cleaned.length === 12) {
+      return `+${cleaned.slice(0, 2)} ${cleaned.slice(2, 5)} ${cleaned.slice(5, 8)} ${cleaned.slice(8, 10)} ${cleaned.slice(10)}`
+    }
+  }
+
+  // Diğer durumlarda olduğu gibi döndür
+  return phoneNumber
 }
 </script>
