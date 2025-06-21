@@ -6,6 +6,7 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
   const isOpenAddressModal = ref(false)
   const openAllAddressModal = ref(false)
   const createOrderLoading = ref(false)
+  const settingsStore = useSettingsStore()
 
   let newAddress = ref({
     name: null,
@@ -38,6 +39,11 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
   })
 
   const orders = ref([])
+
+  // Settings'i başlangıçta yükle
+  if (process.client) {
+    settingsStore.fetchSettings()
+  }
 
   const saveAddress = async (item) => {
     const response = await useBaseOFetchWithAuth('address', {
@@ -115,9 +121,13 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
       return
     }
 
+    // Kargo ücretini hesapla
+    const shippingCost = settingsStore.calculateShippingCost(cartState.cartTotalAmount)
+
     const newOrderObj = {
       address: addresses.value[0],
-      cart: cartState.cart
+      cart: cartState.cart,
+      shipping_cost: shippingCost // Kargo ücretini backend'e gönder
     }
 
     createOrderLoading.value = true

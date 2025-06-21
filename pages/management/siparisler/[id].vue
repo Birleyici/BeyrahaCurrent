@@ -144,14 +144,19 @@
 
             <div class="flex justify-between items-center py-2 border-b border-neutral-200 dark:border-neutral-700">
               <span class="text-neutral-600 dark:text-neutral-400">Kargo:</span>
-              <span class="font-medium text-green-600 dark:text-green-400">Ücretsiz</span>
+              <span class="font-medium"
+                :class="orderState.vendorOrder.parent_order?.shipping_cost > 0 ? 'text-neutral-900 dark:text-neutral-100' : 'text-green-600 dark:text-green-400'">
+                {{ orderState.vendorOrder.parent_order?.shipping_cost > 0 ?
+                  formatPrice(orderState.vendorOrder.parent_order.shipping_cost) : 'Ücretsiz' }}
+              </span>
             </div>
 
             <div
               class="flex justify-between items-center py-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg px-4">
               <span class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Genel Toplam:</span>
               <span class="text-xl font-bold text-secondary-600 dark:text-secondary-400">
-                {{ formatPrice(orderState.vendorOrder.subtotal) }}
+                {{ formatPrice((orderState.vendorOrder.parent_order?.total || 0) +
+                  (orderState.vendorOrder.parent_order?.shipping_cost || 0)) }}
               </span>
             </div>
           </div>

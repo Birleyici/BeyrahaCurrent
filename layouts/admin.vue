@@ -76,6 +76,15 @@
               Sistem
             </h3>
 
+            <NuxtLink to="/management/ayarlar"
+              class="flex items-center px-4 py-3.5 text-neutral-700 dark:text-neutral-200 rounded-xl hover:bg-primary-50 dark:hover:bg-neutral-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group touch-manipulation"
+              :class="{ 'bg-primary-50 dark:bg-neutral-700 text-primary-600 dark:text-primary-400': $route.path === '/management/ayarlar' }"
+              @click="closeMobileSidebar">
+              <UIcon name="i-heroicons-cog-6-tooth"
+                class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span class="font-medium">Ayarlar</span>
+            </NuxtLink>
+
             <button @click="toggleDarkMode"
               class="w-full flex items-center px-4 py-3 text-neutral-700 dark:text-neutral-200 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200 group touch-manipulation">
               <UIcon :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'"

@@ -133,8 +133,7 @@
             <div class="flex flex-col">
               <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
               <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
-                formatPrice(cartState.cartTotalAmount
-                  + shippingCost)
+                formatPrice(cartState.cartTotalAmount + settingsStore.calculateShippingCost(cartState.cartTotalAmount))
               }}</span>
             </div>
 
@@ -252,15 +251,12 @@ useHead({
 const orderState = useOrderStoreFront()
 const authStore = useAuthStore()
 const cartState = useCartState()
+const settingsStore = useSettingsStore()
 
 // Native back button handlers - TEK SATIRLAR!
 const { useBackHandler, BACK_HANDLER_PRIORITIES } = await import('~/composables/useNativeBackHandler.js')
 useBackHandler(toRef(orderState, 'isOpenAddressModal'), BACK_HANDLER_PRIORITIES.MODAL)
 useBackHandler(toRef(orderState, 'openAllAddressModal'), BACK_HANDLER_PRIORITIES.MODAL)
-
-const shippingCost = computed(() => {
-  return cartState.cartTotalAmount > 1000 ? 0 : 60
-})
 
 const links = [{
   label: 'Ana sayfa',

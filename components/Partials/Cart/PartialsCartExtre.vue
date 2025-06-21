@@ -32,13 +32,13 @@
                     </div>
 
                     <!-- Ücretsiz Kargo Bilgisi -->
-                    <div v-if="shippingCost > 0 && (1000 - cartStore.cartTotalAmount) > 0"
+                    <div v-if="shippingCost > 0 && remainingForFreeShipping > 0"
                         class="bg-secondary-50 dark:bg-secondary-900/50 border border-secondary-200 dark:border-secondary-700 rounded-lg p-3">
                         <div class="flex items-center space-x-2">
                             <UIcon name="i-heroicons-truck"
                                 class="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
                             <span class="text-sm text-secondary-700 dark:text-secondary-300">
-                                {{ formatPrice(1000 - cartStore.cartTotalAmount) }} daha alışveriş yapın,
+                                {{ formatPrice(remainingForFreeShipping) }} daha alışveriş yapın,
                                 <span class="font-semibold">ücretsiz kargo</span> kazanın!
                             </span>
                         </div>
@@ -70,9 +70,30 @@
 
 <script setup>
 const cartStore = useCartState()
+const settingsStore = useSettingsStore()
+
+// Settings'i başlangıçta yükle
+await settingsStore.fetchSettings()
+
 const shippingCost = computed(() => {
-    return cartStore.cartTotalAmount > 1000 ? 0 : 60
+    return settingsStore.calculateShippingCost(cartStore.cartTotalAmount)
 })
+
+const remainingForFreeShipping = computed(() => {
+    return settingsStore.remainingForFreeShipping(cartStore.cartTotalAmount)
+})
+
+// Test amaçlı refresh fonksiyonu
+const refreshSettings = async () => {
+    console.log('Ayarlar yenileniyor...')
+    await settingsStore.refreshSettings()
+    console.log('Yeni shipping cost:', settingsStore.settings.shippingCost)
+}
+
+// Dev mode'da console'a log at
+if (process.dev) {
+    console.log('Current shipping cost:', settingsStore.settings.shippingCost)
+}
 </script>
 
 <style scoped>
