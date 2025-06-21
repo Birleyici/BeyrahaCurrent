@@ -231,24 +231,34 @@
                     <!-- Kart İçerik -->
                     <div class="p-4">
                         <div class="flex items-center justify-between">
-                            <!-- Durum Badges -->
+                            <!-- Durum Badge -->
                             <div class="flex flex-wrap gap-2">
                                 <UBadge :ui="{ rounded: 'rounded-full' }"
                                     :color="orderState.statuses[order.status].color">
                                     {{ orderState.statuses[order.status].text }}
                                 </UBadge>
-                                <UBadge :ui="{ rounded: 'rounded-full' }" color="secondary" v-if="order.shipping_code">
-                                    {{ order.shipping_code }}
-                                </UBadge>
                             </div>
 
                             <!-- Aksiyonlar -->
-                            <div class="flex space-x-2">
-                                <UButton @click="deleteHandling(order.id)" icon="i-heroicons-trash" size="sm"
-                                    color="red" variant="soft" />
+                            <div class="flex items-center space-x-2">
+                                <!-- Sipariş Detayları -->
+                                <UButton :to="'/management/siparisler/' + order.id" icon="i-heroicons-eye" size="sm"
+                                    color="blue" variant="soft" :ui="{ rounded: 'rounded-full' }" />
+
+                                <!-- Kargo Kodu -->
+                                <UButton v-if="order.shipping_code" @click="showShippingCodeModal(order.shipping_code)"
+                                    icon="i-heroicons-truck" size="sm" color="green" variant="soft"
+                                    :ui="{ rounded: 'rounded-full' }" />
+
+                                <!-- Kargo Kodu Al -->
                                 <UButton v-if="order.status == 'processing'" icon="i-heroicons-qr-code"
                                     color="secondary" variant="soft" :loading="order.shippingLoading"
-                                    @click="orderState.getShippingCode(order)" size="sm" />
+                                    @click="orderState.getShippingCode(order)" size="sm"
+                                    :ui="{ rounded: 'rounded-full' }" />
+
+                                <!-- Sil -->
+                                <UButton @click="deleteHandling(order.id)" icon="i-heroicons-trash" size="sm"
+                                    color="red" variant="soft" :ui="{ rounded: 'rounded-full' }" />
                             </div>
                         </div>
                     </div>
@@ -289,6 +299,56 @@
             </div>
         </div>
     </div>
+
+    <!-- Kargo Kodu Modal -->
+    <UModal v-model="shippingCodeModalOpen" :ui="{ width: 'w-full sm:max-w-md' }">
+        <UCard :ui="{
+            ring: '',
+            divide: 'divide-y divide-gray-100 dark:divide-gray-800',
+            header: { padding: 'px-4 py-3' },
+            body: { padding: 'px-4 py-3' },
+            footer: { padding: 'px-4 py-3' }
+        }">
+            <template #header>
+                <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                        Kargo Referans Kodu
+                    </h3>
+                    <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+                        @click="shippingCodeModalOpen = false" />
+                </div>
+            </template>
+
+            <div class="space-y-4">
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <UIcon name="i-heroicons-truck" class="w-8 h-8 text-green-600 dark:text-green-400" />
+                    </div>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                        Kargo referans kodunuz:
+                    </p>
+                    <div
+                        class="bg-gray-50 dark:bg-gray-800 rounded-lg p-4 border-2 border-dashed border-gray-200 dark:border-gray-700">
+                        <p class="text-xl font-bold text-gray-900 dark:text-white font-mono tracking-wider">
+                            {{ selectedShippingCode }}
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <template #footer>
+                <div class="flex justify-end space-x-2">
+                    <UButton color="gray" variant="outline" @click="shippingCodeModalOpen = false">
+                        Kapat
+                    </UButton>
+                    <UButton color="primary" @click="copyShippingCode" icon="i-heroicons-clipboard-document">
+                        Kopyala
+                    </UButton>
+                </div>
+            </template>
+        </UCard>
+    </UModal>
 </template>
 
 <script setup>
@@ -299,6 +359,11 @@ definePageMeta({
 
 const orderState = useOrderManagementStore();
 const route = useRoute()
+const toast = useToast()
+
+// Modal state
+const shippingCodeModalOpen = ref(false)
+const selectedShippingCode = ref('')
 
 const currentPage = computed({
     get: () => orderState.pagination.current_page,
@@ -326,6 +391,30 @@ watch(() => route.query, async (newQuery, oldQuery) => {
         await orderState.fetchVendorOrders(page, false)
     }
 }, { deep: true })
+
+// Modal fonksiyonları
+const showShippingCodeModal = (shippingCode) => {
+    selectedShippingCode.value = shippingCode
+    shippingCodeModalOpen.value = true
+}
+
+const copyShippingCode = async () => {
+    try {
+        await navigator.clipboard.writeText(selectedShippingCode.value)
+        toast.add({
+            title: 'Referans kodu kopyalandı!',
+            icon: 'i-heroicons-check-badge',
+            color: 'green'
+        })
+        shippingCodeModalOpen.value = false
+    } catch (error) {
+        toast.add({
+            title: 'Kopyalama başarısız!',
+            color: 'red',
+            icon: 'i-heroicons-exclamation-triangle'
+        })
+    }
+}
 
 async function deleteHandling(subOrderId) {
     if (await useConfirmation("İşlem Onayı", "Siparişi silmek istediğinize emin misiniz?")) {
