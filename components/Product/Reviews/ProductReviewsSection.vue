@@ -38,9 +38,35 @@
                     <p class="text-neutral-600 dark:text-neutral-400 mb-6">
                         Bu ürün için ilk yorumu siz yazın!
                     </p>
+
+                    <!-- Authenticated User -->
                     <UButton v-if="canWriteReview" @click="showReviewForm = true" color="secondary" variant="solid">
                         İlk Yorumu Yaz
                     </UButton>
+
+                    <!-- Unauthenticated User -->
+                    <div v-else-if="!isAuthenticated" class="space-y-4">
+                        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                            Yorum yazabilmek için giriş yapmanız gerekiyor
+                        </p>
+                        <div class="flex items-center justify-center gap-4">
+                            <UButton @click="showAuthModal = true" color="secondary" variant="solid">
+                                <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-4 h-4 mr-2" />
+                                Giriş Yap
+                            </UButton>
+
+                        </div>
+                    </div>
+
+                    <!-- Authenticated but can't review -->
+                    <div v-else class="space-y-2">
+                        <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                            Bu ürüne yorum yapamazsınız
+                        </p>
+                        <p class="text-xs text-neutral-400 dark:text-neutral-500">
+                            Sadece satın aldığınız ürünlere yorum yapabilirsiniz
+                        </p>
+                    </div>
                 </div>
 
                 <!-- Loading -->
@@ -67,6 +93,9 @@
 
         <!-- Review Form Modal -->
         <ProductReviewsForm v-model:show="showReviewForm" :product="product" @submitted="handleReviewSubmitted" />
+
+        <!-- Auth Modal -->
+        <PartialsModalAuthModal v-model:show="showAuthModal" @auth-success="handleAuthSuccess" />
     </div>
 </template>
 
@@ -109,6 +138,7 @@ const {
 
 // Local state
 const showReviewForm = ref(false)
+const showAuthModal = ref(false)
 const canUserReview = ref(false)
 
 // Computed
@@ -189,6 +219,18 @@ const handleReviewSubmitted = async () => {
     toast.add({
         title: 'Yorumunuz gönderildi',
         description: 'Moderasyon sonrası yayınlanacaktır',
+        color: 'green',
+        icon: 'i-heroicons-check-circle'
+    })
+}
+
+const handleAuthSuccess = async () => {
+    // Auth başarılı olduktan sonra can review check yap
+    canUserReview.value = await checkCanUserReview(props.product.id)
+
+    toast.add({
+        title: 'Giriş başarılı!',
+        description: 'Artık yorum yazabilirsiniz',
         color: 'green',
         icon: 'i-heroicons-check-circle'
     })

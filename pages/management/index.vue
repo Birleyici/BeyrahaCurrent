@@ -108,7 +108,7 @@
         <!-- Quick Actions -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
             <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">Hızlı İşlemler</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
                 <NuxtLink to="/management/urunler/yeni"
                     class="flex items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 group">
                     <div
@@ -142,6 +142,18 @@
                     <div>
                         <h3 class="font-semibold text-gray-900 dark:text-white">Siparişler</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400">Sipariş takibi</p>
+                    </div>
+                </NuxtLink>
+
+                <NuxtLink to="/management/yorumlar"
+                    class="flex items-center p-4 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg hover:bg-secondary-100 dark:hover:bg-secondary-900/30 transition-colors duration-200 group">
+                    <div
+                        class="p-2 bg-secondary-600 rounded-lg mr-4 group-hover:scale-110 transition-transform duration-200">
+                        <Icon name="mdi:comment-multiple" class="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-gray-900 dark:text-white">Yorum Yönetimi</h3>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Yorumları incele</p>
                     </div>
                 </NuxtLink>
 

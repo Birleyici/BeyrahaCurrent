@@ -207,6 +207,9 @@ const props = defineProps({
   }
 })
 
+// Emit tanımlamaları
+const emit = defineEmits(['login-success', 'register-success'])
+
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
 
@@ -243,17 +246,29 @@ type RegisterSchema = InferType<typeof schemaRegister>;
 // Form handlers
 async function onLogin(event: FormSubmitEvent<LoginSchema>) {
   const response = await authStore.login()
-  if (response && props.redirect) {
-    const callback = router.currentRoute.value.query.callback
-    navigateTo(typeof callback === 'string' ? callback : '/')
+  if (response) {
+    // Emit success event
+    emit('login-success')
+
+    // Redirect sadece props.redirect true ise
+    if (props.redirect) {
+      const callback = router.currentRoute.value.query.callback
+      navigateTo(typeof callback === 'string' ? callback : '/')
+    }
   }
 }
 
 async function onRegister(event: FormSubmitEvent<RegisterSchema>) {
   const response = await authStore.registerUser()
-  if (response && props.redirect) {
-    const callback = router.currentRoute.value.query.callback
-    navigateTo(typeof callback === 'string' ? callback : '/')
+  if (response) {
+    // Emit success event
+    emit('register-success')
+
+    // Redirect sadece props.redirect true ise
+    if (props.redirect) {
+      const callback = router.currentRoute.value.query.callback
+      navigateTo(typeof callback === 'string' ? callback : '/')
+    }
   }
 }
 </script>

@@ -23,12 +23,7 @@
                     </div>
                 </div>
 
-                <p class="text-lg text-neutral-700 dark:text-neutral-300">
-                    Müşteri memnuniyeti:
-                    <span class="font-semibold text-success-600 dark:text-success-400">
-                        {{ satisfactionPercentage }}%
-                    </span>
-                </p>
+
             </div>
 
             <!-- Rating Distribution -->
