@@ -43,21 +43,71 @@ export const useAttributes = () => {
         }
     }
 
-    const addTerm = (term) => {
-        if (
-            term.termWord &&
-            term.termWord.length <= 25 &&
-            !term.product_attribute_terms.some((t) => t.term_name === term.termWord)
-        ) {
-            term.product_attribute_terms.push({ term_name: term.termWord, term_images: [] });
+    const addTerm = async (attr) => {
+        if (!attr.termWord || attr.termWord.length > 25) {
+            toast.add({
+                title: 'Geçersiz terim!',
+                description: 'Terim adı 1-25 karakter arasında olmalıdır.',
+                color: 'red',
+            })
+            return;
+        }
+
+        // Aynı isimde terim var mı kontrol et
+        if (attr.product_attribute_terms.some((t) => t.term_name === attr.termWord)) {
+            toast.add({
+                title: 'Bu terim zaten var!',
+                description: `"${attr.termWord}" terimi daha önce eklenmiş.`,
+                color: 'orange',
+            })
+            return;
+        }
+
+        // Eğer ürün ID'si varsa backend'e kaydet
+        if (productState.product?.id) {
+            try {
+                const response = await useBaseOFetchWithAuth(
+                    `products/${productState.product.id}/attributes/${attr.attribute_id}/terms`,
+                    {
+                        method: 'POST',
+                        body: {
+                            term_name: attr.termWord
+                        }
+                    }
+                );
+
+                // Backend'den dönen terim bilgisini kullan
+                attr.product_attribute_terms.push(response.term);
+                
+                toast.add({
+                    title: 'Terim eklendi!',
+                    description: `"${attr.termWord}" terimi başarıyla eklendi ve kaydedildi.`,
+                    color: 'green',
+                })
+
+                attr.termWord = "";
+            } catch (error) {
+                console.error('Terim ekleme hatası:', error);
+                toast.add({
+                    title: 'Hata!',
+                    description: 'Terim eklenirken bir hata oluştu.',
+                    color: 'red',
+                })
+            }
+        } else {
+            // Ürün henüz kaydedilmemişse sadece frontend'e ekle (eski davranış)
+            attr.product_attribute_terms.push({ 
+                term_name: attr.termWord, 
+                term_images: [] 
+            });
             
             toast.add({
                 title: 'Terim eklendi!',
-                description: `"${term.termWord}" terimi başarıyla eklendi.`,
+                description: `"${attr.termWord}" terimi başarıyla eklendi.`,
                 color: 'green',
             })
 
-            term.termWord = "";
+            attr.termWord = "";
         }
     };
 

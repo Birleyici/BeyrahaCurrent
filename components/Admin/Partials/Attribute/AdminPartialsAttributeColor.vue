@@ -172,7 +172,7 @@
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
             {{ selectedTerm?.term_name }} için Görsel Seç
           </h3>
-          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark" @click="isMediaModalOpen = false" />
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark" @click="closeModal" />
         </div>
 
         <!-- Modal Content -->
@@ -183,7 +183,7 @@
         <!-- Modal Footer -->
         <div
           class="flex justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky bottom-0 z-10">
-          <UButton color="gray" variant="ghost" @click="isMediaModalOpen = false">
+          <UButton color="gray" variant="ghost" @click="closeModal">
             İptal
           </UButton>
           <UButton color="orange" @click="assignImageToTerm" :disabled="!selectedImages.length">
@@ -384,6 +384,46 @@ const lightenColor = (color, percent) => {
 
 // Media selection methods
 const openImageSelector = (term) => {
+  console.log('openImageSelector çağrıldı:', {
+    term: term,
+    termId: term?.id,
+    termName: term?.term_name
+  })
+
+  if (!term) {
+    console.error('Term parametresi boş!')
+    try {
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Renk terimi bulunamadı',
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
+    } catch (toastError) {
+      console.log('Toast hatası:', toastError)
+    }
+    return
+  }
+
+  if (!term.id) {
+    console.error('Term ID boş!', term)
+    try {
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Renk terimi ID\'si bulunamadı',
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
+    } catch (toastError) {
+      console.log('Toast hatası:', toastError)
+    }
+    return
+  }
+
   selectedTerm.value = term
 
   // Mevcut görselleri selectedImages'a yükle - hem image hem term_images formatını destekle
@@ -403,18 +443,96 @@ const openImageSelector = (term) => {
 
   console.log('Modal açılıyor:', {
     term: term.term_name,
-    currentImages: selectedImages.value
+    termId: term.id,
+    currentImages: selectedImages.value,
+    selectedTerm: selectedTerm.value
   })
 
   isMediaModalOpen.value = true
 }
 
 const assignImageToTerm = async () => {
-  if (!selectedTerm.value || !selectedImages.value.length) return
+  // Daha detaylı kontroller ekle
+  console.log('assignImageToTerm çağrıldı:', {
+    selectedTerm: selectedTerm.value,
+    selectedImages: selectedImages.value,
+    termId: selectedTerm.value?.id || selectedTerm.value?.product_attribute_term_id,
+    imageId: selectedImages.value?.[0]?.id
+  })
+
+  if (!selectedTerm.value) {
+    console.error('selectedTerm boş!')
+    try {
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Seçili renk terimi bulunamadı',
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
+    } catch (toastError) {
+      console.log('Toast hatası:', toastError)
+    }
+    return
+  }
+
+  // ID'yi hem id hem de product_attribute_term_id alanlarından kontrol et
+  const termId = selectedTerm.value.id || selectedTerm.value.product_attribute_term_id
+  if (!termId) {
+    console.error('selectedTerm ID boş!', selectedTerm.value)
+    try {
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Renk terimi ID\'si bulunamadı',
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
+    } catch (toastError) {
+      console.log('Toast hatası:', toastError)
+    }
+    return
+  }
+
+  if (!selectedImages.value?.length) {
+    console.error('selectedImages boş!')
+    try {
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Seçili görsel bulunamadı',
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
+    } catch (toastError) {
+      console.log('Toast hatası:', toastError)
+    }
+    return
+  }
+
+  if (!selectedImages.value[0]?.id) {
+    console.error('selectedImages[0].id boş!', selectedImages.value[0])
+    try {
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Görsel ID\'si bulunamadı',
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
+    } catch (toastError) {
+      console.log('Toast hatası:', toastError)
+    }
+    return
+  }
 
   try {
-    // API call to assign image to term
-    const response = await useBaseOFetchWithAuth(`product-attribute-terms/${selectedTerm.value.id}/image`, {
+    // Yeni API endpoint'ini kullan
+    const response = await useBaseOFetchWithAuth(`product-attribute-terms/${termId}/image`, {
       method: 'POST',
       body: {
         image_id: selectedImages.value[0].id
@@ -440,14 +558,31 @@ const assignImageToTerm = async () => {
       })
 
       // Close modal and show success message
-      isMediaModalOpen.value = false
+      closeModal()
 
       try {
-        useNuxtApp().$toast.add({
-          title: 'Görsel başarıyla atandı!',
-          color: 'green',
-          icon: 'i-heroicons-check'
-        })
+        const nuxtApp = useNuxtApp()
+        if (nuxtApp && nuxtApp.$toast) {
+          nuxtApp.$toast.add({
+            title: 'Görsel başarıyla atandı!',
+            color: 'green',
+            icon: 'i-heroicons-check'
+          })
+        }
+      } catch (toastError) {
+        console.log('Toast hatası:', toastError)
+      }
+    } else {
+      console.error('API response error:', response.error)
+      try {
+        const nuxtApp = useNuxtApp()
+        if (nuxtApp && nuxtApp.$toast) {
+          nuxtApp.$toast.add({
+            title: 'API hatası: ' + (response.error.message || 'Bilinmeyen hata'),
+            color: 'red',
+            icon: 'i-heroicons-x-mark'
+          })
+        }
       } catch (toastError) {
         console.log('Toast hatası:', toastError)
       }
@@ -456,11 +591,14 @@ const assignImageToTerm = async () => {
     console.error('Görsel atama hatası:', error)
 
     try {
-      useNuxtApp().$toast.add({
-        title: 'Görsel atanırken hata oluştu',
-        color: 'red',
-        icon: 'i-heroicons-x-mark'
-      })
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Görsel atanırken hata oluştu: ' + (error.message || 'Bilinmeyen hata'),
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
     } catch (toastError) {
       console.log('Toast hatası:', toastError)
     }
@@ -469,8 +607,28 @@ const assignImageToTerm = async () => {
 
 const removeTermImage = async (term) => {
   try {
-    // API call to remove image from term
-    const response = await useBaseOFetchWithAuth(`product-attribute-terms/${term.id}/image`, {
+    // ID'yi hem id hem de product_attribute_term_id alanlarından kontrol et
+    const termId = term.id || term.product_attribute_term_id
+
+    if (!termId) {
+      console.error('Term ID bulunamadı:', term)
+      try {
+        const nuxtApp = useNuxtApp()
+        if (nuxtApp && nuxtApp.$toast) {
+          nuxtApp.$toast.add({
+            title: 'Term ID bulunamadı',
+            color: 'red',
+            icon: 'i-heroicons-x-mark'
+          })
+        }
+      } catch (toastError) {
+        console.log('Toast hatası:', toastError)
+      }
+      return
+    }
+
+    // Yeni API endpoint'ini kullan
+    const response = await useBaseOFetchWithAuth(`product-attribute-terms/${termId}/image`, {
       method: 'DELETE'
     })
 
@@ -482,11 +640,14 @@ const removeTermImage = async (term) => {
       console.log('Renk terimi görseli kaldırıldı:', term.term_name)
 
       try {
-        useNuxtApp().$toast.add({
-          title: 'Görsel kaldırıldı',
-          color: 'orange',
-          icon: 'i-heroicons-trash'
-        })
+        const nuxtApp = useNuxtApp()
+        if (nuxtApp && nuxtApp.$toast) {
+          nuxtApp.$toast.add({
+            title: 'Görsel kaldırıldı',
+            color: 'orange',
+            icon: 'i-heroicons-trash'
+          })
+        }
       } catch (toastError) {
         console.log('Toast hatası:', toastError)
       }
@@ -495,11 +656,14 @@ const removeTermImage = async (term) => {
     console.error('Görsel kaldırma hatası:', error)
 
     try {
-      useNuxtApp().$toast.add({
-        title: 'Görsel kaldırılırken hata oluştu',
-        color: 'red',
-        icon: 'i-heroicons-x-mark'
-      })
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Görsel kaldırılırken hata oluştu',
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
     } catch (toastError) {
       console.log('Toast hatası:', toastError)
     }
@@ -580,5 +744,10 @@ const confirmDeleteAttr = async () => {
   } finally {
     hideDeleteAttrModal()
   }
+}
+
+const closeModal = () => {
+  isMediaModalOpen.value = false
+  resetModalState()
 }
 </script>
