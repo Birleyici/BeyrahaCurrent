@@ -1,22 +1,22 @@
 <template>
   <div class="bg-neutral-50 dark:bg-neutral-900 min-h-screen transition-colors duration-300">
+    <!-- Breadcrumb -->
+    <UiCommonBreadcrumb :links="breadcrumbLinks" />
+
     <!-- Ürün Detay -->
-    <section class="page-content-spacing !mt-0 !pt-0">
-      <div class="container">
-        <!-- Breadcrumb -->
-        <UiCommonBreadcrumb class="mb-3 md:mb-8" :links="breadcrumbLinks" />
-
-        <div class="lg:grid lg:grid-cols-12 lg:gap-12 space-y-8 lg:space-y-0">
-          <!-- Ürün Görselleri -->
-          <div class="col-span-5" v-if="$mainState.isLoaded">
-            <div class="sticky top-24">
-              <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages" />
-            </div>
+    <section class="page-content-spacing !mt-0 !pt-0 !px-0 md:!px-x-mobile lg:!px-x-desktop">
+      <div class="lg:grid lg:grid-cols-12 lg:gap-12 space-y-8 lg:space-y-0">
+        <!-- Ürün Görselleri - Mobilde boşluksuz -->
+        <div class="col-span-5 -mx-4 md:mx-0" v-if="$mainState.isLoaded">
+          <div class="lg:sticky lg:top-24">
+            <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages" />
           </div>
-          <SkeletonProductGallery v-else class="col-span-5"></SkeletonProductGallery>
+        </div>
+        <SkeletonProductGallery v-else class="col-span-5 -mx-4 md:mx-0"></SkeletonProductGallery>
 
-          <!-- Ürün Bilgileri -->
-          <div class="col-span-7">
+        <!-- Ürün Bilgileri -->
+        <div class="col-span-7">
+          <div class="container lg:!px-0 px-4 md:px-4">
             <div class="content-gap">
               <!-- Ürün Başlığı -->
               <div>
@@ -31,7 +31,7 @@
 
               <!-- Öne Çıkan Bilgiler -->
               <div
-                class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm transition-colors duration-300">
+                class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-6 shadow-none md:shadow-sm transition-colors duration-300 -mx-4 md:mx-0">
                 <h3 class="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Öne çıkan bilgiler</h3>
                 <ul class="space-y-3 text-neutral-700 dark:text-neutral-300">
                   <li class="flex items-start space-x-3">
@@ -62,17 +62,14 @@
 
     <!-- Ürün Açıklaması -->
     <section ref="product_information"
-      class="enhanced-section-spacing bg-white dark:bg-neutral-800 transition-colors duration-300">
-      <div class="container">
-        <PartialsProductInformation :attributes="attributeState.transformedAttrs" />
-      </div>
+      class="enhanced-section-spacing bg-white dark:bg-neutral-800 transition-colors duration-300 !px-0 md:!px-x-mobile lg:!px-x-desktop">
+      <PartialsProductInformation :attributes="attributeState.transformedAttrs" />
     </section>
 
     <!-- Ürün Yorumları -->
-    <section class="enhanced-section-spacing bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
-      <div class="container">
-        <ProductReviewsSection v-if="productState.product && productState.product.id" :product="productState.product" />
-      </div>
+    <section
+      class="enhanced-section-spacing bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300 !px-0 md:!px-x-mobile lg:!px-x-desktop">
+      <ProductReviewsSection v-if="productState.product && productState.product.id" :product="productState.product" />
     </section>
 
     <!-- Benzer Ürünler -->

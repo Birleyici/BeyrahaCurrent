@@ -2,9 +2,10 @@
   <div>
     <ClientOnly>
       <div>
-        <div class="container">
-          <UiCommonBreadcrumb class="mb-3 md:mb-6" :links="links" />
+        <!-- Breadcrumb - Mobilde padding sıfır -->
+        <UiCommonBreadcrumb class="mb-3 md:mb-6" :links="links" />
 
+        <div class="container mt-4">
           <div v-if="cartState.cart.length > 0" class="lg:grid lg:grid-cols-3 gap-8">
             <div class="lg:col-span-2">
               <!-- Sayfa Başlığı -->

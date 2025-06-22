@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6 shadow-soft transition-colors duration-300">
+        class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6 shadow-none md:shadow-soft transition-colors duration-300 -mx-4 md:mx-0">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
             <!-- Filter Title -->
             <div class="flex items-center space-x-2">

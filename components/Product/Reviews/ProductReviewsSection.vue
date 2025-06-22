@@ -1,8 +1,8 @@
 <template>
     <div class="bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
-        <div class="container mx-auto px-4 py-8 lg:py-12">
+        <div class="container mx-auto px-0 md:px-4 py-8 lg:py-12">
             <!-- Header -->
-            <div class="flex items-center justify-between mb-8">
+            <div class="flex items-center justify-between mb-8 px-4 md:px-0">
                 <h2 class="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-neutral-100">
                     Müşteri Yorumları
                 </h2>
@@ -21,7 +21,7 @@
 
             <!-- Filters -->
             <ProductReviewsFilters v-if="reviewStats.total_reviews > 2" v-model:filters="filters"
-                @update="handleFiltersUpdate" class="mb-6" />
+                @update="handleFiltersUpdate" class="mb-6 px-4 md:px-0" />
 
             <!-- Reviews List -->
             <div class="space-y-6">
@@ -30,7 +30,7 @@
                     @reply="handleVendorReply" />
 
                 <!-- Empty State -->
-                <div v-if="!loading && !hasReviews" class="text-center py-12">
+                <div v-if="!loading && !hasReviews" class="text-center py-12 px-4 md:px-0">
                     <div class="w-24 h-24 mx-auto mb-4 text-neutral-300 dark:text-neutral-600">
                         <UIcon name="i-heroicons-star" class="w-full h-full" />
                     </div>
@@ -86,7 +86,7 @@
                 </div>
 
                 <!-- Load More -->
-                <div v-if="canLoadMore" class="text-center pt-6">
+                <div v-if="canLoadMore" class="text-center pt-6 px-4 md:px-0">
                     <UButton @click="handleLoadMore" variant="outline" color="gray" size="lg" :loading="loading">
                         Daha Fazla Yorum Yükle
                     </UButton>

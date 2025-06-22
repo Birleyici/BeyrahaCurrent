@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full max-w-2xl mx-auto">
+  <div class="w-full md:max-w-2xl md:mx-auto">
     <!-- Ana Resim Alanı -->
     <div class="relative group">
       <!-- Ana Resim -->
-      <div class="relative aspect-[3/4] bg-neutral-100 rounded-2xl overflow-hidden" @touchstart="handleMainTouchStart"
-        @touchmove="handleMainTouchMove" @touchend="handleMainTouchEnd">
+      <div class="relative aspect-[3/4] bg-neutral-100 md:rounded-2xl overflow-hidden"
+        @touchstart="handleMainTouchStart" @touchmove="handleMainTouchMove" @touchend="handleMainTouchEnd">
         <div class="flex transition-transform duration-500 ease-in-out h-full"
           :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
           <div v-for="(image, index) in images" :key="index" class="w-full h-full flex-shrink-0">
@@ -28,14 +28,14 @@
         <template v-if="images.length > 1">
           <!-- Sol Ok -->
           <button @click="prevImage"
-            class="absolute left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110">
-            <UIcon name="i-heroicons-chevron-left" class="w-5 h-5 text-neutral-700" />
+            class="absolute left-2 md:left-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-2 md:p-3 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110">
+            <UIcon name="i-heroicons-chevron-left" class="w-4 h-4 md:w-5 md:h-5 text-neutral-700" />
           </button>
 
           <!-- Sağ Ok -->
           <button @click="nextImage"
-            class="absolute right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110">
-            <UIcon name="i-heroicons-chevron-right" class="w-5 h-5 text-neutral-700" />
+            class="absolute right-2 md:right-4 top-1/2 -translate-y-1/2 bg-white/90 backdrop-blur-sm rounded-full p-2 md:p-3 shadow-lg opacity-0 group-hover:opacity-100 transition-all duration-300 hover:bg-white hover:scale-110">
+            <UIcon name="i-heroicons-chevron-right" class="w-4 h-4 md:w-5 md:h-5 text-neutral-700" />
           </button>
         </template>
 
@@ -63,7 +63,7 @@
     </div>
 
     <!-- Navigate Dots (Sadece mobilde görünür) -->
-    <div v-if="images.length > 1" class="mt-4 flex justify-center md:hidden">
+    <div v-if="images.length > 1" class="mt-4 flex justify-center md:hidden px-4">
       <div class="flex space-x-2">
         <button v-for="(image, index) in images" :key="index" @click="goToImage(index)" :class="{
           'bg-secondary-500 scale-110': index === currentIndex,

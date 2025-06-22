@@ -1,5 +1,5 @@
 <template>
-  <div class="standart-section-spacing !mt-0 pb-20 md:pb-0">
+  <div class=" pb-20 md:pb-0 !px-0 md:!px-x-mobile lg:!px-x-desktop">
     <!-- Yükleniyor Durumu -->
     <div v-if="!isLoaded" class="min-h-screen flex items-center justify-center">
       <div class="text-center">
@@ -13,151 +13,154 @@
     </div>
 
     <!-- Ana İçerik -->
-    <div v-else class="container">
-      <!-- Breadcrumb -->
-      <UiCommonBreadcrumb class="mb-3 md:mb-6" :links="links" />
+    <div v-else>
+      <!-- Breadcrumb - Mobilde padding sıfır -->
+      <UiCommonBreadcrumb :links="links" />
 
-      <!-- Sayfa Başlığı -->
-      <div class="mb-8">
-        <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">Ödeme</h1>
-        <p class="text-neutral-600 dark:text-neutral-400">Sipariş bilgilerinizi kontrol edin ve ödeme yöntemini seçin
-        </p>
-      </div>
+      <div class="container mt-4">
+        <!-- Sayfa Başlığı -->
+        <div class="mb-8">
+          <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">Ödeme</h1>
+          <p class="text-neutral-600 dark:text-neutral-400">Sipariş bilgilerinizi kontrol edin ve ödeme yöntemini seçin
+          </p>
+        </div>
 
-      <div class="lg:grid lg:grid-cols-3 gap-8">
-        <!-- Sol Taraf - Sipariş Formu -->
-        <div class="lg:col-span-2 space-y-8" v-if="isLoaded">
-          <!-- Teslimat Adresi -->
-          <div
-            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
-            <div class="flex items-center space-x-3 mb-6">
-              <div
-                class="w-10 h-10 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center">
-                <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
-              </div>
-              <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Teslimat Adresi</h2>
-            </div>
-
-            <!-- Varsayılan Adres -->
-            <div v-if="orderState.defaultAddress"
-              class="bg-secondary-50 dark:bg-secondary-900/50 border border-secondary-200 dark:border-secondary-700 rounded-lg p-4 mb-4">
-              <PartialsOrderAddress :addressOptions="{ edit: true }" :address="orderState.defaultAddress" />
-            </div>
-
-            <!-- Adres Butonları -->
-            <div class="flex flex-col sm:flex-row gap-3">
-              <UButton v-if="isShowNewAddressButton" @click="orderState.isOpenAddressModal = true" color="secondary"
-                variant="outline" icon="i-heroicons-plus" class="flex-1 sm:flex-none u-button-center">
-                Yeni Adres Ekle
-              </UButton>
-
-              <UButton v-if="orderState.addresses?.length > 1 && authStore.token"
-                @click="orderState.openAllAddressModal = true" color="gray" variant="outline"
-                icon="i-heroicons-list-bullet" class="flex-1 sm:flex-none u-button-center">
-                Diğer Adresler
-              </UButton>
-            </div>
-          </div>
-
-          <!-- Ödeme Yöntemleri -->
-          <div
-            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
-            <div class="flex items-center space-x-3 mb-6">
-              <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                <UIcon name="i-heroicons-credit-card" class="w-5 h-5 text-green-600 dark:text-green-400" />
-              </div>
-              <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Ödeme Yöntemi</h2>
-            </div>
-
-            <!-- Havale/EFT Seçeneği -->
+        <div class="lg:grid lg:grid-cols-3 gap-8">
+          <!-- Sol Taraf - Sipariş Formu -->
+          <div class="lg:col-span-2 space-y-8" v-if="isLoaded">
+            <!-- Teslimat Adresi -->
             <div
-              class="border rounded-lg transition-all duration-200 hover:border-secondary-300 dark:hover:border-secondary-600"
-              :class="orderState.orderOptions.selectedPaymentMethod == 'bacs' ? 'bg-secondary-50 dark:bg-secondary-900/50 border-secondary-300 dark:border-secondary-600' : 'border-neutral-200 dark:border-neutral-700'">
-              <label class="flex items-start space-x-4 p-4 cursor-pointer">
-                <URadio v-model="orderState.orderOptions.selectedPaymentMethod" value="bacs" name="paymentMethod"
-                  class="mt-1" />
-                <div class="flex-1">
-                  <div class="flex items-center space-x-2 mb-2">
-                    <UIcon name="i-heroicons-building-library" class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-                    <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">Havale / EFT ile Ödeme</h3>
-                  </div>
-                  <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                    Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam tutarını
-                    havale veya EFT yoluyla gönderebilirsiniz.
-                  </p>
+              class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
+              <div class="flex items-center space-x-3 mb-6">
+                <div
+                  class="w-10 h-10 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center">
+                  <UIcon name="i-heroicons-map-pin" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
                 </div>
-              </label>
-            </div>
-          </div>
-        </div>
+                <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Teslimat Adresi</h2>
+              </div>
 
-        <!-- Loading State -->
-        <div v-else class="lg:col-span-2 space-y-8">
-          <div
-            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
-            <div class="space-y-4">
-              <USkeleton class="h-6 w-32" />
-              <USkeleton class="h-32 w-full" />
-              <div class="flex gap-3">
-                <USkeleton class="h-10 w-32" />
-                <USkeleton class="h-10 w-32" />
+              <!-- Varsayılan Adres -->
+              <div v-if="orderState.defaultAddress"
+                class="bg-secondary-50 dark:bg-secondary-900/50 border border-secondary-200 dark:border-secondary-700 rounded-lg p-4 mb-4">
+                <PartialsOrderAddress :addressOptions="{ edit: true }" :address="orderState.defaultAddress" />
+              </div>
+
+              <!-- Adres Butonları -->
+              <div class="flex flex-col sm:flex-row gap-3">
+                <UButton v-if="isShowNewAddressButton" @click="orderState.isOpenAddressModal = true" color="secondary"
+                  variant="outline" icon="i-heroicons-plus" class="flex-1 sm:flex-none u-button-center">
+                  Yeni Adres Ekle
+                </UButton>
+
+                <UButton v-if="orderState.addresses?.length > 1 && authStore.token"
+                  @click="orderState.openAllAddressModal = true" color="gray" variant="outline"
+                  icon="i-heroicons-list-bullet" class="flex-1 sm:flex-none u-button-center">
+                  Diğer Adresler
+                </UButton>
+              </div>
+            </div>
+
+            <!-- Ödeme Yöntemleri -->
+            <div
+              class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
+              <div class="flex items-center space-x-3 mb-6">
+                <div class="w-10 h-10 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
+                  <UIcon name="i-heroicons-credit-card" class="w-5 h-5 text-green-600 dark:text-green-400" />
+                </div>
+                <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Ödeme Yöntemi</h2>
+              </div>
+
+              <!-- Havale/EFT Seçeneği -->
+              <div
+                class="border rounded-lg transition-all duration-200 hover:border-secondary-300 dark:hover:border-secondary-600"
+                :class="orderState.orderOptions.selectedPaymentMethod == 'bacs' ? 'bg-secondary-50 dark:bg-secondary-900/50 border-secondary-300 dark:border-secondary-600' : 'border-neutral-200 dark:border-neutral-700'">
+                <label class="flex items-start space-x-4 p-4 cursor-pointer">
+                  <URadio v-model="orderState.orderOptions.selectedPaymentMethod" value="bacs" name="paymentMethod"
+                    class="mt-1" />
+                  <div class="flex-1">
+                    <div class="flex items-center space-x-2 mb-2">
+                      <UIcon name="i-heroicons-building-library"
+                        class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+                      <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">Havale / EFT ile Ödeme</h3>
+                    </div>
+                    <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                      Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam tutarını
+                      havale veya EFT yoluyla gönderebilirsiniz.
+                    </p>
+                  </div>
+                </label>
               </div>
             </div>
           </div>
-          <div
-            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
-            <div class="space-y-4">
-              <USkeleton class="h-6 w-32" />
-              <USkeleton class="h-24 w-full" />
-            </div>
-          </div>
-        </div>
 
-        <!-- Sağ Taraf - Sipariş Özeti -->
-        <div class="lg:col-span-1 mt-8 lg:mt-0">
-          <div v-if="isLoaded" class="sticky top-4">
-            <PartialsCartExtre>
-              <template #button>
-                <!-- Desktop Button -->
-                <div class="hidden md:block">
-                  <UButton :loading="orderState.createOrderLoading" @click="orderState.createOrder()" color="secondary"
-                    class="font-bold w-full flex justify-center u-button-center" size="lg">
-                    Siparişi Onayla
-                  </UButton>
+          <!-- Loading State -->
+          <div v-else class="lg:col-span-2 space-y-8">
+            <div
+              class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
+              <div class="space-y-4">
+                <USkeleton class="h-6 w-32" />
+                <USkeleton class="h-32 w-full" />
+                <div class="flex gap-3">
+                  <USkeleton class="h-10 w-32" />
+                  <USkeleton class="h-10 w-32" />
                 </div>
-              </template>
-            </PartialsCartExtre>
+              </div>
+            </div>
+            <div
+              class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
+              <div class="space-y-4">
+                <USkeleton class="h-6 w-32" />
+                <USkeleton class="h-24 w-full" />
+              </div>
+            </div>
           </div>
-          <div v-else
-            class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
-            <USkeleton class="h-48 w-full" />
-            <USkeleton class="h-12 w-full mt-4" />
+
+          <!-- Sağ Taraf - Sipariş Özeti -->
+          <div class="lg:col-span-1 mt-8 lg:mt-0">
+            <div v-if="isLoaded" class="sticky top-4">
+              <PartialsCartExtre>
+                <template #button>
+                  <!-- Desktop Button -->
+                  <div class="hidden md:block">
+                    <UButton :loading="orderState.createOrderLoading" @click="orderState.createOrder()"
+                      color="secondary" class="font-bold w-full flex justify-center u-button-center" size="lg">
+                      Siparişi Onayla
+                    </UButton>
+                  </div>
+                </template>
+              </PartialsCartExtre>
+            </div>
+            <div v-else
+              class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
+              <USkeleton class="h-48 w-full" />
+              <USkeleton class="h-12 w-full mt-4" />
+            </div>
           </div>
         </div>
-      </div>
 
-      <!-- Mobile Fixed Button - Teleported to body -->
-      <ClientOnly>
-        <Teleport to="body">
-          <div v-if="isLoaded"
-            class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-800 p-4 shadow-2xl border-t border-neutral-200 dark:border-neutral-700 flex items-center justify-between"
-            style="z-index: 999;">
-            <!-- Toplam Tutar -->
-            <div class="flex flex-col">
-              <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
-              <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
-                formatPrice(cartState.cartTotalAmount + calculateShippingCost(cartState.cartTotalAmount))
+        <!-- Mobile Fixed Button - Teleported to body -->
+        <ClientOnly>
+          <Teleport to="body">
+            <div v-if="isLoaded"
+              class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-800 p-4 shadow-2xl border-t border-neutral-200 dark:border-neutral-700 flex items-center justify-between"
+              style="z-index: 999;">
+              <!-- Toplam Tutar -->
+              <div class="flex flex-col">
+                <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
+                <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
+                  formatPrice(cartState.cartTotalAmount + calculateShippingCost(cartState.cartTotalAmount))
                 }}</span>
-            </div>
+              </div>
 
-            <!-- Siparişi Onayla Butonu -->
-            <UButton :loading="orderState.createOrderLoading" @click="orderState.createOrder()" color="secondary"
-              class="flex justify-center font-bold px-6 u-button-center" size="lg" variant="solid">
-              Siparişi Onayla
-            </UButton>
-          </div>
-        </Teleport>
-      </ClientOnly>
+              <!-- Siparişi Onayla Butonu -->
+              <UButton :loading="orderState.createOrderLoading" @click="orderState.createOrder()" color="secondary"
+                class="flex justify-center font-bold px-6 u-button-center" size="lg" variant="solid">
+                Siparişi Onayla
+              </UButton>
+            </div>
+          </Teleport>
+        </ClientOnly>
+      </div>
     </div>
 
     <!-- Yeni Adres Modalı -->

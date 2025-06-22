@@ -1,32 +1,34 @@
 <template>
-  <div class="page-content-spacing">
-    <div class="container">
-      <!-- Breadcrumb -->
-      <UiCommonBreadcrumb class="mb-3 md:mb-8" :links="breadcrumbLinks" />
+  <div class="bg-neutral-50 dark:bg-neutral-900 min-h-screen transition-colors duration-300">
+    <!-- Breadcrumb -->
+    <UiCommonBreadcrumb :links="breadcrumbLinks" />
 
+    <div class="page-content-spacing">
       <!-- Sayfa Başlığı -->
-      <div v-if="slugsCat || query.searchWord" class="mb-8">
-        <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
-          <span v-if="query.searchWord">"{{ query.searchWord }}" için arama sonuçları</span>
-          <span v-else>{{ slugsCat?.label }}</span>
-        </h1>
-        <p v-if="slugsCat && !query.searchWord" class="text-neutral-600 dark:text-neutral-400">
-          {{ slugsCat?.description || 'Kaliteli ürünlerimizi keşfedin' }}
-        </p>
-        <p v-else-if="query.searchWord" class="text-neutral-600 dark:text-neutral-400">
-          {{ productState.products?.total || 0 }} ürün bulundu
-        </p>
+      <div class="container">
+        <div v-if="slugsCat || query.searchWord" class="mb-8">
+          <h1 class="text-2xl lg:text-3xl font-bold text-neutral-900 dark:text-neutral-100 mb-2">
+            <span v-if="query.searchWord">"{{ query.searchWord }}" için arama sonuçları</span>
+            <span v-else>{{ slugsCat?.label }}</span>
+          </h1>
+          <p v-if="slugsCat && !query.searchWord" class="text-neutral-600 dark:text-neutral-400">
+            {{ slugsCat?.description || 'Kaliteli ürünlerimizi keşfedin' }}
+          </p>
+          <p v-else-if="query.searchWord" class="text-neutral-600 dark:text-neutral-400">
+            {{ productState.products?.total || 0 }} ürün bulundu
+          </p>
+        </div>
       </div>
-    </div>
 
-    <div class="container">
-      <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort" :products="productState.products"
-        :loading="loading" />
-      <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products"
-        :loading="loading" />
+      <div class="container">
+        <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort"
+          :products="productState.products" :loading="loading" />
+        <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products"
+          :loading="loading" />
 
-      <!-- Infinite Loading Trigger -->
-      <div v-if="$mainState.isLoaded" id="finishProducts"></div>
+        <!-- Infinite Loading Trigger -->
+        <div v-if="$mainState.isLoaded" id="finishProducts"></div>
+      </div>
     </div>
   </div>
 </template>

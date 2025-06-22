@@ -1,5 +1,5 @@
 <template>
-  <div class="w-full">
+  <div class="w-full mt-4">
     <!-- Mobil: Yatay Scroll -->
     <div class="lg:hidden overflow-x-auto pb-4">
       <div class="flex space-x-3  min-w-max px-1">

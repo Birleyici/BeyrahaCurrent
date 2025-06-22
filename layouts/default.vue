@@ -6,7 +6,7 @@
     </header>
 
     <!-- Ana İçerik -->
-    <main class="flex-1  lg:py-8">
+    <main class="flex-1  ">
       <NuxtPage />
     </main>
 
