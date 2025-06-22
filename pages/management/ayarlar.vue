@@ -125,8 +125,8 @@
                     <div
                         class="px-6 py-4 bg-neutral-50 dark:bg-neutral-900/50 border-t border-neutral-200 dark:border-neutral-700 rounded-b-xl">
                         <div class="flex flex-col sm:flex-row gap-3 sm:justify-end">
-                            <UButton variant="outline" color="neutral" @click="fetchSettings"
-                                icon="i-heroicons-arrow-path" size="md">
+                            <UButton variant="outline" color="gray" @click="fetchSettings" icon="i-heroicons-arrow-path"
+                                size="md">
                                 Yenile
                             </UButton>
                             <UButton @click="saveSettings" :loading="saving" :disabled="saving" color="primary"

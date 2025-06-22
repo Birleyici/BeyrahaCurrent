@@ -7,11 +7,13 @@
                     Müşteri Yorumları
                 </h2>
 
-                <UButton v-if="canWriteReview" @click="showReviewForm = true" color="secondary" variant="solid"
-                    size="lg" class="hidden lg:flex">
-                    <UIcon name="i-heroicons-pencil-square" class="w-5 h-5 mr-2" />
-                    Yorum Yaz
-                </UButton>
+                <ClientOnly>
+                    <UButton v-if="canWriteReview" @click="showReviewForm = true" color="secondary" variant="solid"
+                        size="lg" class="hidden lg:flex">
+                        <UIcon name="i-heroicons-pencil-square" class="w-5 h-5 mr-2" />
+                        Yorum Yaz
+                    </UButton>
+                </ClientOnly>
             </div>
 
             <!-- Review Summary -->
@@ -24,7 +26,7 @@
             <!-- Reviews List -->
             <div class="space-y-6">
                 <ProductReviewsItem v-for="review in reviews" :key="review.id" :review="review"
-                    :can-vote="isAuthenticated" :can-reply="canReplyToReview(review)" @vote="handleVote"
+                    :can-vote="canVoteReview(review)" :can-reply="canReplyToReview(review)" @vote="handleVote"
                     @reply="handleVendorReply" />
 
                 <!-- Empty State -->
@@ -39,34 +41,43 @@
                         Bu ürün için ilk yorumu siz yazın!
                     </p>
 
-                    <!-- Authenticated User -->
-                    <UButton v-if="canWriteReview" @click="showReviewForm = true" color="secondary" variant="solid">
-                        İlk Yorumu Yaz
-                    </UButton>
+                    <!-- Client-side only content to prevent hydration mismatch -->
+                    <ClientOnly>
+                        <!-- Authenticated User -->
+                        <UButton v-if="canWriteReview" @click="showReviewForm = true" color="secondary" variant="solid">
+                            İlk Yorumu Yaz
+                        </UButton>
 
-                    <!-- Unauthenticated User -->
-                    <div v-else-if="!isAuthenticated" class="space-y-4">
-                        <p class="text-sm text-neutral-500 dark:text-neutral-400">
-                            Yorum yazabilmek için giriş yapmanız gerekiyor
-                        </p>
-                        <div class="flex items-center justify-center gap-4">
-                            <UButton @click="showAuthModal = true" color="secondary" variant="solid">
-                                <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-4 h-4 mr-2" />
-                                Giriş Yap
-                            </UButton>
-
+                        <!-- Unauthenticated User -->
+                        <div v-else-if="!isAuthenticated" class="space-y-4">
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                                Yorum yazabilmek için giriş yapmanız gerekiyor
+                            </p>
+                            <div class="flex items-center justify-center gap-4">
+                                <UButton @click="showAuthModal = true" color="secondary" variant="solid">
+                                    <UIcon name="i-heroicons-arrow-right-on-rectangle" class="w-4 h-4 mr-2" />
+                                    Giriş Yap
+                                </UButton>
+                            </div>
                         </div>
-                    </div>
 
-                    <!-- Authenticated but can't review -->
-                    <div v-else class="space-y-2">
-                        <p class="text-sm text-neutral-500 dark:text-neutral-400">
-                            Bu ürüne yorum yapamazsınız
-                        </p>
-                        <p class="text-xs text-neutral-400 dark:text-neutral-500">
-                            Sadece satın aldığınız ürünlere yorum yapabilirsiniz
-                        </p>
-                    </div>
+                        <!-- Authenticated but can't review -->
+                        <div v-else class="space-y-2">
+                            <p class="text-sm text-neutral-500 dark:text-neutral-400">
+                                Bu ürüne yorum yapamazsınız
+                            </p>
+                            <p class="text-xs text-neutral-400 dark:text-neutral-500">
+                                Sadece satın aldığınız ürünlere yorum yapabilirsiniz
+                            </p>
+                        </div>
+
+                        <template #fallback>
+                            <!-- Loading placeholder for hydration -->
+                            <div class="animate-pulse">
+                                <div class="h-10 bg-neutral-200 dark:bg-neutral-700 rounded-lg w-32 mx-auto"></div>
+                            </div>
+                        </template>
+                    </ClientOnly>
                 </div>
 
                 <!-- Loading -->
@@ -76,19 +87,21 @@
 
                 <!-- Load More -->
                 <div v-if="canLoadMore" class="text-center pt-6">
-                    <UButton @click="handleLoadMore" variant="outline" color="neutral" size="lg" :loading="loading">
+                    <UButton @click="handleLoadMore" variant="outline" color="gray" size="lg" :loading="loading">
                         Daha Fazla Yorum Yükle
                     </UButton>
                 </div>
             </div>
 
             <!-- Mobile Write Review Button -->
-            <div class="fixed bottom-6 right-6 lg:hidden">
-                <UButton v-if="canWriteReview" @click="showReviewForm = true" color="secondary" variant="solid"
-                    size="xl" class="rounded-full shadow-lg">
-                    <UIcon name="i-heroicons-pencil-square" class="w-6 h-6" />
-                </UButton>
-            </div>
+            <ClientOnly>
+                <div class="fixed bottom-6 right-6 lg:hidden">
+                    <UButton v-if="canWriteReview" @click="showReviewForm = true" color="secondary" variant="solid"
+                        size="xl" class="rounded-full shadow-lg">
+                        <UIcon name="i-heroicons-pencil-square" class="w-6 h-6" />
+                    </UButton>
+                </div>
+            </ClientOnly>
         </div>
 
         <!-- Review Form Modal -->
@@ -111,14 +124,9 @@ const props = defineProps({
 const authStore = useAuthStore()
 const toast = useToast()
 
-// Computed - kullanıcının giriş yapıp yapmadığını kontrol et
-const isAuthenticated = computed(() => {
-    // Client-side only kontrol
-    if (process.server) return false
-
-    const result = !!authStore.token
-    return result
-})
+// Hydration-safe auth state
+const isAuthenticated = ref(false)
+const isClient = ref(false)
 
 // Composables
 const {
@@ -158,6 +166,13 @@ const canReplyToReview = (review) => {
     return isVendor && review.can_reply
 }
 
+const canVoteReview = (review) => {
+    if (!isAuthenticated.value || !authStore.currentUser) return false
+
+    // Kullanıcı kendi yorumuna oy veremez
+    return review.user_id !== authStore.currentUser.id
+}
+
 // Methods
 const handleFiltersUpdate = async () => {
     await fetchReviews(props.product.id, { page: 1 })
@@ -172,9 +187,18 @@ const handleVote = async (reviewId, isHelpful) => {
             icon: 'i-heroicons-check-circle'
         })
     } catch (error) {
+        let errorMessage = 'Oy verilemedi'
+
+        // 403 hatası için özel mesaj
+        if (error.response?.status === 403) {
+            errorMessage = 'Kendi yorumunuza oy veremezsiniz'
+        } else if (error.message) {
+            errorMessage = error.message
+        }
+
         toast.add({
             title: 'Bir hata oluştu',
-            description: error.message || 'Oy verilemedi',
+            description: errorMessage,
             color: 'red',
             icon: 'i-heroicons-exclamation-triangle'
         })
@@ -248,6 +272,12 @@ watch(isAuthenticated, async (newValue) => {
 // Initialize
 onMounted(async () => {
     try {
+        // Client-side flag'ini set et
+        isClient.value = true
+
+        // Auth durumunu kontrol et
+        isAuthenticated.value = !!authStore.token
+
         // Token varsa ama user bilgisi yoksa, user bilgisini getir
         if (authStore.token && !authStore.currentUser) {
             await authStore.fetchUser()

@@ -10,7 +10,7 @@
             </div>
 
             <!-- Refresh Button -->
-            <UButton @click="refreshData" :loading="loading" color="neutral" variant="outline"
+            <UButton @click="refreshData" :loading="loading" color="gray" variant="outline"
                 icon="i-heroicons-arrow-path">
                 Yenile
             </UButton>
@@ -38,7 +38,7 @@
                     <div>
                         <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Bekleyen</p>
                         <p class="text-3xl font-bold text-warning-600 dark:text-warning-400 mt-2">{{ statistics.pending
-                        }}</p>
+                            }}</p>
                     </div>
                     <div class="p-3 bg-warning-50 dark:bg-warning-900/20 rounded-full">
                         <UIcon name="i-heroicons-clock" class="w-8 h-8 text-warning-600 dark:text-warning-400" />
@@ -52,7 +52,7 @@
                     <div>
                         <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Onaylanan</p>
                         <p class="text-3xl font-bold text-success-600 dark:text-success-400 mt-2">{{ statistics.approved
-                        }}</p>
+                            }}</p>
                     </div>
                     <div class="p-3 bg-success-50 dark:bg-success-900/20 rounded-full">
                         <UIcon name="i-heroicons-check-circle" class="w-8 h-8 text-success-600 dark:text-success-400" />
@@ -113,7 +113,7 @@
                 <div class="text-sm text-neutral-600 dark:text-neutral-400">
                     {{ pagination.total }} yorum bulundu
                 </div>
-                <UButton @click="resetFilters" variant="outline" color="neutral" size="sm">
+                <UButton @click="resetFilters" variant="outline" color="gray" size="sm">
                     Filtreleri Temizle
                 </UButton>
             </div>
@@ -175,7 +175,7 @@
 
                             <!-- Actions Menu -->
                             <UDropdown :items="getActionItems(review)">
-                                <UButton color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal"
+                                <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal"
                                     size="sm" />
                             </UDropdown>
                         </div>
@@ -260,7 +260,7 @@
                 <!-- Load More -->
                 <div v-if="canLoadMore"
                     class="text-center pt-6 border-t border-neutral-200 dark:border-neutral-600 mt-6">
-                    <UButton @click="loadMore" variant="outline" color="neutral" :loading="loading">
+                    <UButton @click="loadMore" variant="outline" color="gray" :loading="loading">
                         Daha Fazla Yükle
                     </UButton>
                 </div>
@@ -281,7 +281,7 @@
                 </div>
 
                 <div class="flex justify-end space-x-3">
-                    <UButton @click="showRejectModalState = false" variant="outline" color="neutral">
+                    <UButton @click="showRejectModalState = false" variant="outline" color="gray">
                         İptal
                     </UButton>
                     <UButton @click="confirmReject" color="error" :loading="rejectLoading">

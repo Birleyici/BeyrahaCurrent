@@ -69,7 +69,7 @@
                 </div>
 
                 <!-- Clear Filters -->
-                <UButton v-if="hasActiveFilters" @click="clearFilters" color="neutral" variant="outline" size="sm"
+                <UButton v-if="hasActiveFilters" @click="clearFilters" color="gray" variant="outline" size="sm"
                     class="whitespace-nowrap">
                     <UIcon name="i-heroicons-x-mark" class="w-4 h-4 mr-1" />
                     Temizle

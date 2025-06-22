@@ -2,9 +2,11 @@
     <UModal v-model="isOpen" :ui="{ width: 'w-full sm:max-w-lg' }">
         <div class="p-6">
             <!-- Header -->
-            <div class="flex items-center justify-center mb-6">
-
-                <UButton @click="closeModal" color="neutral" variant="ghost" icon="i-heroicons-x-mark" size="sm" />
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100">
+                    Giriş Yap / Kayıt Ol
+                </h3>
+                <UButton @click="closeModal" color="gray" variant="ghost" icon="i-heroicons-x-mark" size="sm" />
             </div>
 
             <!-- Auth Form -->

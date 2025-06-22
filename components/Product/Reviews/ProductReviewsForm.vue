@@ -6,7 +6,7 @@
                 <h3 class="text-xl font-bold text-neutral-900 dark:text-neutral-100">
                     Ürün Yorumu Yaz
                 </h3>
-                <UButton @click="closeModal" color="neutral" variant="ghost" icon="i-heroicons-x-mark" size="sm" />
+                <UButton @click="closeModal" color="gray" variant="ghost" icon="i-heroicons-x-mark" size="sm" />
             </div>
 
             <!-- Product Info -->
@@ -111,10 +111,10 @@
 
                 <!-- Actions -->
                 <div class="flex justify-end space-x-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
-                    <UButton type="button" @click="closeModal" color="neutral" variant="outline" :disabled="loading">
+                    <UButton type="button" @click="closeModal" color="gray" variant="outline" :disabled="loading">
                         İptal
                     </UButton>
-                    <UButton type="submit" color="secondary" :loading="loading" :disabled="!isFormValid">
+                    <UButton type="submit" color="primary" :loading="loading" :disabled="!isFormValid">
                         Yorumu Gönder
                     </UButton>
                 </div>

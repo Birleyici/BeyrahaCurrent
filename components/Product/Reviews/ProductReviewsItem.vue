@@ -6,7 +6,7 @@
             <div class="flex items-center space-x-4">
                 <!-- User Avatar -->
                 <div
-                    class="w-12 h-12 bg-gradient-to-br from-secondary-500 to-accent-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
+                    class="w-12 min-w-12 h-12 min-h-12 bg-gradient-to-br from-secondary-500 to-accent-600 rounded-full flex items-center justify-center text-white font-semibold text-lg">
                     {{ getInitials(review.user_name) }}
                 </div>
 
@@ -41,7 +41,7 @@
 
             <!-- Options Menu -->
             <UDropdown v-if="showOptions" :items="optionsItems">
-                <UButton color="neutral" variant="ghost" icon="i-heroicons-ellipsis-horizontal" size="sm" />
+                <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal" size="sm" />
             </UDropdown>
         </div>
 
@@ -79,14 +79,14 @@
 
                     <div class="flex items-center space-x-1">
                         <UButton v-if="canVote" @click="handleVote(true)"
-                            :color="review.user_vote === true ? 'success' : 'neutral'"
+                            :color="review.user_vote === true ? 'success' : 'gray'"
                             :variant="review.user_vote === true ? 'solid' : 'ghost'" size="xs" :disabled="voteLoading">
                             <UIcon name="i-heroicons-hand-thumb-up" class="w-4 h-4 mr-1" />
                             {{ review.helpful_count || 0 }}
                         </UButton>
 
                         <UButton v-if="canVote" @click="handleVote(false)"
-                            :color="review.user_vote === false ? 'error' : 'neutral'"
+                            :color="review.user_vote === false ? 'error' : 'gray'"
                             :variant="review.user_vote === false ? 'solid' : 'ghost'" size="xs" :disabled="voteLoading">
                             <UIcon name="i-heroicons-hand-thumb-down" class="w-4 h-4 mr-1" />
                             {{ review.not_helpful_count || 0 }}
@@ -145,7 +145,7 @@
                         {{ replyText.length }}/500
                     </span>
                     <div class="flex space-x-2">
-                        <UButton type="button" @click="cancelReply" color="neutral" variant="outline" size="xs">
+                        <UButton type="button" @click="cancelReply" color="gray" variant="outline" size="xs">
                             İptal
                         </UButton>
                         <UButton type="submit" color="secondary" size="xs" :loading="replyLoading"
@@ -217,24 +217,24 @@ const currentImageIndex = ref(null)
 
 // Computed
 const maskedUserName = computed(() => {
-    if (!props.review.user_name) return 'Anonim Kullanıcı'
+    // review.user?.name verisini kullan, yoksa user_name'i kullan
+    const name = props.review.user?.name || props.review.user_name
 
-    const name = props.review.user_name
-    const parts = name.split(' ')
+    if (!name) return 'Anonim Kullanıcı'
 
-    if (parts.length === 1) {
-        // Tek kelime ise: "Ahmet" -> "A***t"
-        return parts[0].length > 2
-            ? parts[0][0] + '*'.repeat(parts[0].length - 2) + parts[0].slice(-1)
-            : parts[0]
+    const words = name.trim().split(' ').filter(word => word.length > 0)
+
+    if (words.length === 0) return 'Anonim Kullanıcı'
+
+    if (words.length === 1) {
+        // Tek kelime ise: "Mehmet" -> "M****"
+        const word = words[0]
+        return word.length <= 2 ? word : word[0] + '*'.repeat(word.length - 1)
     } else {
-        // Çok kelime ise: "Ahmet Yılmaz" -> "Ahmet Y***"
-        const firstName = parts[0]
-        const lastName = parts[parts.length - 1]
-        const maskedLastName = lastName.length > 1
-            ? lastName[0] + '*'.repeat(lastName.length - 1)
-            : lastName
-        return `${firstName} ${maskedLastName}`
+        // Çok kelime ise: "Mehmet Çelik" -> "M**** Ç***"
+        return words.map(word => {
+            return word.length <= 2 ? word : word[0] + '*'.repeat(word.length - 1)
+        }).join(' ')
     }
 })
 
@@ -253,13 +253,21 @@ const optionsItems = computed(() => [
 
 // Methods
 const getInitials = (name) => {
-    if (!name) return '?'
+    // review.user?.name verisini kullan, yoksa user_name'i kullan
+    const fullName = props.review.user?.name || props.review.user_name
 
-    const parts = name.split(' ')
-    if (parts.length === 1) {
-        return parts[0][0].toUpperCase()
+    if (!fullName) return '?'
+
+    const words = fullName.trim().split(' ').filter(word => word.length > 0)
+
+    if (words.length === 0) return '?'
+
+    if (words.length === 1) {
+        return words[0][0].toUpperCase()
     }
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+
+    // İlk ve son kelimenin baş harfleri
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase()
 }
 
 const formatDate = (dateString) => {

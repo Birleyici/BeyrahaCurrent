@@ -2,11 +2,12 @@
   <div class="min-h-screen bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
     <!-- Sidebar -->
     <div
-      class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-neutral-800 shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 border-r border-neutral-200 dark:border-neutral-700"
+      class="fixed inset-y-0 left-0 z-50 w-64 bg-white dark:bg-neutral-800 shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0 border-r border-neutral-200 dark:border-neutral-700 flex flex-col"
       :class="{ '-translate-x-full': !sidebarOpen, 'translate-x-0': sidebarOpen }">
 
       <!-- Logo Area -->
-      <div class="flex items-center justify-center h-16 px-4 bg-gradient-to-r from-primary-600 to-primary-700">
+      <div
+        class="flex items-center justify-center h-16 px-4 bg-gradient-to-r from-primary-600 to-primary-700 flex-shrink-0">
         <div class="flex items-center space-x-3">
           <UAvatar size="sm" imgClass="object-contain" src="https://beyraha.vercel.app/logo.jpg" alt="Beyraha Logo" />
           <h1 class="text-lg lg:text-xl font-bold text-white">Beyraha Admin</h1>
@@ -14,8 +15,8 @@
       </div>
 
       <!-- Navigation Menu -->
-      <nav class="mt-6 px-3 pb-20 overflow-y-auto h-full">
-        <div class="space-y-1">
+      <nav class="flex-1 mt-6 px-3 overflow-y-auto">
+        <div class="space-y-1 pb-20">
           <!-- Dashboard -->
           <NuxtLink to="/management"
             class="flex items-center px-4 py-3.5 text-neutral-700 dark:text-neutral-200 rounded-xl hover:bg-primary-50 dark:hover:bg-neutral-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group touch-manipulation"
@@ -64,7 +65,7 @@
                 class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
               <span class="font-medium">Siparişler</span>
               <span v-if="pendingOrdersCount > 0"
-                class="ml-auto bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center">
+                class="ml-auto bg-red-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
                 {{ pendingOrdersCount }}
               </span>
             </NuxtLink>
@@ -84,7 +85,7 @@
                 class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
               <span class="font-medium">Yorum Yönetimi</span>
               <span v-if="pendingReviewsCount > 0"
-                class="ml-auto bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center">
+                class="ml-auto bg-red-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
                 {{ pendingReviewsCount }}
               </span>
             </NuxtLink>
@@ -116,8 +117,7 @@
       </nav>
 
       <!-- User Profile Section -->
-      <div
-        class="absolute bottom-0 left-0 right-0 p-4 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
+      <div class="flex-shrink-0 p-4 border-t border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-800">
         <div
           class="flex items-center space-x-3 p-3 rounded-xl bg-neutral-50 dark:bg-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-600 transition-colors duration-200 cursor-pointer touch-manipulation"
           @click="showUserMenu = !showUserMenu">
@@ -184,7 +184,7 @@
 
             <!-- User Menu -->
             <UDropdown :items="userMenuItems" :popper="{ placement: 'bottom-end' }">
-              <UButton icon="i-heroicons-user-circle" size="sm" color="neutral" variant="ghost"
+              <UButton icon="i-heroicons-user-circle" size="sm" color="gray" variant="ghost"
                 class="hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200" />
             </UDropdown>
           </div>
