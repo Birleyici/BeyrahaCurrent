@@ -45,20 +45,20 @@ export const useAdminReviews = () => {
                 }
             })
 
-            const { data } = await useBaseOFetchWithAuth('admin/reviews', {
+            const data = await useBaseOFetchWithAuth('admin/reviews', {
                 params
             })
 
             console.log(data)
 
             if (page === 1) {
-                reviews.value = data.reviews
+                reviews.value = data.data.reviews
             } else {
-                reviews.value.push(...data.reviews)
+                reviews.value.push(...data.data.reviews)
             }
 
-            pagination.value = data.pagination
-            statistics.value = data.statistics
+            pagination.value = data.data.pagination
+            statistics.value = data.data.statistics
 
         } catch (error) {
             console.error('Admin reviews fetch error:', error)
@@ -70,14 +70,24 @@ export const useAdminReviews = () => {
 
     const approveReview = async (reviewId) => {
         try {
-            const { data } = await useBaseOFetchWithAuth(`admin/reviews/${reviewId}/approve`, {
+            const data = await useBaseOFetchWithAuth(`admin/reviews/${reviewId}/approve`, {
                 method: 'POST'
             })
 
-            // Local state'i güncelle
+            console.log(data)
+
+            // Local state'i güncelle - mevcut review objesini koruyarak sadece değişen alanları güncelle
             const reviewIndex = reviews.value.findIndex(r => r.id === reviewId)
             if (reviewIndex !== -1) {
-                reviews.value[reviewIndex] = data.data
+                // Mevcut review objesini koru ve sadece güncellenen alanları değiştir
+                reviews.value[reviewIndex] = {
+                    ...reviews.value[reviewIndex],
+                    ...data.data,
+                    // İlişkileri özellikle koru
+                    user: data.data.user || reviews.value[reviewIndex].user,
+                    product: data.data.product || reviews.value[reviewIndex].product,
+                    images: data.data.images || reviews.value[reviewIndex].images
+                }
                 statistics.value.pending--
                 statistics.value.approved++
             }
@@ -91,15 +101,23 @@ export const useAdminReviews = () => {
 
     const rejectReview = async (reviewId, reason = null) => {
         try {
-            const { data } = await useBaseOFetchWithAuth(`admin/reviews/${reviewId}/reject`, {
+            const data = await useBaseOFetchWithAuth(`admin/reviews/${reviewId}/reject`, {
                 method: 'POST',
                 body: { reason }
             })
 
-            // Local state'i güncelle
+            // Local state'i güncelle - mevcut review objesini koruyarak sadece değişen alanları güncelle
             const reviewIndex = reviews.value.findIndex(r => r.id === reviewId)
             if (reviewIndex !== -1) {
-                reviews.value[reviewIndex] = data.data
+                // Mevcut review objesini koru ve sadece güncellenen alanları değiştir
+                reviews.value[reviewIndex] = {
+                    ...reviews.value[reviewIndex],
+                    ...data.data,
+                    // İlişkileri özellikle koru
+                    user: data.data.user || reviews.value[reviewIndex].user,
+                    product: data.data.product || reviews.value[reviewIndex].product,
+                    images: data.data.images || reviews.value[reviewIndex].images
+                }
                 statistics.value.pending--
                 statistics.value.rejected++
             }

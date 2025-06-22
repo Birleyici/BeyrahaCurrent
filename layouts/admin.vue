@@ -70,6 +70,26 @@
             </NuxtLink>
           </div>
 
+          <!-- Yorumlar Section -->
+          <div class="pt-6">
+            <h3 class="px-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">
+              Müşteri Yorumları
+            </h3>
+
+            <NuxtLink to="/management/yorumlar"
+              class="flex items-center px-4 py-3.5 text-neutral-700 dark:text-neutral-200 rounded-xl hover:bg-primary-50 dark:hover:bg-neutral-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group touch-manipulation"
+              :class="{ 'bg-primary-50 dark:bg-neutral-700 text-primary-600 dark:text-primary-400': $route.path.includes('/management/yorumlar') }"
+              @click="closeMobileSidebar">
+              <UIcon name="i-heroicons-chat-bubble-left-right"
+                class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span class="font-medium">Yorum Yönetimi</span>
+              <span v-if="pendingReviewsCount > 0"
+                class="ml-auto bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full min-w-[20px] text-center">
+                {{ pendingReviewsCount }}
+              </span>
+            </NuxtLink>
+          </div>
+
           <!-- Ayarlar Section -->
           <div class="pt-6">
             <h3 class="px-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">
@@ -204,6 +224,9 @@ const sidebarOpen = ref(false);
 const showUserMenu = ref(false);
 const pendingOrdersCount = ref(3);
 
+// Admin stats composable'ını kullan
+const { pendingReviewsCount, initAdminStats } = useAdminStats();
+
 // Dark mode composable'ını kullan
 const { isDark, toggleDarkMode, initDarkMode } = useDarkMode();
 
@@ -216,6 +239,7 @@ const pageTitle = computed(() => {
   if (route.path.includes('/management/urunler/')) return 'Ürün Düzenle';
   if (route.path === '/management/siparisler') return 'Sipariş Yönetimi';
   if (route.path.includes('/management/siparisler/') && route.params.id) return 'Sipariş Detayı';
+  if (route.path === '/management/yorumlar') return 'Yorum Yönetimi';
   return 'Admin Panel';
 });
 
@@ -227,6 +251,7 @@ const pageSubtitle = computed(() => {
   if (route.path.includes('/management/urunler/')) return 'Ürün bilgilerini düzenleyin ve güncelleyin';
   if (route.path === '/management/siparisler') return 'Tüm siparişlerinizi görüntüleyin ve yönetin';
   if (route.path.includes('/management/siparisler/') && route.params.id) return `Sipariş #${route.params.id} detayları ve işlemleri`;
+  if (route.path === '/management/yorumlar') return 'Müşteri yorumlarını görüntüleyin, onaylayın ve yönetin';
   return '';
 });
 
@@ -274,6 +299,9 @@ watch(() => useRoute().path, () => {
 // Initialize dark mode on mount
 onMounted(() => {
   initDarkMode();
+
+  // Admin stats'ları başlat
+  initAdminStats();
 
   if (process.client) {
     document.addEventListener('click', (event) => {
