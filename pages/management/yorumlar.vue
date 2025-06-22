@@ -1,9 +1,9 @@
 <template>
     <div class="space-y-6">
         <!-- Header -->
-        <div class="flex items-center justify-between">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
-                <h1 class="text-3xl font-bold text-neutral-900 dark:text-white">Yorum Yönetimi</h1>
+                <h1 class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">Yorum Yönetimi</h1>
                 <p class="text-neutral-600 dark:text-neutral-400 mt-1">
                     Müşteri yorumlarını inceleyin, onaylayın veya reddedin
                 </p>
@@ -11,65 +11,73 @@
 
             <!-- Refresh Button -->
             <UButton @click="refreshData" :loading="loading" color="gray" variant="outline"
-                icon="i-heroicons-arrow-path">
+                icon="i-heroicons-arrow-path" class="w-full sm:w-auto">
                 Yenile
             </UButton>
         </div>
 
         <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
             <div
-                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Toplam Yorum</p>
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{ statistics.total }}</p>
+                        <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Toplam Yorum
+                        </p>
+                        <p class="text-xl sm:text-3xl font-bold text-neutral-900 dark:text-white mt-1 sm:mt-2">{{
+                            statistics.total }}</p>
                     </div>
-                    <div class="p-3 bg-accent-50 dark:bg-accent-900/20 rounded-full">
+                    <div class="p-2 sm:p-3 bg-accent-50 dark:bg-accent-900/20 rounded-full">
                         <UIcon name="i-heroicons-chat-bubble-left-right"
-                            class="w-8 h-8 text-accent-600 dark:text-accent-400" />
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-accent-600 dark:text-accent-400" />
                     </div>
                 </div>
             </div>
 
             <div
-                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Bekleyen</p>
-                        <p class="text-3xl font-bold text-warning-600 dark:text-warning-400 mt-2">{{ statistics.pending
-                            }}</p>
+                        <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Bekleyen</p>
+                        <p class="text-xl sm:text-3xl font-bold text-warning-600 dark:text-warning-400 mt-1 sm:mt-2">{{
+                            statistics.pending
+                        }}</p>
                     </div>
-                    <div class="p-3 bg-warning-50 dark:bg-warning-900/20 rounded-full">
-                        <UIcon name="i-heroicons-clock" class="w-8 h-8 text-warning-600 dark:text-warning-400" />
+                    <div class="p-2 sm:p-3 bg-warning-50 dark:bg-warning-900/20 rounded-full">
+                        <UIcon name="i-heroicons-clock"
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-warning-600 dark:text-warning-400" />
                     </div>
                 </div>
             </div>
 
             <div
-                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Onaylanan</p>
-                        <p class="text-3xl font-bold text-success-600 dark:text-success-400 mt-2">{{ statistics.approved
-                            }}</p>
+                        <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Onaylanan</p>
+                        <p class="text-xl sm:text-3xl font-bold text-success-600 dark:text-success-400 mt-1 sm:mt-2">{{
+                            statistics.approved
+                        }}</p>
                     </div>
-                    <div class="p-3 bg-success-50 dark:bg-success-900/20 rounded-full">
-                        <UIcon name="i-heroicons-check-circle" class="w-8 h-8 text-success-600 dark:text-success-400" />
+                    <div class="p-2 sm:p-3 bg-success-50 dark:bg-success-900/20 rounded-full">
+                        <UIcon name="i-heroicons-check-circle"
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-success-600 dark:text-success-400" />
                     </div>
                 </div>
             </div>
 
             <div
-                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Reddedilen</p>
-                        <p class="text-3xl font-bold text-error-600 dark:text-error-400 mt-2">{{ statistics.rejected }}
+                        <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Reddedilen</p>
+                        <p class="text-xl sm:text-3xl font-bold text-error-600 dark:text-error-400 mt-1 sm:mt-2">{{
+                            statistics.rejected }}
                         </p>
                     </div>
-                    <div class="p-3 bg-error-50 dark:bg-error-900/20 rounded-full">
-                        <UIcon name="i-heroicons-x-circle" class="w-8 h-8 text-error-600 dark:text-error-400" />
+                    <div class="p-2 sm:p-3 bg-error-50 dark:bg-error-900/20 rounded-full">
+                        <UIcon name="i-heroicons-x-circle"
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-error-600 dark:text-error-400" />
                     </div>
                 </div>
             </div>
@@ -77,8 +85,8 @@
 
         <!-- Filters -->
         <div
-            class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+            class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <!-- Status Filter -->
                 <div>
                     <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Durum</label>
@@ -109,11 +117,11 @@
                 </div>
             </div>
 
-            <div class="flex justify-between items-center mt-4">
+            <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-4">
                 <div class="text-sm text-neutral-600 dark:text-neutral-400">
                     {{ pagination.total }} yorum bulundu
                 </div>
-                <UButton @click="resetFilters" variant="outline" color="gray" size="sm">
+                <UButton @click="resetFilters" variant="outline" color="gray" size="sm" class="w-full sm:w-auto">
                     Filtreleri Temizle
                 </UButton>
             </div>
@@ -122,14 +130,16 @@
         <!-- Reviews List -->
         <div
             class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700">
-            <div class="p-6">
+            <div class="p-4 lg:p-6">
                 <h2 class="text-lg font-semibold text-neutral-900 dark:text-white mb-4">Yorumlar</h2>
 
                 <!-- Loading -->
                 <div v-if="loading && !hasReviews" class="space-y-4">
                     <div v-for="i in 5" :key="i" class="animate-pulse">
                         <div class="flex space-x-4 p-4 border border-neutral-200 dark:border-neutral-600 rounded-lg">
-                            <div class="w-12 h-12 bg-neutral-200 dark:bg-neutral-600 rounded-full"></div>
+                            <div
+                                class="w-10 h-10 sm:w-12 sm:h-12 bg-neutral-200 dark:bg-neutral-600 rounded-full flex-shrink-0">
+                            </div>
                             <div class="flex-1 space-y-2">
                                 <div class="h-4 bg-neutral-200 dark:bg-neutral-600 rounded w-1/4"></div>
                                 <div class="h-4 bg-neutral-200 dark:bg-neutral-600 rounded w-3/4"></div>
@@ -142,22 +152,23 @@
                 <!-- Reviews -->
                 <div v-else-if="hasReviews" class="space-y-4">
                     <div v-for="review in reviews" :key="review.id"
-                        class="border border-neutral-200 dark:border-neutral-600 rounded-lg p-6 hover:shadow-md transition-shadow duration-200">
+                        class="border border-neutral-200 dark:border-neutral-600 rounded-lg p-4 lg:p-6 hover:shadow-md transition-shadow duration-200">
 
                         <!-- Review Header -->
                         <div class="flex items-start justify-between mb-4">
-                            <div class="flex items-center space-x-4">
+                            <div class="flex items-center space-x-3 min-w-0 flex-1">
                                 <!-- User Avatar -->
                                 <div
-                                    class="w-12 h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center text-white font-semibold">
-                                    {{ getInitials(review.user?.name || 'A') }}
+                                    class="w-10 min-w-10 h-10 min-h-10 sm:w-12 sm:min-w-12 sm:h-12 sm:min-h-12 bg-gradient-to-br from-primary-500 to-accent-600 rounded-full flex items-center justify-center text-white font-semibold text-sm sm:text-base">
+                                    {{ getInitials(review.user?.name) }}
                                 </div>
 
                                 <!-- User & Product Info -->
-                                <div>
-                                    <div class="flex items-center space-x-2">
-                                        <h3 class="font-semibold text-neutral-900 dark:text-white">
-                                            {{ review.user?.name || 'Anonim Kullanıcı' }}
+                                <div class="min-w-0 flex-1">
+                                    <div class="flex flex-wrap items-center gap-2 mb-1">
+                                        <h3
+                                            class="font-semibold text-neutral-900 dark:text-white text-sm sm:text-base truncate">
+                                            {{ getMaskedUserName(review.user?.name) }}
                                         </h3>
                                         <UBadge v-if="review.is_verified_purchase" color="success" variant="soft"
                                             size="xs">
@@ -167,14 +178,17 @@
                                             {{ getStatusLabel(review.status) }}
                                         </UBadge>
                                     </div>
-                                    <p class="text-sm text-neutral-600 dark:text-neutral-400">
-                                        {{ review.product?.name }} • {{ formatDate(review.created_at) }}
+                                    <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 truncate">
+                                        {{ review.product?.name }}
+                                    </p>
+                                    <p class="text-xs text-neutral-500 dark:text-neutral-500 mt-1">
+                                        {{ formatDate(review.created_at) }}
                                     </p>
                                 </div>
                             </div>
 
                             <!-- Actions Menu -->
-                            <UDropdown :items="getActionItems(review)">
+                            <UDropdown :items="getActionItems(review)" class="flex-shrink-0">
                                 <UButton color="gray" variant="ghost" icon="i-heroicons-ellipsis-horizontal"
                                     size="sm" />
                             </UDropdown>
@@ -189,27 +203,30 @@
 
                         <!-- Comment -->
                         <div class="prose prose-sm dark:prose-invert max-w-none mb-4">
-                            <p class="text-neutral-700 dark:text-neutral-300">{{ review.comment }}</p>
+                            <p class="text-neutral-700 dark:text-neutral-300 text-sm sm:text-base">{{ review.comment }}
+                            </p>
                         </div>
 
                         <!-- Images -->
-                        <div v-if="review.images && review.images.length > 0" class="grid grid-cols-4 gap-2 mb-4">
+                        <div v-if="review.images && review.images.length > 0"
+                            class="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 mb-4">
                             <div v-for="image in review.images" :key="image.id" class="relative">
                                 <NuxtImg :src="`cl/${image.path}`" :alt="'Review image'"
-                                    class="w-full h-20 object-cover rounded-lg border border-neutral-200 dark:border-neutral-600"
+                                    class="w-full h-16 sm:h-20 object-cover rounded-lg border border-neutral-200 dark:border-neutral-600"
                                     width="80" height="80" />
                             </div>
                         </div>
 
                         <!-- Vendor Reply -->
                         <div v-if="review.vendor_reply"
-                            class="mt-4 p-4 bg-accent-50 dark:bg-accent-900/20 rounded-lg border-l-4 border-accent-400">
+                            class="mt-4 p-3 sm:p-4 bg-accent-50 dark:bg-accent-900/20 rounded-lg border-l-4 border-accent-400">
                             <div class="flex items-start space-x-3">
-                                <UIcon name="i-heroicons-building-storefront" class="w-5 h-5 text-accent-600 mt-0.5" />
-                                <div>
-                                    <p class="font-semibold text-accent-700 dark:text-accent-300 text-sm">Satıcı Yanıtı
-                                    </p>
-                                    <p class="text-neutral-700 dark:text-neutral-300 text-sm mt-1">{{
+                                <UIcon name="i-heroicons-building-storefront"
+                                    class="w-4 h-4 sm:w-5 sm:h-5 text-accent-600 mt-0.5 flex-shrink-0" />
+                                <div class="min-w-0 flex-1">
+                                    <p class="font-semibold text-accent-700 dark:text-accent-300 text-xs sm:text-sm">
+                                        Satıcı Yanıtı</p>
+                                    <p class="text-neutral-700 dark:text-neutral-300 text-xs sm:text-sm mt-1">{{
                                         review.vendor_reply }}
                                     </p>
                                     <p class="text-xs text-neutral-500 dark:text-neutral-400 mt-2">
@@ -219,9 +236,9 @@
                             </div>
                         </div>
 
-                        <!-- Helpful Votes -->
+                        <!-- Helpful Votes & Actions -->
                         <div
-                            class="flex items-center justify-between pt-4 mt-4 border-t border-neutral-200 dark:border-neutral-600">
+                            class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pt-4 mt-4 border-t border-neutral-200 dark:border-neutral-600">
                             <div class="flex items-center space-x-4 text-sm text-neutral-600 dark:text-neutral-400">
                                 <div class="flex items-center space-x-1">
                                     <UIcon name="i-heroicons-hand-thumb-up" class="w-4 h-4" />
@@ -236,14 +253,14 @@
                             <!-- Action Buttons -->
                             <div class="flex items-center space-x-2">
                                 <UButton v-if="review.status === 'pending'" @click="approveReview(review.id)"
-                                    color="success" variant="outline" size="xs">
-                                    <UIcon name="i-heroicons-check" class="w-4 h-4 mr-1" />
-                                    Onayla
+                                    color="success" variant="outline" size="xs" class="flex-1 sm:flex-none">
+                                    <UIcon name="i-heroicons-check" class="w-4 h-4 sm:mr-1" />
+                                    <span class="hidden sm:inline">Onayla</span>
                                 </UButton>
                                 <UButton v-if="review.status === 'pending'" @click="showRejectModal(review)"
-                                    color="error" variant="outline" size="xs">
-                                    <UIcon name="i-heroicons-x-mark" class="w-4 h-4 mr-1" />
-                                    Reddet
+                                    color="error" variant="outline" size="xs" class="flex-1 sm:flex-none">
+                                    <UIcon name="i-heroicons-x-mark" class="w-4 h-4 sm:mr-1" />
+                                    <span class="hidden sm:inline">Reddet</span>
                                 </UButton>
                             </div>
                         </div>
@@ -252,7 +269,8 @@
 
                 <!-- Empty State -->
                 <div v-else class="text-center py-12">
-                    <UIcon name="i-heroicons-chat-bubble-left-right" class="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+                    <UIcon name="i-heroicons-chat-bubble-left-right"
+                        class="w-12 h-12 sm:w-16 sm:h-16 text-neutral-400 mx-auto mb-4" />
                     <h3 class="text-lg font-medium text-neutral-900 dark:text-white mb-2">Yorum bulunamadı</h3>
                     <p class="text-neutral-600 dark:text-neutral-400">Arama kriterlerinizi değiştirmeyi deneyin</p>
                 </div>
@@ -260,7 +278,8 @@
                 <!-- Load More -->
                 <div v-if="canLoadMore"
                     class="text-center pt-6 border-t border-neutral-200 dark:border-neutral-600 mt-6">
-                    <UButton @click="loadMore" variant="outline" color="gray" :loading="loading">
+                    <UButton @click="loadMore" variant="outline" color="gray" :loading="loading"
+                        class="w-full sm:w-auto">
                         Daha Fazla Yükle
                     </UButton>
                 </div>
@@ -269,7 +288,7 @@
 
         <!-- Reject Modal -->
         <UModal v-model="showRejectModalState">
-            <div class="p-6">
+            <div class="p-4 sm:p-6">
                 <h3 class="text-lg font-semibold text-neutral-900 dark:text-white mb-4">Yorumu Reddet</h3>
 
                 <div class="mb-4">
@@ -280,11 +299,12 @@
                         :maxlength="500" />
                 </div>
 
-                <div class="flex justify-end space-x-3">
-                    <UButton @click="showRejectModalState = false" variant="outline" color="gray">
+                <div class="flex flex-col sm:flex-row sm:justify-end gap-3">
+                    <UButton @click="showRejectModalState = false" variant="outline" color="gray"
+                        class="w-full sm:w-auto">
                         İptal
                     </UButton>
-                    <UButton @click="confirmReject" color="error" :loading="rejectLoading">
+                    <UButton @click="confirmReject" color="error" :loading="rejectLoading" class="w-full sm:w-auto">
                         Reddet
                     </UButton>
                 </div>
@@ -458,11 +478,38 @@ const getActionItems = (review) => {
     return items
 }
 
+const getMaskedUserName = (name) => {
+    if (!name) return 'Anonim Kullanıcı'
+
+    const words = name.trim().split(' ').filter(word => word.length > 0)
+
+    if (words.length === 0) return 'Anonim Kullanıcı'
+
+    if (words.length === 1) {
+        // Tek kelime ise: "Mehmet" -> "M****"
+        const word = words[0]
+        return word.length <= 2 ? word : word[0] + '*'.repeat(word.length - 1)
+    } else {
+        // Çok kelime ise: "Mehmet Çelik" -> "M**** Ç***"
+        return words.map(word => {
+            return word.length <= 2 ? word : word[0] + '*'.repeat(word.length - 1)
+        }).join(' ')
+    }
+}
+
 const getInitials = (name) => {
     if (!name) return '?'
-    const parts = name.split(' ')
-    if (parts.length === 1) return parts[0][0].toUpperCase()
-    return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase()
+
+    const words = name.trim().split(' ').filter(word => word.length > 0)
+
+    if (words.length === 0) return '?'
+
+    if (words.length === 1) {
+        return words[0][0].toUpperCase()
+    }
+
+    // İlk ve son kelimenin baş harfleri
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase()
 }
 
 const formatDate = (dateString) => {
