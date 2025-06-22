@@ -51,7 +51,7 @@ export const useProductReviews = () => {
         }
       })
 
-      const response = await useBaseOFetch(`products/${productId}/reviews`, {
+      const response = await useBaseOFetchWithAuth(`products/${productId}/reviews`, {
         params
       })
 
@@ -77,19 +77,13 @@ export const useProductReviews = () => {
 
   const submitReview = async (productId, reviewData) => {
     try {
-      const formData = new FormData()
-      formData.append('comment', reviewData.comment)
-      formData.append('rating', reviewData.rating)
-      
-      if (reviewData.images && reviewData.images.length > 0) {
-        reviewData.images.forEach((image, index) => {
-          formData.append(`images[${index}]`, image)
-        })
-      }
-
       const response = await useBaseOFetchWithAuth(`products/${productId}/reviews`, {
         method: 'POST',
-        body: formData
+        body: {
+          comment: reviewData.comment,
+          rating: reviewData.rating,
+          images: reviewData.images || [] // Cloudflare paths array
+        }
       })
 
       return response

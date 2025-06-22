@@ -165,10 +165,18 @@ const canReplyToReview = (review) => {
 }
 
 const canVoteReview = (review) => {
-    if (!isAuthenticated.value || !authStore.currentUser) return false
+    if (!isAuthenticated.value) return false
 
+    // Debug için log ekle
+    console.log('canVoteReview check:', {
+        reviewId: review.id,
+        isOwnReview: review.is_own_review,
+        canVote: !review.is_own_review
+    })
+
+    // Backend'den gelen is_own_review bilgisini kullan
     // Kullanıcı kendi yorumuna oy veremez
-    return review.user_id !== authStore.currentUser.id
+    return !review.is_own_review
 }
 
 // Methods

@@ -55,17 +55,16 @@
             </div>
 
             <!-- Images -->
-            <div v-if="review.images && review.images.length > 0"
-                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                <div v-for="(image, index) in review.images" :key="index" class="relative group cursor-pointer"
-                    @click="openImageGallery(index)">
+            <div v-if="review.images && review.images.length > 0" class="flex flex-wrap gap-2">
+                <div v-for="(image, index) in review.images" :key="index"
+                    class="relative group cursor-pointer flex-shrink-0" @click="openImageGallery(index)">
                     <NuxtImg :src="`cl/${image.path}`" :alt="`Review image ${index + 1}`"
-                        class="w-full h-24 object-cover rounded-lg border border-neutral-200 dark:border-neutral-600 transition-transform duration-200 group-hover:scale-105"
-                        width="120" height="96" />
+                        class="w-12 h-16 object-cover rounded border border-neutral-200 dark:border-neutral-600 transition-transform duration-200 group-hover:scale-105"
+                        width="48" height="64" fit="cover" />
                     <div
-                        class="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded-lg transition-colors duration-200" />
+                        class="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded transition-colors duration-200" />
                     <UIcon name="i-heroicons-magnifying-glass-plus"
-                        class="absolute top-2 right-2 w-5 h-5 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 drop-shadow-lg" />
+                        class="absolute top-1 right-1 w-3 h-3 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-200 drop-shadow-lg" />
                 </div>
             </div>
         </div>

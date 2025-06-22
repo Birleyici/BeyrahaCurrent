@@ -74,40 +74,45 @@
                 </div>
 
                 <!-- Images -->
-                <!-- <div>
+                <div>
                     <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
                         Fotoğraflar (İsteğe bağlı)
                     </label>
                     <div class="space-y-4">
                         <!-- File Input -->
-                <!-- <div class="flex items-center justify-center w-full">
+                        <div class="flex items-center justify-center w-full">
                             <label
-                                class="flex flex-col items-center justify-center w-full h-32 border-2 border-neutral-300 dark:border-neutral-600 border-dashed rounded-lg cursor-pointer bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors duration-200">
+                                class="flex flex-col items-center justify-center w-full h-32 border-2 border-neutral-300 dark:border-neutral-600 border-dashed rounded-lg cursor-pointer bg-neutral-50 dark:bg-neutral-800 hover:bg-neutral-100 dark:hover:bg-neutral-700 hover:border-neutral-400 dark:hover:border-neutral-500 transition-colors duration-200"
+                                :class="{ 'opacity-50 cursor-not-allowed': uploadingImages }">
                                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                                    <UIcon name="i-heroicons-camera" class="w-8 h-8 mb-2 text-neutral-400 dark:text-neutral-500" />
+                                    <UIcon name="i-heroicons-camera"
+                                        class="w-8 h-8 mb-2 text-neutral-400 dark:text-neutral-500" />
                                     <p class="mb-2 text-sm text-neutral-500 dark:text-neutral-400">
-                                        <span class="font-semibold">Fotoğraf eklemek için tıklayın</span>
+                                        <span class="font-semibold">
+                                            {{ uploadingImages ? 'Yükleniyor...' : 'Fotoğraf eklemek için tıklayın' }}
+                                        </span>
                                     </p>
                                     <p class="text-xs text-neutral-500 dark:text-neutral-400">PNG, JPG (MAX. 5MB)</p>
                                 </div>
                                 <input ref="fileInput" type="file" multiple accept="image/*" @change="handleFileSelect"
-                                    class="hidden" />
+                                    class="hidden" :disabled="uploadingImages" />
                             </label>
-                        </div> -->
+                        </div>
 
-                <!-- Image Previews -->
-                <!-- <div v-if="imagePreviews.length > 0" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
+                        <!-- Image Previews -->
+                        <div v-if="imagePreviews.length > 0" class="grid grid-cols-2 sm:grid-cols-3 gap-4">
                             <div v-for="(preview, index) in imagePreviews" :key="index" class="relative group">
-                                <img :src="preview.url" :alt="`Preview ${index + 1}`"
-                                    class="w-full h-24 object-cover rounded-lg border border-neutral-200 dark:border-neutral-600" />
+                                <NuxtImg :src="`cl/${preview.path}`" :alt="`Preview ${index + 1}`"
+                                    class="w-full h-24 object-cover rounded-lg border border-neutral-200 dark:border-neutral-600"
+                                    width="96" height="96" fit="cover" />
                                 <button type="button" @click="removeImage(index)"
                                     class="absolute -top-2 -right-2 bg-error-500 hover:bg-error-600 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                                     <UIcon name="i-heroicons-x-mark" class="w-4 h-4" />
                                 </button>
                             </div>
-                        </div> -->
-                <!-- </div>
-                </div> -->
+                        </div>
+                    </div>
+                </div>
 
                 <!-- Actions -->
                 <div class="flex justify-end space-x-3 pt-4 border-t border-neutral-200 dark:border-neutral-700">
@@ -145,6 +150,7 @@ const toast = useToast()
 const loading = ref(false)
 const hoverRating = ref(0)
 const fileInput = ref(null)
+const uploadingImages = ref(false)
 
 const form = reactive({
     rating: 0,
@@ -194,10 +200,12 @@ const getRatingText = (rating) => {
     return texts[rating] || ''
 }
 
-const handleFileSelect = (event) => {
+const handleFileSelect = async (event) => {
     const files = Array.from(event.target.files)
 
-    if (files.length + form.images.length > 5) {
+    if (files.length === 0) return
+
+    if (files.length + imagePreviews.value.length > 5) {
         toast.add({
             title: 'Çok fazla fotoğraf',
             description: 'En fazla 5 fotoğraf yükleyebilirsiniz',
@@ -206,31 +214,81 @@ const handleFileSelect = (event) => {
         return
     }
 
-    files.forEach(file => {
-        if (file.size > 5 * 1024 * 1024) {
-            toast.add({
-                title: 'Dosya çok büyük',
-                description: `${file.name} dosyası 5MB'dan büyük`,
-                color: 'red'
-            })
+    uploadingImages.value = true
+
+    try {
+        // Validate files
+        const validFiles = []
+        for (const file of files) {
+            if (file.size > 5 * 1024 * 1024) {
+                toast.add({
+                    title: 'Dosya çok büyük',
+                    description: `${file.name} dosyası 5MB'dan büyük`,
+                    color: 'red'
+                })
+                continue
+            }
+
+            if (!['image/jpeg', 'image/png', 'image/gif', 'image/webp'].includes(file.type)) {
+                toast.add({
+                    title: 'Desteklenmeyen format',
+                    description: `${file.name} desteklenmeyen bir format`,
+                    color: 'red'
+                })
+                continue
+            }
+
+            validFiles.push(file)
+        }
+
+        if (validFiles.length === 0) {
+            uploadingImages.value = false
             return
         }
 
-        form.images.push(file)
+        // Upload to Cloudflare
+        const formData = new FormData()
+        validFiles.forEach(file => {
+            formData.append("file[]", file)
+        })
 
-        const reader = new FileReader()
-        reader.onload = (e) => {
-            imagePreviews.value.push({
-                url: e.target.result,
-                file: file
+        const response = await useBaseOFetchWithAuth("upload", {
+            method: "post",
+            body: formData,
+        })
+
+        if (!response.error && response.uploadedFiles) {
+            // Add to form images array
+            form.images.push(...response.uploadedFiles)
+
+            // Add to previews
+            response.uploadedFiles.forEach(imagePath => {
+                imagePreviews.value.push({
+                    path: imagePath
+                })
             })
-        }
-        reader.readAsDataURL(file)
-    })
 
-    // Clear input
-    if (fileInput.value) {
-        fileInput.value.value = ''
+            toast.add({
+                title: 'Başarılı',
+                description: `${validFiles.length} fotoğraf yüklendi`,
+                color: 'green'
+            })
+        } else {
+            throw new Error(response.error || 'Yükleme başarısız')
+        }
+    } catch (error) {
+        console.error('Upload error:', error)
+        toast.add({
+            title: 'Yükleme hatası',
+            description: error.message || 'Fotoğraflar yüklenemedi',
+            color: 'red'
+        })
+    } finally {
+        uploadingImages.value = false
+        // Clear file input
+        if (fileInput.value) {
+            fileInput.value.value = ''
+        }
     }
 }
 
@@ -270,7 +328,7 @@ const handleSubmit = async () => {
         await submitReview(props.product.id, {
             rating: form.rating,
             comment: form.comment.trim(),
-            images: form.images
+            images: form.images // Cloudflare paths array
         })
 
         emit('submitted')
@@ -294,6 +352,7 @@ const resetForm = () => {
     errors.rating = ''
     errors.comment = ''
     hoverRating.value = 0
+    uploadingImages.value = false
 }
 
 const closeModal = () => {
