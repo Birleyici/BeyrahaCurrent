@@ -220,27 +220,17 @@ export const useVariations = () => {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ variations }),
+                body: JSON.stringify({ 
+                    variations,
+                    skipSync: true // Normal varyasyon kaydetme işleminde senkronizasyonu atla
+                }),
             });
-
-            // Backend'den gelen senkronizasyon sonucunu göster
-            const syncResult = response.sync_result || {};
-            let syncMessage = '';
-            
-            if (syncResult.total_cleaned > 0) {
-                const details = [];
-                if (syncResult.orphaned > 0) details.push(`${syncResult.orphaned} yetim`);
-                if (syncResult.duplicates > 0) details.push(`${syncResult.duplicates} tekrar eden`);
-                if (syncResult.invalid > 0) details.push(`${syncResult.invalid} geçersiz`);
-                
-                syncMessage = ` (${details.join(', ')} varyasyon otomatik temizlendi)`;
-            }
 
             await variationState.fetchVariations(productId);
 
             toast.add({
                 title: 'Varyasyonlar kaydedildi!',
-                description: `Varyasyonlar başarıyla güncellendi${syncMessage}`,
+                description: 'Varyasyonlar başarıyla güncellendi',
                 color: 'green',
             })
         } catch (error) {

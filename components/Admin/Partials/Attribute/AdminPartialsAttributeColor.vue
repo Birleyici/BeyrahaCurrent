@@ -164,11 +164,11 @@
     </UAccordion>
 
     <!-- Media Selection Modal -->
-    <UModal v-model="isMediaModalOpen">
-      <div class="h-full bg-white dark:bg-gray-900 flex flex-col">
+    <UModal v-model="isMediaModalOpen" fullscreen>
+      <div class="h-full bg-white dark:bg-gray-900 flex flex-col rounded-lg">
         <!-- Modal Header -->
         <div
-          class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-10">
+          class="flex items-center justify-between p-6 border-b border-gray-200  dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-10">
           <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
             {{ selectedTerm?.term_name }} için Görsel Seç
           </h3>
@@ -386,7 +386,7 @@ const lightenColor = (color, percent) => {
 const openImageSelector = (term) => {
   console.log('openImageSelector çağrıldı:', {
     term: term,
-    termId: term?.id,
+    termId: term?.id || term?.product_attribute_term_id,
     termName: term?.term_name
   })
 
@@ -407,7 +407,9 @@ const openImageSelector = (term) => {
     return
   }
 
-  if (!term.id) {
+  // ID'yi hem id hem de product_attribute_term_id alanlarından kontrol et
+  const termId = term.id || term.product_attribute_term_id
+  if (!termId) {
     console.error('Term ID boş!', term)
     try {
       const nuxtApp = useNuxtApp()
@@ -443,7 +445,7 @@ const openImageSelector = (term) => {
 
   console.log('Modal açılıyor:', {
     term: term.term_name,
-    termId: term.id,
+    termId: termId,
     currentImages: selectedImages.value,
     selectedTerm: selectedTerm.value
   })

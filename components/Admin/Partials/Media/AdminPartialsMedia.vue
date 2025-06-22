@@ -30,7 +30,7 @@
         </div>
 
         <!-- Search and Filters -->
-        <div class="flex flex-col sm:flex-row gap-3">
+        <!-- <div class="flex flex-col sm:flex-row gap-3">
           <div class="flex-1">
             <UInput v-model="searchQuery" icon="i-heroicons-magnifying-glass" placeholder="Görsellerde ara..." size="md"
               :ui="{ icon: { trailing: { pointer: '' } } }">
@@ -38,11 +38,11 @@
                 <UButton v-show="searchQuery !== ''" color="gray" variant="link" icon="i-heroicons-x-mark-20-solid"
                   :padded="false" @click="searchQuery = ''" />
               </template>
-            </UInput>
-          </div>
+</UInput>
+</div>
 
-          <USelectMenu v-model="sortBy" :options="sortOptions" placeholder="Sıralama" size="md"
-            class="w-full sm:w-48 flex-shrink-0" :ui="{
+<USelectMenu v-model="sortBy" :options="sortOptions" placeholder="Sıralama" size="md"
+  class="w-full sm:w-48 flex-shrink-0" :ui="{
               rounded: 'rounded-lg',
               trigger: 'flex items-center justify-between w-full',
               background: 'bg-white dark:bg-gray-800',
@@ -54,7 +54,7 @@
                 }
               }
             }" />
-        </div>
+</div> -->
 
         <!-- Bulk Actions -->
         <div v-if="selectedCount > 0"
@@ -90,10 +90,10 @@
         class="flex flex-col items-center justify-center min-h-[400px] p-6 sm:p-8">
         <Icon name="i-heroicons-photo" class="w-12 h-12 sm:w-16 sm:h-16 text-gray-400 mb-3 sm:mb-4" />
         <h3 class="text-base sm:text-lg font-medium text-gray-900 dark:text-white mb-2 text-center">
-          {{ searchQuery ? 'Görsel bulunamadı' : 'Henüz görsel yok' }}
+          Henüz görsel yok
         </h3>
         <p class="text-gray-600 dark:text-gray-400 text-center mb-4 sm:mb-6 text-sm sm:text-base max-w-md">
-          {{ searchQuery ? 'Arama kriterlerinizi değiştirmeyi deneyin' : 'İlk görselinizi yükleyerek başlayın' }}
+          İlk görselinizi yükleyerek başlayın
         </p>
         <AdminPartialsMediaUploadButton @uploaded-images="imgs => addNewPathsToImages(imgs)" />
       </div>
@@ -152,8 +152,8 @@
       <div v-else class="p-3 sm:p-4 md:p-6">
         <UTable :columns="listColumns" :rows="filteredImages" :loading="loading" :empty-state="{
           icon: 'i-heroicons-photo',
-          label: 'Görsel bulunamadı',
-          description: 'Arama kriterlerinizi değiştirmeyi deneyin'
+          label: 'Henüz görsel yok',
+          description: 'İlk görselinizi yükleyerek başlayın'
         }" :ui="{
           td: { base: 'max-w-[0] truncate', padding: 'px-2 py-2 sm:px-4 sm:py-3' },
           th: { padding: 'px-2 py-2 sm:px-4 sm:py-3', base: 'text-xs sm:text-sm' },
@@ -257,21 +257,21 @@ const query = ref({
 const images = ref({ data: [], total: 0 });
 const loading = ref(false);
 const viewMode = ref('grid');
-const searchQuery = ref('');
-const sortBy = ref('newest');
+// const searchQuery = ref('');
+// const sortBy = ref('newest');
 const showBulkDeleteModal = ref(false);
 const showDeleteModal = ref(false);
 const imageToDelete = ref(null);
 
 // Sort options
-const sortOptions = [
-  { label: 'En Yeni', value: 'newest' },
-  { label: 'En Eski', value: 'oldest' },
-  { label: 'A-Z', value: 'name_asc' },
-  { label: 'Z-A', value: 'name_desc' },
-  { label: 'Boyut (Küçük-Büyük)', value: 'size_asc' },
-  { label: 'Boyut (Büyük-Küçük)', value: 'size_desc' }
-];
+// const sortOptions = [
+//   { label: 'En Yeni', value: 'newest' },
+//   { label: 'En Eski', value: 'oldest' },
+//   { label: 'A-Z', value: 'name_asc' },
+//   { label: 'Z-A', value: 'name_desc' },
+//   { label: 'Boyut (Küçük-Büyük)', value: 'size_asc' },
+//   { label: 'Boyut (Büyük-Küçük)', value: 'size_desc' }
+// ];
 
 // Table columns for list view
 const listColumns = computed(() => [
@@ -287,47 +287,28 @@ const selectedCount = computed(() => {
 });
 
 const filteredImages = computed(() => {
-  let result = [...(images.value.data || [])];
-
-  // Search filter
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase();
-    result = result.filter(img =>
-      img.path.toLowerCase().includes(query) ||
-      img.id.toString().includes(query)
-    );
-  }
-
-  // Sort
-  switch (sortBy.value) {
-    case 'oldest':
-      result.sort((a, b) => new Date(a.created_at) - new Date(b.created_at));
-      break;
-    case 'name_asc':
-      result.sort((a, b) => getImageName(a.path).localeCompare(getImageName(b.path)));
-      break;
-    case 'name_desc':
-      result.sort((a, b) => getImageName(b.path).localeCompare(getImageName(a.path)));
-      break;
-    case 'size_asc':
-      result.sort((a, b) => (a.size || 0) - (b.size || 0));
-      break;
-    case 'size_desc':
-      result.sort((a, b) => (b.size || 0) - (a.size || 0));
-      break;
-    default: // newest
-      result.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
-  }
-
-  return result;
+  // Backend'den seçili görseller zaten öncelikli geldiği için sadece data'yı döndür
+  return [...(images.value.data || [])];
 });
 
 const getImagesData = async () => {
   loading.value = true;
   try {
+    // Seçili görsellerin ID'lerini hazırla
+    const selectedImageIds = Array.isArray(model.value)
+      ? model.value.map(item => item.id).filter(id => id)
+      : [];
+
+    const queryParams = {
+      ...query.value,
+      // Seçili görsel ID'lerini backend'e gönder
+      ...(selectedImageIds.length > 0 && { priority_ids: selectedImageIds.join(',') })
+    };
+
     const response = await useBaseOFetchWithAuth("vendor/images", {
-      query: query.value,
+      query: queryParams,
     });
+
     if (response.data) {
       images.value = response;
     }
@@ -436,10 +417,13 @@ const handleSingleDelete = async (confirmed) => {
   showDeleteModal.value = false;
 };
 
-// Watch for search changes to reset pagination
-watch(searchQuery, () => {
-  query.value.page = 1;
-});
+// Watch for selection changes to reload images with priority
+watch(() => model.value, () => {
+  // Sadece ilk sayfa için yeniden yükle
+  if (query.value.page === 1) {
+    getImagesData();
+  }
+}, { deep: true });
 
 // Initialize
 await getImagesData();

@@ -58,14 +58,13 @@
         ]">
           <div class="p-6 space-y-6">
             <!-- Image Selection -->
-            <div class="space-y-3">
+            <!-- <div class="space-y-3">
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                 Varyasyon Görseli
               </label>
 
               <div class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
                 <div class="flex items-center space-x-4">
-                  <!-- Current Image or Placeholder -->
                   <div @click="openImageSelector"
                     class="relative w-20 h-20 bg-gray-100 dark:bg-gray-600 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-500 cursor-pointer hover:border-orange-400 dark:hover:border-orange-500 transition-colors duration-200 flex items-center justify-center group">
                     <NuxtImg v-if="item.image" :src="'cl/' + item.image.path" :alt="'Varyasyon görseli'"
@@ -75,7 +74,6 @@
                         class="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover:text-orange-500 transition-colors" />
                     </div>
 
-                    <!-- Hover overlay -->
                     <div
                       class="absolute inset-0 bg-black/0 group-hover:bg-black/10 rounded-lg transition-colors duration-200 flex items-center justify-center">
                       <UIcon name="i-heroicons-pencil"
@@ -83,7 +81,6 @@
                     </div>
                   </div>
 
-                  <!-- Image Info -->
                   <div class="flex-1">
                     <p v-if="!item.image" class="text-sm text-gray-500 dark:text-gray-400">
                       Varyasyon için özel görsel seçilmedi
@@ -96,12 +93,11 @@
                     </p>
                   </div>
 
-                  <!-- Remove Image -->
                   <UButton v-if="item.image" @click="removeImage" icon="i-heroicons-trash" color="red" variant="outline"
                     size="xs" />
                 </div>
               </div>
-            </div>
+            </div> -->
 
             <!-- Form Fields -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -109,9 +105,12 @@
               <div class="space-y-2">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   Stok Kodu
+                  <span class="text-xs text-gray-500 dark:text-gray-400 font-normal">(Otomatik oluşturulur)</span>
                 </label>
-                <UInput v-model="item.stockCode" placeholder="Stok kodu girin..." size="md"
-                  :ui="{ rounded: 'rounded-lg' }" />
+                <UInput v-model="item.stockCode" placeholder="Otomatik oluşturulacak..." size="md" :ui="{
+                  rounded: 'rounded-lg',
+                  base: 'cursor-not-allowed bg-gray-50 dark:bg-gray-700 text-gray-500 dark:text-gray-400'
+                }" readonly />
               </div>
 
               <!-- Regular Price -->
@@ -124,26 +123,17 @@
               </div>
 
               <!-- Sale Price -->
-              <div class="space-y-2">
+              <div class="space-y-2 lg:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
                   İndirimli Fiyat
                 </label>
                 <UInput v-model="item.sale_price" placeholder="İndirimli fiyat..." size="md" type="number" step="0.01"
-                  :ui="{ rounded: 'rounded-lg' }" />
-              </div>
-
-              <!-- Cost -->
-              <div class="space-y-2">
-                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Maliyet
-                </label>
-                <UInput v-model="item.coast" placeholder="Maliyet..." size="md" type="number" step="0.01"
-                  :ui="{ rounded: 'rounded-lg' }" />
+                  :ui="{ rounded: 'rounded-lg' }" class="lg:max-w-md" />
               </div>
             </div>
 
             <!-- Stock Management -->
-            <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-600">
+            <!-- <div class="space-y-4 pt-4 border-t border-gray-200 dark:border-gray-600">
               <div class="flex items-center space-x-3">
                 <UCheckbox v-model="item.isStockManagement" :value="true" color="orange" />
                 <div>
@@ -163,7 +153,7 @@
                 <UInput v-model="item.stock" placeholder="Stok miktarı..." size="md" type="number" min="0"
                   :ui="{ rounded: 'rounded-lg' }" class="max-w-xs" />
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
       </template>
