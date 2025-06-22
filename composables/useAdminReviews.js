@@ -74,7 +74,6 @@ export const useAdminReviews = () => {
                 method: 'POST'
             })
 
-            console.log(data)
 
             // Local state'i güncelle - mevcut review objesini koruyarak sadece değişen alanları güncelle
             const reviewIndex = reviews.value.findIndex(r => r.id === reviewId)

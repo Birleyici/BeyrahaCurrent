@@ -13,9 +13,9 @@
             <div
                 class="flex items-center space-x-4 p-4 bg-neutral-50 dark:bg-neutral-800 rounded-lg mb-6 border border-neutral-200 dark:border-neutral-700">
                 <div class="w-16 h-16 rounded-lg overflow-hidden bg-neutral-200 dark:bg-neutral-700 flex-shrink-0">
-                    <NuxtImg v-if="product.selectedImages && product.selectedImages[0].path"
-                        :src="`cl/${product.selectedImages[0].path}`" :alt="product.name"
-                        class="w-full h-full object-cover object-top" width="64" height="64" fit="cover" />
+                    <NuxtImg v-if="productImage && productImage.path" :src="`cl/${productImage.path}`"
+                        :alt="product.name" class="w-full h-full object-cover object-top" width="64" height="64"
+                        fit="cover" />
                     <div v-else class="w-full h-full flex items-center justify-center">
                         <UIcon name="i-heroicons-photo" class="w-6 h-6 text-neutral-400" />
                     </div>
@@ -167,6 +167,19 @@ const isOpen = computed({
 
 const isFormValid = computed(() => {
     return form.rating > 0 && form.comment.trim().length >= 10
+})
+
+// Ürün görselini belirle: selectedImages varsa onu kullan, yoksa selectedColorTermImages'in ilkini al
+const productImage = computed(() => {
+    if (props.product.selectedImages && props.product.selectedImages.length > 0) {
+        return props.product.selectedImages[0]
+    }
+
+    if (props.product.selectedColorTermImages && props.product.selectedColorTermImages.length > 0) {
+        return props.product.selectedColorTermImages[0]
+    }
+
+    return null
 })
 
 // Methods
