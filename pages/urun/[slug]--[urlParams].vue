@@ -4,7 +4,7 @@
     <UiCommonBreadcrumb :links="breadcrumbLinks" />
 
     <!-- Ürün Detay -->
-    <section class="py-6 md:py-8 lg:py-12">
+    <section class="pb-8 md:py-8 lg:py-12">
       <div class="md:container mx-auto  md:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-12 lg:gap-12 space-y-6 lg:space-y-0">
           <!-- Ürün Görselleri - Mobilde tam genişlik -->
@@ -61,7 +61,7 @@
     </section>
 
     <!-- Ürün Açıklaması -->
-    <section ref="product_information"
+    <section ref="product_information "
       class="py-8 lg:py-12 bg-white dark:bg-neutral-800 transition-colors duration-300">
       <div class="container mx-auto px-4 md:px-6 lg:px-8">
         <PartialsProductInformation :attributes="attributeState.transformedAttrs" />
