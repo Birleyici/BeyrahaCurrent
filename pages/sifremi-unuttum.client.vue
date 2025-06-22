@@ -57,7 +57,8 @@
             </UButton>
 
             <UNotification v-if="remindNotification" id="remind_notification" :timeout="0" color="green"
-              title="Başarılı!" description="Şifre yenileme bağlantısı e-mail adresinize gönderildi."
+              title="İşlem Tamamlandı!"
+              description="Eğer bu e-posta adresi sistemimizde kayıtlıysa, şifre sıfırlama bağlantısı gönderilmiştir."
               @close="remindNotification = false" />
           </UForm>
         </div>
@@ -158,15 +159,17 @@ const changeFormErrors = ref<any>({});
 
 async function onRemind(event: FormSubmitEvent<RemindSchema>) {
   try {
-    await authStore.remind(form.value.email);
+    const response = await authStore.remind(form.value.email);
     remindNotification.value = true;
     remindFormErrors.value = {}
     form.value.email = '';
   } catch (error) {
     remindNotification.value = false;
-    const parsedError = parseError(error);
-    if (parsedError.errorType) {
-      remindFormErrors.value = parsedError.errors || {};
+    // Sadece validation hataları veya server hataları için hata göster
+    if (authStore.apiError.remind && authStore.apiError.remind.length > 0) {
+      remindFormErrors.value = { email: authStore.apiError.remind };
+    } else {
+      remindFormErrors.value = { email: ['Bir hata oluştu. Lütfen tekrar deneyin.'] };
     }
   }
 }

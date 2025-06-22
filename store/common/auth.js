@@ -144,15 +144,23 @@ export const useAuthStore = defineStore(
 
     const remind = async (email) => {
       loading.value.remind = true
-      await useBaseOFetch('auth/remind', {
-        body: JSON.stringify({ email }),
-        method: 'POST',
-        onResponseError: (errorResponse) => {
-          const errorData = errorResponse.response._data
-
+      
+      try {
+        const response = await useBaseOFetch('auth/remind', {
+          body: JSON.stringify({ email }),
+          method: 'POST'
+        })
+        
+        // Backend her zaman success döndürecek (güvenlik için)
+        apiError.value.remind = []
+        return response
+        
+      } catch (error) {
+        // Sadece gerçek network hataları veya server hataları
+        if (error.data) {
           // Laravel validation hatalarını işle
+          const errorData = error.data
           if (typeof errorData === 'object' && errorData !== null) {
-            // Validation errors object ise
             const formattedErrors = []
             Object.keys(errorData).forEach(field => {
               if (Array.isArray(errorData[field])) {
@@ -162,17 +170,16 @@ export const useAuthStore = defineStore(
               }
             })
             apiError.value.remind = formattedErrors
-          } else if (Array.isArray(errorData)) {
-            // Eğer direkt array ise
-            apiError.value.remind = errorData
           } else {
-            // Genel hata mesajı
             apiError.value.remind = [errorData || 'Şifre hatırlatma işlemi başarısız']
           }
+        } else {
+          apiError.value.remind = [error.message || 'Şifre hatırlatma işlemi başarısız']
         }
-      }).finally(() => {
+        throw error
+      } finally {
         loading.value.remind = false
-      })
+      }
     }
 
     const changePassword = async (form) => {

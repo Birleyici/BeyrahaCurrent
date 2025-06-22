@@ -249,8 +249,13 @@ const handleReviewSubmitted = async () => {
 }
 
 const handleAuthSuccess = async () => {
+    // Auth durumunu güncelle
+    isAuthenticated.value = !!authStore.token && !!authStore.currentUser
+
     // Auth başarılı olduktan sonra can review check yap
-    canUserReview.value = await checkCanUserReview(props.product.id)
+    if (isAuthenticated.value) {
+        canUserReview.value = await checkCanUserReview(props.product.id)
+    }
 
     toast.add({
         title: 'Giriş başarılı!',
@@ -261,6 +266,14 @@ const handleAuthSuccess = async () => {
 }
 
 // Watch auth changes
+watch(() => authStore.token, (newToken) => {
+    isAuthenticated.value = !!newToken
+})
+
+watch(() => authStore.currentUser, (newUser) => {
+    isAuthenticated.value = !!newUser && !!authStore.token
+})
+
 watch(isAuthenticated, async (newValue) => {
     if (newValue) {
         canUserReview.value = await checkCanUserReview(props.product.id)
