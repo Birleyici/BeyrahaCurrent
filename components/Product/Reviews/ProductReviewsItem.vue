@@ -1,6 +1,6 @@
 <template>
     <article
-        class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-6 shadow-none md:shadow-soft hover:shadow-none md:hover:shadow-medium transition-all duration-300 -mx-4 md:mx-0">
+        class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-6 shadow-none md:shadow-soft hover:shadow-none md:hover:shadow-medium transition-all duration-300">
         <!-- Header -->
         <div class="flex items-start justify-between mb-4">
             <div class="flex items-center space-x-4">

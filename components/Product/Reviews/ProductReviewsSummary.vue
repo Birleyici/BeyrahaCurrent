@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-6 lg:p-8 shadow-none md:shadow-soft transition-colors duration-300 -mx-4 md:mx-0">
+        class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-6 lg:p-8 shadow-none md:shadow-soft transition-colors duration-300">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <!-- Overall Rating -->
             <div class="text-center lg:text-left">

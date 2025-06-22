@@ -1,6 +1,6 @@
 <template>
     <div
-        class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-6 shadow-none md:shadow-soft animate-pulse -mx-4 md:mx-0">
+        class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-6 shadow-none md:shadow-soft animate-pulse -mx-4 md:mx-0 max-w-full">
         <!-- Header -->
         <div class="flex items-start space-x-4 mb-4">
             <!-- Avatar Skeleton -->

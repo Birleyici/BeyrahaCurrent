@@ -1,5 +1,5 @@
 <template>
-  <div class="px-4 md:px-0">
+  <div>
     <UiCardsSectionCard title="Ürün açıklaması ve özellikleri">
       <div class="grid gap-4">
         <ul class="list-disc ">

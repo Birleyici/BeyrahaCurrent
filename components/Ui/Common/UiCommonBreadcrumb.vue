@@ -2,7 +2,7 @@
     <!-- Breadcrumb Container - Arka Plan İçerisinde -->
     <section
         class="bg-white dark:bg-neutral-800 border-b border-neutral-200 dark:border-neutral-700 transition-colors duration-300 md:mb-8">
-        <div class="container">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
             <nav class="flex items-center space-x-1 text-sm py-4 md:py-6" aria-label="Breadcrumb">
                 <!-- Mobil: Sadece geri butonu ve mevcut sayfa -->
                 <div class="md:hidden flex items-center space-x-3 w-full">

@@ -1,9 +1,9 @@
 <template>
-  <div :id="props.id" class="component-spacing">
+  <div :id="props.id" class="py-8 lg:py-12">
     <!-- Skeleton ekranı, yükleme sırasında gösterilir -->
     <div v-if="isLoading" class="w-full overflow-x-hidden">
       <!-- Mobile Skeleton -->
-      <div class="flex gap-4 lg:hidden overflow-x-auto mobile-breakout-x px-container-mobile">
+      <div class="flex gap-4 lg:hidden overflow-x-auto mobile-breakout-x px-4">
         <div v-for="item in 6" :key="item" class="flex-shrink-0 space-y-4 w-[280px] first:ml-0">
           <USkeleton class="w-full h-[320px]" :ui="{ rounded: 'rounded-xl' }" />
           <div class="p-4 lg:p-6 space-y-3">
@@ -14,12 +14,16 @@
       </div>
 
       <!-- Desktop Skeleton -->
-      <div class="hidden lg:flex gap-6">
-        <div v-for="item in 6" :key="item" class="flex-shrink-0 space-y-4 w-[280px] card">
-          <USkeleton class="w-full h-[320px]" :ui="{ rounded: 'rounded-xl' }" />
-          <div class="p-6 space-y-3">
-            <USkeleton class="w-4/6 mx-auto h-4" :ui="{ rounded: 'rounded-md' }" />
-            <USkeleton class="w-2/6 mx-auto h-4" :ui="{ rounded: 'rounded-md' }" />
+      <div class="hidden lg:block">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+          <div class="flex gap-6">
+            <div v-for="item in 6" :key="item" class="flex-shrink-0 space-y-4 w-[280px] card">
+              <USkeleton class="w-full h-[320px]" :ui="{ rounded: 'rounded-xl' }" />
+              <div class="p-6 space-y-3">
+                <USkeleton class="w-4/6 mx-auto h-4" :ui="{ rounded: 'rounded-md' }" />
+                <USkeleton class="w-2/6 mx-auto h-4" :ui="{ rounded: 'rounded-md' }" />
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -27,7 +31,7 @@
 
     <div v-if="!isLoading && products?.length > 0" class="space-y-8">
       <!-- Header -->
-      <div class="container">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-8">
           <h2 class="text-heading-2 font-semibold text-neutral-900 dark:text-neutral-100">{{ props.title }}</h2>
           <NuxtLink v-if="props.to" :to="props.to"
@@ -42,10 +46,10 @@
       <!-- Mobile Carousel - Tam viewport genişliği -->
       <div class="lg:hidden mobile-breakout-viewport">
         <div class="overflow-x-auto scrollbar-hide">
-          <div class="flex gap-4 pb-4 pl-x-mobile" style="scroll-snap-type: x mandatory;">
+          <div class="flex gap-4 pb-4 pl-4" style="scroll-snap-type: x mandatory;">
             <div v-for="(item, index) in products" :key="item.id"
-              class="flex-shrink-0 w-[280px] sm:w-[320px] snap-start"
-              :class="{ 'pr-x-mobile': index === products.length - 1 }" style="scroll-snap-align: start;">
+              class="flex-shrink-0 w-[280px] sm:w-[320px] snap-start" :class="{ 'pr-4': index === products.length - 1 }"
+              style="scroll-snap-align: start;">
               <PartialsProductCard :lcp="props.lcp" :index="index" :product="item" :key="item.id" />
             </div>
           </div>
@@ -54,7 +58,7 @@
 
       <!-- Desktop Carousel - Mevcut görünüm -->
       <div class="hidden lg:block">
-        <div class="container">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
           <UCarousel arrows v-slot="{ item, index }" :items="products" :ui="{
             item: 'snap-end',
             container: 'gap-6 px-2'
