@@ -8,7 +8,7 @@
       <div class="md:container mx-auto  md:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-12 lg:gap-12 space-y-6 lg:space-y-0">
           <!-- Ürün Görselleri - Mobilde tam genişlik -->
-          <div class="col-span-5  md:mx-0" v-if="$mainState.isLoaded">
+          <div id="product-gallery" class="col-span-5  md:mx-0" v-if="$mainState.isLoaded">
             <div class="lg:sticky lg:top-24">
               <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages" />
             </div>

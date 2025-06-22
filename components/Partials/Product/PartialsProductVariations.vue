@@ -1,18 +1,18 @@
 <template>
-  <div class="space-y-y-mobile md:space-y-y-desktop ">
+  <div class="space-y-6">
     <div>
       <div v-for="attribute in props.attrsAndVarsState" :key="attribute.name">
         <!-- Öznitelik Adı -->
         <div>
           <div v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
-            <div class="space-y-4"
-              :class="{ 'p-2 border border-red-400 rounded-md bg-red-50 dark:bg-red-900/20': selectionRequired && !selectedOptions['Renk'] }">
+            <div class="space-y-4 mb-4"
+              :class="{ 'p-4 border border-red-200 rounded-xl bg-red-50 dark:bg-red-900/10 dark:border-red-700': selectionRequired && !selectedOptions['Renk'] }">
               <!-- Renk Başlığı ve Seçili Renk -->
               <div class="flex items-center justify-between">
                 <div class="flex items-center space-x-3">
                   <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">Renk Seçenekleri</h3>
                   <div v-if="selectedOptions['Renk']" class="flex items-center space-x-2">
-                    <div class="w-4 h-4 bg-secondary-500 rounded-full"></div>
+                    <div class="w-3 h-3 bg-secondary-500 rounded-full"></div>
                     <span class="text-sm font-medium text-secondary-600 dark:text-secondary-400">{{
                       selectedOptions['Renk'] }}</span>
                   </div>
@@ -28,18 +28,19 @@
               </div>
 
               <!-- Renk Seçenekleri Grid -->
-              <div v-if="$mainState.isLoaded" class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
-                <div v-for="item in attribute.options" :key="item.term_name"
+              <div v-if="$mainState.isLoaded"
+                class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-3">
+                <button v-for="item in attribute.options" :key="item.term_name"
                   @click="isActive(attribute.name, item.term_name) && selectColorOption(attribute.name, item.term_name, item)"
-                  :class="{
-                    'ring-2 ring-secondary-500 ring-offset-2 scale-105': isSelected(attribute.name, item.term_name),
+                  :disabled="!isActive(attribute.name, item.term_name)" :class="{
+                    'ring-2 ring-secondary-500 ring-offset-2 dark:ring-offset-neutral-800 scale-105': isSelected(attribute.name, item.term_name),
                     'opacity-50 cursor-not-allowed': !isActive(attribute.name, item.term_name),
-                    'cursor-pointer hover:scale-105 hover:shadow-lg': isActive(attribute.name, item.term_name)
+                    'hover:scale-105 hover:shadow-lg active:scale-95': isActive(attribute.name, item.term_name)
                   }"
-                  class="group relative aspect-square rounded-xl overflow-hidden border-2 border-neutral-200 transition-all duration-300 ease-out">
+                  class="group relative aspect-square rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-secondary-400 dark:focus:ring-secondary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800">
 
                   <!-- Renk Resmi -->
-                  <NuxtImg :src="getTermImageSrc(item, item.term_name)" :alt="item.term_name" width="120" height="120"
+                  <NuxtImg :src="getTermImageSrc(item, item.term_name)" :alt="item.term_name" width="100" height="120"
                     fit="cover"
                     class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
 
@@ -48,61 +49,77 @@
                     class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none">
                   </div>
 
-                  <!-- Renk Adı -->
-                  <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2">
+                  <!-- Seçili Durumu -->
+                  <div v-if="isSelected(attribute.name, item.term_name)"
+                    class="absolute inset-0 bg-secondary-500/20 flex items-center justify-center">
+                    <div class="w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center shadow-lg">
+                      <UIcon name="i-heroicons-check" class="w-5 h-5 text-white" />
+                    </div>
+                  </div>
+
+                  <!-- Renk Adı Tooltip -->
+                  <div
+                    class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <span class="text-xs font-medium text-white truncate block">{{ item.term_name }}</span>
                   </div>
-                </div>
+                </button>
               </div>
 
               <!-- Loading State -->
-              <div v-else class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-3">
-                <div v-for="item in 6" :key="item" class="aspect-square rounded-xl bg-neutral-200 animate-pulse"></div>
+              <div v-else class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 gap-3">
+                <div v-for="item in 7" :key="item"
+                  class="aspect-square rounded-xl bg-neutral-200 dark:bg-neutral-700 animate-pulse"></div>
               </div>
             </div>
           </div>
 
-          <div class="p-0 duration-300 grid gap-1 mt-pad-1"
-            :class="{ 'rounded-md p-2 border border-red-400 bg-red-50 dark:bg-red-900/20': selectionRequired && !selectedOptions[attribute.name] }"
-            v-else-if="attribute.name.toLowerCase() != 'renk'">
-            <p v-if="selectionRequired && !selectedOptions[attribute.name]" class="flex items-center space-x-2">
+          <!-- Diğer Öznitelikler -->
+          <div v-else-if="attribute.name.toLowerCase() != 'renk'" class="space-y-3"
+            :class="{ 'p-4 border border-red-200 rounded-xl bg-red-50 dark:bg-red-900/10 dark:border-red-700': selectionRequired && !selectedOptions[attribute.name] }">
+
+            <!-- Hata mesajı -->
+            <div v-if="selectionRequired && !selectedOptions[attribute.name]" class="flex items-center space-x-2">
               <UIcon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-red-500" />
               <span class="text-sm text-red-500 dark:text-red-400">Lütfen {{ attribute.name.toLowerCase() }}
                 seçin</span>
-            </p>
+            </div>
 
-            <p class="font-medium text-sm text-neutral-900 dark:text-neutral-100">{{ attribute.name }}</p>
-            <div class="flex space-x-2 ">
-              <UButton class="cursor-pointer font-normal" size="md" color="gray" v-for="option in attribute.options"
-                :key="option.term_name" :class="{
-                  '!bg-secondary-500 text-white': isSelected(
-                    attribute.name,
-                    option.term_name
-                  ),
-                }" :disabled="!isActive(attribute.name, option.term_name)"
-                @click="selectOption(attribute.name, option.term_name)">
-                {{ option.term_name }}
-              </UButton>
+            <div class="space-y-3">
+              <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">{{ attribute.name }}</h3>
+              <div class="flex flex-wrap gap-2">
+                <button v-for="option in attribute.options" :key="option.term_name"
+                  :disabled="!isActive(attribute.name, option.term_name)"
+                  @click="selectOption(attribute.name, option.term_name)" :class="{
+                    'bg-secondary-500 text-white border-secondary-500 shadow-md': isSelected(attribute.name, option.term_name),
+                    'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:bg-secondary-50 dark:hover:bg-secondary-900/20': !isSelected(attribute.name, option.term_name) && isActive(attribute.name, option.term_name),
+                    'opacity-50 cursor-not-allowed': !isActive(attribute.name, option.term_name)
+                  }"
+                  class="px-4 py-2.5 text-sm font-medium border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-400 dark:focus:ring-secondary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800 hover:scale-105 active:scale-95">
+                  {{ option.term_name }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
 
+    <!-- Ürün Input -->
     <PartialsProductInputItem :product="props.productState.product" />
 
-    <div>
-      <div>
-        <div v-if="getSelectedVariation">
-          <PartialsProductPrice type="page" :sale-price="getSelectedVariation.sale_price"
-            :price="getSelectedVariation.price" />
-        </div>
-        <div v-else>
-          <PartialsProductPrice type="page" :sale-price="props.productState.product.sale_price"
-            :price="props.productState.product.price" />
-        </div>
+    <!-- Fiyat -->
+    <div class="py-2">
+      <div v-if="getSelectedVariation">
+        <PartialsProductPrice type="page" :sale-price="getSelectedVariation.sale_price"
+          :price="getSelectedVariation.price" />
+      </div>
+      <div v-else>
+        <PartialsProductPrice type="page" :sale-price="props.productState.product.sale_price"
+          :price="props.productState.product.price" />
       </div>
     </div>
+
+    <!-- Sayaç ve Butonlar -->
     <div class="flex flex-col lg:flex-row justify-between lg:justify-start space-y-4 lg:space-y-0 lg:space-x-4">
       <!-- Sayaç ve Butonlar Bölümü -->
       <div class="space-y-4">
@@ -227,10 +244,20 @@ const isVariableProduct = computed(() => {
 
 const selectedColor = ref(null)
 const selectColorOption = (attributeName, termName, item) => {
-
   selectedColor.value = item
   selectOption(attributeName, termName, item)
 
+  // Renk değiştirildiğinde ürün galerisinin başına git
+  // Özellikle mobilde görsellerin değiştiğini kullanıcının fark etmesi için
+  nextTick(() => {
+    const galleryElement = document.getElementById('product-gallery')
+    if (galleryElement) {
+      galleryElement.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      })
+    }
+  })
 }
 
 const initialColor = () => {
