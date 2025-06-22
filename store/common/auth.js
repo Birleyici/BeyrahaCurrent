@@ -60,8 +60,15 @@ export const useAuthStore = defineStore(
       const response = await useBaseOFetchWithAuth('auth/login', {
         body: JSON.stringify({ ...user.value }),
         method: 'POST',
-        onResponseError: (errorReponse) => {
-          apiError.value.login = [[errorReponse.response._data.error]]
+        onResponseError: (errorResponse) => {
+          const errorData = errorResponse.response._data
+          
+          // Eğer error field'ı varsa onu kullan, yoksa genel mesaj
+          if (errorData.error) {
+            apiError.value.login = [errorData.error]
+          } else {
+            apiError.value.login = ['Giriş işlemi başarısız']
+          }
           loading.value.login = false
         }
       }).finally(() => {
@@ -99,15 +106,33 @@ export const useAuthStore = defineStore(
       const response = await useBaseOFetchWithAuth('auth/register', {
         body: JSON.stringify({ ...register.value }),
         method: 'POST',
-        onResponseError: (errorReponse) => {
-          apiError.value.register = errorReponse.response._data
+        onResponseError: (errorResponse) => {
+          // Laravel validation hatalarını doğru şekilde işle
+          const errorData = errorResponse.response._data
+          
+          // Eğer hata verisi bir object ise (Laravel validation errors)
+          if (typeof errorData === 'object' && errorData !== null) {
+            // Her field için hata mesajlarını array olarak düzenle
+            const formattedErrors = []
+            Object.keys(errorData).forEach(field => {
+              if (Array.isArray(errorData[field])) {
+                formattedErrors.push(...errorData[field])
+              } else {
+                formattedErrors.push(errorData[field])
+              }
+            })
+            apiError.value.register = formattedErrors
+          } else {
+            // Genel hata mesajı
+            apiError.value.register = [errorData || 'Kayıt işlemi başarısız']
+          }
         }
       }).finally(() => {
         loading.value.register = false
       })
 
       if (!response.error) {
-        apiError.value.register = null
+        apiError.value.register = []
         token.value = response.token
         await actionsOnLogin()
         return true
@@ -123,14 +148,26 @@ export const useAuthStore = defineStore(
         body: JSON.stringify({ email }),
         method: 'POST',
         onResponseError: (errorResponse) => {
-          const data = errorResponse.response._data
+          const errorData = errorResponse.response._data
 
-          // Eğer veri bir array ise apiError.value.remind'e ata
-          if (Array.isArray(data)) {
-            apiError.value.remind = data
+          // Laravel validation hatalarını işle
+          if (typeof errorData === 'object' && errorData !== null) {
+            // Validation errors object ise
+            const formattedErrors = []
+            Object.keys(errorData).forEach(field => {
+              if (Array.isArray(errorData[field])) {
+                formattedErrors.push(...errorData[field])
+              } else {
+                formattedErrors.push(errorData[field])
+              }
+            })
+            apiError.value.remind = formattedErrors
+          } else if (Array.isArray(errorData)) {
+            // Eğer direkt array ise
+            apiError.value.remind = errorData
           } else {
-            // Array değilse, hata mesajını işleyebilir ya da görmezden gelebilirsiniz
-            console.log('Hata mesajı array formatında değil:', data)
+            // Genel hata mesajı
+            apiError.value.remind = [errorData || 'Şifre hatırlatma işlemi başarısız']
           }
         }
       }).finally(() => {

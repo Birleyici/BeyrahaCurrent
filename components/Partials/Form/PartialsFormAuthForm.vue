@@ -84,7 +84,7 @@
                   class="w-5 h-5 text-red-400 dark:text-red-300 mr-2 mt-0.5" />
                 <div class="text-sm text-red-700 dark:text-red-300">
                   <ul class="space-y-1">
-                    <li v-for="error in authStore.apiError.login" :key="error">{{ error[0] }}</li>
+                    <li v-for="error in authStore.apiError.login" :key="error">{{ error }}</li>
                   </ul>
                 </div>
               </div>
@@ -162,7 +162,7 @@
                   class="w-5 h-5 text-red-400 dark:text-red-300 mr-2 mt-0.5" />
                 <div class="text-sm text-red-700 dark:text-red-300">
                   <ul class="space-y-1">
-                    <li v-for="error in authStore.apiError.register" :key="error">{{ error[0] }}</li>
+                    <li v-for="error in authStore.apiError.register" :key="error">{{ error }}</li>
                   </ul>
                 </div>
               </div>
