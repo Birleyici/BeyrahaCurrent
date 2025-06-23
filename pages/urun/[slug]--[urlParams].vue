@@ -80,14 +80,14 @@
       :filters="similarProductsFilters" />
 
     <!-- Admin Edit Button - Sabit konumda sol alt köşe -->
-    <div v-if="isAdmin" class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50">
-      <UButton :to="`/management/urunler/${productState.product.id}`" color="orange" variant="solid" size="lg"
+    <div v-if="isAdmin" class="fixed bottom-6 left-4 sm:bottom-6 sm:left-6 z-50">
+      <UButton :to="`/management/urunler/${productState.product.id}`" color="green" variant="solid" size="lg"
         icon="i-heroicons-pencil-square"
         class="shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm" :ui="{
           rounded: 'rounded-full',
           background: 'bg-orange-500/90 hover:bg-orange-600/90 dark:bg-orange-600/90 dark:hover:bg-orange-700/90'
         }" title="Ürünü Düzenle">
-        <span class="hidden sm:inline ml-2">Düzenle</span>
+        <span class=" ml-2">Düzenle</span>
       </UButton>
     </div>
   </div>
