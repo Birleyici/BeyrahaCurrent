@@ -1,6 +1,7 @@
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
+
     <AdminCommonPageHeader title="Ürün Yönetimi"
       :description="`Toplam ${Array.isArray(productState.vendorProducts) ? productState.vendorProducts.length : 0} ürün bulunuyor`"
       :breadcrumb-links="breadcrumbLinks">
@@ -57,12 +58,47 @@
 
             <!-- Product Image -->
             <div class="relative aspect-square bg-gray-100 dark:bg-gray-700">
-              <NuxtImg v-if="getProductImagePath(product)" :src="'cl/' + getProductImagePath(product)"
-                :alt="product.name" class="w-full h-full object-cover" format="webp" quality="90" :width="300"
-                :height="400" fit="inside" />
-              <div v-else class="w-full h-full flex items-center justify-center">
-                <NuxtImg :src="'cl/' + 'edb26c39-166b-465f-780d-e930fa903900/public'" class="w-full h-full object-cover"
-                  format="webp" quality="90" :width="300" :height="400" fit="inside" background="#CCCCCC" />
+              <!-- Renk niteliği olan ürünlerde basit slider göster -->
+              <div v-if="product.has_color_attribute && product.colorImages?.length > 0" class="relative w-full h-full">
+                <NuxtImg :src="'cl/' + getCurrentColorImage(product).image_path"
+                  :alt="`${product.name} - ${getCurrentColorImage(product).color_name}`"
+                  class="w-full h-full object-cover" format="webp" quality="90" :width="300" :height="400"
+                  fit="inside" />
+
+                <!-- Navigation buttons - sadece birden fazla renk varsa göster -->
+                <div v-if="product.colorImages.length > 1"
+                  class="absolute inset-0 flex items-center justify-between p-2 opacity-0 hover:opacity-100 transition-opacity duration-200">
+                  <button @click="previousColorImage(product.id)"
+                    class="w-6 h-6 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
+                    :disabled="getColorImageIndex(product.id) === 0">
+                    <Icon name="heroicons:chevron-left" class="w-3 h-3" />
+                  </button>
+                  <button @click="nextColorImage(product.id)"
+                    class="w-6 h-6 bg-black/50 text-white rounded-full flex items-center justify-center hover:bg-black/70 transition-colors"
+                    :disabled="getColorImageIndex(product.id) === product.colorImages.length - 1">
+                    <Icon name="heroicons:chevron-right" class="w-3 h-3" />
+                  </button>
+                </div>
+
+                <!-- Dots indicator - sadece birden fazla renk varsa göster -->
+                <div v-if="product.colorImages.length > 1"
+                  class="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                  <button v-for="(colorImage, index) in product.colorImages" :key="index"
+                    @click="setColorImageIndex(product.id, index)" class="w-2 h-2 rounded-full transition-colors"
+                    :class="getColorImageIndex(product.id) === index ? 'bg-white' : 'bg-white/50'">
+                  </button>
+                </div>
+              </div>
+              <!-- Normal ürün görseli -->
+              <div v-else>
+                <NuxtImg v-if="getProductImagePath(product)" :src="'cl/' + getProductImagePath(product)"
+                  :alt="product.name" class="w-full h-full object-cover" format="webp" quality="90" :width="300"
+                  :height="400" fit="inside" />
+                <div v-else class="w-full h-full flex items-center justify-center">
+                  <NuxtImg :src="'cl/' + 'edb26c39-166b-465f-780d-e930fa903900/public'"
+                    class="w-full h-full object-cover" format="webp" quality="90" :width="300" :height="400"
+                    fit="inside" background="#CCCCCC" />
+                </div>
               </div>
 
               <!-- Status Badge -->
@@ -165,9 +201,31 @@
                 <!-- Product Image -->
                 <div
                   class="w-16 h-16 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden flex-shrink-0">
-                  <NuxtImg v-if="getProductImagePath(product)" :src="'cl/' + getProductImagePath(product)"
-                    :alt="product.name" class="w-full h-full object-cover" />
-                  <Icon v-else name="mdi:image-outline" class="w-6 h-6 text-gray-400" />
+                  <!-- Renk niteliği olan ürünlerde mini renk görselleri -->
+                  <div v-if="product.has_color_attribute && product.colorImages?.length > 0"
+                    class="relative w-full h-full">
+                    <div class="grid grid-cols-2 gap-0.5 w-full h-full p-1">
+                      <div v-for="(colorImage, index) in product.colorImages.slice(0, 4)" :key="index"
+                        class="relative rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600" :class="{
+                          'col-span-2': product.colorImages.length === 1,
+                          'w-full h-full': product.colorImages.length <= 4
+                        }">
+                        <NuxtImg :src="'cl/' + colorImage.image_path" :alt="colorImage.color_name"
+                          class="w-full h-full object-cover" />
+                      </div>
+                      <!-- Fazla renk göstergesi -->
+                      <div v-if="product.colorImages.length > 4"
+                        class="absolute bottom-0 right-0 w-4 h-4 bg-gray-800/80 text-white text-[8px] flex items-center justify-center rounded-full">
+                        +{{ product.colorImages.length - 4 }}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Normal ürün görseli -->
+                  <div v-else class="w-full h-full">
+                    <NuxtImg v-if="getProductImagePath(product)" :src="'cl/' + getProductImagePath(product)"
+                      :alt="product.name" class="w-full h-full object-cover" />
+                    <Icon v-else name="mdi:image-outline" class="w-6 h-6 text-gray-400" />
+                  </div>
                 </div>
 
                 <!-- Product Info -->
@@ -262,10 +320,31 @@
             <template #name-data="{ row }">
               <div class="flex items-center gap-3">
                 <div
-                  class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
-                  <NuxtImg v-if="getProductImagePath(row)" :src="'cl/' + getProductImagePath(row)" :alt="row.name"
-                    class="w-full h-full object-cover" />
-                  <Icon v-else name="mdi:image-outline" class="w-5 h-5 text-gray-400" />
+                  class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden relative">
+                  <!-- Renk niteliği olan ürünlerde mini renk görselleri -->
+                  <div v-if="row.has_color_attribute && row.colorImages?.length > 0" class="w-full h-full">
+                    <div class="flex flex-wrap gap-0.5 w-full h-full p-0.5">
+                      <div v-for="(colorImage, index) in row.colorImages.slice(0, 3)" :key="index"
+                        class="rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600" :class="{
+                          'w-8 h-8': row.colorImages.length === 1,
+                          'w-3 h-3': row.colorImages.length > 1
+                        }">
+                        <NuxtImg :src="'cl/' + colorImage.image_path" :alt="colorImage.color_name"
+                          class="w-full h-full object-cover" />
+                      </div>
+                      <!-- Fazla renk göstergesi -->
+                      <div v-if="row.colorImages.length > 3"
+                        class="absolute bottom-0 right-0 w-3 h-3 bg-gray-800/80 text-white text-[6px] flex items-center justify-center rounded-full">
+                        +{{ row.colorImages.length - 3 }}
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Normal ürün görseli -->
+                  <div v-else class="w-full h-full">
+                    <NuxtImg v-if="getProductImagePath(row)" :src="'cl/' + getProductImagePath(row)" :alt="row.name"
+                      class="w-full h-full object-cover" />
+                    <Icon v-else name="mdi:image-outline" class="w-5 h-5 text-gray-400" />
+                  </div>
                 </div>
                 <div class="min-w-0 flex-1">
                   <NuxtLink :to="`/management/urunler/${row.id}`"
@@ -414,6 +493,7 @@ const productToDelete = ref(null);
 const viewMode = ref('grid');
 const page = ref(1);
 const pageCount = 12;
+const colorImageIndexes = ref({}); // Her ürün için aktif renk görseli index'i
 
 // Breadcrumb links
 const breadcrumbLinks = [
@@ -437,11 +517,45 @@ const paginatedProducts = computed(() => {
   return products.slice(start, end);
 });
 
+// Color image navigation methods
+const getCurrentColorImage = (product) => {
+  const index = colorImageIndexes.value[product.id] || 0;
+  return product.colorImages[index] || product.colorImages[0];
+};
+
+const getColorImageIndex = (productId) => {
+  return colorImageIndexes.value[productId] || 0;
+};
+
+const setColorImageIndex = (productId, index) => {
+  colorImageIndexes.value[productId] = index;
+};
+
+const nextColorImage = (productId) => {
+  const product = paginatedProducts.value.find(p => p.id === productId);
+  if (product && product.colorImages) {
+    const currentIndex = colorImageIndexes.value[productId] || 0;
+    const nextIndex = (currentIndex + 1) % product.colorImages.length;
+    colorImageIndexes.value[productId] = nextIndex;
+  }
+};
+
+const previousColorImage = (productId) => {
+  const product = paginatedProducts.value.find(p => p.id === productId);
+  if (product && product.colorImages) {
+    const currentIndex = colorImageIndexes.value[productId] || 0;
+    const prevIndex = currentIndex === 0 ? product.colorImages.length - 1 : currentIndex - 1;
+    colorImageIndexes.value[productId] = prevIndex;
+  }
+};
+
 // Methods
 const refreshProducts = async () => {
   isLoading.value = true;
   try {
     await getVendorProducts();
+    // Yeni ürünler yüklendiğinde index'leri sıfırla
+    colorImageIndexes.value = {};
   } finally {
     isLoading.value = false;
   }
@@ -506,6 +620,11 @@ const getProductImagePath = (product) => {
   }
   return null;
 };
+
+// Watch for page changes to reset indexes
+watch(page, () => {
+  colorImageIndexes.value = {};
+});
 
 // Initialize data
 await refreshProducts();
