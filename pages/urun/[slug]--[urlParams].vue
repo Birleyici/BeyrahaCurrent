@@ -78,6 +78,18 @@
     <!-- Benzer Ürünler -->
     <UiSlidesProductSlide id="similar-products" :is-ssr="false" title="Benzer Ürünler"
       :filters="similarProductsFilters" />
+
+    <!-- Admin Edit Button - Sabit konumda sol alt köşe -->
+    <div v-if="isAdmin" class="fixed bottom-4 left-4 sm:bottom-6 sm:left-6 z-50">
+      <UButton :to="`/management/urunler/${productState.product.id}`" color="orange" variant="solid" size="lg"
+        icon="i-heroicons-pencil-square"
+        class="shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm" :ui="{
+          rounded: 'rounded-full',
+          background: 'bg-orange-500/90 hover:bg-orange-600/90 dark:bg-orange-600/90 dark:hover:bg-orange-700/90'
+        }" title="Ürünü Düzenle">
+        <span class="hidden sm:inline ml-2">Düzenle</span>
+      </UButton>
+    </div>
   </div>
 </template>
 
@@ -87,6 +99,25 @@ const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
 const product_information = ref(null)
 const { settings } = useSettings()
+
+// Auth kontrolü için
+const authStore = useAuthStore()
+
+// Admin kontrolü - currentUser'da role bilgisi varsa kullan, yoksa management route'una erişimi kontrol et
+const isAdmin = computed(() => {
+  // Basit kontrol: kullanıcı giriş yapmış mı ve token var mı
+  if (!authStore.token || !authStore.currentUser || !authStore.currentUser.user) {
+    return false;
+  }
+
+  // Rol bilgisi kontrolü - doğru yapı: authStore.currentUser.user.role
+  if (authStore.currentUser.user.role) {
+    return authStore.currentUser.user.role === 'admin' || authStore.currentUser.user.role === 'manager';
+  }
+
+  return false;
+});
+
 const productCategoryIds = computed(() => {
   const categoryIds = productState.product.categories?.map(c => c.id) || []
   console.log('Product categories:', productState.product.categories)
@@ -102,6 +133,11 @@ await useAsyncData("initProductPageData", async () => {
   const response = await productState.fetchProduct(route.params)
   await variationsFrontState.fetchVariations(response.id)
   await attributeState.fetchAttributes(response.id, route.params)
+
+  // Kullanıcı giriş yapmışsa kullanıcı verilerini al
+  if (authStore.token) {
+    await authStore.fetchUser()
+  }
 
   return true
 })

@@ -7,8 +7,9 @@
       <template #actions>
         <UButton icon="i-heroicons-arrow-left" size="sm" color="gray" variant="outline" label="Geri Dön"
           to="/management/urunler" />
-        <UButton icon="i-heroicons-eye" size="sm" color="gray" variant="outline" label="Önizle"
-          :disabled="isNewProduct" />
+        <UButton v-if="!isNewProduct && productState.product.is_active === 1"
+          icon="i-heroicons-arrow-top-right-on-square" size="sm" color="green" variant="outline" label="Ürüne Git"
+          :to="getProductUrl()" target="_blank" />
       </template>
     </AdminCommonPageHeader>
 
@@ -845,5 +846,45 @@ const handlePublishProduct = async () => {
     console.error('Ürün yayınlanırken hata oluştu:', error);
     throw error;
   }
+};
+
+const getProductUrl = () => {
+  if (!productState.product?.id) {
+    return '/';
+  }
+
+  // Ürün slug'ı varsa kullan, yoksa 'urun' varsayılanını kullan
+  const slug = productState.product.slug || 'urun';
+
+  // Renk niteliği kontrolü
+  const colorAttribute = attributeState.attributes?.find(attr =>
+    attr.attribute_name && attr.attribute_name.toLowerCase() === 'renk'
+  );
+
+  // Eğer renk niteliği varsa ve en az bir renk terimi varsa
+  if (colorAttribute && colorAttribute.product_attribute_terms && colorAttribute.product_attribute_terms.length > 0) {
+    const firstColorTerm = colorAttribute.product_attribute_terms[0];
+
+    // Slug oluşturma - basit yöntem kullan
+    const colorSlug = firstColorTerm.term_name
+      .toLowerCase()
+      .replace(/ş/g, 's')
+      .replace(/ğ/g, 'g')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ü/g, 'u')
+      .replace(/ç/g, 'c')
+      .replace(/[^a-z0-9]/g, '-')
+      .replace(/-+/g, '-')
+      .replace(/^-|-$/g, '');
+
+    const termId = firstColorTerm.product_attribute_term_id || firstColorTerm.id;
+
+    // URL formatı: /urun/[slug]--[colorSlug]-[termId]
+    return `/urun/${slug}--${colorSlug}-${termId}`;
+  }
+
+  // Renk niteliği yoksa normal URL formatı: /urun/[slug]--[id]
+  return `/urun/${slug}--${productState.product.id}`;
 };
 </script>
