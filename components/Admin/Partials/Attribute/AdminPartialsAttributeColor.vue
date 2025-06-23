@@ -105,31 +105,58 @@
                     <!-- Görsel Seçimi -->
                     <div class="space-y-2">
                       <label class="block text-xs font-medium text-gray-700 dark:text-gray-300">
-                        Renk Görseli
+                        Renk Görselleri
                       </label>
 
-                      <!-- Mevcut Görsel -->
-                      <div v-if="hasTermImage(term)" class="relative group/image">
-                        <div
-                          class="aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
-                          <!-- Önce image formatını kontrol et -->
-                          <NuxtImg v-if="term.image" :src="'cl/' + term.image.path" :alt="term.term_name"
-                            class="w-full h-full object-cover" />
-                          <!-- Sonra term_images formatını kontrol et -->
-                          <NuxtImg v-else-if="term.term_images && term.term_images.length > 0"
-                            :src="'cl/' + term.term_images[0].path" :alt="term.term_name"
-                            class="w-full h-full object-cover" />
-                        </div>
-                        <!-- Görsel Üzerinde Hover Aksiyonları -->
-                        <div
-                          class="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-colors duration-200 rounded-lg flex items-center justify-center">
-                          <div
-                            class="opacity-0 group-hover/image:opacity-100 transition-opacity duration-200 flex space-x-2">
-                            <UButton icon="i-heroicons-pencil" color="white" variant="solid" size="xs"
-                              @click="openImageSelector(term)" />
-                            <UButton icon="i-heroicons-trash" color="red" variant="solid" size="xs"
-                              @click="showDeleteImageConfirmation(term)" />
+                      <!-- Mevcut Görseller - Grid Layout -->
+                      <div v-if="hasTermImage(term)" class="space-y-3">
+                        <!-- Görseller Grid -->
+                        <div class="grid grid-cols-2 gap-2">
+                          <!-- Önce image formatını kontrol et (backward compatibility) -->
+                          <div v-if="term.image" class="relative group/image">
+                            <div
+                              class="aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
+                              <NuxtImg :src="'cl/' + term.image.path" :alt="term.term_name"
+                                class="w-full h-full object-cover" />
+                            </div>
+                            <!-- Hover Aksiyonları -->
+                            <div
+                              class="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-colors duration-200 rounded-lg flex items-center justify-center">
+                              <div
+                                class="opacity-0 group-hover/image:opacity-100 transition-opacity duration-200 flex space-x-1">
+                                <UButton icon="i-heroicons-pencil" color="white" variant="solid" size="xs"
+                                  @click="openImageSelector(term)" />
+                                <UButton icon="i-heroicons-trash" color="red" variant="solid" size="xs"
+                                  @click="showDeleteImageConfirmation(term)" />
+                              </div>
+                            </div>
                           </div>
+
+                          <!-- term_images formatını kontrol et -->
+                          <div v-for="(termImage, imageIndex) in term.term_images" :key="termImage.id || imageIndex"
+                            class="relative group/image">
+                            <div
+                              class="aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
+                              <NuxtImg :src="'cl/' + termImage.path" :alt="term.term_name"
+                                class="w-full h-full object-cover" />
+                            </div>
+                            <!-- Hover Aksiyonları -->
+                            <div
+                              class="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-colors duration-200 rounded-lg flex items-center justify-center">
+                              <div
+                                class="opacity-0 group-hover/image:opacity-100 transition-opacity duration-200 flex space-x-1">
+                                <UButton icon="i-heroicons-pencil" color="white" variant="solid" size="xs"
+                                  @click="openImageSelector(term)" />
+                                <UButton icon="i-heroicons-trash" color="red" variant="solid" size="xs"
+                                  @click="showDeleteImageConfirmation(term)" />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <!-- Görsel Sayısı Bilgisi -->
+                        <div class="text-xs text-gray-500 dark:text-gray-400 text-center">
+                          {{ getTermImageCount(term) }} görsel atanmış
                         </div>
                       </div>
 
@@ -138,6 +165,13 @@
                         class="w-full">
                         <UIcon name="i-heroicons-photo" class="mr-2" />
                         Görsel Seç
+                      </UButton>
+
+                      <!-- Görsel Varsa Düzenle Butonu -->
+                      <UButton v-if="hasTermImage(term)" @click="openImageSelector(term)" variant="outline"
+                        color="orange" size="sm" class="w-full mt-2">
+                        <UIcon name="i-heroicons-pencil" class="mr-2" />
+                        Görselleri Düzenle
                       </UButton>
                     </div>
                   </div>
@@ -187,7 +221,8 @@
             İptal
           </UButton>
           <UButton color="orange" @click="assignImageToTerm" :disabled="!selectedImages.length">
-            Görseli Ata
+            {{ selectedImages.length > 1 ? 'Görselleri Ata' : 'Görseli Ata' }}
+            <span v-if="selectedImages.length > 1" class="ml-1">({{ selectedImages.length }})</span>
           </UButton>
         </div>
       </div>
@@ -459,7 +494,7 @@ const assignImageToTerm = async () => {
     selectedTerm: selectedTerm.value,
     selectedImages: selectedImages.value,
     termId: selectedTerm.value?.id || selectedTerm.value?.product_attribute_term_id,
-    imageId: selectedImages.value?.[0]?.id
+    imageIds: selectedImages.value?.map(img => img.id)
   })
 
   if (!selectedTerm.value) {
@@ -515,13 +550,16 @@ const assignImageToTerm = async () => {
     return
   }
 
-  if (!selectedImages.value[0]?.id) {
-    console.error('selectedImages[0].id boş!', selectedImages.value[0])
+  // Tüm seçili görsellerin ID'lerini topla
+  const imageIds = selectedImages.value.map(img => img.id).filter(id => id !== null && id !== undefined)
+
+  if (imageIds.length === 0) {
+    console.error('Geçerli görsel ID\'si bulunamadı!', selectedImages.value)
     try {
       const nuxtApp = useNuxtApp()
       if (nuxtApp && nuxtApp.$toast) {
         nuxtApp.$toast.add({
-          title: 'Görsel ID\'si bulunamadı',
+          title: 'Geçerli görsel ID\'si bulunamadı',
           color: 'red',
           icon: 'i-heroicons-x-mark'
         })
@@ -533,30 +571,32 @@ const assignImageToTerm = async () => {
   }
 
   try {
-    // Yeni API endpoint'ini kullan
+    // Yeni API endpoint'ini kullan - birden fazla görsel gönder
     const response = await useBaseOFetchWithAuth(`product-attribute-terms/${termId}/image`, {
       method: 'POST',
       body: {
-        image_id: selectedImages.value[0].id
+        image_ids: imageIds  // Array olarak gönder
       }
     })
 
     if (!response.error) {
-      // Update local term object with the selected image
+      // Update local term object with the selected images
+      // İlk görseli ana image olarak ata (backward compatibility için)
       selectedTerm.value.image = {
         id: selectedImages.value[0].id,
         path: selectedImages.value[0].path
       }
 
-      // Also update term_images array if it exists for consistency
-      if (!selectedTerm.value.term_images) {
-        selectedTerm.value.term_images = []
-      }
-      selectedTerm.value.term_images = [selectedImages.value[0]]
+      // Tüm görselleri term_images array'ine ata
+      selectedTerm.value.term_images = selectedImages.value.map(img => ({
+        id: img.id,
+        path: img.path
+      }))
 
-      console.log('Renk terimi için görsel atandı:', {
+      console.log('Renk terimi için görseller atandı:', {
         term: selectedTerm.value.term_name,
-        image: selectedImages.value[0]
+        imageCount: selectedImages.value.length,
+        images: selectedImages.value
       })
 
       // Close modal and show success message
@@ -566,7 +606,8 @@ const assignImageToTerm = async () => {
         const nuxtApp = useNuxtApp()
         if (nuxtApp && nuxtApp.$toast) {
           nuxtApp.$toast.add({
-            title: 'Görsel başarıyla atandı!',
+            title: selectedImages.value.length > 1 ? 'Görseller başarıyla atandı!' : 'Görsel başarıyla atandı!',
+            description: selectedImages.value.length > 1 ? `${selectedImages.value.length} görsel atandı` : undefined,
             color: 'green',
             icon: 'i-heroicons-check'
           })
@@ -751,5 +792,20 @@ const confirmDeleteAttr = async () => {
 const closeModal = () => {
   isMediaModalOpen.value = false
   resetModalState()
+}
+
+// Görsel sayısını hesaplayan helper fonksiyon
+const getTermImageCount = (term) => {
+  let count = 0
+  if (term.image) count += 1
+  if (term.term_images && term.term_images.length > 0) {
+    // Eğer term.image varsa ve term_images'da da aynı görsel varsa tekrar saymayalım
+    if (term.image) {
+      count += term.term_images.filter(img => img.id !== term.image.id).length
+    } else {
+      count += term.term_images.length
+    }
+  }
+  return count
 }
 </script>
