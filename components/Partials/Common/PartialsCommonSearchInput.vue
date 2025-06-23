@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!$device.isMobile || $mainState.isOpenSearch" class="relative" :class="{
+  <div v-if="!isMobile || $mainState.isOpenSearch" class="relative" :class="{
     'w-full': true
   }">
     <!-- Mobile Search Overlay -->
-    <div v-if="$mainState.isOpenSearch && $device.isMobile" class="fixed inset-0 z-50">
+    <div v-if="$mainState.isOpenSearch && isMobile" class="fixed inset-0 z-50">
       <div class="absolute inset-0 p-4">
         <div
           class="bg-white dark:bg-neutral-800 rounded-xl shadow-xl max-h-[90vh] overflow-hidden transition-colors duration-300">
@@ -44,7 +44,7 @@
         leave-active-class="transition duration-150 ease-in"
         leave-from-class="transform scale-100 opacity-100 translate-y-0"
         leave-to-class="transform scale-98 opacity-0 translate-y-1">
-        <div v-if="searchWord && $mainState.isOpenSearch && !$device.isMobile"
+        <div v-if="searchWord && $mainState.isOpenSearch && !isMobile"
           class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200/80 dark:border-neutral-700/80 z-50 max-h-[400px] overflow-hidden results-container transition-colors duration-300">
           <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
             :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch" />
@@ -57,6 +57,10 @@
 <script setup>
 import pkg from 'lodash'
 const { debounce } = pkg
+
+// Device detection
+const { isMobile } = useDevice()
+
 const productState = useProductState()
 const { $mainState, $changeMainState } = useNuxtApp()
 const searchInput = ref(null)
@@ -108,7 +112,9 @@ function handleBlur(event) {
         $mainState.isOpenSearch = false
       }
     }, 150)
+
   }
+
 }
 
 // Debounce edilmiş arama fonksiyonu

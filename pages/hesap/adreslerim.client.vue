@@ -35,7 +35,7 @@
 
           <!-- Adresler -->
           <div v-if="paginatedAddresses?.length" class="grid lg:grid-cols-2 gap-6">
-            <UModal v-model="orderState.isOpenAddressModal" :fullscreen="$device.isMobile">
+            <UModal v-model="orderState.isOpenAddressModal" :fullscreen="isMobile">
               <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800', }">
                 <template #header>
                   <div class="flex items-center justify-between">
@@ -84,6 +84,8 @@
 </template>
 
 <script setup>
+import { useDevice } from 'use-device'
+
 const { siteName } = useSettings()
 
 useHead({
@@ -96,6 +98,9 @@ const addressesLoaded = ref(false)
 // Sayfalandırma için state'ler
 const currentPage = ref(1)
 const pageSize = 6 // Her sayfada 6 adres göster (2x3 grid)
+
+// Device detection
+const { isMobile } = useDevice()
 
 // Sayfalandırılmış adresleri hesapla
 const paginatedAddresses = computed(() => {

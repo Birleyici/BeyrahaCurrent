@@ -59,7 +59,7 @@
             <div class="absolute bottom-0 left-0 w-12 h-0.5 bg-secondary-500 rounded-full"></div>
           </h3>
           <div class="space-y-3">
-            <a v-if="settings.whatsappNumber" :href="`https://wa.me/${settings.whatsappNumber}`" target="_blank"
+            <a v-if="whatsappNumber" :href="`https://wa.me/${whatsappNumber}`" target="_blank"
               class="flex items-center space-x-3 text-neutral-300 hover:text-white hover:translate-x-1 transition-all duration-200 group">
               <div
                 class="flex-shrink-0 w-10 h-10 bg-green-600 rounded-lg flex items-center justify-center group-hover:bg-green-500 transition-colors duration-200">
@@ -67,10 +67,10 @@
               </div>
               <div>
                 <div class="font-medium">WhatsApp Destek</div>
-                <div class="text-sm text-neutral-400">{{ formatPhoneNumber(settings.whatsappNumber) }}</div>
+                <div class="text-sm text-neutral-400">{{ formatPhoneNumber(whatsappNumber) }}</div>
               </div>
             </a>
-            <a v-if="settings.contactEmail" :href="`mailto:${settings.contactEmail}`"
+            <a v-if="contactEmail" :href="`mailto:${contactEmail}`"
               class="flex items-center space-x-3 text-neutral-300 hover:text-white hover:translate-x-1 transition-all duration-200 group">
               <div
                 class="flex-shrink-0 w-10 h-10 bg-secondary-600 rounded-lg flex items-center justify-center group-hover:bg-secondary-500 transition-colors duration-200">
@@ -78,7 +78,7 @@
               </div>
               <div>
                 <div class="font-medium">E-posta</div>
-                <div class="text-sm text-neutral-400">{{ settings.contactEmail }}</div>
+                <div class="text-sm text-neutral-400">{{ contactEmail }}</div>
               </div>
             </a>
           </div>
@@ -124,7 +124,7 @@
         <div class="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <div class="text-center md:text-left">
             <p class="text-neutral-400 text-sm">
-              © 2017 - 2024 <span class="text-white font-medium">{{ settings.siteName || 'Beyraha' }}</span>. Tüm
+              © 2017 - 2024 <span class="text-white font-medium">{{ siteName || 'Beyraha' }}</span>. Tüm
               hakları saklıdır.
             </p>
           </div>
@@ -155,14 +155,12 @@
 </template>
 
 <script setup>
-import { useSettings } from '~/composables/useSettings'
-
 // PWA Store
 const pwaStore = usePwaStore()
 const isInstalling = ref(false)
 
-// Settings composable'ından verileri al
-const { settings } = useSettings()
+// Settings composable'ından güvenli şekilde verileri al
+const { whatsappNumber, contactEmail, siteName } = useSettings()
 
 // PWA'yı yükle
 const installPwa = async () => {

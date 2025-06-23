@@ -1,15 +1,22 @@
 <template>
-  <div class="py-pad-2 relative inline-block" v-if="!$device.isMobile">
-    <div class="flex items-center">
-      <div class="!font-semibold" @click="status = true">
-        <a href="#" class="pr-4 font-primary !font-medium text-heading-4">GİYİM</a>
-        <a href="#" class="px-4 font-primary text-heading-4 !font-medium">TAKI & AKSESUAR</a>
-      </div>
-      <PartialsCommonHeaderSlideNestedMenu v-model="status" :menu="[]"></PartialsCommonHeaderSlideNestedMenu>
+  <div>
+    <!-- Mobile Mega Menu -->
+    <div v-if="isMobile" class="lg:hidden">
+      <!-- Mobile specific mega menu content -->
+      <!-- ... diğer mobile menu içeriği ... -->
+    </div>
+
+    <!-- Desktop Mega Menu -->
+    <div v-else class="hidden lg:block">
+      <!-- Desktop specific mega menu content -->
+      <!-- ... diğer desktop menu içeriği ... -->
     </div>
   </div>
 </template>
 
 <script setup>
+// Device detection
+const { isMobile } = useDevice()
+
 const status = ref(false);
 </script>

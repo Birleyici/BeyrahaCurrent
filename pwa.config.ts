@@ -94,32 +94,15 @@ export default {
     ]
   },
   workbox: {
+    skipWaiting: true,
+    clientsClaim: true,
+    cleanupOutdatedCaches: true,
+    globPatterns: [],
     navigateFallback: undefined,
-    navigateFallbackDenylist: [/^\/management\//],
-    globPatterns: ['**/*.{js,css,html,png,svg,ico,woff2,woff}'],
-    runtimeCaching: [
-      {
-        urlPattern: /^https:\/\/cdn\.beyraha\.com\/.*/i,
-        handler: 'CacheFirst',
-        options: {
-          cacheName: 'images-cache',
-          expiration: {
-            maxEntries: 100,
-            maxAgeSeconds: 60 * 60 * 24 * 7 // 1 week
-          }
-        }
-      },
-      {
-        urlPattern: /^https:\/\/api\.beyraha\.com\/api\/.*/i,
-        handler: 'NetworkFirst',
-        options: {
-          cacheName: 'api-cache',
-          expiration: {
-            maxEntries: 50,
-            maxAgeSeconds: 60 * 60 * 24 // 1 day
-          }
-        }
-      }
-    ]
+    navigateFallbackDenylist: [/.*/],
+    runtimeCaching: [],
+    disableDevLogs: true,
+    additionalManifestEntries: [],
+    offlineGoogleAnalytics: false
   }
 } 

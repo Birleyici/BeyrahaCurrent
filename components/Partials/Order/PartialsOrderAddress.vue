@@ -76,7 +76,7 @@
             message="Adresi silmek istediğinize emin misiniz?" v-model:is-open="isOpenDeleteModal" />
 
         <!-- Düzenleme Modalı -->
-        <UModal v-model="isOpenEditModal" :fullscreen="$device.isMobile">
+        <UModal v-model="isOpenEditModal" :fullscreen="isMobile">
             <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
                 <template #header>
                     <div class="flex items-center justify-between">
@@ -95,10 +95,15 @@
 </template>
 
 <script setup>
+import { useDevice } from 'use-device';
+
 const props = defineProps(["address", 'saveFunction', 'addressOptions']);
 const orderState = useOrderStoreFront();
 const isOpenDeleteModal = ref(false);
 const isOpenEditModal = ref(false)
+
+// Device detection
+const { isMobile } = useDevice()
 
 const isActiveEditingButton = computed(() => {
     return props.addressOptions?.editMode || props.addressOptions?.edit || props.addressOptions?.allAction;

@@ -21,8 +21,8 @@
       </div>
 
       <div class="container">
-        <PartialsCategoryDesktop v-if="!$device.isMobile" v-model:u-select="query.sort"
-          :products="productState.products" :loading="loading" />
+        <PartialsCategoryDesktop v-if="!isMobile" v-model:u-select="query.sort" :products="productState.products"
+          :loading="loading" />
         <PartialsCategoryMobile v-else v-model:u-select="query.sort" :products="productState.products"
           :loading="loading" />
 
@@ -34,6 +34,7 @@
 </template>
 
 <script setup>
+import { useDevice } from '~/composables/useDevice'
 
 const productState = useProductState();
 const categoryState = useCategoryState();
@@ -43,6 +44,9 @@ const { settings } = useSettings()
 const catSlug = route.params.catSlug
 const catId = route.params.catId
 const isChangeRoute = ref(false)
+
+// Device detection
+const { isMobile } = useDevice()
 
 watch(() => router.currentRoute.value.path, (newVal, oldVal) => {
   console.log(newVal, oldVal)
@@ -170,23 +174,7 @@ const slugsCat = computed(() => {
   return categoryState.categories?.find(c => c.id === parseInt(catId))
 })
 
-const pageTitle = computed(() => {
-  if (query.value.searchWord) {
-    return `${query.value.searchWord} arama sonuçları`
-  } else if (slugsCat.value) {
-    return `${slugsCat.value.label} fiyatları ve modelleri`
-  }
-  return 'Beyraha'
-})
 
-const pageDescription = computed(() => {
-  if (query.value.searchWord) {
-    return `${query.value.searchWord} için ${productState.products?.total || 0} ürün bulundu`
-  } else if (slugsCat.value) {
-    return slugsCat.value.description || 'Kaliteli ürünlerimizi keşfedin'
-  }
-  return ''
-})
 
 useHead({
   title: computed(() => `${route.params.catSlug} - ${settings.value.siteName}`),
