@@ -748,26 +748,17 @@ if (isNewProduct.value) {
     bypassNavigationGuard.value = true;
     await navigateTo(`/management/urunler/${productState.product.id}`);
   }
-
 } else {
+  // Mevcut ürünü yükle
   await getProduct(route.params.id);
 
-  // Eğer ürün adı boş ve yakın zamanda oluşturulmuşsa otomatik oluşturulmuş kabul et
-  const createdAt = new Date(productState.product.created_at);
-  const now = new Date();
-  const timeDiff = now - createdAt;
-  const isRecentlyCreated = timeDiff < 5 * 60 * 1000; // 5 dakika içinde oluşturulmuş
-
-  isAutoCreatedProduct.value = isRecentlyCreated &&
-    (!productState.product.name || productState.product.name.trim() === '');
-
-  // Eğer selectedCategories null ise boş array yap
-  if (!productState.product.selectedCategories) {
-    productState.product.selectedCategories = [];
+  // Ürün yüklendikten sonra nitelikleri de yükle
+  if (productState.product?.id) {
+    await attributeState.fetchAttributes(productState.product.id);
   }
 
-  // Mevcut ürün için orijinal verileri kaydet
-  saveOriginalProduct();
+  isAutoCreatedProduct.value = !productState.product.name || productState.product.name.trim() === '';
+  originalProduct.value = JSON.parse(JSON.stringify(productState.product));
 }
 
 // Ürün yayınlama için gerekli alanları kontrol et

@@ -71,7 +71,10 @@ const toast = useToast()
 
 const { addAttr, fetchGlobalAttrs } = useAttributes();
 
-await attributeState.fetchAttributes(productState.product.id);
+// Nitelikleri sadece yüklenmemişse yükle
+if (!attributeState.attributes || attributeState.attributes.length === 0) {
+  await attributeState.fetchAttributes(productState.product.id);
+}
 await fetchGlobalAttrs();
 
 // Nitelik ekleme fonksiyonu - varyasyonları da günceller
