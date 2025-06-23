@@ -95,7 +95,6 @@
 </template>
 
 <script setup>
-import { useDevice } from 'use-device';
 
 const props = defineProps(["address", 'saveFunction', 'addressOptions']);
 const orderState = useOrderStoreFront();

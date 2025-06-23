@@ -137,16 +137,6 @@
               <UIcon name="i-heroicons-truck" class="w-4 h-4 text-secondary-500" />
               <span>Hızlı Teslimat</span>
             </div>
-            <!-- PWA Install Butonu -->
-            <button v-if="pwaStore.canInstall && !pwaStore.isInstalled" @click="installPwa"
-              class="flex items-center space-x-2 text-neutral-400 hover:text-white text-sm transition-colors duration-200 group"
-              :disabled="isInstalling">
-              <UIcon :name="isInstalling ? 'i-heroicons-arrow-path' : 'i-heroicons-device-phone-mobile'" :class="[
-                'w-4 h-4 text-primary-500',
-                isInstalling ? 'animate-spin' : 'group-hover:scale-110 transition-transform'
-              ]" />
-              <span>{{ isInstalling ? 'Yükleniyor...' : 'Uygulamayı Yükle' }}</span>
-            </button>
           </div>
         </div>
       </div>
@@ -155,28 +145,8 @@
 </template>
 
 <script setup>
-// PWA Store
-const pwaStore = usePwaStore()
-const isInstalling = ref(false)
-
 // Settings composable'ından güvenli şekilde verileri al
 const { whatsappNumber, contactEmail, siteName } = useSettings()
-
-// PWA'yı yükle
-const installPwa = async () => {
-  isInstalling.value = true
-  try {
-    const result = await pwaStore.installPwa()
-    if (result) {
-      // Başarılı yükleme toast'ı göster (eğer toast sistemi varsa)
-      console.log('PWA başarıyla yüklendi!')
-    }
-  } catch (error) {
-    console.error('PWA yükleme hatası:', error)
-  } finally {
-    isInstalling.value = false
-  }
-}
 
 // Telefon numarasını formatla
 const formatPhoneNumber = (phoneNumber) => {

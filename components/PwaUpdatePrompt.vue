@@ -52,12 +52,7 @@
 </template>
 
 <script setup>
-const {
-    needRefresh,
-    offlineReady,
-    updateServiceWorker,
-    closePrompt
-} = usePwa()
+
 
 const showOfflineReady = ref(false)
 

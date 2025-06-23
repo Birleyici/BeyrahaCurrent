@@ -34,12 +34,7 @@
 </template>
 
 <script setup>
-const {
-    shouldShowPrompt,
-    install,
-    showLater,
-    neverShow
-} = usePwa()
+
 
 const handleInstall = async () => {
     const success = await install()

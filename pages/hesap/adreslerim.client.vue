@@ -84,7 +84,6 @@
 </template>
 
 <script setup>
-import { useDevice } from 'use-device'
 
 const { siteName } = useSettings()
 

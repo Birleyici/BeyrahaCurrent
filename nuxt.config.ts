@@ -1,5 +1,4 @@
 import vsharp from 'vite-plugin-vsharp';
-import pwaConfig from './pwa.config';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -37,8 +36,6 @@ export default defineNuxtConfig({
     ]
   },
 
-
-
   vite: {
     // plugins: [vsharp()], // Geçici olarak devre dışı
     vue: {
@@ -65,7 +62,6 @@ export default defineNuxtConfig({
 
   //runtime public base url tanımlayacağız
 
-
   runtimeConfig: {
     public: {
       apiBase: process.env.API_BASE_URL,
@@ -90,11 +86,8 @@ export default defineNuxtConfig({
     'nuxt-icon',
     '@nuxt/image',
     '@nuxtjs/device',
-    'nuxt-tiptap-editor',
-    '@vite-pwa/nuxt'
+    'nuxt-tiptap-editor'
   ],
-
-  pwa: pwaConfig,
 
   tiptap: {
     prefix: 'Tiptap', //prefix for Tiptap imports, composables not included
@@ -124,7 +117,6 @@ export default defineNuxtConfig({
   },
 
   compatibilityDate: '2024-08-21',
-
 
   routeRules: {
     '/management/**': { ssr: false },

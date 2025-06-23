@@ -1,14 +1,11 @@
 <template>
   <div>
-    <VitePwaManifest />
     <NuxtLoadingIndicator />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
     <UNotifications icon="i-heroicons-check-badge" color="orange" />
     <DialogWrapper />
-    <PwaInstallPrompt />
-    <PwaUpdatePrompt />
   </div>
 </template>
 
@@ -26,15 +23,12 @@ const uiStore = useUIStore()
 // Dark mode support
 const { initDarkMode } = useDarkMode();
 
-// PWA support
-const { checkInstallation } = usePwa()
 
 onMounted(async () => {
   // Dark mode'u initialize et
   initDarkMode();
 
-  // PWA durumunu kontrol et
-  checkInstallation();
+  $changeMainState({ isLoaded: true });
 
   $changeMainState({ isLoaded: true });
   await cartState.cartDBToState()
