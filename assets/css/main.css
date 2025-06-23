@@ -130,6 +130,30 @@ a:hover {
   @apply mb-12 lg:mb-16;
 }
 
+/* Breadcrumb List Reset */
+.breadcrumb ol,
+.breadcrumb ul,
+nav[aria-label="Breadcrumb"] ol,
+nav[aria-label="Breadcrumb"] ul,
+[data-component="breadcrumb"] ol,
+[data-component="breadcrumb"] ul {
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  list-style: none !important;
+}
+
+/* Global list reset for breadcrumbs */
+ol.breadcrumb-list,
+ul.breadcrumb-list {
+  margin: 0 !important;
+  padding: 0 !important;
+  padding-left: 0 !important;
+  margin-left: 0 !important;
+  list-style: none !important;
+}
+
 /* Enhanced Card System */
 .card {
   @apply bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-300 mb-6 lg:mb-8;
@@ -915,4 +939,7 @@ textarea:disabled {
     margin-right: calc(-50vw + 50%);
   }
 }
+
+
+
   

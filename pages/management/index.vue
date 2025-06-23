@@ -1,24 +1,10 @@
 <template>
     <div class="space-y-6">
-        <!-- Welcome Header -->
-        <div class="bg-gradient-to-r from-blue-600 to-blue-700 rounded-lg shadow-sm p-6 text-white">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold mb-2">Hoş Geldiniz! 👋</h1>
-                    <p class="text-blue-100 text-lg">
-                        Beyraha Admin Paneline hoş geldiniz. İşletmenizi yönetmek için tüm araçlar burada.
-                    </p>
-                </div>
-                <div class="hidden md:block">
-                    <div class="text-right">
-                        <p class="text-blue-100 text-sm">Bugün</p>
-                        <p class="text-2xl font-bold">{{ currentDate }}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Page Header -->
+        <AdminCommonPageHeader title="Dashboard" description="Genel bakış ve istatistikler"
+            :breadcrumb-links="breadcrumbLinks" />
 
-        <!-- Stats Cards -->
+        <!-- İstatistik Kartları -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Total Products -->
             <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
@@ -287,6 +273,24 @@
 </template>
 
 <script setup>
+// SEO ayarları
+useHead({
+    title: 'Dashboard - Beyraha Admin',
+    meta: [
+        { name: 'description', content: 'Beyraha admin panel dashboard sayfası' }
+    ]
+})
+
+// Breadcrumb links
+const breadcrumbLinks = [
+    {
+        label: 'Dashboard',
+        icon: 'i-heroicons-home'
+    }
+];
+
+// Mock data for demonstration
+
 definePageMeta({
     layout: "admin",
 });

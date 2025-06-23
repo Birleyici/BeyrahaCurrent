@@ -1,23 +1,16 @@
 <template>
-  <div class="space-y-4 lg:space-y-6 p-4 lg:p-6">
+  <div class="space-y-6">
     <!-- Page Header -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-4 lg:p-6">
-      <div class="flex flex-col space-y-4 lg:flex-row lg:items-center lg:justify-between lg:space-y-0">
-        <div>
-          <h1 class="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">Ürün Yönetimi</h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-1 text-sm lg:text-base">
-            Toplam {{ Array.isArray(productState.vendorProducts) ? productState.vendorProducts.length : 0 }} ürün
-            bulunuyor
-          </p>
-        </div>
-        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-          <UButton icon="i-heroicons-arrow-path" size="sm" color="gray" variant="outline" label="Yenile"
-            @click="refreshProducts" :loading="isLoading" class="touch-manipulation" />
-          <UButton icon="i-heroicons-plus" size="sm" color="primary" variant="solid" label="Yeni Ürün Ekle"
-            to="/management/urunler/yeni" class="touch-manipulation" />
-        </div>
-      </div>
-    </div>
+    <AdminCommonPageHeader title="Ürün Yönetimi"
+      :description="`Toplam ${Array.isArray(productState.vendorProducts) ? productState.vendorProducts.length : 0} ürün bulunuyor`"
+      :breadcrumb-links="breadcrumbLinks">
+      <template #actions>
+        <UButton icon="i-heroicons-arrow-path" size="sm" color="gray" variant="outline" label="Yenile"
+          @click="refreshProducts" :loading="isLoading" class="touch-manipulation" />
+        <UButton icon="i-heroicons-plus" size="sm" color="primary" variant="solid" label="Yeni Ürün Ekle"
+          to="/management/urunler/yeni" class="touch-manipulation" />
+      </template>
+    </AdminCommonPageHeader>
 
     <!-- Products Grid/List Toggle -->
     <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
@@ -95,12 +88,48 @@
               <!-- Price and Actions -->
               <div class="flex items-center justify-between">
                 <div>
-                  <span v-if="product.price" class="text-base lg:text-lg font-bold text-green-600 dark:text-green-400">
-                    {{ formatPrice(product.price) }}
-                  </span>
-                  <span v-else class="text-sm text-gray-500 dark:text-gray-400">
-                    Fiyat belirtilmemiş
-                  </span>
+                  <div v-if="product.is_variation_product">
+                    <!-- Varyasyonlı ürün fiyat gösterimi -->
+                    <div v-if="product.display_price" class="flex flex-col">
+                      <span v-if="product.has_price_range" class="font-semibold text-green-600 dark:text-green-400">
+                        {{ formatPrice(product.display_price) }}+
+                      </span>
+                      <span v-else class="font-semibold text-green-600 dark:text-green-400">
+                        {{ formatPrice(product.display_price) }}
+                      </span>
+                      <span class="text-xs text-gray-500 dark:text-gray-400">
+                        Varyasyonlara göre
+                      </span>
+                    </div>
+                    <div v-else>
+                      <span class="text-sm text-orange-500 dark:text-orange-400">
+                        Varyasyon fiyatı belirlenmemiş
+                      </span>
+                    </div>
+                  </div>
+                  <div v-else>
+                    <!-- Normal ürün fiyat gösterimi -->
+                    <div v-if="product.sale_price">
+                      <!-- İndirimli fiyat varsa onu göster -->
+                      <span class="font-semibold text-orange-600 dark:text-orange-400">
+                        {{ formatPrice(product.sale_price) }}
+                      </span>
+                      <span class="text-xs text-gray-500 dark:text-gray-400 line-through ml-2">
+                        {{ formatPrice(product.price) }}
+                      </span>
+                    </div>
+                    <div v-else-if="product.price">
+                      <!-- Normal fiyat -->
+                      <span class="font-semibold text-green-600 dark:text-green-400">
+                        {{ formatPrice(product.price) }}
+                      </span>
+                    </div>
+                    <div v-else>
+                      <span class="text-sm text-gray-500 dark:text-gray-400">
+                        Fiyat belirtilmemiş
+                      </span>
+                    </div>
+                  </div>
                 </div>
 
                 <UDropdown :items="getProductActions(product)" :popper="{ placement: 'bottom-end' }">
@@ -161,12 +190,44 @@
                       </div>
 
                       <div class="mt-1 flex items-center space-x-4">
-                        <span v-if="product.price" class="font-semibold text-green-600 dark:text-green-400">
-                          {{ formatPrice(product.price) }}
-                        </span>
-                        <span v-if="product.sale_price" class="font-semibold text-orange-600 dark:text-orange-400">
-                          {{ formatPrice(product.sale_price) }}
-                        </span>
+                        <div v-if="product.is_variation_product">
+                          <!-- Varyasyonlı ürün fiyat gösterimi -->
+                          <div v-if="product.display_price" class="flex flex-col">
+                            <span v-if="product.has_price_range"
+                              class="font-semibold text-green-600 dark:text-green-400">
+                              {{ formatPrice(product.display_price) }}+
+                            </span>
+                            <span v-else class="font-semibold text-green-600 dark:text-green-400">
+                              {{ formatPrice(product.display_price) }}
+                            </span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">
+                              Varyasyonlara göre
+                            </span>
+                          </div>
+                          <div v-else>
+                            <span class="text-sm text-orange-500 dark:text-orange-400">
+                              Varyasyon fiyatı belirlenmemiş
+                            </span>
+                          </div>
+                        </div>
+                        <div v-else>
+                          <!-- Normal ürün fiyat gösterimi -->
+                          <div v-if="product.sale_price">
+                            <!-- İndirimli fiyat varsa onu göster -->
+                            <span class="font-semibold text-orange-600 dark:text-orange-400">
+                              {{ formatPrice(product.sale_price) }}
+                            </span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400 line-through ml-2">
+                              {{ formatPrice(product.price) }}
+                            </span>
+                          </div>
+                          <div v-else-if="product.price">
+                            <!-- Normal fiyat -->
+                            <span class="font-semibold text-green-600 dark:text-green-400">
+                              {{ formatPrice(product.price) }}
+                            </span>
+                          </div>
+                        </div>
                       </div>
                     </div>
 
@@ -220,21 +281,70 @@
             </template>
 
             <template #price-data="{ row }">
-              <span v-if="row.price" class="font-semibold text-green-600 dark:text-green-400">
-                {{ formatPrice(row.price) }}
-              </span>
-              <span v-else class="text-gray-500 dark:text-gray-400 text-sm">
-                Belirtilmemiş
-              </span>
+              <div v-if="row.is_variation_product">
+                <!-- Varyasyonlı ürün fiyat gösterimi -->
+                <div v-if="row.display_price">
+                  <span v-if="row.has_price_range" class="font-semibold text-green-600 dark:text-green-400">
+                    {{ formatPrice(row.display_price) }}+
+                  </span>
+                  <span v-else class="font-semibold text-green-600 dark:text-green-400">
+                    {{ formatPrice(row.display_price) }}
+                  </span>
+                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                    Varyasyonlara göre
+                  </p>
+                </div>
+                <div v-else>
+                  <span class="text-orange-500 dark:text-orange-400 text-sm">
+                    Varyasyon fiyatı belirlenmemiş
+                  </span>
+                </div>
+              </div>
+              <div v-else>
+                <!-- Normal ürün fiyat gösterimi -->
+                <div v-if="row.sale_price">
+                  <!-- İndirimli fiyat varsa onu göster -->
+                  <span class="font-semibold text-orange-600 dark:text-orange-400">
+                    {{ formatPrice(row.sale_price) }}
+                  </span>
+                  <span class="text-xs text-gray-500 dark:text-gray-400 line-through ml-2">
+                    {{ formatPrice(row.price) }}
+                  </span>
+                </div>
+                <div v-else-if="row.price">
+                  <!-- Normal fiyat -->
+                  <span class="font-semibold text-green-600 dark:text-green-400">
+                    {{ formatPrice(row.price) }}
+                  </span>
+                </div>
+                <div v-else>
+                  <span class="text-gray-500 dark:text-gray-400 text-sm">
+                    Belirtilmemiş
+                  </span>
+                </div>
+              </div>
             </template>
 
             <template #sale_price-data="{ row }">
-              <span v-if="row.sale_price" class="font-semibold text-orange-600 dark:text-orange-400">
-                {{ formatPrice(row.sale_price) }}
-              </span>
-              <span v-else class="text-gray-500 dark:text-gray-400 text-sm">
-                -
-              </span>
+              <div v-if="row.is_variation_product">
+                <!-- Varyasyonlı ürünlerde sale_price ayrı gösterilmez -->
+                <span class="text-gray-500 dark:text-gray-400 text-sm">
+                  Varyasyonlarda
+                </span>
+              </div>
+              <div v-else>
+                <!-- Normal ürün sale_price gösterimi - sadece indirim oranı -->
+                <div v-if="row.sale_price && row.price">
+                  <span class="text-red-600 dark:text-red-400 font-medium text-sm">
+                    %{{ Math.round(((row.price - row.sale_price) / row.price) * 100) }} İndirim
+                  </span>
+                </div>
+                <div v-else>
+                  <span class="text-gray-500 dark:text-gray-400 text-sm">
+                    -
+                  </span>
+                </div>
+              </div>
             </template>
 
             <template #sku-data="{ row }">
@@ -304,6 +414,19 @@ const productToDelete = ref(null);
 const viewMode = ref('grid');
 const page = ref(1);
 const pageCount = 12;
+
+// Breadcrumb links
+const breadcrumbLinks = [
+  {
+    label: 'Dashboard',
+    icon: 'i-heroicons-home',
+    to: '/management'
+  },
+  {
+    label: 'Ürünler',
+    icon: 'i-heroicons-cube'
+  }
+];
 
 // Computed properties
 const paginatedProducts = computed(() => {

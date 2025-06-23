@@ -29,7 +29,9 @@
       </div>
 
       <div class="flex justify-center pt-2">
-        <PartialsProductPrice type="card" :sale-price="props.product.sale_price" :price="props.product.price" />
+        <PartialsProductPrice type="card" :sale-price="props.product.sale_price" :price="props.product.price"
+          :display-price="props.product.display_price" :is-variation-product="props.product.is_variation_product"
+          :has-price-range="props.product.has_price_range" />
       </div>
     </div>
   </div>

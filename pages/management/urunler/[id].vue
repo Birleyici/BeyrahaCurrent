@@ -1,25 +1,16 @@
 <template>
   <div class="space-y-6">
     <!-- Page Header -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <UBreadcrumb :links="links" class="mb-2" />
-          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">
-            {{ isNewProduct ? 'Yeni Ürün Oluştur' : 'Ürün Düzenle' }}
-          </h1>
-          <p class="text-gray-600 dark:text-gray-400 mt-1">
-            {{ isNewProduct ? 'Yeni bir ürün oluşturun ve detaylarını ekleyin' : 'Ürün bilgilerini güncelleyin' }}
-          </p>
-        </div>
-        <div class="flex items-center gap-3">
-          <UButton icon="i-heroicons-arrow-left" size="sm" color="gray" variant="outline" label="Geri Dön"
-            to="/management/urunler" />
-          <UButton icon="i-heroicons-eye" size="sm" color="gray" variant="outline" label="Önizle"
-            :disabled="isNewProduct" />
-        </div>
-      </div>
-    </div>
+    <AdminCommonPageHeader :title="isNewProduct ? 'Yeni Ürün Oluştur' : 'Ürün Düzenle'"
+      :description="isNewProduct ? 'Yeni bir ürün oluşturun ve detaylarını ekleyin' : 'Ürün bilgilerini güncelleyin'"
+      :breadcrumb-links="links">
+      <template #actions>
+        <UButton icon="i-heroicons-arrow-left" size="sm" color="gray" variant="outline" label="Geri Dön"
+          to="/management/urunler" />
+        <UButton icon="i-heroicons-eye" size="sm" color="gray" variant="outline" label="Önizle"
+          :disabled="isNewProduct" />
+      </template>
+    </AdminCommonPageHeader>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <!-- Main Content -->
@@ -120,11 +111,30 @@
                   <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
                   Ürün adı
                 </li>
-                <li v-if="!productState.product.price || productState.product.price <= 0"
+
+                <!-- Fiyat kontrolü - varyasyonlu ve basit ürün için farklı mesajlar -->
+                <li
+                  v-if="(hasColorAttribute || (attributeState.attributes && attributeState.attributes.some(attr => attr.useForVariation))) &&
+                    (!variationState.variations || variationState.variations.length === 0 ||
+                      !variationState.variations.some(v => (v.price && parseFloat(v.price) > 0) || (v.sale_price && parseFloat(v.sale_price) > 0)))"
                   class="flex items-center gap-2">
+                  <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
+                  <div>
+                    <div>Varyasyon fiyatları</div>
+                    <div class="text-xs text-amber-600 mt-1">
+                      {{ !variationState.variations || variationState.variations.length === 0
+                        ? 'Önce varyasyonlar oluşturulmalı, sonra fiyatları girilmeli'
+                        : 'En az bir varyasyonun fiyatı girilmeli' }}
+                    </div>
+                  </div>
+                </li>
+
+                <li v-else-if="!(hasColorAttribute || (attributeState.attributes && attributeState.attributes.some(attr => attr.useForVariation))) &&
+                  (!productState.product.price || productState.product.price <= 0)" class="flex items-center gap-2">
                   <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
                   Fiyat
                 </li>
+
                 <li
                   v-if="!productState.product.selectedCategories || productState.product.selectedCategories.length === 0"
                   class="flex items-center gap-2">
@@ -325,6 +335,7 @@ definePageMeta({
 const productState = useProductState();
 const categoryState = useCategoryState();
 const attributeState = useAttributeState();
+const variationState = useVariationState();
 const route = useRoute();
 
 // Import the composable function
@@ -653,10 +664,20 @@ onBeforeRouteLeave((to, from, next) => {
   // Değişiklik kontrolü yap
   const hasChanges = hasUnsavedChanges();
 
-  // Eğer otomatik oluşturulmuş ürün varsa ve henüz kaydedilmemişse uyarı göster
-  const isEmptyAutoCreated = isAutoCreatedProduct.value &&
-    productState.product.id &&
-    (!productState.product.name || productState.product.name.trim() === '');
+  // Otomatik oluşturulmuş ürün kontrolü - daha kapsamlı
+  const isEmptyAutoCreated = productState.product.id &&
+    (isAutoCreatedProduct.value ||
+      (!productState.product.name || productState.product.name.trim() === '')) &&
+    productState.product.is_active === 0; // Sadece taslak durumundaki ürünler için
+
+  console.log('Navigation guard kontrol:', {
+    hasChanges,
+    isEmptyAutoCreated,
+    isAutoCreatedProduct: isAutoCreatedProduct.value,
+    productName: productState.product.name,
+    productId: productState.product.id,
+    isActive: productState.product.is_active
+  });
 
   if (isEmptyAutoCreated || hasChanges) {
     console.log('Navigation guard - modal açılıyor', {
@@ -675,7 +696,13 @@ onBeforeRouteLeave((to, from, next) => {
 // Window beforeunload event for browser close/refresh
 onMounted(() => {
   const handleBeforeUnload = (event) => {
-    if (isAutoCreatedProduct.value && productState.product.id && (!productState.product.name || productState.product.name.trim() === '')) {
+    // Otomatik oluşturulmuş ürün kontrolü - daha kapsamlı
+    const isEmptyAutoCreated = productState.product.id &&
+      (isAutoCreatedProduct.value ||
+        (!productState.product.name || productState.product.name.trim() === '')) &&
+      productState.product.is_active === 0;
+
+    if (isEmptyAutoCreated) {
       event.preventDefault();
       event.returnValue = 'Otomatik oluşturulan ürün var. Sayfayı kapatmak istediğinizden emin misiniz?';
       return event.returnValue;
@@ -711,14 +738,29 @@ if (isNewProduct.value) {
     selectedCategories: [], // Güvenli varsayılan değer
     selectedImages: []
   };
-  await saveProduct(productState.product.id, false);
-  isAutoCreatedProduct.value = true; // Otomatik oluşturuldu işaretle
 
-  // Yeni ürün için orijinal verileri kaydet
-  saveOriginalProduct();
+  // Yeni ürün oluştur
+  await saveProduct(productState.product.id, false);
+
+  // Ürün oluşturulduktan sonra ID'li sayfasına yönlendir
+  if (productState.product.id) {
+    // Navigation guard'ı bypass et çünkü bu otomatik yönlendirme
+    bypassNavigationGuard.value = true;
+    await navigateTo(`/management/urunler/${productState.product.id}`);
+  }
+
 } else {
   await getProduct(route.params.id);
-  isAutoCreatedProduct.value = false;
+
+  // Eğer ürün adı boş ve yakın zamanda oluşturulmuşsa otomatik oluşturulmuş kabul et
+  const createdAt = new Date(productState.product.created_at);
+  const now = new Date();
+  const timeDiff = now - createdAt;
+  const isRecentlyCreated = timeDiff < 5 * 60 * 1000; // 5 dakika içinde oluşturulmuş
+
+  isAutoCreatedProduct.value = isRecentlyCreated &&
+    (!productState.product.name || productState.product.name.trim() === '');
+
   // Eğer selectedCategories null ise boş array yap
   if (!productState.product.selectedCategories) {
     productState.product.selectedCategories = [];
@@ -734,8 +776,27 @@ const canPublishProduct = computed(() => {
 
   // Temel gereklilikler
   const hasName = productState.product.name && productState.product.name.trim() !== '';
-  const hasPrice = productState.product.price && productState.product.price > 0;
   const hasCategories = productState.product.selectedCategories && productState.product.selectedCategories.length > 0;
+
+  // Fiyat kontrolü - varyasyonlu ürünler için daha detaylı kontrol
+  let hasPrice = false;
+
+  // Eğer varyasyon niteliği varsa, varyasyon fiyatlarını kontrol et
+  if (hasColorAttribute.value || (attributeState.attributes && attributeState.attributes.some(attr => attr.useForVariation))) {
+    // Varyasyonlu ürün - varyasyon fiyatlarını kontrol et
+    if (variationState.variations && variationState.variations.length > 0) {
+      hasPrice = variationState.variations.some(variation =>
+        (variation.price && parseFloat(variation.price) > 0) ||
+        (variation.sale_price && parseFloat(variation.sale_price) > 0)
+      );
+    } else {
+      // Varyasyon tanımlanmış ama varyasyon oluşturulmamış
+      hasPrice = false;
+    }
+  } else {
+    // Basit ürün - ana ürün fiyatını kontrol et
+    hasPrice = productState.product.price && parseFloat(productState.product.price) > 0;
+  }
 
   // Renk niteliği varsa görsel kontrolünü atla (her renk için ayrı görsel atanıyor)
   const hasImages = hasColorAttribute.value ? true :
@@ -747,6 +808,9 @@ const canPublishProduct = computed(() => {
     hasCategories,
     hasImages,
     hasColorAttribute: hasColorAttribute.value,
+    hasVariationAttributes: attributeState.attributes?.some(attr => attr.useForVariation),
+    variationsCount: variationState.variations?.length || 0,
+    variationPrices: variationState.variations?.map(v => ({ id: v.id, price: v.price, sale_price: v.sale_price })) || [],
     canPublish: hasName && hasPrice && hasCategories && hasImages
   });
 

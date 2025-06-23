@@ -157,20 +157,18 @@
       <header
         class="bg-white dark:bg-neutral-800 shadow-sm border-b border-neutral-200 dark:border-neutral-700 sticky top-0 z-30">
         <div class="flex items-center justify-between px-4 lg:px-6 py-4">
-          <!-- Mobile menu button and title -->
+          <!-- Mobile menu button -->
           <div class="flex items-center space-x-4 flex-1">
             <button @click="sidebarOpen = !sidebarOpen"
               class="lg:hidden p-2 rounded-xl text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 focus:outline-none focus:ring-2 focus:ring-primary-500 touch-manipulation">
               <UIcon name="i-heroicons-bars-3" class="w-6 h-6" />
             </button>
 
-            <div class="min-w-0">
-              <h1 class="text-xl lg:text-2xl font-bold text-neutral-900 dark:text-white truncate">
-                {{ pageTitle }}
+            <!-- Logo/Brand for mobile -->
+            <div class="lg:hidden">
+              <h1 class="text-lg font-bold text-neutral-900 dark:text-white">
+                Beyraha Admin
               </h1>
-              <p v-if="pageSubtitle" class="text-sm text-neutral-500 dark:text-neutral-400 hidden lg:block mt-1">
-                {{ pageSubtitle }}
-              </p>
             </div>
           </div>
 
@@ -192,7 +190,7 @@
       </header>
 
       <!-- Page Content -->
-      <main class="flex-1 p-4 lg:p-6">
+      <main class="flex-1 p-4 lg:p-6 pt-2 lg:pt-4">
         <div class="max-w-7xl mx-auto">
           <LazyNuxtPage />
         </div>
@@ -229,31 +227,6 @@ const { pendingReviewsCount, initAdminStats } = useAdminStats();
 
 // Dark mode composable'ını kullan
 const { isDark, toggleDarkMode, initDarkMode } = useDarkMode();
-
-// Page title and subtitle computed properties
-const pageTitle = computed(() => {
-  const route = useRoute();
-  if (route.path === '/management') return 'Dashboard';
-  if (route.path === '/management/urunler') return 'Ürün Listesi';
-  if (route.path === '/management/urunler/yeni') return 'Yeni Ürün';
-  if (route.path.includes('/management/urunler/')) return 'Ürün Düzenle';
-  if (route.path === '/management/siparisler') return 'Sipariş Yönetimi';
-  if (route.path.includes('/management/siparisler/') && route.params.id) return 'Sipariş Detayı';
-  if (route.path === '/management/yorumlar') return 'Yorum Yönetimi';
-  return 'Admin Panel';
-});
-
-const pageSubtitle = computed(() => {
-  const route = useRoute();
-  if (route.path === '/management') return 'Genel bakış ve istatistikler';
-  if (route.path === '/management/urunler') return 'Tüm ürünlerinizi görüntüleyin ve yönetin';
-  if (route.path === '/management/urunler/yeni') return 'Sisteme yeni ürün ekleyin';
-  if (route.path.includes('/management/urunler/')) return 'Ürün bilgilerini düzenleyin ve güncelleyin';
-  if (route.path === '/management/siparisler') return 'Tüm siparişlerinizi görüntüleyin ve yönetin';
-  if (route.path.includes('/management/siparisler/') && route.params.id) return `Sipariş #${route.params.id} detayları ve işlemleri`;
-  if (route.path === '/management/yorumlar') return 'Müşteri yorumlarını görüntüleyin, onaylayın ve yönetin';
-  return '';
-});
 
 // User menu items
 const userMenuItems = [

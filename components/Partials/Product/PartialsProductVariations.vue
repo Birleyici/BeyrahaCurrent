@@ -207,7 +207,6 @@
 </template>
 
 <script setup>
-import { useSettings } from '~/composables/useSettings'
 
 const props = defineProps(["attrsAndVarsState", "productState"]);
 const cartState = useCartState()

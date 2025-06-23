@@ -1,20 +1,15 @@
 <template>
     <div class="space-y-6">
-        <!-- Header -->
-        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div>
-                <h1 class="text-2xl sm:text-3xl font-bold text-neutral-900 dark:text-white">Yorum Yönetimi</h1>
-                <p class="text-neutral-600 dark:text-neutral-400 mt-1">
-                    Müşteri yorumlarını inceleyin, onaylayın veya reddedin
-                </p>
-            </div>
-
-            <!-- Refresh Button -->
-            <UButton @click="refreshData" :loading="loading" color="gray" variant="outline"
-                icon="i-heroicons-arrow-path" class="w-full sm:w-auto">
-                Yenile
-            </UButton>
-        </div>
+        <!-- Page Header -->
+        <AdminCommonPageHeader title="Yorum Yönetimi"
+            description="Müşteri yorumlarını inceleyin, onaylayın veya reddedin" :breadcrumb-links="breadcrumbLinks">
+            <template #actions>
+                <UButton @click="refreshData" :loading="loading" color="gray" variant="outline"
+                    icon="i-heroicons-arrow-path">
+                    Yenile
+                </UButton>
+            </template>
+        </AdminCommonPageHeader>
 
         <!-- Statistics Cards -->
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
@@ -370,6 +365,19 @@ const sortOptions = [
     { label: 'En Düşük Puan', value: 'rating_low' },
     { label: 'En Yararlı', value: 'helpful' }
 ]
+
+// Breadcrumb links
+const breadcrumbLinks = [
+    {
+        label: 'Dashboard',
+        icon: 'i-heroicons-home',
+        to: '/management'
+    },
+    {
+        label: 'Yorumlar',
+        icon: 'i-heroicons-chat-bubble-left-right'
+    }
+];
 
 // Methods
 const refreshData = async () => {

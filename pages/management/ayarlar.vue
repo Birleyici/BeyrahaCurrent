@@ -1,21 +1,15 @@
 <template>
     <div class="space-y-6">
-        <!-- Header -->
-        <div
-            class="bg-white dark:bg-neutral-800 rounded-xl shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
-            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-neutral-900 dark:text-white">Sistem Ayarları</h1>
-                    <p class="mt-1 text-sm text-neutral-600 dark:text-neutral-400">
-                        Site ayarlarını buradan yönetebilirsiniz
-                    </p>
-                </div>
-                <UButton @click="saveSettings" :loading="saving" :disabled="saving" color="primary" size="lg"
-                    icon="i-heroicons-check" class="w-full lg:w-auto">
+        <!-- Page Header -->
+        <AdminCommonPageHeader title="Sistem Ayarları" description="Site ayarlarını buradan yönetebilirsiniz"
+            :breadcrumb-links="breadcrumbLinks">
+            <template #actions>
+                <UButton @click="saveSettings" :loading="saving" :disabled="saving" color="primary"
+                    icon="i-heroicons-check">
                     {{ saving ? 'Kaydediliyor...' : 'Değişiklikleri Kaydet' }}
                 </UButton>
-            </div>
-        </div>
+            </template>
+        </AdminCommonPageHeader>
 
         <!-- Loading State -->
         <div v-if="loading" class="flex justify-center py-12">
@@ -154,6 +148,19 @@ const loading = ref(true)
 const saving = ref(false)
 const activeGroup = ref('shipping')
 const localSettings = ref({})
+
+// Breadcrumb links
+const breadcrumbLinks = [
+    {
+        label: 'Dashboard',
+        icon: 'i-heroicons-home',
+        to: '/management'
+    },
+    {
+        label: 'Ayarlar',
+        icon: 'i-heroicons-cog-6-tooth'
+    }
+];
 
 // Setting Groups Configuration
 const settingGroups = [

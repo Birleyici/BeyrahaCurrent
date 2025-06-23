@@ -9,15 +9,9 @@ export const useVariationState = defineStore('variationState', () => {
 
         if (productId == null) { return }
 
-        console.log('🔄 FETCHING VARIATIONS FOR PRODUCT:', productId);
-
         const response = await useBaseOFetchWithAuth(`products/${productId}/variations`);
 
-        console.log('📦 RECEIVED VARIATIONS:', response.variations?.length || 0, 'items');
-
         variations.value = response.variations
-
-        console.log('✅ STATE UPDATED. VARIATION COUNT:', variations.value?.length || 0);
     }
 
     const deleteVariation = async (variationData) => {
