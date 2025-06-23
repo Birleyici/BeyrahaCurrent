@@ -149,7 +149,7 @@
                 <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
                 <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
                   formatPrice(cartState.cartTotalAmount + calculateShippingCost(cartState.cartTotalAmount))
-                }}</span>
+                  }}</span>
               </div>
 
               <!-- Siparişi Onayla Butonu -->
@@ -164,12 +164,7 @@
     </div>
 
     <!-- Yeni Adres Modalı -->
-    <UModal v-model="orderState.isOpenAddressModal" :prevent-close="true" :ui="{
-      wrapper: 'fixed inset-0 z-[9999999] overflow-y-auto',
-      overlay: { base: 'fixed inset-0 transition-opacity z-[9999998]' },
-      container: 'flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 z-[9999999]',
-      base: 'relative text-left rtl:text-right flex flex-col z-[9999999]'
-    }">
+    <UModal v-model="orderState.isOpenAddressModal" :prevent-close="true">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
@@ -185,12 +180,7 @@
     </UModal>
 
     <!-- Tüm Adresler Modalı -->
-    <UModal v-model="orderState.openAllAddressModal" :prevent-close="true" :ui="{
-      wrapper: 'fixed inset-0 z-[9999999] overflow-y-auto',
-      overlay: { base: 'fixed inset-0 transition-opacity z-[9999998]' },
-      container: 'flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0 z-[9999999]',
-      base: 'relative text-left rtl:text-right flex flex-col z-[9999999]'
-    }">
+    <UModal v-model="orderState.openAllAddressModal" :prevent-close="true">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
@@ -345,5 +335,31 @@ onMounted(async () => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+/* Modal z-index düzeltmeleri */
+.modal-overlay-fix {
+  z-index: 9998 !important;
+}
+
+.modal-container-fix {
+  z-index: 9999 !important;
+}
+
+.modal-content-fix {
+  z-index: 10000 !important;
+}
+
+/* UModal içindeki overlay ve container sınıflarını hedefle */
+:deep(.fixed.inset-0.transition-opacity) {
+  z-index: 9998 !important;
+}
+
+:deep(.flex.min-h-full.items-end.justify-center) {
+  z-index: 9999 !important;
+}
+
+:deep(.relative.text-left) {
+  z-index: 10000 !important;
 }
 </style>
