@@ -117,7 +117,7 @@
 
           <!-- Sağ Taraf - Sipariş Özeti -->
           <div class="lg:col-span-1 mt-8 lg:mt-0">
-            <div v-if="isLoaded" class="sticky top-4">
+            <div v-if="isLoaded" class="sticky top-4 ">
               <PartialsCartExtre>
                 <template #button>
                   <!-- Desktop Button -->
@@ -142,7 +142,7 @@
         <ClientOnly>
           <Teleport to="body">
             <div v-if="isLoaded"
-              class="md:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-neutral-800 p-4 shadow-2xl border-t border-neutral-200 dark:border-neutral-700 flex items-center justify-between"
+              class="md:hidden fixed !z-0 bottom-0 left-0 right-0 bg-white dark:bg-neutral-800 p-4 shadow-2xl border-t border-neutral-200 dark:border-neutral-700 flex items-center justify-between"
               style="z-index: 999;">
               <!-- Toplam Tutar -->
               <div class="flex flex-col">

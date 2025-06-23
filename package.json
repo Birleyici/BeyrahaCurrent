@@ -26,8 +26,10 @@
   "dependencies": {
     "@nuxt/image": "^1.6.0",
     "@tiptap/extension-placeholder": "^2.14.0",
+    "@types/leaflet": "^1.9.18",
     "aws-sdk": "^2.1508.0",
     "jsonwebtoken": "^9.0.2",
+    "leaflet": "^1.9.4",
     "mobile-detect": "^1.4.5",
     "next-auth": "^4.21.1",
     "npx": "^10.2.2",
