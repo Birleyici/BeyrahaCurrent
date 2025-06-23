@@ -1,130 +1,174 @@
 <template>
   <div class="space-y-6">
-    <!-- Form Progress Indicator -->
+    <!-- Modern Progress Indicator -->
     <div class="mb-8">
-      <div class="flex items-center justify-between mb-2">
-        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Adres Bilgileri</h3>
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100">Hızlı Adres Ekleme</h3>
         <div class="flex items-center space-x-2">
-          <UIcon name="i-heroicons-shield-check" class="w-4 h-4 text-green-600 dark:text-green-400" />
-          <span class="text-sm text-green-600 dark:text-green-400 font-medium">Güvenli</span>
+          <UIcon name="i-heroicons-bolt" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
         </div>
       </div>
-      <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
-        <div class="bg-secondary-500 dark:bg-secondary-400 h-2 rounded-full transition-all duration-500"
-          :style="`width: ${formProgress}%`">
+
+      <!-- Step Indicator -->
+      <div class="flex items-center space-x-2 mb-4">
+        <div v-for="(step, index) in steps" :key="index" class="flex items-center">
+          <div
+            class="flex items-center justify-center w-8 h-8 rounded-full text-sm font-medium transition-all duration-300"
+            :class="currentStep > index ? 'bg-secondary-500 text-white' :
+              currentStep === index ? 'bg-secondary-100 dark:bg-secondary-900 text-secondary-600 dark:text-secondary-400 ring-2 ring-secondary-500' :
+                'bg-neutral-200 dark:bg-neutral-700 text-neutral-500 dark:text-neutral-400'">
+            <UIcon v-if="currentStep > index" name="i-heroicons-check" class="w-4 h-4" />
+            <span v-else>{{ index + 1 }}</span>
+          </div>
+          <div v-if="index < steps.length - 1" class="w-8 h-0.5 mx-2 transition-all duration-300"
+            :class="currentStep > index ? 'bg-secondary-500' : 'bg-neutral-200 dark:bg-neutral-700'"></div>
         </div>
       </div>
-      <p class="text-sm text-neutral-500 dark:text-neutral-400 mt-2">{{ formProgress }}% tamamlandı</p>
+
+      <p class="text-sm text-neutral-600 dark:text-neutral-400">
+        {{ steps[currentStep]?.description }}
+      </p>
     </div>
 
-    <UForm :schema="schema" :state="addressObj" class="space-y-6" @submit="saveAddress()">
-      <!-- Kişisel Bilgiler -->
-      <div class="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-6 border border-neutral-200 dark:border-neutral-700">
-        <div class="flex items-center space-x-3 mb-4">
-          <div class="w-8 h-8 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center">
-            <UIcon name="i-heroicons-user" class="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
-          </div>
-          <h4 class="text-base font-semibold text-neutral-900 dark:text-neutral-100">Kişisel Bilgiler</h4>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <UFormGroup label="Ad*" name="name">
-            <UInput color="secondary" v-model="addressObj.name" type="text" placeholder="Adınızı girin"
-              :ui="{ base: 'transition-all duration-200' }" />
-          </UFormGroup>
-
-          <UFormGroup label="Soyad*" name="last_name">
-            <UInput color="secondary" v-model="addressObj.last_name" type="text" placeholder="Soyadınızı girin"
-              :ui="{ base: 'transition-all duration-200' }" />
-          </UFormGroup>
-        </div>
-      </div>
-
-      <!-- İletişim Bilgileri -->
-      <div class="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-6 border border-neutral-200 dark:border-neutral-700">
-        <div class="flex items-center space-x-3 mb-4">
-          <div class="w-8 h-8 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-            <UIcon name="i-heroicons-phone" class="w-4 h-4 text-green-600 dark:text-green-400" />
-          </div>
-          <h4 class="text-base font-semibold text-neutral-900 dark:text-neutral-100">İletişim Bilgileri</h4>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <UFormGroup label="Telefon*" name="phone">
-            <UInput color="secondary" v-model="addressObj.phone" type="text" placeholder="5XX XXX XX XX"
-              :ui="{ base: 'transition-all duration-200' }" />
-          </UFormGroup>
-
-          <UFormGroup label="Email*" name="email">
-            <UInput color="secondary" v-model="addressObj.email" type="email" placeholder="email@example.com"
-              :ui="{ base: 'transition-all duration-200' }" />
-          </UFormGroup>
-        </div>
-      </div>
-
-      <!-- Adres Bilgileri -->
-      <div class="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-6 border border-neutral-200 dark:border-neutral-700">
-        <div class="flex items-center space-x-3 mb-4">
-          <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-            <UIcon name="i-heroicons-map-pin" class="w-4 h-4 text-blue-600 dark:text-blue-400" />
-          </div>
-          <h4 class="text-base font-semibold text-neutral-900 dark:text-neutral-100">Adres Detayları</h4>
-        </div>
-
-        <div class="space-y-4">
-          <!-- Tam Adres -->
-          <UFormGroup label="Adres*" name="address"
-            description="Mahalle, sokak, cadde, bina no ve diğer adres detaylarını girin">
-            <UInput color="secondary" v-model="addressObj.address"
-              placeholder="Örn: Yenimahalle, Bağlar Sokak, No: 15/B, Daire: 3"
-              :ui="{ base: 'transition-all duration-200' }" />
-          </UFormGroup>
-
-          <!-- Şehir ve İlçe -->
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <UFormGroup label="Şehir*" name="city">
-              <USelectMenu :searchable="searchableHandle" @change="orderState.fetchDistricts(addressObj.city)"
-                searchable-placeholder="Şehir ara..." class="w-full" placeholder="Şehir seçin"
-                :options="orderState.cities" v-model="addressObj.city" option-attribute="city"
-                :search-attributes="['city']" :ui="{
-                  base: 'transition-all duration-200',
-                  trigger: 'focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500'
-                }" />
-            </UFormGroup>
-
-            <UFormGroup label="İlçe*" name="district">
-              <USelectMenu @click="orderState.fetchDistricts(addressObj.city)" searchable-placeholder="İlçe ara..."
-                class="w-full" placeholder="İlçe seçin" :options="orderState.districts" v-model="addressObj.district"
-                option-attribute="district" :search-attributes="['district']" :disabled="!addressObj.city" :ui="{
-                  base: 'transition-all duration-200',
-                  trigger: 'focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500'
-                }" />
-            </UFormGroup>
-          </div>
-        </div>
-      </div>
-
-      <!-- Kaydet Butonu -->
-      <div
-        class="bg-gradient-to-r from-secondary-50 to-secondary-100 dark:from-secondary-900/50 dark:to-secondary-800/50 rounded-xl p-6 border border-secondary-200 dark:border-secondary-700">
-        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-          <div class="flex items-start space-x-3">
-            <UIcon name="i-heroicons-information-circle"
-              class="w-5 h-5 text-secondary-600 dark:text-secondary-400 mt-0.5" />
+    <UForm :schema="currentSchema" :state="addressObj" class="space-y-6" @submit="handleSubmit">
+      <!-- Step 1: Kişisel Bilgiler -->
+      <div v-if="currentStep === 0" class="space-y-6">
+        <div
+          class="bg-gradient-to-br from-secondary-50 to-secondary-100 dark:from-secondary-900/50 dark:to-secondary-800/50 rounded-2xl p-6 border border-secondary-200 dark:border-secondary-700">
+          <div class="flex items-center space-x-3 mb-6">
+            <div class="w-12 h-12 bg-secondary-500 rounded-2xl flex items-center justify-center">
+              <UIcon name="i-heroicons-user" class="w-6 h-6 text-white" />
+            </div>
             <div>
-              <p class="text-sm font-medium text-secondary-900 dark:text-secondary-100">Adres Kaydı</p>
-              <p class="text-xs text-secondary-700 dark:text-secondary-300 mt-1">
-                Bu adres hesabınıza kaydedilecek ve gelecekteki siparişlerinizde kullanabileceksiniz.
-              </p>
+              <h4 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Kimlik Bilgileri</h4>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400">Adınız ve soyadınız</p>
             </div>
           </div>
 
-          <UButton type="submit" color="secondary" size="lg" :disabled="formProgress < 100"
-            class="w-full sm:w-auto font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
-            <UIcon name="i-heroicons-check" class="w-4 h-4 mr-2" />
-            Adresi Kaydet
-          </UButton>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <UFormGroup label="Ad*" name="name">
+              <UInput color="secondary" v-model="addressObj.name" type="text" placeholder="Adınızı girin" size="lg"
+                :ui="{ base: 'transition-all duration-200' }" />
+            </UFormGroup>
+
+            <UFormGroup label="Soyad*" name="last_name">
+              <UInput color="secondary" v-model="addressObj.last_name" type="text" placeholder="Soyadınızı girin"
+                size="lg" :ui="{ base: 'transition-all duration-200' }" />
+            </UFormGroup>
+          </div>
         </div>
+      </div>
+
+      <!-- Step 2: İletişim Bilgileri -->
+      <div v-if="currentStep === 1" class="space-y-6">
+        <div
+          class="bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/50 dark:to-green-800/50 rounded-2xl p-6 border border-green-200 dark:border-green-700">
+          <div class="flex items-center space-x-3 mb-6">
+            <div class="w-12 h-12 bg-green-500 rounded-2xl flex items-center justify-center">
+              <UIcon name="i-heroicons-phone" class="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">İletişim Bilgileri</h4>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400">Telefon ve e-posta adresiniz</p>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <UFormGroup label="Telefon*" name="phone">
+              <UInput color="secondary" v-model="addressObj.phone" type="text" placeholder="5XX XXX XX XX" size="lg"
+                :ui="{ base: 'transition-all duration-200' }" />
+            </UFormGroup>
+
+            <UFormGroup label="Email*" name="email">
+              <UInput color="secondary" v-model="addressObj.email" type="email" placeholder="email@example.com"
+                size="lg" :ui="{ base: 'transition-all duration-200' }" />
+            </UFormGroup>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Konum Seçimi -->
+      <div v-if="currentStep === 2" class="space-y-6">
+        <div
+          class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 rounded-2xl p-6 border border-blue-200 dark:border-blue-700">
+          <div class="flex items-center space-x-3 mb-6">
+            <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center">
+              <UIcon name="i-heroicons-map-pin" class="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Konum Seçimi</h4>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400">Şehir ve ilçe seçin</p>
+            </div>
+          </div>
+
+          <div class="space-y-6">
+            <!-- Şehir Seçimi -->
+            <UFormGroup label="Şehir*" name="city">
+              <USelectMenu searchable @change="handleCityChange" searchable-placeholder="Şehir ara..." class="w-full"
+                placeholder="Şehir seçin" :options="orderState.cities" v-model="addressObj.city" option-attribute="city"
+                :search-attributes="['city']" size="lg" :ui="{
+                  base: 'transition-all duration-200',
+                  trigger: 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                }" />
+            </UFormGroup>
+
+            <!-- İlçe Seçimi - Şehir seçildikten sonra görünür -->
+            <div v-if="addressObj.city" class="animate-in slide-in-from-top-2 duration-300">
+              <UFormGroup label="İlçe*" name="district">
+                <USelectMenu searchable searchable-placeholder="İlçe ara..." class="w-full" placeholder="İlçe seçin"
+                  :options="orderState.districts" v-model="addressObj.district" option-attribute="district"
+                  :search-attributes="['district']" size="lg" :ui="{
+                    base: 'transition-all duration-200',
+                    trigger: 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                  }" />
+              </UFormGroup>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Adres Detayları -->
+      <div v-if="currentStep === 3" class="space-y-6">
+        <div
+          class="bg-gradient-to-br from-purple-50 to-purple-100 dark:from-purple-900/50 dark:to-purple-800/50 rounded-2xl p-6 border border-purple-200 dark:border-purple-700">
+          <div class="flex items-center space-x-3 mb-6">
+            <div class="w-12 h-12 bg-purple-500 rounded-2xl flex items-center justify-center">
+              <UIcon name="i-heroicons-home" class="w-6 h-6 text-white" />
+            </div>
+            <div>
+              <h4 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Adres Detayları</h4>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400">Tam adres bilgileriniz</p>
+            </div>
+          </div>
+
+          <UFormGroup label="Tam Adres*" name="address"
+            description="Mahalle, sokak, cadde, bina no ve diğer detayları girin">
+            <UTextarea color="secondary" v-model="addressObj.address"
+              placeholder="Örn: Yenimahalle, Bağlar Sokak, No: 15/B, Daire: 3" :rows="4" resize
+              :ui="{ base: 'transition-all duration-200' }" />
+          </UFormGroup>
+        </div>
+      </div>
+
+      <!-- Navigation Buttons -->
+      <div class="flex justify-between items-center pt-6">
+        <UButton v-if="currentStep > 0" @click="previousStep" color="gray" variant="outline" size="lg" class="px-6">
+          <UIcon name="i-heroicons-arrow-left" class="w-4 h-4 mr-2" />
+          Geri
+        </UButton>
+        <div v-else></div>
+
+        <UButton v-if="currentStep < steps.length - 1" @click="nextStep" color="secondary" size="lg"
+          :disabled="!canProceed" class="px-6">
+          İleri
+          <UIcon name="i-heroicons-arrow-right" class="w-4 h-4 ml-2" />
+        </UButton>
+
+        <UButton v-else type="submit" color="secondary" size="lg" :disabled="!canProceed"
+          class="px-8 font-semibold shadow-lg hover:shadow-xl transition-all duration-200">
+          <UIcon name="i-heroicons-check" class="w-4 h-4 mr-2" />
+          Adresi Kaydet
+        </UButton>
       </div>
     </UForm>
   </div>
@@ -133,62 +177,129 @@
 <script setup lang="ts">
 import { object, string, type InferType } from 'yup'
 import type { FormSubmitEvent } from '#ui/types'
+
 const props = defineProps(['address', 'saveFunction'])
 const orderState = useOrderStoreFront()
+const emit = defineEmits(['isSaved'])
+
 await orderState.fetchCities()
 await orderState.fetchDistricts()
 
-
-let newAddress = ref(
-  {
-    name: null,
-    last_name: null,
-    phone: null,
-    address: null,
-    city: null,
-    district: null,
-    email: null,
-    isDefault: true
-  }
-)
-
+let newAddress = ref({
+  name: null,
+  last_name: null,
+  phone: null,
+  address: null,
+  city: null,
+  district: null,
+  email: null,
+  isDefault: true
+})
 
 const addressObj = props.address ? props.address : newAddress.value
 
-watch(() => addressObj.city, () => {
-  addressObj.district = null
-})
+// Step management
+const currentStep = ref(0)
+const steps = ref([
+  {
+    title: 'Kimlik',
+    description: 'Adınızı ve soyadınızı girin',
+    fields: ['name', 'last_name']
+  },
+  {
+    title: 'İletişim',
+    description: 'Telefon ve e-posta bilgilerinizi girin',
+    fields: ['phone', 'email']
+  },
+  {
+    title: 'Konum',
+    description: 'Şehir ve ilçe seçin',
+    fields: ['city', 'district']
+  },
+  {
+    title: 'Adres',
+    description: 'Tam adres bilgilerinizi girin',
+    fields: ['address']
+  }
+])
 
-const emit = defineEmits(['isSaved'])
-
-// Form progress calculator
-const formProgress = computed(() => {
-  const fields = ['name', 'last_name', 'phone', 'email', 'address', 'city', 'district']
-  const filledFields = fields.filter(field => {
-    const value = addressObj[field]
-    return value !== null && value !== undefined && value !== ''
-  })
-  return Math.round((filledFields.length / fields.length) * 100)
-})
-
-const schema = object({
+// Schema definitions for each step
+const step1Schema = object({
   name: string()
     .min(3, '3 karakterden az olamaz.')
     .required('Zorunlu'),
   last_name: string()
     .min(2, '2 karakterden az olamaz.')
     .required('Zorunlu'),
-  address: string()
-    .min(20, 'Adres 20 karakterden kısa olamaz.')
-    .required('Zorunlu'),
-  email: string().trim().email('Geçersiz email adresi.').required('Zorunlu'),
+})
+
+const step2Schema = object({
   phone: string()
     .min(10, 'Cep Telefonu 10 hane olmalıdır.')
     .required('Zorunlu'),
+  email: string().trim().email('Geçersiz email adresi.').required('Zorunlu'),
+})
+
+const step3Schema = object({
   city: object().required('Zorunlu'),
   district: object().required('Zorunlu'),
 })
 
+const step4Schema = object({
+  address: string()
+    .min(20, 'Adres 20 karakterden kısa olamaz.')
+    .required('Zorunlu'),
+})
+
+// Current schema based on step
+const currentSchema = computed(() => {
+  switch (currentStep.value) {
+    case 0: return step1Schema
+    case 1: return step2Schema
+    case 2: return step3Schema
+    case 3: return step4Schema
+    default: return step1Schema
+  }
+})
+
+// Check if current step can proceed
+const canProceed = computed(() => {
+  const currentFields = steps.value[currentStep.value]?.fields || []
+  return currentFields.every(field => {
+    const value = addressObj[field]
+    return value !== null && value !== undefined && value !== ''
+  })
+})
+
+// Navigation functions
+const nextStep = () => {
+  if (currentStep.value < steps.value.length - 1 && canProceed.value) {
+    currentStep.value++
+  }
+}
+
+const previousStep = () => {
+  if (currentStep.value > 0) {
+    currentStep.value--
+  }
+}
+
+// Handle city change
+const handleCityChange = async (city: any) => {
+  addressObj.district = null
+  if (city) {
+    await orderState.fetchDistricts(city)
+  }
+}
+
+// Handle form submission
+const handleSubmit = async () => {
+  if (currentStep.value === steps.value.length - 1) {
+    await saveAddress()
+  }
+}
+
+// Save address function
 const saveAddress = async () => {
   if (props.saveFunction) {
     const response = await props.saveFunction(addressObj)
@@ -198,21 +309,14 @@ const saveAddress = async () => {
   emit('isSaved', true)
 }
 
-type Schema = InferType<typeof schema>
+// Watch city changes
+watch(() => addressObj.city, () => {
+  addressObj.district = null
+})
 
-
-
-// onBeforeRouteLeave((to, from, next) => {
-//   if (confirm('Bu sayfadan ayrılmak istediğinizden emin misiniz?')) {
-//     next() // İzin verir ve sayfadan çıkış yapar
-//   } else {
-//     next(false) // Geri gitme işlemini durdurur
-//   }
-// })
-
+type Schema = InferType<typeof step1Schema>
 
 function searchableHandle(word: string) {
   return orderState.cities.filter((c: any) => c.city.includes(capitalizeFirstLetterTR(word)))
 }
-
 </script>
