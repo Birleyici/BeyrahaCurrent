@@ -34,7 +34,6 @@
 </template>
 
 <script setup>
-import { useDevice } from '~/composables/useDevice'
 
 const productState = useProductState();
 const categoryState = useCategoryState();
@@ -177,11 +176,71 @@ const slugsCat = computed(() => {
 
 
 useHead({
-  title: computed(() => `${route.params.catSlug} - ${settings.value.siteName}`),
+  title: computed(() => {
+    if (query.value.searchWord) {
+      return `"${query.value.searchWord}" Arama Sonuçları - ${settings.value.siteName}`
+    } else if (slugsCat.value) {
+      return `${slugsCat.value.label} Modelleri ve Fiyatları - ${settings.value.siteName}`
+    } else {
+      return `Ürünler - ${settings.value.siteName}`
+    }
+  }),
   meta: [
     {
       name: 'description',
-      content: computed(() => `${route.params.catSlug} kategorisindeki ürünleri keşfedin. ${settings.value.siteDescription || 'Kaliteli tesettür giyim ürünleri'}.`)
+      content: computed(() => {
+        if (query.value.searchWord) {
+          const productCount = productState.products?.total || 0
+          return `"${query.value.searchWord}" arama sonuçları - ${productCount} ürün bulundu. ${settings.value.siteDescription || 'Kaliteli tesettür giyim ürünleri ve uygun fiyatlarla hemen sipariş verin.'}`
+        } else if (slugsCat.value) {
+          const categoryDesc = slugsCat.value.description || `${slugsCat.value.label} kategorisindeki kaliteli ürünler`
+          return `${slugsCat.value.label} modelleri ve fiyatları. ${categoryDesc}. ${settings.value.siteName}'de en uygun fiyatlarla hemen sipariş verin.`
+        } else {
+          return `${settings.value.siteDescription || 'Kaliteli tesettür giyim ürünleri ve uygun fiyatlarla hemen sipariş verin.'}`
+        }
+      })
+    },
+    {
+      name: 'keywords',
+      content: computed(() => {
+        if (query.value.searchWord) {
+          return `${query.value.searchWord}, arama, ürün, tesettür, giyim, online alışveriş`
+        } else if (slugsCat.value) {
+          return `${slugsCat.value.label}, ${slugsCat.value.label} modelleri, ${slugsCat.value.label} fiyatları, tesettür, giyim, online alışveriş`
+        } else {
+          return 'tesettür, giyim, ürünler, online alışveriş'
+        }
+      })
+    },
+    {
+      property: 'og:title',
+      content: computed(() => {
+        if (query.value.searchWord) {
+          return `"${query.value.searchWord}" Arama Sonuçları`
+        } else if (slugsCat.value) {
+          return `${slugsCat.value.label} Modelleri ve Fiyatları`
+        } else {
+          return 'Ürünler'
+        }
+      })
+    },
+    {
+      property: 'og:description',
+      content: computed(() => {
+        if (query.value.searchWord) {
+          const productCount = productState.products?.total || 0
+          return `"${query.value.searchWord}" için ${productCount} ürün bulundu. Kaliteli tesettür giyim ürünleri ve uygun fiyatlarla.`
+        } else if (slugsCat.value) {
+          const categoryDesc = slugsCat.value.description || `${slugsCat.value.label} kategorisindeki kaliteli ürünler`
+          return `${categoryDesc}. En uygun fiyatlarla hemen sipariş verin.`
+        } else {
+          return settings.value.siteDescription || 'Kaliteli tesettür giyim ürünleri'
+        }
+      })
+    },
+    {
+      property: 'og:type',
+      content: 'website'
     }
   ]
 })
