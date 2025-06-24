@@ -134,7 +134,8 @@
         </div>
 
         <!-- Ürün Kartları -->
-        <PartialsProductCard :product="product" v-for="product in props.products?.data" :key="product.id" />
+        <PartialsProductCard :product="product" v-for="product in props.products?.data"
+          :key="product.variant_id || `product-${product.id}`" />
       </div>
     </div>
   </div>

@@ -86,9 +86,16 @@ export const useProductState = defineStore('productState', () => {
         } else {
           // Sayfa 1'den büyükse ve mevcut liste varsa - listeye ekle
           if (response.data && response.data.length > 0) {
-            // Duplicate kontrolü - aynı ID'li ürünleri eklemeyi engelle
-            const existingIds = new Set(products.value.data.map(p => p.id));
-            const newProducts = response.data.filter(p => !existingIds.has(p.id));
+            // Gelişmiş duplicate kontrolü - hem ID hem variant_id kontrolü
+            const existingKeys = new Set(products.value.data.map(p => {
+              // Eğer variant_id varsa onu kullan, yoksa sadece id kullan
+              return p.variant_id || p.id.toString();
+            }));
+            
+            const newProducts = response.data.filter(p => {
+              const productKey = p.variant_id || p.id.toString();
+              return !existingKeys.has(productKey);
+            });
             
             if (newProducts.length > 0) {
               products.value.data.push(...newProducts);

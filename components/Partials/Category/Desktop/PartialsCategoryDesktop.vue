@@ -53,7 +53,7 @@
             <div class="flex items-center space-x-4">
               <div class="text-sm text-neutral-600 dark:text-neutral-400 transition-colors duration-300">
                 <span class="font-semibold text-neutral-900 dark:text-neutral-100">{{ props.products?.total || 0
-                  }}</span> ürün bulundu
+                }}</span> ürün bulundu
               </div>
             </div>
 
@@ -100,7 +100,8 @@
             </div>
 
             <!-- Ürün Kartları -->
-            <PartialsProductCard :product="product" v-for="product in props.products.data" :key="product.id" />
+            <PartialsProductCard :product="product" v-for="product in props.products.data"
+              :key="product.variant_id || `product-${product.id}`" />
           </div>
         </div>
       </div>

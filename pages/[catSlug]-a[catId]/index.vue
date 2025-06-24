@@ -130,6 +130,7 @@ await useAsyncData('initDataProducts', async () => {
 
 const loading = ref(false);
 const isLoadingMore = ref(false); // Infinite scroll için ayrı loading state
+const isProcessingRequest = ref(false); // İstek işleniyor mu kontrolü
 
 watch([
   () => query.value.page,
@@ -146,6 +147,11 @@ watch([
   // [4]: route.query.searchWord
 
   if (!isChangeRoute.value) {
+    // Eğer zaten bir istek işleniyorsa, yeni isteği engelle
+    if (isProcessingRequest.value) {
+      return;
+    }
+
     // Filtreler değiştiğinde sayfayı 1'e resetlemek için kontrol
     let filtersChanged = false;
     const isPageChange = newValues[0] !== oldValues[0]; // Sadece sayfa değişikliği mi?
@@ -161,6 +167,9 @@ watch([
     }
 
     pushQueryParams();
+
+    // İstek başlıyor
+    isProcessingRequest.value = true;
 
     // Sayfa değişikliği ise infinite scroll loading, filtre değişikliği ise normal loading
     if (isPageChange && !filtersChanged) {
@@ -181,6 +190,7 @@ watch([
     } finally {
       loading.value = false;
       isLoadingMore.value = false;
+      isProcessingRequest.value = false; // İstek tamamlandı
     }
   }
 }, {
@@ -292,6 +302,7 @@ const { isProcessing } = useShowElement('finishProducts', async () => {
   // Çoklu kontroller
   if (loading.value ||
     isLoadingMore.value ||
+    isProcessingRequest.value || // Zaten bir istek işleniyorsa dur
     !productState.products?.last_page ||
     query.value.page >= productState.products.last_page) {
     return;

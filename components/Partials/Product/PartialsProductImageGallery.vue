@@ -100,7 +100,7 @@
                   'cursor-grabbing': isDragging,
                   'transition-transform duration-200': !isDragging && zoomLevel === 1,
                   'transition-none': isDragging || zoomLevel > 1
-                }" format="webp" quality="95" @click.stop="handleImageClick" @dragstart.prevent />
+                }" format="webp" quality="95" @click.stop="handleImageClick" @dragstart.prevent fit="cover" />
 
               <!-- Zoom Kontrolleri -->
               <div class="absolute bottom-4 right-4 flex flex-col space-y-3">
