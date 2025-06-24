@@ -193,8 +193,12 @@ useHead({
           const productCount = productState.products?.total || 0
           return `"${query.value.searchWord}" arama sonuçları - ${productCount} ürün bulundu. ${settings.value.siteDescription || 'Kaliteli tesettür giyim ürünleri ve uygun fiyatlarla hemen sipariş verin.'}`
         } else if (slugsCat.value) {
-          const categoryDesc = slugsCat.value.description || `${slugsCat.value.label} kategorisindeki kaliteli ürünler`
-          return `${slugsCat.value.label} modelleri ve fiyatları. ${categoryDesc}. ${settings.value.siteName}'de en uygun fiyatlarla hemen sipariş verin.`
+          const categoryDesc = slugsCat.value.description
+          if (categoryDesc) {
+            return `${slugsCat.value.label} modelleri ve fiyatları. ${categoryDesc} ${settings.value.siteName}'de en uygun fiyatlarla hemen sipariş verin.`
+          } else {
+            return `${slugsCat.value.label} modelleri ve fiyatları. ${settings.value.siteName}'de en uygun fiyatlarla hemen sipariş verin.`
+          }
         } else {
           return `${settings.value.siteDescription || 'Kaliteli tesettür giyim ürünleri ve uygun fiyatlarla hemen sipariş verin.'}`
         }
@@ -231,8 +235,12 @@ useHead({
           const productCount = productState.products?.total || 0
           return `"${query.value.searchWord}" için ${productCount} ürün bulundu. Kaliteli tesettür giyim ürünleri ve uygun fiyatlarla.`
         } else if (slugsCat.value) {
-          const categoryDesc = slugsCat.value.description || `${slugsCat.value.label} kategorisindeki kaliteli ürünler`
-          return `${categoryDesc}. En uygun fiyatlarla hemen sipariş verin.`
+          const categoryDesc = slugsCat.value.description
+          if (categoryDesc) {
+            return `${categoryDesc} En uygun fiyatlarla hemen sipariş verin.`
+          } else {
+            return `${slugsCat.value.label} kategorisindeki kaliteli ürünler. En uygun fiyatlarla hemen sipariş verin.`
+          }
         } else {
           return settings.value.siteDescription || 'Kaliteli tesettür giyim ürünleri'
         }
