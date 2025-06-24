@@ -60,6 +60,7 @@ export const useVariations = () => {
             stockCode: "",
             stockAmount: 0,
             isStockManagement: false,
+            stock_status: 'in_stock',
             product_id: productState.product.id,
             terms: [],
         };
@@ -163,6 +164,7 @@ export const useVariations = () => {
                 stockCode: "",
                 stockAmount: 0,
                 isStockManagement: false,
+                stock_status: 'in_stock',
                 product_id: productState.product.id,
                 terms: combination.map((termId, index) => ({
                     product_variation_id: null, // Bu değer varyasyon oluşturulduktan sonra atanacak.

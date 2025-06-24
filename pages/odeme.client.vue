@@ -149,7 +149,7 @@
                 <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
                 <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
                   formatPrice(cartState.cartTotalAmount + calculateShippingCost(cartState.cartTotalAmount))
-                }}</span>
+                  }}</span>
               </div>
 
               <!-- Siparişi Onayla Butonu -->
@@ -164,7 +164,7 @@
     </div>
 
     <!-- Yeni Adres Modalı -->
-    <UModal v-model="orderState.isOpenAddressModal">
+    <UModal v-model="orderState.isOpenAddressModal" prevent-close="true">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">
@@ -180,7 +180,7 @@
     </UModal>
 
     <!-- Tüm Adresler Modalı -->
-    <UModal v-model="orderState.openAllAddressModal">
+    <UModal v-model="orderState.openAllAddressModal" prevent-close="true">
       <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
         <template #header>
           <div class="flex items-center justify-between">

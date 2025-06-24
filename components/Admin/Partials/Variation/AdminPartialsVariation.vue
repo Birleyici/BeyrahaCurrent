@@ -130,6 +130,18 @@
                 <UInput v-model="item.sale_price" placeholder="İndirimli fiyat..." size="md" type="number" step="0.01"
                   :ui="{ rounded: 'rounded-lg' }" class="lg:max-w-md" />
               </div>
+
+              <!-- Stock Status -->
+              <div class="space-y-2 lg:col-span-2">
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Stok Durumu
+                </label>
+                <USelect v-model="item.stock_status" :options="stockStatusOptions" size="md"
+                  :ui="{ rounded: 'rounded-lg' }" class="lg:max-w-md" />
+                <p class="text-xs text-gray-500 dark:text-gray-400">
+                  Bu varyasyonun stok durumunu belirleyin
+                </p>
+              </div>
             </div>
 
             <!-- Stock Management -->
@@ -236,6 +248,13 @@
 <script setup>
 const variationState = useVariationState()
 const { item } = defineProps(["item"]);
+
+// Stok durumu seçenekleri
+const stockStatusOptions = [
+  { label: 'Stokta', value: 'in_stock' },
+  { label: 'Stok Dışı', value: 'out_of_stock' },
+  { label: 'Üretimi Durduruldu', value: 'discontinued' }
+];
 
 // Accordion state
 const isOpen = ref(false)

@@ -484,6 +484,13 @@ const getStatusLabel = (status) => {
 };
 
 const getStatusColor = (status) => {
+  // Stok durumu kontrolü
+  if (productState.product.stock_status === 'out_of_stock') {
+    return 'red';
+  } else if (productState.product.stock_status === 'discontinued') {
+    return 'gray';
+  }
+
   // is_active değerine göre renk belirle
   if (productState.product.is_active === 1) {
     return 'green';
@@ -729,6 +736,7 @@ if (isNewProduct.value) {
     sale_price: null,
     stock: 0,
     stock_management: 0,
+    stock_status: 'in_stock',
     sku: '',
     is_active: 0,
     discount: null,

@@ -1,20 +1,28 @@
 <template>
   <div
-    class="card group cursor-pointer max-w-[280px] w-full bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-300">
+    class="card group cursor-pointer max-w-[280px] w-full bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-300"
+    :class="{ 'opacity-75': !isProductInStock }">
     <div class="relative overflow-hidden rounded-t-xl">
       <NuxtLink :to="productUrl">
         <NuxtImg sizes="390px sm:300px md:390px" v-if="props.product.coverImage" :src="`cl/${props.product.coverImage}`"
           format="webp" quality="90" fit="inside" :loading="imgLoadingType" :preload="imgPreload" width="400"
           height="600" :alt="props.product.name" :background="backgroundColor"
-          class="w-full h-[320px] object-cover transition-transform duration-300 group-hover:scale-105" />
-        <img v-else :src="img_placeholder"
-          class="w-full h-[320px] object-cover transition-transform duration-300 group-hover:scale-105"
-          alt="Ürün görseli yer tutucusu" />
+          class="w-full h-[320px] object-cover transition-transform duration-300"
+          :class="{ 'group-hover:scale-105': isProductInStock }" />
+        <img v-else :src="img_placeholder" class="w-full h-[320px] object-cover transition-transform duration-300"
+          :class="{ 'group-hover:scale-105': isProductInStock }" alt="Ürün görseli yer tutucusu" />
       </NuxtLink>
 
       <!-- Hover overlay -->
-      <div
-        class="absolute inset-0 bg-black/0 group-hover:bg-black/10 dark:group-hover:bg-black/20 transition-colors duration-300 pointer-events-none">
+      <div class="absolute inset-0 bg-black/0 transition-colors duration-300 pointer-events-none"
+        :class="{ 'group-hover:bg-black/10 dark:group-hover:bg-black/20': isProductInStock }">
+      </div>
+
+      <!-- Stok Durumu Badge -->
+      <div v-if="!isProductInStock" class="absolute top-3 left-3">
+        <UBadge :color="stockBadgeColor" variant="solid" size="sm" class="font-medium">
+          {{ stockStatusLabel }}
+        </UBadge>
       </div>
     </div>
 
@@ -22,16 +30,20 @@
       <div class="text-center">
         <NuxtLink :to="productUrl" class="block">
           <h3
-            class="font-medium text-neutral-900 dark:text-neutral-100 group-hover:text-secondary-600 dark:group-hover:text-secondary-400 transition-colors duration-200 product-name-clamp line-clamp-2">
+            class="font-medium text-neutral-900 dark:text-neutral-100 transition-colors duration-200 product-name-clamp line-clamp-2"
+            :class="{ 'group-hover:text-secondary-600 dark:group-hover:text-secondary-400': isProductInStock }">
             {{ props.product.name }}
           </h3>
         </NuxtLink>
       </div>
 
       <div class="flex justify-center pt-2">
-        <PartialsProductPrice type="card" :sale-price="props.product.sale_price" :price="props.product.price"
-          :display-price="props.product.display_price" :is-variation-product="props.product.is_variation_product"
-          :has-price-range="props.product.has_price_range" />
+        <PartialsProductPrice v-if="isProductInStock" type="card" :sale-price="props.product.sale_price"
+          :price="props.product.price" :display-price="props.product.display_price"
+          :is-variation-product="props.product.is_variation_product" :has-price-range="props.product.has_price_range" />
+        <div v-else class="text-sm text-red-600 dark:text-red-400 font-medium">
+          {{ stockStatusLabel }}
+        </div>
       </div>
     </div>
   </div>
@@ -40,6 +52,101 @@
 <script setup>
 const props = defineProps(['product', 'index', 'lcp'])
 const img_placeholder = '/img-placeholder.jpg'
+
+// Ürünün stok durumunu kontrol et
+const isProductInStock = computed(() => {
+  const product = props.product;
+
+  // Manuel olarak stok dışı işaretlenmişse
+  if (product.stock_status === 'out_of_stock' || product.stock_status === 'discontinued') {
+    return false;
+  }
+
+  // Varyasyonlu ürün ise
+  if (product.is_variation_product) {
+    // En az bir varyasyonun stokta olması gerekir
+    const variations = product.variations || [];
+    if (variations.length > 0) {
+      return variations.some(variation => {
+        // Varyasyon manuel olarak stok dışı işaretlenmişse
+        if (variation.stock_status === 'out_of_stock' || variation.stock_status === 'discontinued') {
+          return false;
+        }
+
+        // Stok yönetimi aktifse stok miktarını kontrol et
+        if (variation.isStockManagement) {
+          return variation.stockAmount > 0;
+        }
+
+        // Stok yönetimi kapalıysa stokta kabul et
+        return true;
+      });
+    }
+  }
+
+  // Basit ürün için stok kontrolü
+  if (product.stock_management == 1) {
+    return product.stock > 0;
+  }
+
+  return true; // Stok yönetimi kapalıysa her zaman stokta kabul et
+});
+
+// Stok durumu etiketi
+const stockStatusLabel = computed(() => {
+  const product = props.product;
+
+  if (product.stock_status === 'discontinued') {
+    return 'Üretimi Durduruldu';
+  }
+
+  if (product.stock_status === 'out_of_stock') {
+    return 'Stok Dışı';
+  }
+
+  // Varyasyonlu ürün kontrolü
+  if (product.is_variation_product) {
+    const variations = product.variations || [];
+    if (variations.length > 0) {
+      const inStockVariations = variations.filter(variation => {
+        // Varyasyon manuel olarak stok dışı işaretlenmişse
+        if (variation.stock_status === 'out_of_stock' || variation.stock_status === 'discontinued') {
+          return false;
+        }
+
+        // Stok yönetimi aktifse stok miktarını kontrol et
+        if (variation.isStockManagement) {
+          return variation.stockAmount > 0;
+        }
+
+        // Stok yönetimi kapalıysa stokta kabul et
+        return true;
+      });
+
+      if (inStockVariations.length === 0) {
+        return 'Tükendi';
+      }
+    }
+  } else {
+    // Basit ürün için stok kontrolü
+    if (product.stock_management == 1 && product.stock <= 0) {
+      return 'Tükendi';
+    }
+  }
+
+  return 'Stok Dışı';
+});
+
+// Badge rengi
+const stockBadgeColor = computed(() => {
+  const product = props.product;
+
+  if (product.stock_status === 'discontinued') {
+    return 'gray';
+  }
+
+  return 'red';
+});
 
 // Dark mode reactive tracking
 const isDarkMode = ref(false);

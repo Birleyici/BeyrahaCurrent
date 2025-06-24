@@ -103,7 +103,7 @@
 
               <!-- Status Badge -->
               <div class="absolute top-2 right-2">
-                <UBadge :color="product.is_active === 1 ? 'green' : 'yellow'" variant="solid" size="xs">
+                <UBadge :color="getStatusColor(product)" variant="solid" size="xs">
                   {{ getStatusLabel(product) }}
                 </UBadge>
               </div>
@@ -239,7 +239,7 @@
                       </NuxtLink>
 
                       <div class="mt-1 flex items-center space-x-2">
-                        <UBadge :color="product.is_active === 1 ? 'green' : 'yellow'" variant="soft" size="xs">
+                        <UBadge :color="getStatusColor(product)" variant="soft" size="xs">
                           {{ getStatusLabel(product) }}
                         </UBadge>
                         <span v-if="product.sku" class="text-xs text-gray-500 dark:text-gray-400">
@@ -436,7 +436,7 @@
             </template>
 
             <template #status-data="{ row }">
-              <UBadge :color="row.is_active === 1 ? 'green' : 'yellow'" variant="soft" size="xs">
+              <UBadge :color="getStatusColor(row)" variant="soft" size="xs">
                 {{ getStatusLabel(row) }}
               </UBadge>
             </template>
@@ -562,6 +562,13 @@ const refreshProducts = async () => {
 };
 
 const getStatusLabel = (product) => {
+  // Stok durumu kontrolü
+  if (product.stock_status === 'out_of_stock') {
+    return 'Stok Dışı';
+  } else if (product.stock_status === 'discontinued') {
+    return 'Üretimi Durduruldu';
+  }
+
   // is_active alanına göre durum belirle
   if (product.is_active === 1) {
     return 'Yayında';
@@ -576,6 +583,30 @@ const getStatusLabel = (product) => {
     inactive: 'Pasif'
   };
   return labels[product.status] || 'Bilinmiyor';
+};
+
+const getStatusColor = (product) => {
+  // Stok durumu kontrolü
+  if (product.stock_status === 'out_of_stock') {
+    return 'red';
+  } else if (product.stock_status === 'discontinued') {
+    return 'gray';
+  }
+
+  // is_active alanına göre renk belirle
+  if (product.is_active === 1) {
+    return 'green';
+  } else if (product.is_active === 0) {
+    return 'yellow';
+  }
+
+  // Eski status sistemi için fallback
+  const colors = {
+    active: 'green',
+    draft: 'yellow',
+    inactive: 'red'
+  };
+  return colors[product.status] || 'gray';
 };
 
 const formatPrice = (price) => {

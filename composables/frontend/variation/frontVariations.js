@@ -71,10 +71,29 @@ export const useVariationsFront = () => {
     let tempSelected = { ...selectedOptions.value, [attributeName]: option }
 
     return filteredVariations.value.some((variation) => {
-      return Object.keys(tempSelected).every((key) => {
+      // Önce varyasyon kombinasyonunun mevcut olup olmadığını kontrol et
+      const isVariationMatch = Object.keys(tempSelected).every((key) => {
         if (!variation.attributes[key]) return true
         return variation.attributes[key] === tempSelected[key]
       })
+
+      // Eğer varyasyon kombinasyonu eşleşmiyorsa false döndür
+      if (!isVariationMatch) {
+        return false
+      }
+
+      // Varyasyonun stok durumunu kontrol et
+      // Manuel olarak stok dışı işaretlenmişse
+      if (variation.stock_status === 'out_of_stock' || variation.stock_status === 'discontinued') {
+        return false
+      }
+
+      // Stok yönetimi aktifse stok miktarını kontrol et
+      if (variation.isStockManagement && variation.stockAmount <= 0) {
+        return false
+      }
+
+      return true
     })
   })
 
