@@ -153,10 +153,9 @@ useBackHandler(isOpenFiltersSlideOver)
 useBackHandler(isOpenCategorySlideOver)
 
 const sortOptions = [
-  { name: 'Varsayılan', value: 'default' },
+  { name: 'En Çok Satılan', value: 'popular' },
   { name: 'Fiyat (Düşükten Yükseğe)', value: 'price_asc' },
   { name: 'Fiyat (Yüksekten Düşüğe)', value: 'price_desc' },
-  { name: 'Yeni Ürünler', value: 'newest' },
-  { name: 'Popüler Ürünler', value: 'popular' }
+  { name: 'Yeni Ürünler', value: 'newest' }
 ]
 </script>

@@ -28,6 +28,27 @@
 
         <!-- Infinite Loading Trigger -->
         <div v-if="$mainState.isLoaded" id="finishProducts"></div>
+
+        <!-- Infinite Scroll Loading Indicator -->
+        <div v-if="isLoadingMore" class="flex items-center justify-center py-8 mt-6">
+          <div class="flex flex-col items-center space-y-3">
+            <Icon name="mdi:loading" class="w-8 h-8 animate-spin text-secondary-500 dark:text-secondary-400"></Icon>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400">Daha fazla ürün yükleniyor...</p>
+          </div>
+        </div>
+
+        <!-- End of Products Indicator -->
+        <div v-else-if="productState.products?.data?.length > 0 &&
+          query.page >= productState.products.last_page &&
+          !loading" class="flex items-center justify-center py-8 mt-6">
+          <div class="text-center">
+            <div
+              class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-3">
+              <Icon name="heroicons:check" class="w-6 h-6 text-neutral-600 dark:text-neutral-400"></Icon>
+            </div>
+            <p class="text-sm text-neutral-600 dark:text-neutral-400">Tüm ürünler gösterildi</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -69,7 +90,7 @@ const initCategoryIds = route.query.selectedCategoryIds
 const query = ref({
   searchWord: route.query.searchWord,
   page: parseInt(route.query.page) || 1,
-  sort: route.query.sort || 'default', // Etkisiz başlangıç değeri
+  sort: route.query.sort || 'popular', // Varsayılan sıralama: en çok satılan
 });
 
 
@@ -108,6 +129,8 @@ await useAsyncData('initDataProducts', async () => {
 
 
 const loading = ref(false);
+const isLoadingMore = ref(false); // Infinite scroll için ayrı loading state
+
 watch([
   () => query.value.page,
   () => query.value.sort,
@@ -125,6 +148,7 @@ watch([
   if (!isChangeRoute.value) {
     // Filtreler değiştiğinde sayfayı 1'e resetlemek için kontrol
     let filtersChanged = false;
+    const isPageChange = newValues[0] !== oldValues[0]; // Sadece sayfa değişikliği mi?
 
     if (newValues[1] !== oldValues[1] || // sort değişti mi?
       JSON.stringify(newValues[2]) !== JSON.stringify(oldValues[2]) || // selectedCategoryIds değişti mi?
@@ -138,15 +162,26 @@ watch([
 
     pushQueryParams();
 
-    loading.value = true;
-    query.value.searchWord = route.query.searchWord;
+    // Sayfa değişikliği ise infinite scroll loading, filtre değişikliği ise normal loading
+    if (isPageChange && !filtersChanged) {
+      isLoadingMore.value = true;
+    } else {
+      loading.value = true;
+    }
 
-    await productState.getProducts({
-      ...query.value,
-      selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
-    });
+    try {
+      query.value.searchWord = route.query.searchWord;
 
-    loading.value = false;
+      await productState.getProducts({
+        ...query.value,
+        selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
+      });
+    } catch (error) {
+      console.error('Ürün yükleme hatası:', error);
+    } finally {
+      loading.value = false;
+      isLoadingMore.value = false;
+    }
   }
 }, {
   deep: true,
@@ -253,10 +288,26 @@ useHead({
   ]
 })
 
-useShowElement('finishProducts', () => {
-  if (!loading.value && query.value.page < productState.products.last_page) {
-    query.value.page++;
+const { isProcessing } = useShowElement('finishProducts', async () => {
+  // Çoklu kontroller
+  if (loading.value ||
+    isLoadingMore.value ||
+    !productState.products?.last_page ||
+    query.value.page >= productState.products.last_page) {
+    return;
   }
+
+  try {
+    query.value.page++;
+  } catch (error) {
+    console.error('Scroll loading error:', error);
+    // Hata durumunda page'i geri al
+    query.value.page--;
+  }
+}, {
+  threshold: 0.3, // Elementin %30'u göründüğünde tetikle
+  debounceTime: 1000, // 1 saniye debounce
+  rootMargin: '200px' // 200px öncesinde tetikle
 });
 
 const breadcrumbLinks = computed(() => {

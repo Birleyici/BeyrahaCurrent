@@ -72,20 +72,36 @@ export const useProductState = defineStore('productState', () => {
       filters.page = 1
     }
 
-    const response = await useBaseOFetch(`products`, {
-      params: filters
-    })
+    try {
+      const response = await useBaseOFetch(`products`, {
+        params: filters
+      })
 
-    if (shouldReturnResponse) {
-      return response
-    } else {
-      //eğer sayfalama verileri yoksa
-      if (!products.value.total || filters.page == 1) {
-        products.value = response
+      if (shouldReturnResponse) {
+        return response
       } else {
-        const dataArray = Object.values(response.data)
-        products.value.data.push(...dataArray)
+        // Sayfa 1 ise veya mevcut ürün listesi yoksa/boşsa - yeni liste oluştur
+        if (filters.page == 1 || !products.value.data || products.value.data.length === 0) {
+          products.value = response
+        } else {
+          // Sayfa 1'den büyükse ve mevcut liste varsa - listeye ekle
+          if (response.data && response.data.length > 0) {
+            // Duplicate kontrolü - aynı ID'li ürünleri eklemeyi engelle
+            const existingIds = new Set(products.value.data.map(p => p.id));
+            const newProducts = response.data.filter(p => !existingIds.has(p.id));
+            
+            if (newProducts.length > 0) {
+              products.value.data.push(...newProducts);
+              products.value.current_page = response.current_page;
+              products.value.last_page = response.last_page;
+              products.value.total = response.total;
+            }
+          }
+        }
       }
+    } catch (error) {
+      console.error('Product fetch error:', error);
+      throw error;
     }
   }
 

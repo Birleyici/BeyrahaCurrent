@@ -53,7 +53,7 @@
             <div class="flex items-center space-x-4">
               <div class="text-sm text-neutral-600 dark:text-neutral-400 transition-colors duration-300">
                 <span class="font-semibold text-neutral-900 dark:text-neutral-100">{{ props.products?.total || 0
-                }}</span> ürün bulundu
+                  }}</span> ürün bulundu
               </div>
             </div>
 
@@ -115,10 +115,9 @@ const uSelect = defineModel('uSelect')
 const query = defineModel('query')
 
 const sortOptions = [
-  { name: 'Varsayılan', value: 'default' },
+  { name: 'En Çok Satılan', value: 'popular' },
   { name: 'Fiyat (Düşükten Yükseğe)', value: 'price_asc' },
   { name: 'Fiyat (Yüksekten Düşüğe)', value: 'price_desc' },
   { name: 'Yeni Ürünler', value: 'newest' },
-  { name: 'Popüler Ürünler', value: 'popular' }
 ]
 </script>
