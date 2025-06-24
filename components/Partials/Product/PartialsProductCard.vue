@@ -57,6 +57,11 @@ const img_placeholder = '/img-placeholder.jpg'
 const isProductInStock = computed(() => {
   const product = props.product;
 
+  // Renk varyantı için özel stok kontrolü
+  if (product.is_color_out_of_stock) {
+    return false;
+  }
+
   // Manuel olarak stok dışı işaretlenmişse
   if (product.stock_status === 'out_of_stock' || product.stock_status === 'discontinued') {
     return false;
@@ -105,6 +110,11 @@ const isProductInStock = computed(() => {
 // Stok durumu etiketi
 const stockStatusLabel = computed(() => {
   const product = props.product;
+
+  // Renk varyantı stok dışı kontrolü
+  if (product.is_color_out_of_stock) {
+    return 'Bu Renk Stok Dışı';
+  }
 
   if (product.stock_status === 'discontinued') {
     return 'Üretimi Durduruldu';
