@@ -35,7 +35,8 @@ export const useAuthStore = defineStore(
       login: false,
       register: false,
       remind: false,
-      fetchUser: false
+      fetchUser: false,
+      logout: false
     })
 
     const fetchUser = async () => {
@@ -198,21 +199,133 @@ export const useAuthStore = defineStore(
       }
     }
 
-    const logout = (callback = null) => {
-      token.value = null
-      currentUser.value = null
-      user.value = {
-        email: '',
-        password: ''
-      }
-      register.value = {
-        email: '',
-        password: '',
-        password_confirmation: ''
-      }
-      actionsOnLogout()
+    const logout = async (callback = null, showMessage = true) => {
+      try {
+        // Loading state
+        loading.value.logout = true
 
-      callback ? navigateTo(callback) : navigateTo('/auth')
+        // API'ye logout isteği gönder (eğer token varsa)
+        if (token.value) {
+          try {
+            await useBaseOFetch('auth/logout', {
+              method: 'POST',
+              headers: { Authorization: `Bearer ${token.value}` }
+            })
+          } catch (error) {
+            console.warn('Logout API call failed, continuing with local logout:', error)
+          }
+        }
+
+        // Local state'i temizle
+        token.value = null
+        currentUser.value = null
+        user.value = {
+          email: '',
+          password: ''
+        }
+        register.value = {
+          email: '',
+          password: '',
+          password_confirmation: ''
+        }
+
+        // API hatalarını temizle
+        apiError.value = {
+          login: [],
+          register: [],
+          remind: []
+        }
+
+        // Actions on logout
+        await actionsOnLogout()
+
+        // Toast mesajı göster (eğer sistemi varsa)
+        if (showMessage && process.client) {
+          try {
+            const { $toast } = useNuxtApp()
+            if ($toast) {
+              $toast.success('Çıkış yapıldı')
+            }
+          } catch (e) {
+            console.warn('Toast system not available:', e)
+          }
+        }
+
+        // Yönlendirme
+        if (callback) {
+          await navigateTo(callback)
+        } else {
+          await navigateTo('/auth')
+        }
+
+      } catch (error) {
+        console.error('Error during logout:', error)
+        
+        // Hata durumunda da state'i temizle
+        token.value = null
+        currentUser.value = null
+        
+        // En son çare olarak auth sayfasına yönlendir
+        if (process.client) {
+          window.location.href = '/auth'
+        }
+      } finally {
+        loading.value.logout = false
+      }
+    }
+
+    // Token geçerliliğini kontrol eden helper fonksiyon
+    const isTokenValid = () => {
+      if (!token.value) return false
+      
+      try {
+        // Token'ın formatını basit kontrol et
+        const parts = token.value.split('.')
+        if (parts.length !== 3) return false
+        
+        // JWT payload'ını decode et (basit kontrol için)
+        const payload = JSON.parse(atob(parts[1]))
+        const now = Math.floor(Date.now() / 1000)
+        
+        // Exp kontrolü
+        if (payload.exp && payload.exp < now) {
+          console.log('Token expired locally')
+          return false
+        }
+        
+        return true
+      } catch (error) {
+        console.warn('Token validation error:', error)
+        return false
+      }
+    }
+
+    // Otomatik token yenileme için periodic check
+    const startTokenRefreshTimer = () => {
+      if (process.client && token.value) {
+        // Her 5 dakikada bir token kontrolü yap
+        setInterval(async () => {
+          if (token.value && !isTokenValid()) {
+            console.log('Token expired, attempting refresh...')
+            try {
+              const response = await useBaseOFetchWithAuth('auth/refresh', {
+                method: 'POST'
+              })
+              if (response && response.token) {
+                token.value = response.token
+                if (response.user) {
+                  currentUser.value = response.user
+                }
+                console.log('Token auto-refreshed')
+              }
+            } catch (error) {
+              console.warn('Auto token refresh failed:', error)
+              // Sessiz bir şekilde logout yap
+              await logout(null, false)
+            }
+          }
+        }, 5 * 60 * 1000) // 5 dakika
+      }
     }
 
     return {
@@ -228,7 +341,8 @@ export const useAuthStore = defineStore(
       remind,
       logout,
       changePassword,
-      fetchUser
+      fetchUser,
+      startTokenRefreshTimer
     }
   },
   {
