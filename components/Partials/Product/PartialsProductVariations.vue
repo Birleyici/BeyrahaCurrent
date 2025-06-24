@@ -10,10 +10,7 @@
               Stok Dışı
             </h4>
             <p class="text-red-700 dark:text-red-300">
-              {{ outOfStockMessage }}
-            </p>
-            <p class="text-sm text-red-600 dark:text-red-400 mt-2">
-              Stok durumu güncellendiğinde size bilgi verebiliriz.
+              Bu ürün şu anda stok dışıdır.
             </p>
           </div>
         </div>
@@ -135,6 +132,10 @@
           <PartialsProductPrice type="page" :sale-price="getSelectedVariation.sale_price"
             :price="getSelectedVariation.price" />
         </div>
+        <div v-else-if="isVariableProduct && defaultVariationPrice">
+          <PartialsProductPrice type="page" :sale-price="defaultVariationPrice.sale_price"
+            :price="defaultVariationPrice.price" />
+        </div>
         <div v-else>
           <PartialsProductPrice type="page" :sale-price="props.productState.product.sale_price"
             :price="props.productState.product.price" />
@@ -169,6 +170,7 @@
             <div class="flex flex-col space-y-3">
               <!-- Sepete Ekle Butonu -->
               <UButton :loading="cartState.addToCartloading" @click="addToCart()" color="secondary"
+                :disabled="!isSelectedVariationInStock"
                 class="!rounded-full font-bold flex justify-center relative text-sm px-6 overflow-hidden w-full text-white h-12">
                 <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
                 </Icon>
@@ -176,7 +178,7 @@
               </UButton>
 
               <!-- WhatsApp Sipariş Butonu -->
-              <UButton @click="orderViaWhatsApp()"
+              <UButton @click="orderViaWhatsApp()" :disabled="!isSelectedVariationInStock"
                 class="!rounded-full font-bold flex justify-center items-center text-sm px-6 w-full h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 transition-all duration-200">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path
@@ -207,6 +209,7 @@
             <div class="flex space-x-4">
               <!-- Sepete Ekle Butonu -->
               <UButton :loading="cartState.addToCartloading" @click="addToCart()" color="secondary"
+                :disabled="!isSelectedVariationInStock"
                 class="!rounded-full font-bold flex justify-center relative text-sm px-8 overflow-hidden min-w-[180px] h-12 text-white">
                 <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
                 </Icon>
@@ -214,7 +217,7 @@
               </UButton>
 
               <!-- WhatsApp Sipariş Butonu -->
-              <UButton @click="orderViaWhatsApp()"
+              <UButton @click="orderViaWhatsApp()" :disabled="!isSelectedVariationInStock"
                 class="!rounded-full font-bold flex justify-center items-center text-sm px-8 min-w-[180px] h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 transition-all duration-200">
                 <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
                   <path
@@ -261,9 +264,14 @@ const isProductInStock = computed(() => {
 
   // Varyasyonlu ürün ise
   if (isVariableProduct.value) {
-    // En az bir varyasyonun stokta olması gerekir
+    // En az bir varyasyonun stokta ve fiyatlı olması gerekir
     const variations = props.productState.product.variations || [];
     return variations.some(variation => {
+      // Önce fiyat kontrolü - fiyatı yoksa bu varyasyon kullanılamaz
+      if (!variation.price && !variation.sale_price) {
+        return false;
+      }
+
       // Varyasyon manuel olarak stok dışı işaretlenmişse
       if (variation.stock_status === 'out_of_stock' || variation.stock_status === 'discontinued') {
         return false;
@@ -274,7 +282,7 @@ const isProductInStock = computed(() => {
         return variation.stockAmount > 0;
       }
 
-      // Stok yönetimi kapalıysa stokta kabul et
+      // Stok yönetimi kapalıysa ve fiyatlıysa stokta kabul et
       return true;
     });
   }
@@ -289,25 +297,6 @@ const isProductInStock = computed(() => {
 
 // Ana stok dışı mesajını al
 const outOfStockMessage = computed(() => {
-  const product = props.productState.product;
-
-  if (product.stock_status === 'discontinued') {
-    return 'Bu ürünün üretimi durdurulmuştur.';
-  }
-
-  if (product.stock_status === 'out_of_stock') {
-    return 'Bu ürün manuel olarak stok dışı işaretlenmiştir.';
-  }
-
-  if (isVariableProduct.value) {
-    return 'Bu ürünün tüm varyasyonları stok dışıdır.';
-  } else {
-    // Basit ürün için stok kontrolü
-    if (product.stock_management == 1 && product.stock <= 0) {
-      return 'Bu ürün stok dışıdır.';
-    }
-  }
-
   return 'Bu ürün şu anda stok dışıdır.';
 });
 
@@ -331,6 +320,33 @@ const isActive = (attributeName, termName) => {
   return originalIsActive.value(attributeName, termName);
 };
 
+// Seçili varyasyonun stok durumunu kontrol et
+const isSelectedVariationInStock = computed(() => {
+  const selectedVariation = getSelectedVariation.value;
+
+  // Varyasyon seçilmemişse stokta kabul et (basit ürün veya varyasyon seçilmemiş)
+  if (!selectedVariation) {
+    return isProductInStock.value;
+  }
+
+  // Seçili varyasyonun fiyat kontrolü - fiyatı yoksa stok dışı
+  if (!selectedVariation.price && !selectedVariation.sale_price) {
+    return false;
+  }
+
+  // Manuel olarak stok dışı işaretlenmişse
+  if (selectedVariation.stock_status === 'out_of_stock' || selectedVariation.stock_status === 'discontinued') {
+    return false;
+  }
+
+  // Stok yönetimi aktifse stok miktarını kontrol et
+  if (selectedVariation.isStockManagement && selectedVariation.stockAmount <= 0) {
+    return false;
+  }
+
+  return true;
+});
+
 const isVariableProduct = computed(() => {
   const hasVariationAttrs = props.attrsAndVarsState.some(i => {
     // Farklı veri tipleri için kontrol
@@ -343,6 +359,49 @@ const isVariableProduct = computed(() => {
   });
 
   return hasVariationAttrs;
+});
+
+// Varsayılan varyant fiyatını al (en ucuz fiyatlı ve stokta olan varyant)
+const defaultVariationPrice = computed(() => {
+  if (!isVariableProduct.value) {
+    return null;
+  }
+
+  const variations = props.productState.product.variations || [];
+
+  // Fiyatlı ve stokta olan varyantları filtrele
+  const availableVariations = variations.filter(variation => {
+    // Fiyat kontrolü
+    if (!variation.price && !variation.sale_price) {
+      return false;
+    }
+
+    // Stok durumu kontrolü
+    if (variation.stock_status === 'out_of_stock' || variation.stock_status === 'discontinued') {
+      return false;
+    }
+
+    // Stok yönetimi kontrolü
+    if (variation.isStockManagement && variation.stockAmount <= 0) {
+      return false;
+    }
+
+    return true;
+  });
+
+  if (availableVariations.length === 0) {
+    return null;
+  }
+
+  // En ucuz varyantı bul (sale_price varsa onu, yoksa price'ı kullan)
+  const cheapestVariation = availableVariations.reduce((cheapest, current) => {
+    const cheapestPrice = cheapest.sale_price || cheapest.price;
+    const currentPrice = current.sale_price || current.price;
+
+    return currentPrice < cheapestPrice ? current : cheapest;
+  });
+
+  return cheapestVariation;
 });
 
 const selectedColor = ref(null)
@@ -459,6 +518,18 @@ const addToCart = () => {
 
     // Seçili varyasyonun stok durumunu kontrol et
     const selectedVariation = getSelectedVariation.value;
+
+    // Seçili varyasyonun fiyat kontrolü - fiyatı yoksa hata ver
+    if (!selectedVariation.price && !selectedVariation.sale_price) {
+      toast.add({
+        title: 'Seçili varyantın fiyatı yok!',
+        description: 'Bu varyant için fiyat belirtilmemiş. Lütfen farklı bir varyant seçin.',
+        color: 'red',
+        icon: "i-heroicons-exclamation-triangle",
+      });
+      return;
+    }
+
     if (selectedVariation.stock_status === 'out_of_stock' || selectedVariation.stock_status === 'discontinued') {
       toast.add({
         title: 'Seçili varyant stok dışı!',
@@ -527,15 +598,28 @@ const addToCart = () => {
       total: (selectedVariation.sale_price ? selectedVariation.sale_price : selectedVariation.price) * parseInt(qyt.value) // Toplam tutarı hesapla
     };
   } else {
-    // Basit ürün için
+    // Basit ürün için veya varyantlı ürünlerde varyant seçilmemişse
+    let effectivePrice;
+    let effectiveSalePrice;
+
+    if (isVariableProduct.value && defaultVariationPrice.value) {
+      // Varyantlı üründe varsayılan varyant fiyatını kullan
+      effectivePrice = defaultVariationPrice.value.price;
+      effectiveSalePrice = defaultVariationPrice.value.sale_price;
+    } else {
+      // Basit ürün fiyatını kullan
+      effectivePrice = props.productState.product.price;
+      effectiveSalePrice = props.productState.product.sale_price;
+    }
+
     newCartItem = {
       ...newCartItem,
       product_id: props.productState.product.id,
       product_name: props.productState.product.name + ' ' + (selectedColor.value?.term_name || ''),
       image_id: props.productState.product.selectedColorTermImages?.[0]?.id || props.productState.product.selectedImages?.[0]?.id,
       qyt: parseInt(qyt.value),
-      price: props.productState.product.sale_price ? props.productState.product.sale_price : props.productState.product.price, // Ürünün fiyatını ekle
-      total: (props.productState.product.sale_price ? props.productState.product.sale_price : props.productState.product.price) * parseInt(qyt.value) // Toplam tutarı hesapla
+      price: effectiveSalePrice ? effectiveSalePrice : effectivePrice, // Efektif fiyatı kullan
+      total: (effectiveSalePrice ? effectiveSalePrice : effectivePrice) * parseInt(qyt.value) // Toplam tutarı hesapla
     };
   }
 
@@ -599,6 +683,18 @@ const orderViaWhatsApp = () => {
 
     // Seçili varyasyonun stok durumunu kontrol et
     const selectedVariation = getSelectedVariation.value;
+
+    // Seçili varyasyonun fiyat kontrolü - fiyatı yoksa hata ver
+    if (!selectedVariation.price && !selectedVariation.sale_price) {
+      toast.add({
+        title: 'Seçili varyantın fiyatı yok!',
+        description: 'Bu varyant için fiyat belirtilmemiş. Lütfen farklı bir varyant seçin.',
+        color: 'red',
+        icon: "i-heroicons-exclamation-triangle",
+      });
+      return;
+    }
+
     if (selectedVariation.stock_status === 'out_of_stock' || selectedVariation.stock_status === 'discontinued') {
       toast.add({
         title: 'Seçili varyant stok dışı!',
@@ -643,13 +739,23 @@ const orderViaWhatsApp = () => {
   // Seçili varyasyon bilgilerini al
   const selectedVariation = getSelectedVariation.value;
   let productName = props.productState.product.name;
-  let productPrice = props.productState.product.sale_price || props.productState.product.price;
+  let productPrice;
 
   if (selectedVariation) {
     productName += ` (${selectedColor.value?.term_name || ''})`;
     productPrice = selectedVariation.sale_price || selectedVariation.price;
-  } else if (selectedColor.value) {
-    productName += ` (${selectedColor.value.term_name})`;
+  } else if (isVariableProduct.value && defaultVariationPrice.value) {
+    // Varyantlı üründe varsayılan varyant fiyatını kullan
+    if (selectedColor.value) {
+      productName += ` (${selectedColor.value.term_name})`;
+    }
+    productPrice = defaultVariationPrice.value.sale_price || defaultVariationPrice.value.price;
+  } else {
+    // Basit ürün fiyatını kullan
+    if (selectedColor.value) {
+      productName += ` (${selectedColor.value.term_name})`;
+    }
+    productPrice = props.productState.product.sale_price || props.productState.product.price;
   }
 
   // WhatsApp mesajını oluştur

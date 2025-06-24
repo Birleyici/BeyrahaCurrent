@@ -82,6 +82,11 @@ export const useVariationsFront = () => {
         return false
       }
 
+      // Varyasyonun fiyat kontrolü - fiyatı yoksa stok dışı kabul et
+      if (!variation.price && !variation.sale_price) {
+        return false
+      }
+
       // Varyasyonun stok durumunu kontrol et
       // Manuel olarak stok dışı işaretlenmişse
       if (variation.stock_status === 'out_of_stock' || variation.stock_status === 'discontinued') {

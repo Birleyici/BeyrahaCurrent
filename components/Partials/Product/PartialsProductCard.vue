@@ -64,10 +64,20 @@ const isProductInStock = computed(() => {
 
   // Varyasyonlu ürün ise
   if (product.is_variation_product) {
-    // En az bir varyasyonun stokta olması gerekir
+    // Eğer display_price null ise, hiçbir varyasyon fiyatlı değil demektir
+    if (product.display_price === null) {
+      return false;
+    }
+
+    // En az bir varyasyonun stokta ve fiyatlı olması gerekir
     const variations = product.variations || [];
     if (variations.length > 0) {
       return variations.some(variation => {
+        // Önce fiyat kontrolü - fiyatı yoksa bu varyasyon kullanılamaz
+        if (!variation.price && !variation.sale_price) {
+          return false;
+        }
+
         // Varyasyon manuel olarak stok dışı işaretlenmişse
         if (variation.stock_status === 'out_of_stock' || variation.stock_status === 'discontinued') {
           return false;
@@ -78,7 +88,7 @@ const isProductInStock = computed(() => {
           return variation.stockAmount > 0;
         }
 
-        // Stok yönetimi kapalıysa stokta kabul et
+        // Stok yönetimi kapalıysa ve fiyatlıysa stokta kabul et
         return true;
       });
     }
@@ -106,9 +116,19 @@ const stockStatusLabel = computed(() => {
 
   // Varyasyonlu ürün kontrolü
   if (product.is_variation_product) {
+    // Eğer display_price null ise, hiçbir varyasyon fiyatlı değil demektir
+    if (product.display_price === null) {
+      return 'Stok Dışı';
+    }
+
     const variations = product.variations || [];
     if (variations.length > 0) {
       const inStockVariations = variations.filter(variation => {
+        // Önce fiyat kontrolü - fiyatı yoksa bu varyasyon kullanılamaz
+        if (!variation.price && !variation.sale_price) {
+          return false;
+        }
+
         // Varyasyon manuel olarak stok dışı işaretlenmişse
         if (variation.stock_status === 'out_of_stock' || variation.stock_status === 'discontinued') {
           return false;
@@ -119,12 +139,12 @@ const stockStatusLabel = computed(() => {
           return variation.stockAmount > 0;
         }
 
-        // Stok yönetimi kapalıysa stokta kabul et
+        // Stok yönetimi kapalıysa ve fiyatlıysa stokta kabul et
         return true;
       });
 
       if (inStockVariations.length === 0) {
-        return 'Tükendi';
+        return 'Stok Dışı';
       }
     }
   } else {
