@@ -177,11 +177,24 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
 
 async function handleLogout(authStore, router, route, errorMessage = null) {
   try {
-    console.log('Handling logout due to auth error:', errorMessage)
+    console.log('🚨 HANDLE LOGOUT CALLED 🚨')
+    console.log('Error message:', errorMessage)
+    console.log('Current route:', route?.fullPath)
+    console.log('Router available:', !!router)
     
     // Store'u temizle
     authStore.token = null
     authStore.currentUser = null
+    
+    // MANUEL LOCALSTORAGE TEMİZLEME - Pinia persist otomatik yapmıyor
+    if (process.client) {
+      try {
+        localStorage.removeItem('authStore')
+        console.log('🧹 localStorage authStore cleared manually in handleLogout')
+      } catch (e) {
+        console.warn('Failed to clear localStorage in handleLogout:', e)
+      }
+    }
     
     // Logout actions
     await authStore.actionsOnLogout()
@@ -203,14 +216,25 @@ async function handleLogout(authStore, router, route, errorMessage = null) {
     const currentPath = route.fullPath
     const redirectPath = currentPath !== '/auth' ? `/auth?callback=${encodeURIComponent(currentPath)}` : '/auth'
     
+    console.log('🚀 Attempting redirect to:', redirectPath)
+    
     // Router'ı kullanarak yönlendir
     await router.push(redirectPath)
     
+    console.log('✅ Redirect completed successfully')
+    
   } catch (error) {
-    console.error('Error during logout handling:', error)
+    console.error('❌ Error during logout handling:', error)
     
     // En son çare olarak sayfa yenile
     if (process.client) {
+      console.log('🔄 Fallback: redirecting via window.location')
+      // LocalStorage'ı da temizle
+      try {
+        localStorage.removeItem('authStore')
+      } catch (e) {
+        console.warn('Failed to clear localStorage in fallback:', e)
+      }
       window.location.href = '/auth'
     }
   }

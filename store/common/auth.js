@@ -236,6 +236,16 @@ export const useAuthStore = defineStore(
           remind: []
         }
 
+        // MANUEL LOCALSTORAGE TEMİZLEME - Pinia persist otomatik yapmıyor
+        if (process.client) {
+          try {
+            localStorage.removeItem('authStore')
+            console.log('localStorage authStore cleared manually')
+          } catch (e) {
+            console.warn('Failed to clear localStorage:', e)
+          }
+        }
+
         // Actions on logout
         await actionsOnLogout()
 
@@ -264,6 +274,15 @@ export const useAuthStore = defineStore(
         // Hata durumunda da state'i temizle
         token.value = null
         currentUser.value = null
+        
+        // LocalStorage'ı da temizle
+        if (process.client) {
+          try {
+            localStorage.removeItem('authStore')
+          } catch (e) {
+            console.warn('Failed to clear localStorage in error handling:', e)
+          }
+        }
         
         // En son çare olarak auth sayfasına yönlendir
         if (process.client) {
@@ -342,6 +361,7 @@ export const useAuthStore = defineStore(
       logout,
       changePassword,
       fetchUser,
+      isTokenValid,
       startTokenRefreshTimer
     }
   },
