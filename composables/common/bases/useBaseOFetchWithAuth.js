@@ -2,10 +2,12 @@ import { defu } from 'defu'
 
 let isRefreshing = false
 let refreshSubscribers = []
+let currentRefreshToken = null
 
 function onRefreshed(token) {
   refreshSubscribers.map((callback) => callback(token))
   refreshSubscribers = []
+  currentRefreshToken = null
 }
 
 function addRefreshSubscriber(callback) {
@@ -65,7 +67,7 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
       if (errorData && errorData.requires_login) {
         console.log('Login required, error:', errorData.error)
         
-        // Token expired veya invalid durumları için farklı işlemler
+        // Token expired durumu için refresh dene
         if (errorData.error === 'TOKEN_EXPIRED') {
           return await handleTokenRefresh(authStore, apiBaseUrl, route, router, url, params)
         } else if (['TOKEN_INVALID', 'TOKEN_ERROR', 'USER_NOT_FOUND'].includes(errorData.error)) {
@@ -84,8 +86,11 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
 }
 
 async function handleTokenRefresh(authStore, apiBaseUrl, route, router, originalUrl, originalParams) {
-  // Eğer refresh işlemi devam ediyorsa, bekle
-  if (isRefreshing) {
+  const currentToken = authStore.token
+
+  // Eğer aynı token ile refresh işlemi devam ediyorsa, bekle
+  if (isRefreshing && currentRefreshToken === currentToken) {
+    console.log('Token refresh already in progress for current token, waiting...')
     return new Promise((resolve, reject) => {
       addRefreshSubscriber((token) => {
         if (token) {
@@ -101,14 +106,21 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
     })
   }
 
+  // Eğer farklı bir token ile refresh devam ediyorsa, iptal et
+  if (isRefreshing && currentRefreshToken !== currentToken) {
+    console.log('Different token refresh in progress, cancelling current request')
+    throw new Error('Token changed during refresh')
+  }
+
   isRefreshing = true
+  currentRefreshToken = currentToken
 
   try {
-    console.log('Attempting token refresh...')
+    console.log('Attempting token refresh with token:', currentToken.substring(0, 20) + '...')
     
     const response = await $fetch(apiBaseUrl + 'auth/refresh', {
       method: 'POST',
-      headers: { Authorization: `Bearer ${authStore.token}` }
+      headers: { Authorization: `Bearer ${currentToken}` }
     })
 
     if (response && response.token) {
@@ -120,7 +132,7 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
         authStore.currentUser = response.user
       }
 
-      console.log('Token refreshed successfully')
+      console.log('Token refreshed successfully, new token:', response.token.substring(0, 20) + '...')
       onRefreshed(response.token)
 
       // Original isteği yeni token ile tekrar yap
@@ -144,6 +156,13 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
       if (errorData.message) {
         errorMessage = errorData.message
       }
+      
+      // Backend'den gelen spesifik hatalar
+      if (errorData.error === 'TOKEN_INVALID') {
+        errorMessage = 'Token geçersiz. Lütfen tekrar giriş yapın.'
+      } else if (errorData.error === 'TOKEN_EXPIRED') {
+        errorMessage = 'Oturum tamamen sona erdi. Lütfen tekrar giriş yapın.'
+      }
     }
 
     await handleLogout(authStore, router, route, errorMessage)
@@ -152,6 +171,7 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
     throw error
   } finally {
     isRefreshing = false
+    currentRefreshToken = null
   }
 }
 

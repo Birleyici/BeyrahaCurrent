@@ -81,10 +81,10 @@
       </div>
 
       <!-- Sidebar -->
-      <div class="lg:col-span-1 space-y-6">
+      <div class="lg:col-span-1 space-y-6 flex flex-col-reverse md:flex-col ">
         <!-- Actions -->
         <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">İşlemler</h3>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white  mb-4">İşlemler</h3>
 
           <div class="space-y-3">
             <UButton :loading="productState.product.loading" @click="handleSaveProduct(true)" color="primary" size="lg"
@@ -167,6 +167,39 @@
           </div>
         </div>
 
+
+        <!-- Product Status -->
+        <div
+          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 !mb-6 md:!mb-0">
+          <div class="flex items-center gap-2 mb-4">
+            <Icon name="i-heroicons-signal" class="w-5 h-5 text-green-500" />
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Durum</h3>
+          </div>
+
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-700 dark:text-gray-300">Ürün Durumu:</span>
+              <UBadge :color="getStatusColor(productState.product.status)" variant="soft">
+                {{ getStatusLabel(productState.product.status) }}
+              </UBadge>
+            </div>
+
+            <div v-if="productState.product.created_at" class="flex items-center justify-between">
+              <span class="text-sm text-gray-700 dark:text-gray-300">Oluşturulma:</span>
+              <span class="text-sm text-gray-900 dark:text-white">
+                {{ formatDate(productState.product.created_at) }}
+              </span>
+            </div>
+
+            <div v-if="productState.product.updated_at" class="flex items-center justify-between">
+              <span class="text-sm text-gray-700 dark:text-gray-300">Son Güncelleme:</span>
+              <span class="text-sm text-gray-900 dark:text-white">
+                {{ formatDate(productState.product.updated_at) }}
+              </span>
+            </div>
+          </div>
+        </div>
+
         <!-- Product Images -->
         <div v-if="!hasColorAttribute"
           class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
@@ -231,36 +264,7 @@
           </div>
         </div>
 
-        <!-- Product Status -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <div class="flex items-center gap-2 mb-4">
-            <Icon name="i-heroicons-signal" class="w-5 h-5 text-green-500" />
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Durum</h3>
-          </div>
 
-          <div class="space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-700 dark:text-gray-300">Ürün Durumu:</span>
-              <UBadge :color="getStatusColor(productState.product.status)" variant="soft">
-                {{ getStatusLabel(productState.product.status) }}
-              </UBadge>
-            </div>
-
-            <div v-if="productState.product.created_at" class="flex items-center justify-between">
-              <span class="text-sm text-gray-700 dark:text-gray-300">Oluşturulma:</span>
-              <span class="text-sm text-gray-900 dark:text-white">
-                {{ formatDate(productState.product.created_at) }}
-              </span>
-            </div>
-
-            <div v-if="productState.product.updated_at" class="flex items-center justify-between">
-              <span class="text-sm text-gray-700 dark:text-gray-300">Son Güncelleme:</span>
-              <span class="text-sm text-gray-900 dark:text-white">
-                {{ formatDate(productState.product.updated_at) }}
-              </span>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
 
