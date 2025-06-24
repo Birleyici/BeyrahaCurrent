@@ -161,11 +161,84 @@ const selectedImages = computed(() => {
 });
 
 useHead({
-  title: computed(() => `${productState.product.name} - ${settings.value.siteName}`),
+  title: computed(() => {
+    const productName = productState.product.name
+    const categoryName = productState.product.categories?.[0]?.name
+    if (categoryName) {
+      return `${productName} - ${categoryName} Modeli | ${settings.value.siteName}`
+    }
+    return `${productName} | ${settings.value.siteName}`
+  }),
   meta: [
     {
       name: 'description',
-      content: computed(() => productState.product.short_description || productState.product.name)
+      content: computed(() => {
+        const description = productState.product.description || productState.product.short_description
+        const productName = productState.product.name
+        const categoryName = productState.product.categories?.[0]?.name
+
+        if (description) {
+          return `${productName} ${description} ${categoryName ? `${categoryName} kategorisinde ` : ''}en uygun fiyatlarla ${settings.value.siteName}'de.`
+        } else {
+          return `${productName} ${categoryName ? `- ${categoryName} kategorisinde ` : ''}kaliteli ürün. En uygun fiyatlarla ${settings.value.siteName}'de hemen sipariş verin.`
+        }
+      })
+    },
+    {
+      name: 'keywords',
+      content: computed(() => {
+        const productName = productState.product.name
+        const categoryName = productState.product.categories?.[0]?.name
+        const keywords = [productName]
+
+        if (categoryName) {
+          keywords.push(categoryName, `${categoryName} modelleri`, `${categoryName} fiyatları`)
+        }
+
+        keywords.push('tesettür', 'giyim', 'online alışveriş', 'kaliteli ürün')
+
+        return keywords.join(', ')
+      })
+    },
+    {
+      property: 'og:title',
+      content: computed(() => {
+        const productName = productState.product.name
+        const categoryName = productState.product.categories?.[0]?.name
+        return categoryName ? `${productName} - ${categoryName}` : productName
+      })
+    },
+    {
+      property: 'og:description',
+      content: computed(() => {
+        const description = productState.product.description || productState.product.short_description
+        const productName = productState.product.name
+
+        if (description) {
+          return `${productName} ${description}`
+        } else {
+          return `${productName} - Kaliteli ürün en uygun fiyatlarla.`
+        }
+      })
+    },
+    {
+      property: 'og:image',
+      content: computed(() => {
+        const images = selectedImages.value
+        return images?.length > 0 ? images[0].image : null
+      })
+    },
+    {
+      property: 'og:type',
+      content: 'product'
+    },
+    {
+      property: 'product:price:amount',
+      content: computed(() => productState.product.sale_price || productState.product.regular_price)
+    },
+    {
+      property: 'product:price:currency',
+      content: 'TRY'
     }
   ]
 })
