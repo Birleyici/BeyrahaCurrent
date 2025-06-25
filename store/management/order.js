@@ -25,8 +25,10 @@ export const useOrderManagementStore = defineStore(
     const statuses = {
       pending: { color: 'gray', text: 'Beklemede' },
       processing: { color: 'blue', text: 'Hazırlanıyor' },
+      prepared: { color: 'orange', text: 'Hazırlandı' },
       shipped: { color: 'green', text: 'Kargoya Verildi' },
       in_transit: { color: 'yellow', text: 'Yolda' },
+      delivered: { color: 'emerald', text: 'Teslim Edildi' },
       cancelled: { color: 'red', text: 'İptal Edildi' },
       returned: { color: 'purple', text: 'İade Edildi' },
       failed: { color: 'black', text: 'Başarısız' }
@@ -261,11 +263,42 @@ export const useOrderManagementStore = defineStore(
         subOrder.shippingLoading = false
       })
       if (!response.error) {
-        subOrder.shipping_code = response.barcode
-        subOrder.status = 'shipped'
-
+        // Yeni sistem: ShippingDetail oluşturuldu, vendorOrder'ı yeniden yükle
+        await fetchVendorOrder(subOrder.id)
+        
         toast.add({
           title: 'Kargo kodu alındı!',
+          icon: 'i-heroicons-check-badge'
+        })
+      }
+    }
+
+    const getTrackingCode = async (subOrder) => {
+      subOrder.trackingLoading = true
+      const response = await useBaseOFetchWithAuth('shipping/get-tracking', {
+        method: 'POST',
+        body: {
+          subOrderId: subOrder.id
+        },
+        onResponseError: async (error) => {
+          const message = error.response?._data?.message
+          toast.add({
+            title: message ? message : 'Bir hata oluştu!',
+            color: 'red',
+            icon: 'i-heroicons-exclamation-triangle'
+          })
+        }
+      }).finally(() => {
+        subOrder.trackingLoading = false
+      })
+      
+      if (!response.error) {
+        // Yeni sistem: ShippingDetail güncellendi, vendorOrder'ı yeniden yükle
+        await fetchVendorOrder(subOrder.id)
+        
+        toast.add({
+          title: 'Takip kodu alındı!',
+          description: response.tracking_url ? 'Takip linki de kaydedildi' : `Takip kodu: ${response.tracking_code}`,
           icon: 'i-heroicons-check-badge'
         })
       }
@@ -291,7 +324,8 @@ export const useOrderManagementStore = defineStore(
       deleteSubOrderItem,
       saveInput,
       updateStatus,
-      getShippingCode
+      getShippingCode,
+      getTrackingCode
     }
   }
 )

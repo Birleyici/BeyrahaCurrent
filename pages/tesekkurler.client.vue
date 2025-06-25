@@ -27,8 +27,16 @@
             <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto mb-8">
               <span class="font-semibold text-secondary-600 dark:text-secondary-400">{{
                 formatPrice(order.total_with_shipping) }}</span>
-              toplam tutarı aşağıdaki banka bilgilerimize, açıklama kısmına sipariş numaranızı yazarak
-              gönderdiğinizde siparişiniz onaylanarak işleme alınacaktır.
+              <span v-if="order.payment_method === 'bank_transfer'">
+                toplam tutarı aşağıdaki banka bilgilerimize, açıklama kısmına sipariş numaranızı yazarak
+                gönderdiğinizde siparişiniz onaylanarak işleme alınacaktır.
+              </span>
+              <span v-else-if="order.payment_method === 'cash_on_delivery'">
+                toplam tutarı siparişiniz kargoya verildiğinde nakit veya kart ile ödeyebilirsiniz.
+              </span>
+              <span v-else>
+                toplam tutarı için ödeme yönteminize göre işlem yapılacaktır.
+              </span>
             </p>
 
             <!-- Durum İndikatörleri -->
@@ -56,7 +64,7 @@
           <div class="max-w-6xl mx-auto">
 
             <!-- Banka Bilgileri -->
-            <div class="mb-8">
+            <div v-if="order.payment_method === 'bank_transfer'" class="mb-8">
               <div class="card">
                 <div class="card-header">
                   <div class="flex items-center space-x-3 p-4">
@@ -74,6 +82,44 @@
                 </div>
                 <div class="card-body">
                   <PartialsOrderBankInfo />
+                </div>
+              </div>
+            </div>
+
+            <!-- Kapıda Ödeme Bilgileri -->
+            <div v-else-if="order.payment_method === 'cash_on_delivery'" class="mb-8">
+              <div class="card">
+                <div class="card-header">
+                  <div class="flex items-center space-x-3 p-4">
+                    <div
+                      class="w-10 h-10 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center">
+                      <UIcon name="i-heroicons-truck" class="w-6 h-6 text-green-600 dark:text-green-400" />
+                    </div>
+                    <div>
+                      <h2 class="text-xl font-semibold text-neutral-900 dark:text-neutral-100 !p-0 !m-0">Kapıda Ödeme
+                      </h2>
+                      <p class="text-sm text-neutral-600 dark:text-neutral-400">Siparişiniz teslim edilirken ödeme yapın
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div
+                    class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg p-4">
+                    <div class="flex items-start space-x-3">
+                      <UIcon name="i-heroicons-information-circle"
+                        class="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+                      <div>
+                        <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Kapıda Ödeme Bilgileri</h4>
+                        <ul class="text-sm text-green-700 dark:text-green-300 space-y-1">
+                          <li>• Siparişiniz kargoya verildiğinde SMS ile bilgilendirileceksiniz</li>
+                          <li>• Teslimat anında nakit veya kart ile ödeme yapabilirsiniz</li>
+                          <li>• Kargo firması tarafından ekstra komisyon alınabilir</li>
+                          <li>• Ödeme tutarınız: <strong>{{ formatPrice(order.total_with_shipping) }}</strong></li>
+                        </ul>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -201,6 +247,19 @@ useHead({
 const route = useRoute();
 const order = ref({});
 const orderLoaded = ref(false);
+
+// Ödeme yöntemi adlarını Türkçe'ye çevir
+const paymentMethodNames = {
+  'bank_transfer': 'Havale/EFT',
+  'credit_card': 'Kredi Kartı',
+  'cash_on_delivery': 'Kapıda Ödeme',
+  'digital_wallet': 'Dijital Cüzdan',
+  'installment': 'Taksitli Ödeme'
+}
+
+const paymentMethodName = computed(() => {
+  return paymentMethodNames[order.value?.payment_method] || 'Belirtilmemiş'
+})
 
 const getOrder = async () => {
   const response = await useBaseOFetchWithAuth(`order`, {

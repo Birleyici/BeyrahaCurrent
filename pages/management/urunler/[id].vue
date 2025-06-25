@@ -5,7 +5,7 @@
       :description="isNewProduct ? 'Yeni bir ürün oluşturun ve detaylarını ekleyin' : 'Ürün bilgilerini güncelleyin'"
       :breadcrumb-links="links">
       <template #actions>
-        <UButton icon="i-heroicons-arrow-left" size="sm" color="gray" variant="outline" label="Geri Dön"
+        <UButton icon="i-heroicons-arrow-left" size="sm" color="neutral" variant="outline" label="Geri Dön"
           to="/management/urunler" />
         <UButton v-if="!isNewProduct && productState.product.is_active === 1"
           icon="i-heroicons-arrow-top-right-on-square" size="sm" color="green" variant="outline" label="Ürüne Git"
@@ -17,15 +17,16 @@
       <!-- Main Content -->
       <div class="lg:col-span-2 space-y-6">
         <!-- Basic Information -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div
+          class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
           <div class="flex items-center gap-2 mb-4">
             <Icon name="i-heroicons-information-circle" class="w-5 h-5 text-blue-500" />
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Temel Bilgiler</h2>
+            <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">Temel Bilgiler</h2>
           </div>
 
           <div class="space-y-4">
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
                 Ürün Adı *
               </label>
               <UInput v-model="productState.product.name" placeholder="Ürün adını girin..." size="lg"
@@ -33,7 +34,7 @@
             </div>
 
             <div>
-              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+              <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">
                 Kısa Açıklama
               </label>
               <UTextarea v-model="productState.product.description"
@@ -44,10 +45,11 @@
         </div>
 
         <!-- Detailed Description -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div
+          class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
           <div class="flex items-center gap-2 mb-4">
             <Icon name="i-heroicons-document-text" class="w-5 h-5 text-green-500" />
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Detaylı Açıklama</h2>
+            <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">Detaylı Açıklama</h2>
           </div>
 
           <TiptapEditor :inital-data="productState.product.additional_info"
@@ -56,16 +58,17 @@
         </div>
 
         <!-- Product Data Tabs -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
-          <div class="p-6 border-b border-gray-200 dark:border-gray-700">
+        <div
+          class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700">
+          <div class="p-6 border-b border-neutral-200 dark:border-neutral-700">
             <div class="flex items-center gap-2 mb-4">
               <Icon name="i-heroicons-cog-6-tooth" class="w-5 h-5 text-purple-500" />
-              <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Ürün Detayları</h2>
+              <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">Ürün Detayları</h2>
             </div>
 
             <!-- Tab Navigation -->
             <div class="flex flex-wrap gap-1">
-              <UButton v-for="tab in tabList" :key="tab.key" :color="currentTab === tab.key ? 'primary' : 'gray'"
+              <UButton v-for="tab in tabList" :key="tab.key" :color="currentTab === tab.key ? 'primary' : 'neutral'"
                 :variant="currentTab === tab.key ? 'solid' : 'ghost'" size="sm" :icon="tab.icon" :label="tab.label"
                 @click="currentTab = tab.key" class="flex-shrink-0" />
             </div>
@@ -83,8 +86,9 @@
       <!-- Sidebar -->
       <div class="lg:col-span-1 space-y-6 flex flex-col-reverse md:flex-col ">
         <!-- Actions -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white  mb-4">İşlemler</h3>
+        <div
+          class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+          <h3 class="text-lg font-semibold text-neutral-900 dark:text-white  mb-4">İşlemler</h3>
 
           <div class="space-y-3">
             <UButton :loading="productState.product.loading" @click="handleSaveProduct(true)" color="primary" size="lg"
@@ -101,12 +105,12 @@
 
             <!-- Yayınlama Gereklilikleri -->
             <div v-if="productState.product.is_active !== 1 && !canPublishProduct"
-              class="bg-amber-50 border border-amber-200 rounded-lg p-3 text-sm">
+              class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 rounded-lg p-3 text-sm">
               <div class="flex items-center gap-2 mb-2">
-                <Icon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-amber-600" />
-                <span class="font-medium text-amber-800">Yayınlamak için eksik:</span>
+                <Icon name="i-heroicons-exclamation-triangle" class="w-4 h-4 text-amber-600 dark:text-amber-400" />
+                <span class="font-medium text-amber-800 dark:text-amber-200">Yayınlamak için eksik:</span>
               </div>
-              <ul class="space-y-1 text-amber-700">
+              <ul class="space-y-1 text-amber-700 dark:text-amber-300">
                 <li v-if="!productState.product.name || productState.product.name.trim() === ''"
                   class="flex items-center gap-2">
                   <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
@@ -122,7 +126,7 @@
                   <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
                   <div>
                     <div>Varyasyon fiyatları</div>
-                    <div class="text-xs text-amber-600 mt-1">
+                    <div class="text-xs text-amber-600 dark:text-amber-400 mt-1">
                       {{ !variationState.variations || variationState.variations.length === 0
                         ? 'Önce varyasyonlar oluşturulmalı, sonra fiyatları girilmeli'
                         : 'En az bir varyasyonun fiyatı girilmeli' }}
@@ -148,15 +152,15 @@
                   <Icon name="i-heroicons-x-mark" class="w-3 h-3" />
                   En az bir görsel
                 </li>
-                <li v-if="hasColorAttribute" class="flex items-center gap-2 text-green-700">
+                <li v-if="hasColorAttribute" class="flex items-center gap-2 text-green-700 dark:text-green-300">
                   <Icon name="i-heroicons-check" class="w-3 h-3" />
                   Görseller renk nitelikleri için atanacak
                 </li>
               </ul>
             </div>
 
-            <UButton :loading="productState.product.loading" @click="handleSaveDraft()" color="gray" variant="outline"
-              size="lg" icon="i-heroicons-document" block class="justify-center">
+            <UButton :loading="productState.product.loading" @click="handleSaveDraft()" color="neutral"
+              variant="outline" size="lg" icon="i-heroicons-document" block class="justify-center">
               Taslak Olarak Kaydet
             </UButton>
 
@@ -170,30 +174,30 @@
 
         <!-- Product Status -->
         <div
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6 !mb-6 md:!mb-0">
+          class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6 !mb-6 md:!mb-0">
           <div class="flex items-center gap-2 mb-4">
             <Icon name="i-heroicons-signal" class="w-5 h-5 text-green-500" />
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Durum</h3>
+            <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Durum</h3>
           </div>
 
           <div class="space-y-3">
             <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-700 dark:text-gray-300">Ürün Durumu:</span>
+              <span class="text-sm text-neutral-700 dark:text-neutral-300">Ürün Durumu:</span>
               <UBadge :color="getStatusColor(productState.product.status)" variant="soft">
                 {{ getStatusLabel(productState.product.status) }}
               </UBadge>
             </div>
 
             <div v-if="productState.product.created_at" class="flex items-center justify-between">
-              <span class="text-sm text-gray-700 dark:text-gray-300">Oluşturulma:</span>
-              <span class="text-sm text-gray-900 dark:text-white">
+              <span class="text-sm text-neutral-700 dark:text-neutral-300">Oluşturulma:</span>
+              <span class="text-sm text-neutral-900 dark:text-white">
                 {{ formatDate(productState.product.created_at) }}
               </span>
             </div>
 
             <div v-if="productState.product.updated_at" class="flex items-center justify-between">
-              <span class="text-sm text-gray-700 dark:text-gray-300">Son Güncelleme:</span>
-              <span class="text-sm text-gray-900 dark:text-white">
+              <span class="text-sm text-neutral-700 dark:text-neutral-300">Son Güncelleme:</span>
+              <span class="text-sm text-neutral-900 dark:text-white">
                 {{ formatDate(productState.product.updated_at) }}
               </span>
             </div>
@@ -202,11 +206,11 @@
 
         <!-- Product Images -->
         <div v-if="!hasColorAttribute"
-          class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+          class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center gap-2">
               <Icon name="i-heroicons-photo" class="w-5 h-5 text-purple-500" />
-              <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Ürün Görselleri</h3>
+              <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Ürün Görselleri</h3>
             </div>
             <UButton icon="i-heroicons-plus" size="xs" color="primary" variant="outline" label="Galeri"
               @click="isOpenMediaModal = true" />
@@ -234,17 +238,18 @@
         </div>
 
         <!-- Categories -->
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <div
+          class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
           <div class="flex items-center gap-2 mb-4">
             <Icon name="i-heroicons-tag" class="w-5 h-5 text-orange-500" />
-            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Kategoriler</h3>
+            <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Kategoriler</h3>
           </div>
 
-          <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 max-h-64 overflow-y-auto">
+          <div class="border border-neutral-200 dark:border-neutral-700 rounded-lg p-3 max-h-64 overflow-y-auto">
             <div v-if="!categoryState?.sortedCategories?.length" class="flex items-center justify-center py-8">
               <div class="text-center">
-                <Icon name="i-heroicons-arrow-path" class="w-5 h-5 animate-spin mx-auto mb-2 text-gray-400" />
-                <p class="text-sm text-gray-500">Kategoriler yükleniyor...</p>
+                <Icon name="i-heroicons-arrow-path" class="w-5 h-5 animate-spin mx-auto mb-2 text-neutral-400" />
+                <p class="text-sm text-neutral-500">Kategoriler yükleniyor...</p>
               </div>
             </div>
             <UCommandPalette v-else :emptyState="{ queryLabel: 'Kategori bulunamadı...' }"
@@ -254,7 +259,7 @@
 
           <!-- Selected Categories Display -->
           <div v-if="selectedCategoriesProxy?.length" class="mt-4">
-            <p class="text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Seçili Kategoriler:</p>
+            <p class="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Seçili Kategoriler:</p>
             <div class="flex flex-wrap gap-2">
               <UBadge v-for="category in selectedCategoriesProxy" :key="category.id" color="blue" variant="soft"
                 size="sm">
@@ -270,14 +275,14 @@
 
     <!-- Media Modal -->
     <UModal v-model="isOpenMediaModal" fullscreen>
-      <div class="h-full bg-white dark:bg-gray-900 flex flex-col">
+      <div class="h-full bg-white dark:bg-neutral-900 flex flex-col">
         <!-- Modal Header -->
         <div
-          class="flex-shrink-0 flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-10">
-          <h3 class="text-base sm:text-lg font-semibold leading-6 text-gray-900 dark:text-white">
+          class="flex-shrink-0 flex items-center justify-between p-4 sm:p-6 border-b border-neutral-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 sticky top-0 z-10">
+          <h3 class="text-base sm:text-lg font-semibold leading-6 text-neutral-900 dark:text-white">
             Medya Galerisi
           </h3>
-          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+          <UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
             @click="isOpenMediaModal = false" />
         </div>
 
@@ -295,17 +300,17 @@
 
     <!-- Exit Warning Modal for New Product -->
     <UModal v-model="showExitWarningModal" :ui="{ width: 'sm:max-w-md' }">
-      <UCard :ui="{ ring: '', divide: 'divide-y divide-gray-100 dark:divide-gray-800' }">
+      <UCard :ui="{ ring: '', divide: 'divide-y divide-neutral-100 dark:divide-neutral-800' }">
         <template #header>
           <div class="flex items-center justify-between">
-            <h3 class="text-lg font-semibold leading-6 text-gray-900 dark:text-white">
+            <h3 class="text-lg font-semibold leading-6 text-neutral-900 dark:text-white">
               Sayfadan Ayrılıyor Musunuz?
             </h3>
           </div>
         </template>
 
         <div class="space-y-4">
-          <p class="text-sm text-gray-600 dark:text-gray-400">
+          <p class="text-sm text-neutral-600 dark:text-neutral-400">
             {{ isAutoCreatedProduct && (!productState.product.name || productState.product.name.trim() === '')
               ? 'Otomatik olarak oluşturulan ürün var. Ne yapmak istersiniz?'
               : 'Kaydedilmemiş değişiklikleriniz var. Ne yapmak istersiniz?' }}
@@ -322,7 +327,7 @@
               Taslak Olarak Kaydet ve Çık
             </UButton>
 
-            <UButton color="gray" variant="outline" size="lg" block class="justify-center" @click="cancelExit">
+            <UButton color="neutral" variant="outline" size="lg" block class="justify-center" @click="cancelExit">
               Vazgeç
             </UButton>
           </div>

@@ -70,25 +70,27 @@
                 <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Ödeme Yöntemi</h2>
               </div>
 
-              <!-- Havale/EFT Seçeneği -->
-              <div
-                class="border rounded-lg transition-all duration-200 hover:border-secondary-300 dark:hover:border-secondary-600"
-                :class="orderState.orderOptions.selectedPaymentMethod == 'bacs' ? 'bg-secondary-50 dark:bg-secondary-900/50 border-secondary-300 dark:border-secondary-600' : 'border-neutral-200 dark:border-neutral-700'">
-                <label class="flex items-start space-x-4 p-4 cursor-pointer">
-                  <URadio v-model="orderState.orderOptions.selectedPaymentMethod" value="bacs" name="paymentMethod"
-                    class="mt-1" />
-                  <div class="flex-1">
-                    <div class="flex items-center space-x-2 mb-2">
-                      <UIcon name="i-heroicons-building-library"
-                        class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-                      <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">Havale / EFT ile Ödeme</h3>
+              <div class="space-y-3">
+                <!-- Havale/EFT Seçeneği -->
+                <div
+                  class="border rounded-lg transition-all duration-200 hover:border-secondary-300 dark:hover:border-secondary-600"
+                  :class="orderState.orderOptions.selectedPaymentMethod == 'bacs' ? 'bg-secondary-50 dark:bg-secondary-900/50 border-secondary-300 dark:border-secondary-600' : 'border-neutral-200 dark:border-neutral-700'">
+                  <label class="flex items-start space-x-4 p-4 cursor-pointer">
+                    <URadio v-model="orderState.orderOptions.selectedPaymentMethod" value="bacs" name="paymentMethod"
+                      class="mt-1" />
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-2 mb-2">
+                        <UIcon name="i-heroicons-building-library"
+                          class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+                        <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">Havale / EFT ile Ödeme</h3>
+                      </div>
+                      <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                        Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam tutarını
+                        havale veya EFT yoluyla gönderebilirsiniz.
+                      </p>
                     </div>
-                    <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-                      Sipariş onay ekranında verilecek banka bilgilerine sipariş toplam tutarını
-                      havale veya EFT yoluyla gönderebilirsiniz.
-                    </p>
-                  </div>
-                </label>
+                  </label>
+                </div>
               </div>
             </div>
           </div>

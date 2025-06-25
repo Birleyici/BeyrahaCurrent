@@ -6,12 +6,13 @@
             <UButton @click="addFeature()" size="sm" color="primary" variant="solid" label="Ekle" trailing />
         </div>
     </div>
-    <p class="text-xs text-gray-500">Max. 5 adet öne çıkan bilgi ekleyebilirsiniz.</p>
+    <p class="text-xs text-neutral-500 dark:text-neutral-400">Max. 5 adet öne çıkan bilgi ekleyebilirsiniz.</p>
 
     <div class="my-pad-2">
         <div class="flex items-center mb-2 space-x-2" v-for="feature in productState.product.featured_infos"
             :key="feature.id">
-            <p class="px-2 py-1 rounded-md bg-gray-100 w-full">{{ feature.content }}</p>
+            <p class="px-2 py-1 rounded-md bg-neutral-100 dark:bg-neutral-700 text-neutral-900 dark:text-white w-full">
+                {{ feature.content }}</p>
             <div>
                 <UButton :loading="feature.loading" @click="deleteFeature(feature)" icon="i-heroicons-trash" size="2xs"
                     color="red" variant="solid" :trailing="false" />

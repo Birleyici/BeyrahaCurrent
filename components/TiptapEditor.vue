@@ -6,23 +6,23 @@
       <div class="toolbar-group">
         <UButton @click="editor.chain().focus().toggleBold().run()"
           :disabled="!editor.can().chain().focus().toggleBold().run()"
-          :color="editor.isActive('bold') ? 'orange' : 'gray'" :variant="editor.isActive('bold') ? 'solid' : 'ghost'"
+          :color="editor.isActive('bold') ? 'orange' : 'neutral'" :variant="editor.isActive('bold') ? 'solid' : 'ghost'"
           size="xs" icon="i-heroicons-bold" square />
         <UButton @click="editor.chain().focus().toggleItalic().run()"
           :disabled="!editor.can().chain().focus().toggleItalic().run()"
-          :color="editor.isActive('italic') ? 'orange' : 'gray'"
+          :color="editor.isActive('italic') ? 'orange' : 'neutral'"
           :variant="editor.isActive('italic') ? 'solid' : 'ghost'" size="xs" icon="i-heroicons-italic" square />
         <UButton @click="editor.chain().focus().toggleStrike().run()"
           :disabled="!editor.can().chain().focus().toggleStrike().run()"
-          :color="editor.isActive('strike') ? 'orange' : 'gray'"
+          :color="editor.isActive('strike') ? 'orange' : 'neutral'"
           :variant="editor.isActive('strike') ? 'solid' : 'ghost'" size="xs" square>
           <span class="text-xs font-bold">S</span>
         </UButton>
         <UButton @click="editor.chain().focus().toggleCode().run()"
           :disabled="!editor.can().chain().focus().toggleCode().run()"
-          :color="editor.isActive('code') ? 'orange' : 'gray'" :variant="editor.isActive('code') ? 'solid' : 'ghost'"
+          :color="editor.isActive('code') ? 'orange' : 'neutral'" :variant="editor.isActive('code') ? 'solid' : 'ghost'"
           size="xs" icon="i-heroicons-code-bracket" square />
-        <UButton @click="editor.chain().focus().unsetAllMarks().run()" color="gray" variant="ghost" size="xs"
+        <UButton @click="editor.chain().focus().unsetAllMarks().run()" color="neutral" variant="ghost" size="xs"
           icon="i-heroicons-x-mark" square title="Formatı temizle" />
       </div>
 
@@ -32,12 +32,12 @@
       <!-- Headings -->
       <div class="toolbar-group">
         <UButton @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-          :color="editor.isActive('heading', { level: 2 }) ? 'orange' : 'gray'"
+          :color="editor.isActive('heading', { level: 2 }) ? 'orange' : 'neutral'"
           :variant="editor.isActive('heading', { level: 2 }) ? 'solid' : 'ghost'" size="xs" square>
           <span class="text-xs font-bold">H2</span>
         </UButton>
         <UButton @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-          :color="editor.isActive('heading', { level: 3 }) ? 'orange' : 'gray'"
+          :color="editor.isActive('heading', { level: 3 }) ? 'orange' : 'neutral'"
           :variant="editor.isActive('heading', { level: 3 }) ? 'solid' : 'ghost'" size="xs" square>
           <span class="text-xs font-bold">H3</span>
         </UButton>
@@ -49,11 +49,11 @@
       <!-- Lists -->
       <div class="toolbar-group">
         <UButton @click="editor.chain().focus().toggleBulletList().run()"
-          :color="editor.isActive('bulletList') ? 'orange' : 'gray'"
+          :color="editor.isActive('bulletList') ? 'orange' : 'neutral'"
           :variant="editor.isActive('bulletList') ? 'solid' : 'ghost'" size="xs" icon="i-heroicons-list-bullet"
           square />
         <UButton @click="editor.chain().focus().toggleOrderedList().run()"
-          :color="editor.isActive('orderedList') ? 'orange' : 'gray'"
+          :color="editor.isActive('orderedList') ? 'orange' : 'neutral'"
           :variant="editor.isActive('orderedList') ? 'solid' : 'ghost'" size="xs" square>
           <span class="text-xs font-bold">1.</span>
         </UButton>
@@ -65,9 +65,9 @@
       <!-- Undo/Redo -->
       <div class="toolbar-group">
         <UButton @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()"
-          color="gray" variant="ghost" size="xs" icon="i-heroicons-arrow-uturn-left" square title="Geri al" />
+          color="neutral" variant="ghost" size="xs" icon="i-heroicons-arrow-uturn-left" square title="Geri al" />
         <UButton @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()"
-          color="gray" variant="ghost" size="xs" icon="i-heroicons-arrow-uturn-right" square title="Yinele" />
+          color="neutral" variant="ghost" size="xs" icon="i-heroicons-arrow-uturn-right" square title="Yinele" />
       </div>
     </div>
 
@@ -105,11 +105,11 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .tiptap-editor-container {
-  @apply border border-gray-200 dark:border-gray-600 rounded-lg overflow-hidden bg-white dark:bg-gray-800;
+  @apply border border-neutral-200 dark:border-neutral-600 rounded-lg overflow-hidden bg-white dark:bg-neutral-800;
 }
 
 .tiptap-toolbar {
-  @apply flex flex-wrap items-center gap-2 p-3 bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600;
+  @apply flex flex-wrap items-center gap-2 p-3 bg-neutral-50 dark:bg-neutral-700 border-b border-neutral-200 dark:border-neutral-600;
 }
 
 .toolbar-group {
@@ -117,7 +117,7 @@ onBeforeUnmount(() => {
 }
 
 .toolbar-divider {
-  @apply w-px h-6 bg-gray-300 dark:bg-gray-500;
+  @apply w-px h-6 bg-neutral-300 dark:bg-neutral-500;
 }
 
 .tiptap-content-wrapper {
@@ -130,20 +130,20 @@ onBeforeUnmount(() => {
 
 /* Editor content styling */
 :deep(.tiptap-editor-content .ProseMirror) {
-  @apply text-gray-900 dark:text-gray-100 focus:outline-none;
+  @apply text-neutral-900 dark:text-neutral-100 focus:outline-none;
   line-height: 1.6;
 }
 
 :deep(.tiptap-editor-content .ProseMirror h2) {
-  @apply text-xl font-semibold text-gray-900 dark:text-white mt-4 mb-2 first:mt-0;
+  @apply text-xl font-semibold text-neutral-900 dark:text-white mt-4 mb-2 first:mt-0;
 }
 
 :deep(.tiptap-editor-content .ProseMirror h3) {
-  @apply text-lg font-medium text-gray-800 dark:text-gray-100 mt-3 mb-2 first:mt-0;
+  @apply text-lg font-medium text-neutral-800 dark:text-neutral-100 mt-3 mb-2 first:mt-0;
 }
 
 :deep(.tiptap-editor-content .ProseMirror p) {
-  @apply mb-3 last:mb-0 text-gray-700 dark:text-gray-200;
+  @apply mb-3 last:mb-0 text-neutral-700 dark:text-neutral-200;
 }
 
 :deep(.tiptap-editor-content .ProseMirror ul) {
@@ -155,32 +155,32 @@ onBeforeUnmount(() => {
 }
 
 :deep(.tiptap-editor-content .ProseMirror li) {
-  @apply text-gray-700 dark:text-gray-200;
+  @apply text-neutral-700 dark:text-neutral-200;
 }
 
 :deep(.tiptap-editor-content .ProseMirror strong) {
-  @apply font-semibold text-gray-900 dark:text-white;
+  @apply font-semibold text-neutral-900 dark:text-white;
 }
 
 :deep(.tiptap-editor-content .ProseMirror em) {
-  @apply italic text-gray-700 dark:text-gray-200;
+  @apply italic text-neutral-700 dark:text-neutral-200;
 }
 
 :deep(.tiptap-editor-content .ProseMirror s) {
-  @apply line-through text-gray-600 dark:text-gray-300;
+  @apply line-through text-neutral-600 dark:text-neutral-300;
 }
 
 :deep(.tiptap-editor-content .ProseMirror code) {
-  @apply px-1.5 py-0.5 bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded font-mono text-sm;
+  @apply px-1.5 py-0.5 bg-neutral-100 dark:bg-neutral-700 text-neutral-800 dark:text-neutral-200 rounded font-mono text-sm;
 }
 
 :deep(.tiptap-editor-content .ProseMirror pre) {
-  @apply bg-gray-100 dark:bg-gray-700 p-3 rounded text-gray-800 dark:text-gray-200 font-mono text-sm overflow-x-auto mb-3;
+  @apply bg-neutral-100 dark:bg-neutral-700 p-3 rounded text-neutral-800 dark:text-neutral-200 font-mono text-sm overflow-x-auto mb-3;
 }
 
 /* Placeholder text */
 :deep(.tiptap-editor-content .ProseMirror p.is-editor-empty:first-child::before) {
-  @apply text-gray-400 dark:text-gray-500;
+  @apply text-neutral-400 dark:text-neutral-500;
   content: attr(data-placeholder);
   float: left;
   height: 0;

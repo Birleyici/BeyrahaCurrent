@@ -107,6 +107,22 @@
             </NuxtLink>
           </div>
 
+          <!-- E-Mail Section -->
+          <div class="pt-6">
+            <h3 class="px-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">
+              E-Mail Yönetimi
+            </h3>
+
+            <NuxtLink to="/management/email/sablonlar"
+              class="flex items-center px-4 py-3.5 text-neutral-700 dark:text-neutral-200 rounded-xl hover:bg-primary-50 dark:hover:bg-neutral-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group touch-manipulation"
+              :class="{ 'bg-primary-50 dark:bg-neutral-700 text-primary-600 dark:text-primary-400': $route.path.includes('/management/email/sablonlar') }"
+              @click="closeMobileSidebar">
+              <UIcon name="i-heroicons-envelope"
+                class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span class="font-medium">Şablonlar</span>
+            </NuxtLink>
+          </div>
+
           <!-- Ayarlar Section -->
           <div class="pt-6">
             <h3 class="px-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">
@@ -170,8 +186,7 @@
     <!-- Main Content Area -->
     <div class="lg:pl-64 flex flex-col min-h-screen">
       <!-- Top Header -->
-      <header
-        class="bg-white dark:bg-neutral-800 shadow-sm border-b border-neutral-200 dark:border-neutral-700 sticky top-0 z-30">
+      <header class="bg-white dark:bg-neutral-800 shadow-sm border-b border-neutral-200 dark:border-neutral-700  z-30">
         <div class="flex items-center justify-between px-4 lg:px-6 py-4">
           <!-- Mobile menu button -->
           <div class="flex items-center space-x-4 flex-1">

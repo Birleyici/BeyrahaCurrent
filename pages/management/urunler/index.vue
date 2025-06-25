@@ -14,22 +14,22 @@
     </AdminCommonPageHeader>
 
     <!-- Products Grid/List Toggle -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700">
+    <div class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700">
       <!-- View Toggle Header -->
       <div
-        class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-b border-gray-200 dark:border-gray-700 space-y-3 sm:space-y-0">
+        class="flex flex-col sm:flex-row items-start sm:items-center justify-between p-4 border-b border-neutral-200 dark:border-neutral-700 space-y-3 sm:space-y-0">
         <div class="flex items-center gap-2">
-          <span class="text-sm font-medium text-gray-700 dark:text-gray-300">
+          <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">
             {{ Array.isArray(productState.vendorProducts) ? productState.vendorProducts.length : 0 }} ürün gösteriliyor
           </span>
         </div>
 
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <UButtonGroup size="sm" orientation="horizontal" class="flex-1 sm:flex-none">
-            <UButton :color="viewMode === 'grid' ? 'primary' : 'gray'"
+            <UButton :color="viewMode === 'grid' ? 'primary' : 'neutral'"
               :variant="viewMode === 'grid' ? 'solid' : 'outline'" icon="i-heroicons-squares-2x2"
               @click="viewMode = 'grid'" class="flex-1 sm:flex-none touch-manipulation" />
-            <UButton :color="viewMode === 'table' ? 'primary' : 'gray'"
+            <UButton :color="viewMode === 'table' ? 'primary' : 'neutral'"
               :variant="viewMode === 'table' ? 'solid' : 'outline'" icon="i-heroicons-list-bullet"
               @click="viewMode = 'table'" class="flex-1 sm:flex-none touch-manipulation" />
           </UButtonGroup>
@@ -40,11 +40,11 @@
       <div v-if="viewMode === 'grid'" class="p-4 lg:p-6">
         <!-- Empty State -->
         <div v-if="paginatedProducts.length === 0" class="text-center py-12">
-          <Icon name="mdi:package-variant-closed" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
-          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+          <Icon name="mdi:package-variant-closed" class="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+          <h3 class="text-lg font-medium text-neutral-900 dark:text-white mb-2">
             Henüz ürün yok
           </h3>
-          <p class="text-gray-600 dark:text-gray-400 mb-6">
+          <p class="text-neutral-600 dark:text-neutral-400 mb-6">
             İlk ürününüzü ekleyerek başlayın
           </p>
           <UButton icon="i-heroicons-plus" color="primary" variant="solid" label="Yeni Ürün Ekle"
@@ -54,10 +54,10 @@
         <!-- Products Grid -->
         <div v-else class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 lg:gap-6">
           <div v-for="product in paginatedProducts" :key="product.id"
-            class="bg-white dark:bg-gray-800 rounded-lg shadow-sm border border-gray-200 dark:border-gray-700 hover:shadow-md transition-shadow duration-200 overflow-hidden">
+            class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 hover:shadow-md transition-shadow duration-200 overflow-hidden">
 
             <!-- Product Image -->
-            <div class="relative aspect-square bg-gray-100 dark:bg-gray-700">
+            <div class="relative aspect-square bg-neutral-100 dark:bg-neutral-700">
               <!-- Renk niteliği olan ürünlerde basit slider göster -->
               <div v-if="product.has_color_attribute && product.colorImages?.length > 0" class="relative w-full h-full">
                 <NuxtImg :src="'cl/' + getCurrentColorImage(product).image_path"
@@ -113,10 +113,10 @@
             <div class="p-4">
               <div class="mb-3">
                 <NuxtLink :to="`/management/urunler/${product.id}`"
-                  class="text-base lg:text-lg font-semibold text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors line-clamp-2 touch-manipulation">
+                  class="text-base lg:text-lg font-semibold text-neutral-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors line-clamp-2 touch-manipulation">
                   {{ product.name || `Taslak ürün #${product.id}` }}
                 </NuxtLink>
-                <p v-if="product.description" class="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
+                <p v-if="product.description" class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">
                   {{ product.description }}
                 </p>
               </div>
@@ -133,7 +133,7 @@
                       <span v-else class="font-semibold text-green-600 dark:text-green-400">
                         {{ formatPrice(product.display_price) }}
                       </span>
-                      <span class="text-xs text-gray-500 dark:text-gray-400">
+                      <span class="text-xs text-neutral-500 dark:text-neutral-400">
                         Varyasyonlara göre
                       </span>
                     </div>
@@ -150,7 +150,7 @@
                       <span class="font-semibold text-orange-600 dark:text-orange-400">
                         {{ formatPrice(product.sale_price) }}
                       </span>
-                      <span class="text-xs text-gray-500 dark:text-gray-400 line-through ml-2">
+                      <span class="text-xs text-neutral-500 dark:text-neutral-400 line-through ml-2">
                         {{ formatPrice(product.price) }}
                       </span>
                     </div>
@@ -161,7 +161,7 @@
                       </span>
                     </div>
                     <div v-else>
-                      <span class="text-sm text-gray-500 dark:text-gray-400">
+                      <span class="text-sm text-neutral-500 dark:text-neutral-400">
                         Fiyat belirtilmemiş
                       </span>
                     </div>
@@ -169,7 +169,7 @@
                 </div>
 
                 <UDropdown :items="getProductActions(product)" :popper="{ placement: 'bottom-end' }">
-                  <UButton icon="i-heroicons-ellipsis-vertical" size="xs" color="gray" variant="ghost"
+                  <UButton icon="i-heroicons-ellipsis-vertical" size="xs" color="neutral" variant="ghost"
                     class="touch-manipulation p-2" />
                 </UDropdown>
               </div>
@@ -183,30 +183,30 @@
         <!-- Mobile Card View -->
         <div class="lg:hidden">
           <div v-if="paginatedProducts.length === 0" class="text-center py-12 px-4">
-            <Icon name="mdi:package-variant-closed" class="w-16 h-16 text-gray-400 mx-auto mb-4" />
-            <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            <Icon name="mdi:package-variant-closed" class="w-16 h-16 text-neutral-400 mx-auto mb-4" />
+            <h3 class="text-lg font-medium text-neutral-900 dark:text-white mb-2">
               Henüz ürün yok
             </h3>
-            <p class="text-gray-600 dark:text-gray-400 mb-6">
+            <p class="text-neutral-600 dark:text-neutral-400 mb-6">
               İlk ürününüzü ekleyerek başlayın
             </p>
             <UButton icon="i-heroicons-plus" color="primary" variant="solid" label="Yeni Ürün Ekle"
               to="/management/urunler/yeni" class="touch-manipulation" />
           </div>
 
-          <div v-else class="divide-y divide-gray-200 dark:divide-gray-700">
+          <div v-else class="divide-y divide-neutral-200 dark:divide-neutral-700">
             <div v-for="product in paginatedProducts" :key="product.id"
-              class="p-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors">
+              class="p-4 hover:bg-neutral-50 dark:hover:bg-neutral-700/50 transition-colors">
               <div class="flex items-start space-x-4">
                 <!-- Product Image -->
                 <div
-                  class="w-16 h-16 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden flex-shrink-0">
+                  class="w-16 h-16 rounded-lg bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center overflow-hidden flex-shrink-0">
                   <!-- Renk niteliği olan ürünlerde mini renk görselleri -->
                   <div v-if="product.has_color_attribute && product.colorImages?.length > 0"
                     class="relative w-full h-full">
                     <div class="grid grid-cols-2 gap-0.5 w-full h-full p-1">
                       <div v-for="(colorImage, index) in product.colorImages.slice(0, 4)" :key="index"
-                        class="relative rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600" :class="{
+                        class="relative rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-600" :class="{
                           'col-span-2': product.colorImages.length === 1,
                           'w-full h-full': product.colorImages.length <= 4
                         }">
@@ -215,7 +215,7 @@
                       </div>
                       <!-- Fazla renk göstergesi -->
                       <div v-if="product.colorImages.length > 4"
-                        class="absolute bottom-0 right-0 w-4 h-4 bg-gray-800/80 text-white text-[8px] flex items-center justify-center rounded-full">
+                        class="absolute bottom-0 right-0 w-4 h-4 bg-neutral-800/80 text-white text-[8px] flex items-center justify-center rounded-full">
                         +{{ product.colorImages.length - 4 }}
                       </div>
                     </div>
@@ -224,7 +224,7 @@
                   <div v-else class="w-full h-full">
                     <NuxtImg v-if="getProductImagePath(product)" :src="'cl/' + getProductImagePath(product)"
                       :alt="product.name" class="w-full h-full object-cover" />
-                    <Icon v-else name="mdi:image-outline" class="w-6 h-6 text-gray-400" />
+                    <Icon v-else name="mdi:image-outline" class="w-6 h-6 text-neutral-400" />
                   </div>
                 </div>
 
@@ -233,7 +233,7 @@
                   <div class="flex items-start justify-between">
                     <div class="flex-1 min-w-0">
                       <NuxtLink :to="`/management/urunler/${product.id}`"
-                        class="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors touch-manipulation"
+                        class="font-medium text-neutral-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors touch-manipulation"
                         :class="{ '!text-red-500': !product.name }">
                         <span class="line-clamp-1">{{ product.name || `Taslak ürün #${product.id}` }}</span>
                       </NuxtLink>
@@ -242,7 +242,7 @@
                         <UBadge :color="getStatusColor(product)" variant="soft" size="xs">
                           {{ getStatusLabel(product) }}
                         </UBadge>
-                        <span v-if="product.sku" class="text-xs text-gray-500 dark:text-gray-400">
+                        <span v-if="product.sku" class="text-xs text-neutral-500 dark:text-neutral-400">
                           SKU: {{ product.sku }}
                         </span>
                       </div>
@@ -258,7 +258,7 @@
                             <span v-else class="font-semibold text-green-600 dark:text-green-400">
                               {{ formatPrice(product.display_price) }}
                             </span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400">
+                            <span class="text-xs text-neutral-500 dark:text-neutral-400">
                               Varyasyonlara göre
                             </span>
                           </div>
@@ -275,7 +275,7 @@
                             <span class="font-semibold text-orange-600 dark:text-orange-400">
                               {{ formatPrice(product.sale_price) }}
                             </span>
-                            <span class="text-xs text-gray-500 dark:text-gray-400 line-through ml-2">
+                            <span class="text-xs text-neutral-500 dark:text-neutral-400 line-through ml-2">
                               {{ formatPrice(product.price) }}
                             </span>
                           </div>
@@ -291,7 +291,7 @@
 
                     <!-- Actions -->
                     <UDropdown :items="getProductActions(product)" :popper="{ placement: 'bottom-end' }">
-                      <UButton icon="i-heroicons-ellipsis-horizontal" size="xs" color="gray" variant="ghost"
+                      <UButton icon="i-heroicons-ellipsis-horizontal" size="xs" color="neutral" variant="ghost"
                         class="touch-manipulation p-2" />
                     </UDropdown>
                   </div>
@@ -312,7 +312,7 @@
             th: { padding: 'px-4 py-3' }
           }">
             <template #id-data="{ row }">
-              <span class="text-sm font-mono text-gray-600 dark:text-gray-400">
+              <span class="text-sm font-mono text-neutral-600 dark:text-neutral-400">
                 #{{ row.id }}
               </span>
             </template>
@@ -320,12 +320,12 @@
             <template #name-data="{ row }">
               <div class="flex items-center gap-3">
                 <div
-                  class="w-10 h-10 rounded-lg bg-gray-100 dark:bg-gray-700 flex items-center justify-center overflow-hidden relative">
+                  class="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-700 flex items-center justify-center overflow-hidden relative">
                   <!-- Renk niteliği olan ürünlerde mini renk görselleri -->
                   <div v-if="row.has_color_attribute && row.colorImages?.length > 0" class="w-full h-full">
                     <div class="flex flex-wrap gap-0.5 w-full h-full p-0.5">
                       <div v-for="(colorImage, index) in row.colorImages.slice(0, 3)" :key="index"
-                        class="rounded-full overflow-hidden bg-gray-200 dark:bg-gray-600" :class="{
+                        class="rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-600" :class="{
                           'w-8 h-8': row.colorImages.length === 1,
                           'w-3 h-3': row.colorImages.length > 1
                         }">
@@ -334,7 +334,7 @@
                       </div>
                       <!-- Fazla renk göstergesi -->
                       <div v-if="row.colorImages.length > 3"
-                        class="absolute bottom-0 right-0 w-3 h-3 bg-gray-800/80 text-white text-[6px] flex items-center justify-center rounded-full">
+                        class="absolute bottom-0 right-0 w-3 h-3 bg-neutral-800/80 text-white text-[6px] flex items-center justify-center rounded-full">
                         +{{ row.colorImages.length - 3 }}
                       </div>
                     </div>
@@ -343,16 +343,16 @@
                   <div v-else class="w-full h-full">
                     <NuxtImg v-if="getProductImagePath(row)" :src="'cl/' + getProductImagePath(row)" :alt="row.name"
                       class="w-full h-full object-cover" />
-                    <Icon v-else name="mdi:image-outline" class="w-5 h-5 text-gray-400" />
+                    <Icon v-else name="mdi:image-outline" class="w-5 h-5 text-neutral-400" />
                   </div>
                 </div>
                 <div class="min-w-0 flex-1">
                   <NuxtLink :to="`/management/urunler/${row.id}`"
-                    class="font-medium text-gray-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    class="font-medium text-neutral-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
                     :class="{ '!text-red-500': !row.name }">
                     {{ row.name || `Taslak ürün #${row.id}` }}
                   </NuxtLink>
-                  <p v-if="row.description" class="text-sm text-gray-600 dark:text-gray-400 truncate">
+                  <p v-if="row.description" class="text-sm text-neutral-600 dark:text-neutral-400 truncate">
                     {{ row.description }}
                   </p>
                 </div>
@@ -369,7 +369,7 @@
                   <span v-else class="font-semibold text-green-600 dark:text-green-400">
                     {{ formatPrice(row.display_price) }}
                   </span>
-                  <p class="text-xs text-gray-500 dark:text-gray-400">
+                  <p class="text-xs text-neutral-500 dark:text-neutral-400">
                     Varyasyonlara göre
                   </p>
                 </div>
@@ -386,7 +386,7 @@
                   <span class="font-semibold text-orange-600 dark:text-orange-400">
                     {{ formatPrice(row.sale_price) }}
                   </span>
-                  <span class="text-xs text-gray-500 dark:text-gray-400 line-through ml-2">
+                  <span class="text-xs text-neutral-500 dark:text-neutral-400 line-through ml-2">
                     {{ formatPrice(row.price) }}
                   </span>
                 </div>
@@ -397,7 +397,7 @@
                   </span>
                 </div>
                 <div v-else>
-                  <span class="text-gray-500 dark:text-gray-400 text-sm">
+                  <span class="text-neutral-500 dark:text-neutral-400 text-sm">
                     Belirtilmemiş
                   </span>
                 </div>
@@ -407,7 +407,7 @@
             <template #sale_price-data="{ row }">
               <div v-if="row.is_variation_product">
                 <!-- Varyasyonlı ürünlerde sale_price ayrı gösterilmez -->
-                <span class="text-gray-500 dark:text-gray-400 text-sm">
+                <span class="text-neutral-500 dark:text-neutral-400 text-sm">
                   Varyasyonlarda
                 </span>
               </div>
@@ -419,7 +419,7 @@
                   </span>
                 </div>
                 <div v-else>
-                  <span class="text-gray-500 dark:text-gray-400 text-sm">
+                  <span class="text-neutral-500 dark:text-neutral-400 text-sm">
                     -
                   </span>
                 </div>
@@ -427,10 +427,10 @@
             </template>
 
             <template #sku-data="{ row }">
-              <span v-if="row.sku" class="text-gray-900 dark:text-white">
+              <span v-if="row.sku" class="text-neutral-900 dark:text-white">
                 {{ row.sku }}
               </span>
-              <span v-else class="text-gray-500 dark:text-gray-400 text-sm">
+              <span v-else class="text-neutral-500 dark:text-neutral-400 text-sm">
                 -
               </span>
             </template>
@@ -444,7 +444,7 @@
             <template #actions-data="{ row }">
               <div class="flex justify-end">
                 <UDropdown :items="getProductActions(row)" :popper="{ placement: 'bottom-end' }">
-                  <UButton icon="i-heroicons-ellipsis-horizontal" size="xs" color="gray" variant="ghost" />
+                  <UButton icon="i-heroicons-ellipsis-horizontal" size="xs" color="neutral" variant="ghost" />
                 </UDropdown>
               </div>
             </template>
@@ -454,8 +454,8 @@
 
       <!-- Pagination -->
       <div v-if="Array.isArray(productState.vendorProducts) && productState.vendorProducts.length > pageCount"
-        class="flex flex-col sm:flex-row justify-between items-center px-4 lg:px-6 py-4 border-t border-gray-200 dark:border-gray-700 space-y-3 sm:space-y-0">
-        <div class="text-sm text-gray-700 dark:text-gray-300 text-center sm:text-left">
+        class="flex flex-col sm:flex-row justify-between items-center px-4 lg:px-6 py-4 border-t border-neutral-200 dark:border-neutral-700 space-y-3 sm:space-y-0">
+        <div class="text-sm text-neutral-700 dark:text-neutral-300 text-center sm:text-left">
           {{ (page - 1) * pageCount + 1 }}-{{ Math.min(page * pageCount, Array.isArray(productState.vendorProducts) ?
             productState.vendorProducts.length : 0) }} / {{
             Array.isArray(productState.vendorProducts) ? productState.vendorProducts.length : 0 }} ürün
