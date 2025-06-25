@@ -172,6 +172,10 @@
                                 </th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                    Kayıt Tarihi
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                                     Son Aktivite
                                 </th>
                                 <th
@@ -207,6 +211,14 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <UBadge :color="getRoleColor(user.role)" :label="getRoleLabel(user.role)"
                                         size="sm" />
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
+                                    <div v-if="user.created_at">
+                                        {{ formatDate(user.created_at) }}
+                                    </div>
+                                    <div v-else class="text-neutral-400 dark:text-neutral-500">
+                                        Kayıt tarihi bulunamadı
+                                    </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
                                     <div v-if="user.last_activity">
@@ -311,7 +323,15 @@
 
                     <!-- Kart İçerik -->
                     <div class="p-4">
-                        <div class="flex items-center justify-between mb-3">
+                        <div class="grid grid-cols-2 gap-4 mb-3">
+                            <!-- Kayıt Tarihi -->
+                            <div>
+                                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Kayıt Tarihi</p>
+                                <p class="text-sm text-neutral-900 dark:text-neutral-100">
+                                    {{ user.created_at ? formatDate(user.created_at) : 'Bilinmiyor' }}
+                                </p>
+                            </div>
+
                             <!-- Son Aktivite -->
                             <div>
                                 <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Son Aktivite</p>
@@ -321,9 +341,9 @@
                             </div>
 
                             <!-- Sepet Durumu -->
-                            <div class="text-right">
+                            <div class="col-span-2">
                                 <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Sepet</p>
-                                <div v-if="user.cart_items_count > 0" class="flex items-center justify-end">
+                                <div v-if="user.cart_items_count > 0" class="flex items-center">
                                     <UIcon name="i-heroicons-shopping-cart" class="w-4 h-4 text-orange-500 mr-1" />
                                     <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                                         {{ user.cart_items_count }} ürün
@@ -416,6 +436,22 @@
                                     class="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Rol</label>
                                 <UBadge :color="getRoleColor(selectedUser.role)"
                                     :label="getRoleLabel(selectedUser.role)" size="sm" />
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Kayıt
+                                    Tarihi</label>
+                                <p class="text-sm text-neutral-900 dark:text-neutral-100">
+                                    {{ selectedUser.created_at ? formatDate(selectedUser.created_at) : 'Bilinmiyor' }}
+                                </p>
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Son
+                                    Giriş</label>
+                                <p class="text-sm text-neutral-900 dark:text-neutral-100">
+                                    {{ selectedUser.last_activity ? formatDate(selectedUser.last_activity) : `Hiç giriş
+                                    yapmamış` }}
+                                </p>
                             </div>
                         </div>
                     </div>
