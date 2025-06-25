@@ -180,6 +180,10 @@
                                 </th>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
+                                    Adres
+                                </th>
+                                <th
+                                    class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                                     Sepet
                                 </th>
                                 <th
@@ -226,6 +230,20 @@
                                     </div>
                                     <div v-else class="text-neutral-400 dark:text-neutral-500">
                                         Hiç giriş yapmamış
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div v-if="user.addresses_count > 0" class="flex items-center">
+                                        <UIcon name="i-heroicons-map-pin" class="w-4 h-4 text-green-500 mr-2" />
+                                        <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                            {{ user.addresses_count }} adres
+                                        </span>
+                                    </div>
+                                    <div v-else class="flex items-center">
+                                        <UIcon name="i-heroicons-x-mark" class="w-4 h-4 text-red-500 mr-2" />
+                                        <span class="text-sm text-neutral-400 dark:text-neutral-500">
+                                            Adres yok
+                                        </span>
                                     </div>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
@@ -340,6 +358,23 @@
                                 </p>
                             </div>
 
+                            <!-- Adres -->
+                            <div class="col-span-2">
+                                <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Adres</p>
+                                <div v-if="user.addresses_count > 0" class="flex items-center">
+                                    <UIcon name="i-heroicons-map-pin" class="w-4 h-4 text-green-500 mr-2" />
+                                    <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                        {{ user.addresses_count }} adres
+                                    </span>
+                                </div>
+                                <div v-else class="flex items-center">
+                                    <UIcon name="i-heroicons-x-mark" class="w-4 h-4 text-red-500 mr-2" />
+                                    <span class="text-sm text-neutral-400 dark:text-neutral-500">
+                                        Adres yok
+                                    </span>
+                                </div>
+                            </div>
+
                             <!-- Sepet Durumu -->
                             <div class="col-span-2">
                                 <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Sepet</p>
@@ -452,6 +487,23 @@
                                     {{ selectedUser.last_activity ? formatDate(selectedUser.last_activity) : `Hiç giriş
                                     yapmamış` }}
                                 </p>
+                            </div>
+                            <div>
+                                <label
+                                    class="block text-xs font-medium text-neutral-500 dark:text-neutral-400 mb-1">Adres
+                                    Durumu</label>
+                                <div v-if="selectedUser.addresses_count > 0" class="flex items-center">
+                                    <UIcon name="i-heroicons-map-pin" class="w-4 h-4 text-green-500 mr-2" />
+                                    <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
+                                        {{ selectedUser.addresses_count }} adres kayıtlı
+                                    </span>
+                                </div>
+                                <div v-else class="flex items-center">
+                                    <UIcon name="i-heroicons-x-mark" class="w-4 h-4 text-red-500 mr-2" />
+                                    <span class="text-sm text-neutral-400 dark:text-neutral-500">
+                                        Kayıtlı adres yok
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
