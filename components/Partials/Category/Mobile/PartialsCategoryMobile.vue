@@ -1,16 +1,18 @@
 <template>
   <div class="space-y-6">
-    <!-- Filtre ve Sıralama Butonları -->
+    <!-- Filtre ve Sıralama -->
     <div
       class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm p-4">
-      <div class="grid grid-cols-2 gap-3">
-        <UButton @click="isOpenFiltersSlideOver = true" variant="outline" color="gray"
-          class="flex-1 justify-center h-12" icon="i-heroicons-funnel">
-          Sıralama
-        </UButton>
+      <div class="space-y-3">
+        <!-- Sıralama Select -->
+        <div>
 
+          <USelect v-model="uSelect" :options="sortOptions" option-attribute="name" size="md" />
+        </div>
+
+        <!-- Kategoriler Butonu -->
         <UButton @click="isOpenCategorySlideOver = true" variant="outline" color="gray"
-          class="flex-1 justify-center h-12" icon="i-heroicons-squares-2x2">
+          class="w-full justify-center h-10" icon="i-heroicons-squares-2x2">
           Kategoriler
         </UButton>
       </div>
@@ -35,33 +37,6 @@
         </div>
       </div>
     </div>
-
-    <!-- Sıralama Slide Over -->
-    <USlideover side="bottom" v-model="isOpenFiltersSlideOver" :ui="{ wrapper: 'fixed inset-0 flex z-[999999]' }">
-      <UCard class="flex flex-col flex-1 bg-white dark:bg-neutral-800" :ui="{
-        body: { base: 'flex-1' },
-        ring: '',
-        divide: 'divide-y divide-neutral-200 dark:divide-neutral-700',
-      }">
-        <template #header>
-          <div class="flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-              <div
-                class="w-10 h-10 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center">
-                <UIcon name="i-heroicons-funnel" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
-              </div>
-              <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Sıralama</h3>
-            </div>
-            <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
-              @click="isOpenFiltersSlideOver = false" />
-          </div>
-        </template>
-
-        <div class="space-y-4 p-4">
-          <USelect v-model="uSelect" :options="sortOptions" option-attribute="name" size="lg" class="w-full" />
-        </div>
-      </UCard>
-    </USlideover>
 
     <!-- Kategori Slide Over -->
     <USlideover side="bottom" v-model="isOpenCategorySlideOver" :ui="{ wrapper: 'fixed inset-0 flex z-[999999]' }">
@@ -142,15 +117,14 @@
 </template>
 
 <script setup>
+
 const categoryState = useCategoryState();
-const isOpenFiltersSlideOver = ref(false);
 const isOpenCategorySlideOver = ref(false);
 const props = defineProps(["products", "loading"]);
 const uSelect = defineModel("uSelect");
 
-// Native back button handlers - TEK SATIRLAR!
+// Native back button handler - sadece kategori slide over için
 const { useBackHandler } = await import('~/composables/useNativeBackHandler.js')
-useBackHandler(isOpenFiltersSlideOver)
 useBackHandler(isOpenCategorySlideOver)
 
 const sortOptions = [
