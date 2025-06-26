@@ -1,6 +1,6 @@
 <template>
   <div
-    class="card group cursor-pointer max-w-[280px] w-full bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-300"
+    class="card group cursor-pointer w-[220px] w-full bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-300"
     :class="{ 'opacity-75': !isProductInStock }">
     <div class="relative overflow-hidden rounded-t-xl">
       <NuxtLink :to="productUrl">
