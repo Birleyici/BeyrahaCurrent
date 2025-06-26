@@ -250,6 +250,7 @@ const props = defineProps({
 
 const cartState = useCartState();
 const { $mainState } = useNuxtApp();
+const nuxtApp = useNuxtApp();
 const currentRoute = useRoute();
 const toast = useToast();
 
@@ -426,16 +427,63 @@ const selectColorOption = (attributeName, termName, item) => {
 
 const initialColor = () => {
   const urlParams = currentRoute.params?.urlParams;
-  if (urlParams && urlParams.includes('-')) {
-    // Son tire işaretinin pozisyonunu bul
-    const lastDashPos = urlParams.lastIndexOf('-');
-    const colorTermId = urlParams.substring(lastDashPos + 1);
 
-    if (colorTermId) {
-      const color = props.attrsAndVarsState.find(i => i.name === 'Renk');
-      const colorTerm = color?.options.find(c => c.term_id === parseInt(colorTermId))
-      selectedColor.value = colorTerm
-      selectOption('Renk', colorTerm?.term_name, colorTerm)
+  // Renk niteliğini bul
+  const colorAttribute = props.attrsAndVarsState.find(i => i.name === 'Renk');
+
+  if (!colorAttribute || !colorAttribute.options || colorAttribute.options.length === 0) {
+    return;
+  }
+
+  // URL parametresi varsa URL'den renk seçimi yap
+  if (urlParams) {
+    // Eğer sadece sayısal ID ise ve renk niteliği varsa ilk rengi seç
+    if (!isNaN(urlParams) && Number.isInteger(Number(urlParams))) {
+      const firstColor = colorAttribute.options[0];
+      if (firstColor) {
+        selectedColor.value = firstColor;
+        selectOption('Renk', firstColor.term_name, firstColor);
+      }
+      return;
+    }
+
+    // URL'de tire işareti varsa renk parametresi kontrolü yap
+    if (urlParams.includes('-')) {
+      // Son tire işaretinin pozisyonunu bul
+      const lastDashPos = urlParams.lastIndexOf('-');
+      const colorTermId = urlParams.substring(lastDashPos + 1);
+
+      if (colorTermId && !isNaN(colorTermId)) {
+        const colorTerm = colorAttribute.options.find(c => c.term_id === parseInt(colorTermId));
+        if (colorTerm) {
+          selectedColor.value = colorTerm;
+          selectOption('Renk', colorTerm.term_name, colorTerm);
+          return;
+        }
+      }
+    }
+  }
+
+  // URL parametresi yoksa veya geçerli renk bulunamadıysa varsayılan olarak ilk rengi seç
+  const firstColor = colorAttribute.options[0];
+  if (firstColor) {
+    selectedColor.value = firstColor;
+    selectOption('Renk', firstColor.term_name, firstColor);
+
+    // URL'yi de güncelle (sadece renk seçildiğinde)
+    if (process.client) {
+      nextTick(() => {
+        const currentSlug = currentRoute.params.slug;
+        const newParams = nuxtApp.$slugify(firstColor.term_name, { lower: true }) + '-' + firstColor.term_id;
+        const newUrl = '/urun/' + currentSlug + '--' + newParams;
+
+        // URL'yi güncellerken geçmişe yeni bir giriş eklemeyelim, mevcut URL'yi değiştirelim
+        const currentState = window.history.state;
+        window.history.replaceState(currentState, '', newUrl);
+
+        // Route params'ı da güncelle
+        currentRoute.params.urlParams = newParams;
+      });
     }
   }
 };

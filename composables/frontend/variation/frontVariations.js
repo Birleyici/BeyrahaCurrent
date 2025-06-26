@@ -160,6 +160,17 @@ export const useVariationsFront = () => {
 
         window.history.replaceState(currentState, '', newUrl)
       }
+    } else if (attributeName === 'Renk' && process.client) {
+      // Renk seçimi kaldırıldığında URL'yi renk parametresi olmadan güncelle
+      const currentSlug = router.currentRoute.value.params.slug
+      const productId = productState.product.id
+      const newUrl = '/urun/' + currentSlug + '--' + productId
+
+      router.currentRoute.value.params.urlParams = productId.toString()
+      // Preserve the current history state
+      const currentState = window.history.state
+
+      window.history.replaceState(currentState, '', newUrl)
     }
 
     selectedOptions.value = {
