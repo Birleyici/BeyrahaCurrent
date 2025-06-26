@@ -113,10 +113,12 @@
                                 {{ product.name }}
                             </h4>
                             <div class="flex items-center justify-between mt-0.5">
-                                <p
-                                    class="text-sm font-semibold text-secondary-600 dark:text-secondary-400 transition-colors duration-300">
-                                    {{ formatPrice(product.price) }}
-                                </p>
+                                <div class="text-sm">
+                                    <PartialsProductPrice type="card" :price="product.price"
+                                        :sale-price="product.sale_price" :display-price="product.display_price"
+                                        :is-variation-product="product.is_variation_product"
+                                        :has-price-range="product.has_price_range" />
+                                </div>
                                 <UIcon name="i-heroicons-arrow-right"
                                     class="w-3 h-3 text-neutral-400 dark:text-neutral-500 group-hover:text-secondary-500 dark:group-hover:text-secondary-400 group-hover:translate-x-0.5 transition-all duration-150" />
                             </div>
@@ -170,7 +172,7 @@
                                     class="w-3 h-3 text-secondary-500 dark:text-secondary-400" />
                             </div>
                             <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300">{{ category.name
-                            }}</span>
+                                }}</span>
                         </button>
                     </div>
                 </div>

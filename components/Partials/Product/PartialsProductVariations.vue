@@ -425,12 +425,18 @@ const selectColorOption = (attributeName, termName, item) => {
 }
 
 const initialColor = () => {
-  const colorTermId = currentRoute.params?.urlParams.split('-')[1]
-  if (colorTermId) {
-    const color = props.attrsAndVarsState.find(i => i.name === 'Renk');
-    const colorTerm = color?.options.find(c => c.term_id === parseInt(colorTermId))
-    selectedColor.value = colorTerm
-    selectOption('Renk', colorTerm?.term_name, colorTerm)
+  const urlParams = currentRoute.params?.urlParams;
+  if (urlParams && urlParams.includes('-')) {
+    // Son tire işaretinin pozisyonunu bul
+    const lastDashPos = urlParams.lastIndexOf('-');
+    const colorTermId = urlParams.substring(lastDashPos + 1);
+
+    if (colorTermId) {
+      const color = props.attrsAndVarsState.find(i => i.name === 'Renk');
+      const colorTerm = color?.options.find(c => c.term_id === parseInt(colorTermId))
+      selectedColor.value = colorTerm
+      selectOption('Renk', colorTerm?.term_name, colorTerm)
+    }
   }
 };
 initialColor()
