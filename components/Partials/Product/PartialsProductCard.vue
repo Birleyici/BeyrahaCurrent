@@ -5,7 +5,7 @@
     <div class="relative overflow-hidden rounded-t-xl">
       <NuxtLink :to="productUrl">
         <NuxtImg sizes="390px sm:300px md:390px" v-if="props.product.coverImage" :src="`cl/${props.product.coverImage}`"
-          format="webp" quality="90" fit="inside" :loading="imgLoadingType" :preload="imgPreload" width="400"
+          format="webp" quality="90" fit="contain" :loading="imgLoadingType" :preload="imgPreload" width="400"
           height="600" :alt="props.product.name" :background="backgroundColor"
           class="w-full h-[320px] object-cover transition-transform duration-300"
           :class="{ 'group-hover:scale-105': isProductInStock }" />
