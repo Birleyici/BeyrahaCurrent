@@ -59,8 +59,10 @@
                     class="group relative aspect-square rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-secondary-400 dark:focus:ring-secondary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800">
 
                     <!-- Renk Resmi -->
-                    <NuxtImg :src="getTermImageSrc(item, item.term_name)" :alt="item.term_name" width="100" height="120"
-                      fit="cover"
+                    <NuxtImg v-if="item?.term_images?.[0]?.path" :src="getTermImageSrc(item, item.term_name)"
+                      :alt="item.term_name" width="100" height="120" fit="cover"
+                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
+                    <img v-else src="/img-placeholder.jpg" :alt="item.term_name"
                       class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
 
                     <!-- Hover Overlay -->

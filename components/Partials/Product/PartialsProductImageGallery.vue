@@ -8,10 +8,14 @@
         <div class="flex transition-transform duration-500 ease-in-out h-full"
           :style="{ transform: `translateX(-${currentIndex * 100}%)` }">
           <div v-for="(image, index) in images" :key="index" class="w-full h-full flex-shrink-0">
-            <NuxtImg :src="'cl/' + image.path" :alt="image.alt"
+            <NuxtImg v-if="!image.placeholder && image.path !== '/img-placeholder.jpg'" :src="'cl/' + image.path"
+              :alt="image.alt"
               class="w-full h-full object-cover cursor-zoom-in transition-transform duration-300 group-hover:scale-105"
               @click="openFullscreen" format="webp" quality="90" :width="600" :height="800" fit="inside"
               :background="backgroundColor" />
+            <img v-else src="/img-placeholder.jpg" alt="Ürün Resmi"
+              class="w-full h-full object-cover cursor-zoom-in transition-transform duration-300 group-hover:scale-105"
+              @click="openFullscreen" />
           </div>
         </div>
 
@@ -56,8 +60,10 @@
           'hover:ring-2 hover:ring-neutral-300 hover:ring-offset-1': index !== currentIndex
         }"
           class="relative aspect-square rounded-lg overflow-hidden bg-neutral-100 transition-all duration-300 hover:scale-105">
-          <NuxtImg :src="'cl/' + image.path" :alt="image.alt" class="w-full h-full object-cover" format="webp"
-            quality="60" :width="120" :height="120" fit="cover" />
+          <NuxtImg v-if="!image.placeholder && image.path !== '/img-placeholder.jpg'" :src="'cl/' + image.path"
+            :alt="image.alt" class="w-full h-full object-cover" format="webp" quality="60" :width="120" :height="120"
+            fit="cover" />
+          <img v-else src="/img-placeholder.jpg" alt="Ürün Resmi" class="w-full h-full object-cover" />
         </button>
       </div>
     </div>
@@ -95,12 +101,19 @@
               style="touch-action: none;" @wheel="handleWheel" @mousedown="handleMouseDown" @mousemove="handleMouseMove"
               @mouseup="handleMouseUp" @mouseleave="handleMouseUp" @touchstart="handleTouchStart"
               @touchmove="handleTouchMove" @touchend="handleTouchEnd">
-              <NuxtImg ref="zoomImage" :src="'cl/' + currentImage.path" :alt="currentImage.alt" :style="imageStyle"
+              <NuxtImg v-if="!currentImage.placeholder && currentImage.path !== '/img-placeholder.jpg'" ref="zoomImage"
+                :src="'cl/' + currentImage.path" :alt="currentImage.alt" :style="imageStyle"
                 class="w-full h-full object-contain rounded-lg cursor-grab touch-none" :class="{
                   'cursor-grabbing': isDragging,
                   'transition-transform duration-200': !isDragging && zoomLevel === 1,
                   'transition-none': isDragging || zoomLevel > 1
                 }" format="webp" quality="95" @click.stop="handleImageClick" @dragstart.prevent fit="cover" />
+              <img v-else ref="zoomImage" src="/img-placeholder.jpg" :alt="currentImage.alt" :style="imageStyle"
+                class="w-full h-full object-contain rounded-lg cursor-grab touch-none" :class="{
+                  'cursor-grabbing': isDragging,
+                  'transition-transform duration-200': !isDragging && zoomLevel === 1,
+                  'transition-none': isDragging || zoomLevel > 1
+                }" @click.stop="handleImageClick" @dragstart.prevent />
 
               <!-- Zoom Kontrolleri -->
               <div class="absolute bottom-4 right-4 flex flex-col space-y-3">
@@ -150,8 +163,10 @@
                 'ring-2 ring-white': index === currentIndex,
                 'opacity-60 hover:opacity-100': index !== currentIndex
               }" class="w-12 h-12 rounded-lg overflow-hidden transition-all duration-200">
-                <NuxtImg :src="'cl/' + image.path" :alt="image.alt" class="w-full h-full object-cover" format="webp"
-                  quality="50" :width="48" :height="48" fit="cover" />
+                <NuxtImg v-if="!image.placeholder && image.path !== '/img-placeholder.jpg'" :src="'cl/' + image.path"
+                  :alt="image.alt" class="w-full h-full object-cover" format="webp" quality="50" :width="48"
+                  :height="48" fit="cover" />
+                <img v-else src="/img-placeholder.jpg" alt="Ürün Resmi" class="w-full h-full object-cover" />
               </button>
             </div>
           </div>
