@@ -313,6 +313,7 @@ export const useEmailTemplatePresets = () => {
       'siparis.kargo_ucreti': 'Kargo Ücreti',
       'siparis.genel_toplam': 'Genel Toplam (Kargo Dahil)',
       'siparis.urunler': 'Sipariş Ürünleri (Sadece TR Satırları)',
+      'siparis.urunler_degerlendirme': 'Sipariş Ürünleri (Değerlendirme Butonları ile)',
       'siparis.detay': 'Sipariş Detay Tablosu (HTML)',
       'siparis.kargo_takip': 'Kargo Takip Numarası',
       'siparis.kargo_firma': 'Kargo Firması Adı',
@@ -441,7 +442,40 @@ export const useEmailTemplatePresets = () => {
                   <span style="font-weight: bold; font-size: 16px;">91.90 TL</span>
               </div>
           </div>
-      </div>`
+      </div>`,
+      '{siparis.urunler_degerlendirme}': `
+        <div style="border-bottom: 1px solid #e5e5e5; padding: 15px 0; display: flex; align-items: center; justify-content: space-between;">
+          <div style="flex: 1;">
+            <div style="font-weight: bold; margin-bottom: 5px;">
+              <a href="https://beyraha.com/urun/organik-zeytinyagi" style="color: #007bff; text-decoration: underline; font-weight: 500;" target="_blank">2x Organik Zeytinyağı</a>
+            </div>
+            <div style="font-size: 12px; color: #666; margin-bottom: 5px;">Boyut: 500ml, Renk: Altın Sarısı</div>
+            <div style="font-size: 14px; color: #333;">Birim: 99.00 TL × 2 = <strong>198.00 TL</strong></div>
+          </div>
+          <div style="margin-left: 20px;">
+            <a href="https://beyraha.com/urun/organik-zeytinyagi?degerlendirme=true" 
+               style="background: #f59e0b; color: white; padding: 8px 16px; text-decoration: none; border-radius: 6px; font-size: 12px; font-weight: bold; display: inline-block;" 
+               target="_blank">
+              ⭐ Değerlendir
+            </a>
+          </div>
+        </div>
+        <div style="border-bottom: 1px solid #e5e5e5; padding: 15px 0; display: flex; align-items: center; justify-content: space-between;">
+          <div style="flex: 1;">
+            <div style="font-weight: bold; margin-bottom: 5px;">
+              <a href="https://beyraha.com/urun/dogal-bal" style="color: #007bff; text-decoration: underline; font-weight: 500;" target="_blank">1x Doğal Bal</a>
+            </div>
+            <div style="font-size: 14px; color: #333;">Birim: 91.90 TL × 1 = <strong>91.90 TL</strong></div>
+          </div>
+          <div style="margin-left: 20px;">
+            <a href="https://beyraha.com/urun/dogal-bal?degerlendirme=true" 
+               style="background: #f59e0b; color: white; padding: 8px 16px; text-decoration: none; border-radius: 6px; font-size: 12px; font-weight: bold; display: inline-block;" 
+               target="_blank">
+              ⭐ Değerlendir
+            </a>
+          </div>
+        </div>
+      `
     }
   }
 

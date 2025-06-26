@@ -96,8 +96,8 @@
         <ClientOnly>
             <div class="fixed bottom-6 right-6 lg:hidden">
                 <UButton v-if="canWriteReview" @click="showReviewForm = true" color="secondary" variant="solid"
-                    size="xl" class="rounded-full shadow-lg">
-                    <UIcon name="i-heroicons-pencil-square" class="w-6 h-6" />
+                    icon="i-heroicons-pencil-square" size="lg" class="rounded-full shadow-lg">
+                    Değerlendir
                 </UButton>
             </div>
         </ClientOnly>

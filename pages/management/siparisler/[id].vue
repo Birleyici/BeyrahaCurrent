@@ -62,6 +62,38 @@
                 </UBadge>
               </div>
 
+              <!-- Sipariş Durumu Değiştirme -->
+              <div v-if="editingMode" class="mb-6">
+                <div
+                  class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                  <div class="flex items-start space-x-3 mb-4">
+                    <UIcon name="i-heroicons-cog-6-tooth" class="w-5 h-5 text-amber-600 dark:text-amber-400 mt-0.5" />
+                    <div>
+                      <h4 class="text-sm font-medium text-amber-900 dark:text-amber-100 mb-1">Sipariş Durumu Değiştir
+                      </h4>
+                      <p class="text-xs text-amber-700 dark:text-amber-300">Siparişin durumunu değiştirerek müşteriye
+                        bildirim gönderebilirsiniz.</p>
+                    </div>
+                  </div>
+
+                  <div class="space-y-3">
+                    <div>
+                      <label class="text-sm font-medium text-amber-800 dark:text-amber-200 mb-2 block">Yeni
+                        Durum</label>
+                      <USelect v-model="selectedStatus" :options="statusOptions" option-attribute="label"
+                        value-attribute="value" placeholder="Durum seçin" :ui="{ rounded: 'rounded-lg' }"
+                        class="w-full" />
+                    </div>
+
+                    <UButton @click="updateOrderStatus" :loading="statusUpdateLoading"
+                      :disabled="!selectedStatus || selectedStatus === orderState.vendorOrder.status" color="amber"
+                      size="sm" block icon="i-heroicons-check-circle">
+                      {{ statusUpdateLoading ? 'Güncelleniyor...' : 'Durumu Güncelle' }}
+                    </UButton>
+                  </div>
+                </div>
+              </div>
+
               <!-- Kargo Kodu Bildirimi -->
               <div v-if="shippingCode" class="mb-6">
                 <div
@@ -336,6 +368,52 @@ const trackingUrl = computed(() => {
 const openTrackingUrl = () => {
   if (trackingUrl.value) {
     window.open(trackingUrl.value, '_blank')
+  }
+}
+
+const selectedStatus = ref(null)
+const statusUpdateLoading = ref(false)
+
+const statusOptions = [
+  { label: 'Bekleme', value: 'pending' },
+  { label: 'İşleme Alındı', value: 'processing' },
+  { label: 'Hazırlandı', value: 'prepared' },
+  { label: 'Kargoya Verildi', value: 'shipped' },
+  { label: 'Yolda', value: 'in_transit' },
+  { label: 'Teslim Edildi', value: 'delivered' },
+  { label: 'İptal Edildi', value: 'cancelled' },
+  { label: 'İade Edildi', value: 'returned' },
+  { label: 'Başarısız', value: 'failed' }
+]
+
+const updateOrderStatus = async () => {
+  if (!selectedStatus.value || selectedStatus.value === orderState.vendorOrder.status) return
+
+  statusUpdateLoading.value = true
+
+  try {
+    await orderState.updateStatus(orderState.vendorOrder, selectedStatus.value)
+
+    // Siparişi yeniden yükle
+    await orderState.fetchVendorOrder(orderId)
+
+    selectedStatus.value = null
+    toast.add({
+      title: 'Sipariş durumu güncellendi!',
+      description: `Yeni durum: ${statusOptions.find(s => s.value === orderState.vendorOrder.status)?.label}`,
+      icon: 'i-heroicons-check-circle',
+      color: 'green'
+    })
+  } catch (error) {
+    console.error('Sipariş durumu güncellenirken hata:', error)
+    toast.add({
+      title: 'Sipariş durumu güncellenirken bir hata oluştu!',
+      description: 'Lütfen tekrar deneyiniz.',
+      color: 'red',
+      icon: 'i-heroicons-exclamation-triangle'
+    })
+  } finally {
+    statusUpdateLoading.value = false
   }
 }
 </script>
