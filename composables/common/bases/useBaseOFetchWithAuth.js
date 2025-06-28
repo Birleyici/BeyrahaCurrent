@@ -15,6 +15,7 @@ function addRefreshSubscriber(callback) {
 }
 
 export async function useBaseOFetchWithAuth(url, options = {}) {
+  const { handleError } = await import('~/composables/useErrorHandler.js').then(m => m.useErrorHandler())
   const authStore = useAuthStore()
   const apiBaseUrl = useBaseUrl()
   const route = useRoute()
@@ -57,7 +58,12 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
     return response
 
   } catch (error) {
-    console.error('API Error:', error)
+    // Merkezi hata sistemi ile hata işle
+    const normalizedError = await handleError(error, {
+      context: `useBaseOFetchWithAuth: ${url}`,
+      showToast: false, // API hatalarında otomatik toast gösterme
+      redirectOnAuth: false // Token refresh işlemini kendimiz yapacağız
+    })
 
     // 401 Unauthorized hatası kontrolü
     if (error.response && error.response.status === 401) {

@@ -113,9 +113,9 @@
               E-Mail Yönetimi
             </h3>
 
-            <NuxtLink to="/management/email/sablonlar"
+            <NuxtLink to="/management/email/blade-sablonlar"
               class="flex items-center px-4 py-3.5 text-neutral-700 dark:text-neutral-200 rounded-xl hover:bg-primary-50 dark:hover:bg-neutral-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group touch-manipulation"
-              :class="{ 'bg-primary-50 dark:bg-neutral-700 text-primary-600 dark:text-primary-400': $route.path.includes('/management/email/sablonlar') }"
+              :class="{ 'bg-primary-50 dark:bg-neutral-700 text-primary-600 dark:text-primary-400': $route.path.includes('/management/email/blade-sablonlar') }"
               @click="closeMobileSidebar">
               <UIcon name="i-heroicons-envelope"
                 class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />

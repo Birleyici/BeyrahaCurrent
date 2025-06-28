@@ -132,7 +132,10 @@ export function isEmptyObject(obj) {
   return Object.keys(obj).length === 0 && obj.constructor === Object
 }
 
+// DEPRECATED: Bu fonksiyon eskidir, useErrorHandler composable'ını kullanın
 export function parseError(error) {
+  console.warn('parseError is deprecated, use useErrorHandler instead')
+  
   let errorType = 'general' // Varsayılan hata türü
   let errors = []
   let statusCode = error.response?.status || 500 // Varsayılan 500

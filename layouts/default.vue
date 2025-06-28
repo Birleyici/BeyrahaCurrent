@@ -15,6 +15,9 @@
     <footer class="flex-shrink-0 mt-8">
       <LazyPartialsCommonFooter />
     </footer>
+
+    <!-- Error Monitor (Development only) -->
+    <LazyErrorMonitor />
   </div>
 </template>
 

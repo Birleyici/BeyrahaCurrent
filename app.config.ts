@@ -275,7 +275,7 @@ ui: {
     },
  
     button: {
-      base: 'focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0',
+      base: 'flex items-center justify-center focus:outline-none focus-visible:outline-0 disabled:cursor-not-allowed disabled:opacity-75 flex-shrink-0',
       font: 'font-medium',
       rounded: 'rounded-xl',
       size: {

@@ -253,6 +253,7 @@ const { $mainState } = useNuxtApp();
 const nuxtApp = useNuxtApp();
 const currentRoute = useRoute();
 const toast = useToast();
+const { whatsappNumber } = useSettings();
 
 const qyt = ref(1);
 
@@ -824,11 +825,19 @@ const orderViaWhatsApp = () => {
 
 Detayları konuşabilir miyiz?`;
 
-  // WhatsApp numarası - bu değer dinamik olarak ayarlanmalı
-  const whatsappNumber = "905555555555"; // Bu değer ayarlardan gelmelidir
+  // WhatsApp numarasını ayarlardan al
+  if (!whatsappNumber.value) {
+    toast.add({
+      title: 'WhatsApp numarası bulunamadı!',
+      description: 'Lütfen normal iletişim yöntemlerini kullanın.',
+      color: 'red',
+      icon: "i-heroicons-exclamation-triangle",
+    });
+    return;
+  }
 
   // WhatsApp URL'sini oluştur
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
+  const whatsappUrl = `https://wa.me/${whatsappNumber.value}?text=${encodeURIComponent(message)}`;
 
   // WhatsApp'ı aç
   window.open(whatsappUrl, '_blank');
