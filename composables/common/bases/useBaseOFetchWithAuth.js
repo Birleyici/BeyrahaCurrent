@@ -1,4 +1,5 @@
 import { defu } from 'defu'
+import { useErrorHandler } from '~/composables/useErrorHandler'
 
 let isRefreshing = false
 let refreshSubscribers = []
@@ -15,7 +16,7 @@ function addRefreshSubscriber(callback) {
 }
 
 export async function useBaseOFetchWithAuth(url, options = {}) {
-  const { handleError } = await import('~/composables/useErrorHandler.js').then(m => m.useErrorHandler())
+  const { handleError } = useErrorHandler()
   const authStore = useAuthStore()
   const apiBaseUrl = useBaseUrl()
   const route = useRoute()
