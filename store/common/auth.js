@@ -347,6 +347,15 @@ export const useAuthStore = defineStore(
       }
     }
 
+    // Setter metodları (review token için gerekli)
+    const setToken = (newToken) => {
+      token.value = newToken
+    }
+
+    const setCurrentUser = (user) => {
+      currentUser.value = user
+    }
+
     return {
       user,
       currentUser,
@@ -362,7 +371,9 @@ export const useAuthStore = defineStore(
       changePassword,
       fetchUser,
       isTokenValid,
-      startTokenRefreshTimer
+      startTokenRefreshTimer,
+      setToken,
+      setCurrentUser
     }
   },
   {

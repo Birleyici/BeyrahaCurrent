@@ -142,6 +142,8 @@ const {
     checkCanUserReview
 } = useProductReviews()
 
+const { handleReviewTokenFromUrl } = useReviewToken()
+
 // Local state
 const showReviewForm = ref(false)
 const showAuthModal = ref(false)
@@ -302,12 +304,24 @@ onMounted(async () => {
             await authStore.fetchUser()
         }
 
+        // Review token'ı kontrol et ve handle et
+        const tokenResult = await handleReviewTokenFromUrl()
+
         // Kullanıcı giriş yapmışsa can review check yap
         if (isAuthenticated.value) {
             canUserReview.value = await checkCanUserReview(props.product.id)
         }
 
         await fetchReviews(props.product.id)
+
+        // Review token ile giriş yapıldıysa modal'ı aç
+        if (tokenResult?.shouldOpenReview) {
+            // Biraz bekle ki veriler yüklensin
+            setTimeout(() => {
+                showReviewForm.value = true
+            }, 1000)
+        }
+
     } catch (error) {
         console.error('ProductReviewsSection mount error:', error)
         toast.add({

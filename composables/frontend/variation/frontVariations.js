@@ -152,7 +152,14 @@ export const useVariationsFront = () => {
           nuxtApp.$slugify(colorTerm.term_name, { lower: true }) +
           '-' +
           colorTerm.term_id
-        const newUrl = '/urun/' + currentSlug + '--' + newParams
+        
+        // Mevcut query parametrelerini koru
+        const currentQuery = router.currentRoute.value.query
+        const queryString = Object.keys(currentQuery).length > 0 
+          ? '?' + new URLSearchParams(currentQuery).toString()
+          : ''
+        
+        const newUrl = '/urun/' + currentSlug + '--' + newParams + queryString
 
         router.currentRoute.value.params.urlParams = newParams
         // Preserve the current history state
@@ -164,7 +171,14 @@ export const useVariationsFront = () => {
       // Renk seçimi kaldırıldığında URL'yi renk parametresi olmadan güncelle
       const currentSlug = router.currentRoute.value.params.slug
       const productId = productState.product.id
-      const newUrl = '/urun/' + currentSlug + '--' + productId
+      
+      // Mevcut query parametrelerini koru
+      const currentQuery = router.currentRoute.value.query
+      const queryString = Object.keys(currentQuery).length > 0 
+        ? '?' + new URLSearchParams(currentQuery).toString()
+        : ''
+      
+      const newUrl = '/urun/' + currentSlug + '--' + productId + queryString
 
       router.currentRoute.value.params.urlParams = productId.toString()
       // Preserve the current history state
