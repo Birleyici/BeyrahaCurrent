@@ -56,37 +56,58 @@ export const useAuthStore = defineStore(
       }
     }
 
-    const login = async () => {
+    const login = async (loginType = 'user') => {
       loading.value.login = true
-      const response = await useBaseOFetchWithAuth('auth/login', {
-        body: JSON.stringify({ ...user.value }),
-        method: 'POST',
-        onResponseError: (errorResponse) => {
-          const errorData = errorResponse.response._data
-          
-          // Eğer error field'ı varsa onu kullan, yoksa genel mesaj
-          if (errorData.error) {
-            apiError.value.login = [errorData.error]
-          } else {
-            apiError.value.login = ['Giriş işlemi başarısız']
+      apiError.value.login = [] // Hataları temizle
+      
+      try {
+        const response = await useBaseOFetchWithAuth('auth/login', {
+          body: JSON.stringify({ 
+            ...user.value,
+            login_type: loginType 
+          }),
+          method: 'POST'
+        })
+
+        if (response && response.token) {
+          token.value = response.token
+          await actionsOnLogin()
+          return { success: true }
+        } else if (response && response.error === 'WRONG_LOGIN_PANEL') {
+          return {
+            success: false,
+            wrongPanel: true,
+            redirectTo: response.redirect_to,
+            message: response.message,
+            userRole: response.user_role
           }
-          loading.value.login = false
+        } else {
+          apiError.value.login = [response?.error || 'Giriş işlemi başarısız']
+          return { success: false }
         }
-      }).finally(() => {
+      } catch (error) {
+        console.error('Login error:', error)
+        
+        // Hata response'unu kontrol et
+        if (error.data) {
+          if (error.data.error === 'WRONG_LOGIN_PANEL') {
+            return {
+              success: false,
+              wrongPanel: true,
+              redirectTo: error.data.redirect_to,
+              message: error.data.message,
+              userRole: error.data.user_role
+            }
+          } else {
+            apiError.value.login = [error.data.error || error.data.message || 'Giriş işlemi başarısız']
+          }
+        } else {
+          apiError.value.login = ['Sunucu hatası. Lütfen tekrar deneyin.']
+        }
+        
+        return { success: false }
+      } finally {
         loading.value.login = false
-      })
-
-      console.log(user.value)
-      if (!response.error) {
-        apiError.value.login = []
-        token.value = response.token
-        await actionsOnLogin()
-        return true
-      } else {
-        token.value = null
-        console.log(user.value)
-
-        return false
       }
     }
 
@@ -95,6 +116,8 @@ export const useAuthStore = defineStore(
       await orderState.fetchAddresses()
       await cartState.cartDBToState()
     }
+
+
 
     const actionsOnLogout = async () => {
       currentUser.value = null

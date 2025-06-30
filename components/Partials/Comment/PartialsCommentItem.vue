@@ -16,9 +16,9 @@
       </div>
 
       <p class="text-gray-700 dark:text-gray-300 mb-3">
-        {{ comment || 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Et odio neque, officia iste ratione
+        {{ comment || `Lorem ipsum dolor sit amet consectetur adipisicing elit. Et odio neque, officia iste ratione
         veniam.Laboriosam possimus aut earum vero ducimus praesentium sed debitis, sapiente illo harum quidem magni
-        voluptatum!' }}
+        voluptatum!` }}
       </p>
 
       <p class="text-sm italic text-gray-500 dark:text-gray-400">

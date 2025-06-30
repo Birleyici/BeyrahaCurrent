@@ -36,7 +36,7 @@
                         <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Bekleyen</p>
                         <p class="text-xl sm:text-3xl font-bold text-warning-600 dark:text-warning-400 mt-1 sm:mt-2">{{
                             statistics.pending
-                        }}</p>
+                            }}</p>
                     </div>
                     <div class="p-2 sm:p-3 bg-warning-50 dark:bg-warning-900/20 rounded-full">
                         <UIcon name="i-heroicons-clock"
@@ -52,7 +52,7 @@
                         <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Onaylanan</p>
                         <p class="text-xl sm:text-3xl font-bold text-success-600 dark:text-success-400 mt-1 sm:mt-2">{{
                             statistics.approved
-                        }}</p>
+                            }}</p>
                     </div>
                     <div class="p-2 sm:p-3 bg-success-50 dark:bg-success-900/20 rounded-full">
                         <UIcon name="i-heroicons-check-circle"
@@ -160,18 +160,24 @@
 
                                 <!-- User & Product Info -->
                                 <div class="min-w-0 flex-1">
-                                    <div class="flex flex-wrap items-center gap-2 mb-1">
-                                        <h3
-                                            class="font-semibold text-neutral-900 dark:text-white text-sm sm:text-base truncate">
-                                            {{ getMaskedUserName(review.user?.name) }}
-                                        </h3>
-                                        <UBadge v-if="review.is_verified_purchase" color="success" variant="soft"
-                                            size="xs">
-                                            Doğrulanmış
-                                        </UBadge>
-                                        <UBadge :color="getStatusColor(review.status)" variant="soft" size="xs">
-                                            {{ getStatusLabel(review.status) }}
-                                        </UBadge>
+                                    <div class="mb-1">
+                                        <div class="flex flex-wrap items-center gap-2">
+                                            <h3
+                                                class="font-semibold text-neutral-900 dark:text-white text-sm sm:text-base truncate">
+                                                {{ review.user?.name || 'Anonim Kullanıcı' }}
+                                            </h3>
+                                            <UBadge v-if="review.is_verified_purchase" color="success" variant="soft"
+                                                size="xs">
+                                                Doğrulanmış
+                                            </UBadge>
+                                            <UBadge :color="getStatusColor(review.status)" variant="soft" size="xs">
+                                                {{ getStatusLabel(review.status) }}
+                                            </UBadge>
+                                        </div>
+                                        <p v-if="review.user?.email"
+                                            class="text-xs text-neutral-500 dark:text-neutral-500 truncate">
+                                            {{ review.user.email }}
+                                        </p>
                                     </div>
                                     <p class="text-xs sm:text-sm text-neutral-600 dark:text-neutral-400 truncate">
                                         {{ review.product?.name }}
@@ -486,24 +492,7 @@ const getActionItems = (review) => {
     return items
 }
 
-const getMaskedUserName = (name) => {
-    if (!name) return 'Anonim Kullanıcı'
 
-    const words = name.trim().split(' ').filter(word => word.length > 0)
-
-    if (words.length === 0) return 'Anonim Kullanıcı'
-
-    if (words.length === 1) {
-        // Tek kelime ise: "Mehmet" -> "M****"
-        const word = words[0]
-        return word.length <= 2 ? word : word[0] + '*'.repeat(word.length - 1)
-    } else {
-        // Çok kelime ise: "Mehmet Çelik" -> "M**** Ç***"
-        return words.map(word => {
-            return word.length <= 2 ? word : word[0] + '*'.repeat(word.length - 1)
-        }).join(' ')
-    }
-}
 
 const getInitials = (name) => {
     if (!name) return '?'

@@ -69,20 +69,26 @@
             </div>
             <div>
               <h4 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">İletişim Bilgileri</h4>
-              <p class="text-sm text-neutral-600 dark:text-neutral-400">Telefon ve e-posta adresiniz</p>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400">
+                {{ isLoggedIn ? 'Telefon numaranız' : 'Telefon ve e-posta adresiniz' }}
+              </p>
             </div>
           </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <!-- Telefon her zaman gösterilir -->
+          <div class="space-y-6">
             <UFormGroup label="Telefon*" name="phone">
               <UInput color="secondary" v-model="addressObj.phone" type="text" placeholder="5XX XXX XX XX" size="lg"
                 :ui="{ base: 'transition-all duration-200' }" />
             </UFormGroup>
 
-            <UFormGroup label="Email*" name="email">
-              <UInput color="secondary" v-model="addressObj.email" type="email" placeholder="email@example.com"
-                size="lg" :ui="{ base: 'transition-all duration-200' }" />
-            </UFormGroup>
+            <!-- Email sadece giriş yapmamış kullanıcılar için -->
+            <div v-if="!isLoggedIn">
+              <UFormGroup label="Email*" name="email">
+                <UInput color="secondary" v-model="addressObj.email" type="email" placeholder="email@example.com"
+                  size="lg" :ui="{ base: 'transition-all duration-200' }" />
+              </UFormGroup>
+            </div>
           </div>
         </div>
       </div>
@@ -180,10 +186,16 @@ import type { FormSubmitEvent } from '#ui/types'
 
 const props = defineProps(['address', 'saveFunction'])
 const orderState = useOrderStoreFront()
+const authStore = useAuthStore()
 const emit = defineEmits(['isSaved'])
 
 await orderState.fetchCities()
 await orderState.fetchDistricts()
+
+// Kullanıcının giriş durumunu kontrol et
+const isLoggedIn = computed(() => {
+  return !!(authStore.token && authStore.currentUser)
+})
 
 let newAddress = ref({
   name: null,
@@ -198,6 +210,11 @@ let newAddress = ref({
 
 const addressObj = props.address ? props.address : newAddress.value
 
+// Giriş yapmış kullanıcı için email'i otomatik doldur
+if (isLoggedIn.value && authStore.currentUser?.email && !(addressObj as any).email) {
+  (addressObj as any).email = authStore.currentUser.email
+}
+
 // Step management
 const currentStep = ref(0)
 const steps = ref([
@@ -208,8 +225,8 @@ const steps = ref([
   },
   {
     title: 'İletişim',
-    description: 'Telefon ve e-posta bilgilerinizi girin',
-    fields: ['phone', 'email']
+    description: isLoggedIn.value ? 'Telefon numaranızı girin' : 'Telefon ve e-posta bilgilerinizi girin',
+    fields: isLoggedIn.value ? ['phone'] : ['phone', 'email']
   },
   {
     title: 'Konum',
@@ -233,11 +250,19 @@ const step1Schema = object({
     .required('Zorunlu'),
 })
 
-const step2Schema = object({
-  phone: string()
-    .min(10, 'Cep Telefonu 10 hane olmalıdır.')
-    .required('Zorunlu'),
-  email: string().trim().email('Geçersiz email adresi.').required('Zorunlu'),
+const step2Schema = computed(() => {
+  const baseSchema: any = {
+    phone: string()
+      .min(10, 'Cep Telefonu 10 hane olmalıdır.')
+      .required('Zorunlu'),
+  }
+
+  // Giriş yapmamış kullanıcılar için email alanı ekle
+  if (!isLoggedIn.value) {
+    baseSchema.email = string().trim().email('Geçersiz email adresi.').required('Zorunlu')
+  }
+
+  return object(baseSchema)
 })
 
 const step3Schema = object({
@@ -255,7 +280,7 @@ const step4Schema = object({
 const currentSchema = computed(() => {
   switch (currentStep.value) {
     case 0: return step1Schema
-    case 1: return step2Schema
+    case 1: return step2Schema.value
     case 2: return step3Schema
     case 3: return step4Schema
     default: return step1Schema

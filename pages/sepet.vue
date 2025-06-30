@@ -24,7 +24,9 @@
             </div>
 
             <!-- Sepet Özeti -->
-            <div class="lg:col-span-1 mt-8 lg:mt-0">
+            <div class="lg:col-span-1 mt-8 lg:mt-0 space-y-6">
+
+              <!-- Sepet Özeti -->
               <PartialsCartExtre>
                 <template #button>
                   <!-- Desktop Button -->
@@ -48,8 +50,8 @@
                   <div class="flex flex-col">
                     <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
                     <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
-                      formatPrice(cartState.cartTotalAmount +
-                        calculateShippingCost(cartState.cartTotalAmount))
+                      formatPrice(Math.max(0, cartState.cartFinalAmount +
+                        calculateShippingCost(cartState.cartFinalAmount)))
                     }}</span>
                   </div>
 

@@ -1,6 +1,9 @@
 <template>
     <div class="w-full">
-        <div class="sticky top-4 w-full">
+        <div class="sticky top-4 w-full space-y-4">
+            <!-- Kupon Bileşeni -->
+            <PartialsCartCoupon />
+
             <div
                 class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-6 shadow-sm">
                 <!-- Başlık -->
@@ -20,6 +23,14 @@
                         <span class="text-neutral-600 dark:text-neutral-400">Ürün toplam:</span>
                         <span class="font-medium text-neutral-900 dark:text-neutral-100">{{
                             formatPrice(cartState.cartTotalAmount) }}</span>
+                    </div>
+
+                    <!-- Kupon İndirimi -->
+                    <div v-if="cartState.hasCoupon" class="flex justify-between items-center">
+                        <span class="text-green-600 dark:text-green-400">Kupon indirimi:</span>
+                        <span class="font-medium text-green-600 dark:text-green-400">
+                            -{{ formatPrice(cartState.couponDiscount) }}
+                        </span>
                     </div>
 
                     <!-- Kargo Ücreti -->
@@ -50,8 +61,8 @@
                             <span class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Toplam:</span>
                             <Transition name="slide-up" mode="out-in">
                                 <span class="text-xl font-bold text-secondary-600 dark:text-secondary-400"
-                                    :key="cartState.cartTotalAmount">
-                                    {{ formatPrice(cartState.cartTotalAmount + shippingCost) }}
+                                    :key="cartState.cartFinalAmount">
+                                    {{ formatPrice(Math.max(0, cartState.cartFinalAmount + shippingCost)) }}
                                 </span>
                             </Transition>
                         </div>
@@ -73,11 +84,11 @@ const cartState = useCartState()
 const { settings, calculateShippingCost, remainingForFreeShipping } = useSettings()
 
 const shippingCost = computed(() => {
-    return calculateShippingCost(cartState.cartTotalAmount)
+    return calculateShippingCost(cartState.cartFinalAmount)
 })
 
 const remainingAmount = computed(() => {
-    return remainingForFreeShipping(cartState.cartTotalAmount)
+    return remainingForFreeShipping(cartState.cartFinalAmount)
 })
 
 // Test amaçlı refresh fonksiyonu

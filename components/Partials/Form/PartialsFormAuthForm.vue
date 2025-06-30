@@ -76,6 +76,8 @@
               </ULink>
             </div>
 
+
+
             <!-- Error Messages -->
             <div v-if="authStore.apiError.login?.length"
               class="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800/50 rounded-xl p-4 transition-colors duration-300">
@@ -222,6 +224,7 @@ const showPassword = ref(false)
 const showRegisterPassword = ref(false)
 const showConfirmPassword = ref(false)
 
+
 // Validation schemas
 const schemaLogin = object({
   email: string().trim().email('Geçersiz email').required('Email adresi zorunludur'),
@@ -245,8 +248,9 @@ type RegisterSchema = InferType<typeof schemaRegister>;
 
 // Form handlers
 async function onLogin(event: FormSubmitEvent<LoginSchema>) {
-  const response = await authStore.login()
-  if (response) {
+  const response = await authStore.login('user') // Normal kullanıcı girişi
+
+  if (response.success) {
     // Emit success event
     emit('login-success')
 
@@ -254,6 +258,11 @@ async function onLogin(event: FormSubmitEvent<LoginSchema>) {
     if (props.redirect) {
       const callback = router.currentRoute.value.query.callback
       navigateTo(typeof callback === 'string' ? callback : '/')
+    }
+  } else if (response.wrongPanel) {
+    // Hemen doğru panele yönlendir
+    if (response.redirectTo === 'admin_login') {
+      await navigateTo(`/management/login?wrongPanel=user&message=${encodeURIComponent(response.message)}`)
     }
   }
 }

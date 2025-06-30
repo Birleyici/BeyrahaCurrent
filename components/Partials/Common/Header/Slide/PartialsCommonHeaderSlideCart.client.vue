@@ -62,7 +62,7 @@
                 <div class="flex justify-between items-center">
                     <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">Toplam:</span>
                     <span class="text-lg font-bold text-secondary-600 dark:text-secondary-400">
-                        {{ formatPrice(cartState.cartTotalAmount) }}
+                        {{ formatPrice(cartState.cartFinalAmount) }}
                     </span>
                 </div>
 

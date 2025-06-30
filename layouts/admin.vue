@@ -91,6 +91,30 @@
             </NuxtLink>
           </div>
 
+          <!-- Kuponlar Section -->
+          <div class="pt-6">
+            <h3 class="px-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">
+              İndirim Yönetimi
+            </h3>
+
+            <NuxtLink to="/management/kuponlar"
+              class="flex items-center px-4 py-3.5 text-neutral-700 dark:text-neutral-200 rounded-xl hover:bg-primary-50 dark:hover:bg-neutral-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group touch-manipulation"
+              :class="{ 'bg-primary-50 dark:bg-neutral-700 text-primary-600 dark:text-primary-400': $route.path.includes('/management/kuponlar') }"
+              @click="closeMobileSidebar">
+              <UIcon name="i-heroicons-ticket"
+                class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span class="font-medium">Kupon Yönetimi</span>
+            </NuxtLink>
+
+            <NuxtLink to="/management/kuponlar/yeni"
+              class="flex items-center px-4 py-3 text-neutral-600 dark:text-neutral-300 rounded-xl hover:bg-neutral-50 dark:hover:bg-neutral-700 hover:text-neutral-900 dark:hover:text-white transition-colors duration-200 group ml-4 touch-manipulation"
+              @click="closeMobileSidebar">
+              <UIcon name="i-heroicons-plus-circle"
+                class="w-4 h-4 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span class="text-sm font-medium">Yeni Kupon</span>
+            </NuxtLink>
+          </div>
+
           <!-- Müşteriler Section -->
           <div class="pt-6">
             <h3 class="px-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">
@@ -205,9 +229,9 @@
 
           <!-- Header Actions -->
           <div class="flex items-center space-x-3">
-            <!-- Theme Toggle - Desktop only -->
+            <!-- Theme Toggle - Mobile and Desktop -->
             <button @click="toggleDarkMode"
-              class="hidden lg:flex p-2.5 rounded-xl text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200 touch-manipulation">
+              class="p-2.5 rounded-xl text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-200 touch-manipulation">
               <UIcon :name="isDark ? 'i-heroicons-sun' : 'i-heroicons-moon'" class="w-5 h-5" />
             </button>
 
@@ -259,30 +283,40 @@ const { pendingReviewsCount, initAdminStats } = useAdminStats();
 // Dark mode composable'ını kullan
 const { isDark, toggleDarkMode, initDarkMode } = useDarkMode();
 
+// Auth store'u import et
+const authStore = useAuthStore();
+
 // User menu items
 const userMenuItems = [
   [{
-    label: 'Profil Ayarları',
-    icon: 'i-heroicons-user-circle',
+    label: 'Site Ayarları',
+    icon: 'i-heroicons-cog-6-tooth',
     click: () => {
-      console.log('Profil');
+      navigateTo('/management/ayarlar');
       showUserMenu.value = false;
     }
   }],
   [{
-    label: 'Sistem Ayarları',
-    icon: 'i-heroicons-cog-6-tooth',
+    label: 'Siteyi Görüntüle',
+    icon: 'i-heroicons-eye',
     click: () => {
-      console.log('Ayarlar');
+      window.open('/', '_blank');
       showUserMenu.value = false;
     }
   }],
   [{
     label: 'Güvenli Çıkış',
     icon: 'i-heroicons-arrow-right-on-rectangle',
-    click: () => {
-      console.log('Çıkış');
-      showUserMenu.value = false;
+    click: async () => {
+      try {
+        // Auth store'dan logout fonksiyonunu çağır
+        await authStore.logout('/management/login', false);
+        showUserMenu.value = false;
+      } catch (error) {
+        console.error('Çıkış yapılırken hata:', error);
+        // Hata durumunda da yönlendir
+        await navigateTo('/management/login');
+      }
     }
   }]
 ];

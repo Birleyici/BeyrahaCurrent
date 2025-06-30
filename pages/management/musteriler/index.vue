@@ -12,12 +12,12 @@
         </AdminCommonPageHeader>
 
         <!-- İstatistikler -->
-        <div v-if="userStats" class="grid grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-6">
+        <div v-if="userStats" class="grid grid-cols-2 lg:grid-cols-6 gap-4 lg:gap-6">
             <div
                 class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
                 <div class="flex items-center justify-between">
                     <div>
-                        <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Toplam Müşteri
+                        <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Kayıtlı Müşteri
                         </p>
                         <p class="text-xl sm:text-3xl font-bold text-neutral-900 dark:text-white mt-1 sm:mt-2">{{
                             userStats.total_users }}</p>
@@ -25,6 +25,23 @@
                     <div class="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full">
                         <UIcon name="i-heroicons-users"
                             class="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 dark:text-blue-400" />
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Anonim
+                            Kullanıcı
+                        </p>
+                        <p class="text-xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400 mt-1 sm:mt-2">{{
+                            userStats.total_anonymous_users }}</p>
+                    </div>
+                    <div class="p-2 sm:p-3 bg-orange-50 dark:bg-orange-900/20 rounded-full">
+                        <UIcon name="i-heroicons-user-circle"
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 dark:text-orange-400" />
                     </div>
                 </div>
             </div>
@@ -80,12 +97,28 @@
                     <div>
                         <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Sepetli Müşteri
                         </p>
-                        <p class="text-xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400 mt-1 sm:mt-2">{{
+                        <p class="text-xl sm:text-3xl font-bold text-green-600 dark:text-green-400 mt-1 sm:mt-2">{{
                             userStats.users_with_cart }}</p>
                     </div>
-                    <div class="p-2 sm:p-3 bg-orange-50 dark:bg-orange-900/20 rounded-full">
+                    <div class="p-2 sm:p-3 bg-green-50 dark:bg-green-900/20 rounded-full">
                         <UIcon name="i-heroicons-shopping-cart"
-                            class="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 dark:text-orange-400" />
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-green-600 dark:text-green-400" />
+                    </div>
+                </div>
+            </div>
+
+            <div
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Anonim Sepet
+                        </p>
+                        <p class="text-xl sm:text-3xl font-bold text-indigo-600 dark:text-indigo-400 mt-1 sm:mt-2">{{
+                            userStats.anonymous_users_with_cart }}</p>
+                    </div>
+                    <div class="p-2 sm:p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-full">
+                        <UIcon name="i-heroicons-shopping-bag"
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600 dark:text-indigo-400" />
                     </div>
                 </div>
             </div>
@@ -94,23 +127,31 @@
         <!-- Filtreler -->
         <div
             class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-4 lg:p-6">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                <!-- Kullanıcı Tipi -->
+                <div>
+                    <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Kullanıcı
+                        Tipi</label>
+                    <USelectMenu v-model="filters.user_type" :options="userTypeOptions" option-attribute="label"
+                        value-attribute="value" @change="getUsers" />
+                </div>
+
                 <!-- Arama -->
                 <div>
                     <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Arama</label>
-                    <UInput v-model="filters.search" placeholder="İsim, email veya nickname ara..."
+                    <UInput v-model="filters.search" :placeholder="getSearchPlaceholder()"
                         icon="i-heroicons-magnifying-glass" @input="debouncedSearch" />
                 </div>
 
                 <!-- Rol Filtresi -->
-                <div>
+                <div v-if="filters.user_type === 'registered'">
                     <label class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Rol</label>
                     <USelectMenu v-model="filters.role" :options="roleOptions" option-attribute="label"
                         value-attribute="value" placeholder="Tüm roller" @change="getUsers" />
                 </div>
 
                 <!-- Aktivite Filtresi -->
-                <div>
+                <div v-if="filters.user_type === 'registered'">
                     <label
                         class="block text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-2">Aktivite</label>
                     <USelectMenu v-model="filters.activity_filter" :options="activityOptions" option-attribute="label"
@@ -128,7 +169,7 @@
 
             <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mt-4">
                 <div class="text-sm text-neutral-600 dark:text-neutral-400">
-                    {{ users?.total || 0 }} müşteri bulundu
+                    {{ users?.total || 0 }} {{ getUserTypeText() }} bulundu
                 </div>
                 <UButton @click="resetFilters" variant="outline" color="gray" size="sm" class="w-full sm:w-auto">
                     Filtreleri Temizle
@@ -147,14 +188,15 @@
                         <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
                             <UIcon name="i-heroicons-users" class="w-4 h-4 text-blue-600 dark:text-blue-400" />
                         </div>
-                        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Müşteri Listesi</h3>
+                        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ getListTitle() }}
+                        </h3>
                     </div>
                 </div>
 
                 <!-- Loading State -->
                 <div v-if="loading" class="p-8 text-center">
                     <UIcon name="i-heroicons-arrow-path" class="w-8 h-8 animate-spin text-primary-500 mx-auto mb-4" />
-                    <p class="text-neutral-600 dark:text-neutral-400">Müşteriler yükleniyor...</p>
+                    <p class="text-neutral-600 dark:text-neutral-400">{{ getLoadingText() }}</p>
                 </div>
 
                 <!-- Kullanıcı Tablosu -->
@@ -164,9 +206,9 @@
                             <tr>
                                 <th
                                     class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
-                                    Müşteri
+                                    {{ getUserTypeText() }}
                                 </th>
-                                <th
+                                <th v-if="filters.user_type === 'registered'"
                                     class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                                     Rol
                                 </th>
@@ -174,7 +216,7 @@
                                     class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                                     Kayıt Tarihi
                                 </th>
-                                <th
+                                <th v-if="filters.user_type === 'registered'"
                                     class="px-6 py-3 text-left text-xs font-medium text-neutral-500 dark:text-neutral-400 uppercase tracking-wider">
                                     Son Aktivite
                                 </th>
@@ -202,17 +244,22 @@
                                             <div class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                                                 {{ user.name }}
                                             </div>
-                                            <div class="text-sm text-neutral-500 dark:text-neutral-400">
+                                            <div v-if="user.email"
+                                                class="text-sm text-neutral-500 dark:text-neutral-400">
                                                 {{ user.email }}
                                             </div>
                                             <div v-if="user.nickname"
                                                 class="text-xs text-neutral-400 dark:text-neutral-500">
                                                 @{{ user.nickname }}
                                             </div>
+                                            <div v-if="user.user_type === 'anonymous'"
+                                                class="text-xs text-orange-500 dark:text-orange-400">
+                                                Anonim Kullanıcı
+                                            </div>
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
+                                <td v-if="filters.user_type === 'registered'" class="px-6 py-4 whitespace-nowrap">
                                     <UBadge :color="getRoleColor(user.role)" :label="getRoleLabel(user.role)"
                                         size="sm" />
                                 </td>
@@ -224,7 +271,8 @@
                                         Kayıt tarihi bulunamadı
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
+                                <td v-if="filters.user_type === 'registered'"
+                                    class="px-6 py-4 whitespace-nowrap text-sm text-neutral-500 dark:text-neutral-400">
                                     <div v-if="user.last_activity">
                                         {{ formatDate(user.last_activity) }}
                                     </div>
@@ -275,7 +323,7 @@
                     <UIcon name="i-heroicons-users"
                         class="w-12 h-12 text-neutral-400 dark:text-neutral-500 mx-auto mb-4" />
                     <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2">
-                        Müşteri bulunamadı
+                        {{ getEmptyStateTitle() }}
                     </h3>
                     <p class="text-neutral-600 dark:text-neutral-400">
                         Arama kriterlerinizi değiştirerek tekrar deneyin.
@@ -287,10 +335,10 @@
                     class="bg-gradient-to-r from-neutral-50 to-neutral-100 dark:from-neutral-800 dark:to-neutral-700 px-6 py-4 border-t border-neutral-200 dark:border-neutral-700">
                     <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
                         <div class="text-sm text-neutral-600 dark:text-neutral-400 text-center sm:text-left">
-                            {{ users.from }}-{{ users.to }} / {{ users.total }} müşteri
+                            {{ users.from }}-{{ users.to }} / {{ users.total }} {{ getUserTypeText() }}
                         </div>
-                        <UPagination v-model="currentPage" :page-count="users.last_page" :total="users.total" :max="5"
-                            :ui="{
+                        <UPagination v-model="currentPage" :total="users.total" :page-count="15" :max="5"
+                            :show-last="true" :show-first="true" :ui="{
                                 wrapper: 'flex items-center gap-1',
                                 rounded: '!rounded-md',
                                 default: {
@@ -311,7 +359,7 @@
                     <UIcon name="i-heroicons-arrow-path"
                         class="w-8 h-8 text-blue-600 dark:text-blue-400 animate-spin" />
                 </div>
-                <p class="text-lg font-medium text-neutral-600 dark:text-neutral-400">Müşteriler yükleniyor...</p>
+                <p class="text-lg font-medium text-neutral-600 dark:text-neutral-400">{{ getLoadingText() }}</p>
             </div>
 
             <!-- Müşteri Kartları -->
@@ -328,14 +376,19 @@
                                 <div class="font-semibold text-neutral-900 dark:text-neutral-100 truncate">
                                     {{ user.name }}
                                 </div>
-                                <div class="text-sm text-neutral-500 dark:text-neutral-400 truncate">
+                                <div v-if="user.email" class="text-sm text-neutral-500 dark:text-neutral-400 truncate">
                                     {{ user.email }}
                                 </div>
                                 <div v-if="user.nickname" class="text-xs text-neutral-400 dark:text-neutral-500">
                                     @{{ user.nickname }}
                                 </div>
+                                <div v-if="user.user_type === 'anonymous'"
+                                    class="text-xs text-orange-500 dark:text-orange-400">
+                                    Anonim Kullanıcı
+                                </div>
                             </div>
-                            <UBadge :color="getRoleColor(user.role)" :label="getRoleLabel(user.role)" size="sm" />
+                            <UBadge v-if="user.role && user.role !== 'anonymous'" :color="getRoleColor(user.role)"
+                                :label="getRoleLabel(user.role)" size="sm" />
                         </div>
                     </div>
 
@@ -351,7 +404,7 @@
                             </div>
 
                             <!-- Son Aktivite -->
-                            <div>
+                            <div v-if="user.user_type !== 'anonymous'">
                                 <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Son Aktivite</p>
                                 <p class="text-sm text-neutral-900 dark:text-neutral-100">
                                     {{ user.last_activity ? formatDate(user.last_activity) : 'Hiç giriş yapmamış' }}
@@ -408,7 +461,7 @@
                     <UIcon name="i-heroicons-users" class="w-12 h-12 text-neutral-400 dark:text-neutral-500" />
                 </div>
                 <h3 class="text-lg font-medium text-neutral-900 dark:text-neutral-100 mb-2">
-                    Müşteri bulunamadı
+                    {{ getEmptyStateTitle() }}
                 </h3>
                 <p class="text-neutral-600 dark:text-neutral-400">
                     Arama kriterlerinizi değiştirerek tekrar deneyin.
@@ -420,9 +473,9 @@
                 class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 shadow-sm">
                 <div class="flex flex-col sm:flex-row justify-between items-center space-y-3 sm:space-y-0">
                     <div class="text-sm text-neutral-600 dark:text-neutral-400 text-center sm:text-left">
-                        {{ users.from }}-{{ users.to }} / {{ users.total }} müşteri
+                        {{ users.from }}-{{ users.to }} / {{ users.total }} {{ getUserTypeText() }}
                     </div>
-                    <UPagination v-model="currentPage" :page-count="users.last_page" :total="users.total" :max="5" :ui="{
+                    <UPagination v-model="currentPage" :total="users.total" :page-count="15" :max="5" :ui="{
                         wrapper: 'flex items-center gap-1',
                         rounded: '!rounded-md',
                         default: {
@@ -438,7 +491,8 @@
             <UCard v-if="selectedUser" :ui="{ header: { base: 'flex items-center justify-between' } }">
                 <template #header>
                     <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
-                        Müşteri Detayları
+                        {{ selectedUser?.user_type === 'anonymous' ? 'Anonim Kullanıcı Detayları' : 'Müşteri Detayları'
+                        }}
                     </h3>
                     <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
                         @click="showUserModal = false" />
@@ -566,7 +620,8 @@ const filters = ref({
     role: '',
     activity_filter: '',
     sort_by: 'created_at',
-    sort_order: 'desc'
+    sort_order: 'desc',
+    user_type: 'registered' // 'registered', 'anonymous', 'all'
 })
 
 // Breadcrumb links
@@ -588,6 +643,11 @@ const roleOptions = [
     { label: 'Müşteri', value: 'user' },
     { label: 'Admin', value: 'admin' },
     { label: 'Satıcı', value: 'vendor' }
+]
+
+const userTypeOptions = [
+    { label: 'Kayıtlı Üyeler', value: 'registered' },
+    { label: 'Anonim Kullanıcılar', value: 'anonymous' }
 ]
 
 const activityOptions = [
@@ -612,10 +672,17 @@ const getUsers = async () => {
     try {
         const query = new URLSearchParams()
 
+        // User type filter
+        query.append('user_type', filters.value.user_type)
+
         // Filters
         if (filters.value.search) query.append('search', filters.value.search)
-        if (filters.value.role) query.append('role', filters.value.role)
-        if (filters.value.activity_filter) query.append('activity_filter', filters.value.activity_filter)
+        if (filters.value.role && filters.value.user_type === 'registered') {
+            query.append('role', filters.value.role)
+        }
+        if (filters.value.activity_filter && filters.value.user_type === 'registered') {
+            query.append('activity_filter', filters.value.activity_filter)
+        }
 
         // Sorting
         const sortValue = filters.value.sort_by
@@ -656,8 +723,14 @@ const getUserStats = async () => {
 
 const viewUser = async (user) => {
     try {
-        // Show endpoint direkt user objesini döndürür
-        const response = await useBaseOFetchWithAuth(`admin/users/${user.id}`)
+        let response
+        if (user.user_type === 'anonymous') {
+            // Anonim kullanıcı için farklı endpoint
+            response = await useBaseOFetchWithAuth(`admin/anonymous-users/${user.id}`)
+        } else {
+            // Kayıtlı kullanıcı için mevcut endpoint
+            response = await useBaseOFetchWithAuth(`admin/users/${user.id}`)
+        }
         selectedUser.value = response
         showUserModal.value = true
 
@@ -672,7 +745,8 @@ const resetFilters = () => {
         role: '',
         activity_filter: '',
         sort_by: 'created_at',
-        sort_order: 'desc'
+        sort_order: 'desc',
+        user_type: 'registered'
     }
     currentPage.value = 1
     getUsers()
@@ -692,13 +766,59 @@ const getRoleLabel = (role) => {
     const labels = {
         'admin': 'Admin',
         'vendor': 'Satıcı',
-        'user': 'Müşteri'
+        'user': 'Müşteri',
+        'anonymous': 'Anonim'
     }
     return labels[role] || role
 }
 
 const formatDate = (date) => {
     return new Date(date).toLocaleString('tr-TR')
+}
+
+const getUserTypeText = () => {
+    switch (filters.value.user_type) {
+        case 'anonymous':
+            return 'anonim kullanıcı'
+        default:
+            return 'müşteri'
+    }
+}
+
+const getListTitle = () => {
+    switch (filters.value.user_type) {
+        case 'anonymous':
+            return 'Anonim Kullanıcı Listesi'
+        default:
+            return 'Müşteri Listesi'
+    }
+}
+
+const getLoadingText = () => {
+    switch (filters.value.user_type) {
+        case 'anonymous':
+            return 'Anonim kullanıcılar yükleniyor...'
+        default:
+            return 'Müşteriler yükleniyor...'
+    }
+}
+
+const getEmptyStateTitle = () => {
+    switch (filters.value.user_type) {
+        case 'anonymous':
+            return 'Anonim kullanıcı bulunamadı'
+        default:
+            return 'Müşteri bulunamadı'
+    }
+}
+
+const getSearchPlaceholder = () => {
+    switch (filters.value.user_type) {
+        case 'anonymous':
+            return 'Anonim kullanıcı ID ara...'
+        default:
+            return 'İsim, email veya nickname ara...'
+    }
 }
 
 // Debounced search
@@ -709,6 +829,11 @@ const debouncedSearch = debounce(() => {
 
 // Watchers
 watch(currentPage, () => {
+    getUsers()
+})
+
+watch(() => filters.value.user_type, (newType, oldType) => {
+    currentPage.value = 1
     getUsers()
 })
 

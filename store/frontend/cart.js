@@ -5,6 +5,12 @@ export const useCartState = defineStore('cartState', () => {
   const toast = useToast()
   const addToCartloading = ref(false)
   const uiStore = useUIStore()
+  
+  // Kupon sistemi
+  const appliedCoupon = ref(null)
+  const couponDiscount = ref(0)
+  const couponLoading = ref(false)
+  const couponError = ref('')
 
   const cartQyt = computed(() => {
     return cart.value.reduce((total, item) => total + item.qyt, 0)
@@ -25,8 +31,21 @@ export const useCartState = defineStore('cartState', () => {
     }, 0)
   })
 
+  // Kupon indirimi sonrası toplam tutar
+  const cartFinalAmount = computed(() => {
+    return Math.max(0, cartTotalAmount.value - couponDiscount.value)
+  })
+
+  // Kupon var mı kontrolü
+  const hasCoupon = computed(() => {
+    return appliedCoupon.value !== null
+  })
+
   const resetCartState = () => {
     cart.value = []
+    appliedCoupon.value = null
+    couponDiscount.value = 0
+    couponError.value = ''
   }
 
   const patchCart = async (obj, qyt, openSlide = true) => {
@@ -127,14 +146,105 @@ export const useCartState = defineStore('cartState', () => {
     })
   }
 
+  // Kupon fonksiyonları
+  const applyCoupon = async (couponCode) => {
+    if (!couponCode || couponCode.trim() === '') {
+      couponError.value = 'Kupon kodu boş olamaz'
+      return false
+    }
+
+    couponLoading.value = true
+    couponError.value = ''
+
+    try {
+      const response = await useBaseOFetchWithAuth('coupon/validate', {
+        method: 'POST',
+        body: JSON.stringify({
+          coupon_code: couponCode.trim().toUpperCase()
+        })
+      })
+
+      if (response.success) {
+        appliedCoupon.value = response.coupon
+        couponDiscount.value = response.discount
+        
+        toast.add({
+          title: 'Kupon başarıyla uygulandı!',
+          description: `${response.discount.toFixed(2)} TL indirim kazandınız.`,
+          color: 'green',
+          icon: 'i-heroicons-check-circle'
+        })
+        
+        return true
+      } else {
+        couponError.value = response.message
+        
+        toast.add({
+          title: 'Kupon uygulanamadı',
+          description: response.message,
+          color: 'red',
+          icon: 'i-heroicons-exclamation-triangle'
+        })
+        
+        return false
+      }
+    } catch (error) {
+      couponError.value = 'Kupon doğrulanırken bir hata oluştu'
+      
+      toast.add({
+        title: 'Bağlantı hatası',
+        description: 'Kupon doğrulanırken bir hata oluştu, lütfen tekrar deneyin.',
+        color: 'red',
+        icon: 'i-heroicons-exclamation-triangle'
+      })
+      
+      return false
+    } finally {
+      couponLoading.value = false
+    }
+  }
+
+  const removeCoupon = () => {
+    appliedCoupon.value = null
+    couponDiscount.value = 0
+    couponError.value = ''
+    
+    toast.add({
+      title: 'Kupon kaldırıldı',
+      description: 'Kupon başarıyla sepetinizden kaldırıldı.',
+      color: 'blue',
+      icon: 'i-heroicons-information-circle'
+    })
+  }
+
+  const validateCurrentCoupon = async () => {
+    if (!appliedCoupon.value) return true
+    
+    const isValid = await applyCoupon(appliedCoupon.value.code)
+    if (!isValid) {
+      removeCoupon()
+    }
+    return isValid
+  }
+
   return {
     cart,
     cartQyt,
     cartTotalAmount,
+    cartFinalAmount,
     addToCartloading,
     cartDBToState,
     resetCartState,
     patchCart,
-    deleteCartItem
+    deleteCartItem,
+    // Kupon sistemi
+    appliedCoupon,
+    couponDiscount,
+    couponLoading,
+    couponError,
+    hasCoupon,
+    applyCoupon,
+    removeCoupon,
+    validateCurrentCoupon
   }
 })

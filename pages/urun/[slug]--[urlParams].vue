@@ -61,8 +61,7 @@
     </section>
 
     <!-- Ürün Açıklaması -->
-    <section ref="product_information "
-      class="py-8 lg:py-12 bg-white dark:bg-neutral-800 transition-colors duration-300">
+    <section ref="productInformation" class="py-8 lg:py-12 bg-white dark:bg-neutral-800 transition-colors duration-300">
       <div class="container mx-auto px-4 md:px-6 lg:px-8">
         <PartialsProductInformation :attributes="attributeState.transformedAttrs" />
       </div>
@@ -97,7 +96,7 @@
 const productState = useProductState();
 const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
-const product_information = ref(null)
+const productInformation = ref(null)
 const { settings } = useSettings()
 
 // Auth kontrolü için
@@ -244,7 +243,7 @@ useHead({
 })
 
 const goInfo = () => {
-  product_information.value?.scrollIntoView({ behavior: "smooth" })
+  productInformation.value?.scrollIntoView({ behavior: "smooth" })
 }
 
 const breadcrumbLinks = computed(() => {

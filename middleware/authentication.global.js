@@ -7,6 +7,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (import.meta.server) return
 
   const protectedRoutes = ['/hesap', '/management'];
+  
+  // Login sayfalarını middleware'den muaf tut
+  const authPages = ['/auth', '/management/login'];
+  if (authPages.some(page => to.path.startsWith(page))) {
+    return
+  }
 
   // Protected route kontrolü
   const isProtectedRoute = protectedRoutes.some(route => to.path.startsWith(route))
@@ -15,7 +21,13 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     // Token var mı kontrol et
     if (!authStore.token) {
       console.log('No token found, redirecting to auth')
-      return navigateTo(`/auth?callback=${encodeURIComponent(to.fullPath)}`)
+      
+      // Management alanı için admin login'e yönlendir
+      if (to.path.startsWith('/management')) {
+        return navigateTo('/management/login')
+      } else {
+        return navigateTo(`/auth?callback=${encodeURIComponent(to.fullPath)}`)
+      }
     }
 
     // Token geçerliliği kontrolü
@@ -52,7 +64,12 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
       authStore.token = null
       authStore.currentUser = null
       
-      return navigateTo(`/auth?callback=${encodeURIComponent(to.fullPath)}`)
+      // Management alanı için admin login'e yönlendir
+      if (to.path.startsWith('/management')) {
+        return navigateTo('/management/login')
+      } else {
+        return navigateTo(`/auth?callback=${encodeURIComponent(to.fullPath)}`)
+      }
     }
   }
 

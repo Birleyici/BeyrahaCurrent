@@ -124,10 +124,6 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
       return
     }
 
-    // Kargo ücretini hesapla
-    const { calculateShippingCost } = await useSettings()
-    const shippingCost = calculateShippingCost(cartState.cartTotalAmount)
-
     // Frontend'teki ödeme yöntemi kodlarını backend enum değerlerine dönüştür
     const paymentMethodMap = {
       'bacs': 'bank_transfer',      // Havale/EFT
@@ -140,9 +136,12 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
     const newOrderObj = {
       address: addresses.value[0],
       cart: cartState.cart,
-      shipping_cost: shippingCost, // Kargo ücretini backend'e gönder
+      // shipping_cost: kaldırıldı - backend hesaplayacak
       payment_method: paymentMethodMap[orderOptions.value.selectedPaymentMethod] || 'bank_transfer',
-      payment_status: 'pending' // Yeni siparişler varsayılan olarak beklemede
+      payment_status: 'pending', // Yeni siparişler varsayılan olarak beklemede
+      // Kupon bilgisi
+      coupon: cartState.appliedCoupon,
+      coupon_discount: cartState.couponDiscount
     }
 
     createOrderLoading.value = true

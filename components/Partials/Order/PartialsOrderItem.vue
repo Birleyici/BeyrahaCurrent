@@ -13,7 +13,8 @@
             </div>
             <div>
               <p class="text-sm text-neutral-600 dark:text-neutral-400">Sipariş No</p>
-              <p class="font-semibold text-neutral-900 dark:text-neutral-100">#{{ props.item.id }}</p>
+              <p class="font-semibold text-neutral-900 dark:text-neutral-100">#000{{ props.item.sub_orders?.[0]?.id ||
+                props.item.id }}</p>
             </div>
           </div>
 
@@ -102,6 +103,57 @@
                 :item="subOrderItem" />
             </div>
 
+            <!-- Sipariş Özeti -->
+            <div v-if="props.item.order_summary" class="pt-4 border-t border-neutral-200 dark:border-neutral-700">
+              <div class="bg-neutral-50 dark:bg-neutral-800/50 rounded-lg p-4">
+                <h4 class="font-medium text-neutral-900 dark:text-neutral-100 mb-3 flex items-center">
+                  <UIcon name="i-heroicons-calculator" class="w-4 h-4 mr-2 text-neutral-600 dark:text-neutral-400" />
+                  Sipariş Özeti
+                </h4>
+
+                <div class="space-y-2 text-sm">
+                  <!-- Ara Toplam -->
+                  <div class="flex justify-between">
+                    <span class="text-neutral-600 dark:text-neutral-400">Ara Toplam:</span>
+                    <span class="font-medium text-neutral-900 dark:text-neutral-100">
+                      {{ props.item.order_summary.formatted.subtotal }}
+                    </span>
+                  </div>
+
+                  <!-- Kupon İndirimi -->
+                  <div v-if="props.item.order_summary.has_discount" class="flex justify-between">
+                    <span class="text-neutral-600 dark:text-neutral-400 flex items-center">
+                      <span>Kupon İndirimi</span>
+                      <UBadge v-if="props.item.order_summary.coupon_code" size="xs" color="green" variant="soft"
+                        class="ml-2">
+                        {{ props.item.order_summary.coupon_code }}
+                      </UBadge>
+                    </span>
+                    <span class="font-medium text-red-600 dark:text-red-400">
+                      -{{ props.item.order_summary.formatted.discount_amount }}
+                    </span>
+                  </div>
+
+                  <!-- Kargo -->
+                  <div class="flex justify-between">
+                    <span class="text-neutral-600 dark:text-neutral-400">Kargo:</span>
+                    <span class="font-medium"
+                      :class="props.item.order_summary.shipping_cost > 0 ? 'text-neutral-900 dark:text-neutral-100' : 'text-green-600 dark:text-green-400'">
+                      {{ props.item.order_summary.formatted.shipping_cost }}
+                    </span>
+                  </div>
+
+                  <!-- Toplam -->
+                  <div class="flex justify-between pt-2 border-t border-neutral-200 dark:border-neutral-600">
+                    <span class="font-semibold text-neutral-900 dark:text-neutral-100">Toplam:</span>
+                    <span class="font-bold text-secondary-600 dark:text-secondary-400">
+                      {{ props.item.order_summary.formatted.total }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Slot İçeriği (Adres Kartları) -->
             <div class="pt-4 border-t border-neutral-200 dark:border-neutral-700">
               <slot />
@@ -118,9 +170,6 @@ import { computed } from 'vue'
 
 const props = defineProps(['item', 'index'])
 const orderState = useOrderManagementStore()
-
-// Debug için sipariş verisini yazdır
-console.log('Sipariş verisi:', props.item)
 
 // Siparişteki tüm ürünleri topla
 const allProducts = computed(() => {

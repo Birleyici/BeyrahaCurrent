@@ -102,7 +102,7 @@
         <div
             class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
             <h2 class="text-xl font-bold text-neutral-900 dark:text-white mb-6">Hızlı İşlemler</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                 <NuxtLink to="/management/urunler/yeni"
                     class="flex items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 group">
                     <div
@@ -136,6 +136,18 @@
                     <div>
                         <h3 class="font-semibold text-neutral-900 dark:text-white">Siparişler</h3>
                         <p class="text-sm text-neutral-600 dark:text-neutral-400">Sipariş takibi</p>
+                    </div>
+                </NuxtLink>
+
+                <NuxtLink to="/management/kuponlar"
+                    class="flex items-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors duration-200 group">
+                    <div
+                        class="p-2 bg-orange-600 rounded-lg mr-4 group-hover:scale-110 transition-transform duration-200">
+                        <Icon name="mdi:ticket-percent" class="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-neutral-900 dark:text-white">Kupon Yönetimi</h3>
+                        <p class="text-sm text-neutral-600 dark:text-neutral-400">İndirim kuponları</p>
                     </div>
                 </NuxtLink>
 

@@ -20,7 +20,8 @@
             <div
               class="bg-secondary-50 dark:bg-secondary-900/30 border border-secondary-200 dark:border-secondary-700 rounded-xl p-6 mb-6 inline-block">
               <p class="text-sm text-neutral-600 dark:text-neutral-400 mb-1">Sipariş Numaranız</p>
-              <p class="text-2xl font-bold text-secondary-600 dark:text-secondary-400">#000{{ order.id }}</p>
+              <p class="text-2xl font-bold text-secondary-600 dark:text-secondary-400">#000{{ order.sub_orders?.[0]?.id
+                || order.id }}</p>
             </div>
 
             <!-- Açıklama -->
@@ -160,7 +161,8 @@
                     </div>
                   </div>
                   <div class="card-body">
-                    <PartialsOrderExtre :total="order?.total" :shipping-cost="order?.shipping_cost" />
+                    <PartialsOrderExtre :total="order?.total" :shipping-cost="order?.shipping_cost"
+                      :coupon-usage="order?.coupon_usage" />
                   </div>
                 </div>
               </div>

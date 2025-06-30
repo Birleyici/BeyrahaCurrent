@@ -32,6 +32,31 @@
         </p>
       </div>
 
+      <!-- Wrong Panel Warning -->
+      <div v-if="wrongPanelMessage" class="mb-8">
+        <div
+          class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-2xl p-6 shadow-lg">
+          <div class="flex items-start space-x-4">
+            <div class="flex-shrink-0">
+              <div class="w-10 h-10 bg-amber-100 dark:bg-amber-800/50 rounded-full flex items-center justify-center">
+                <UIcon name="i-heroicons-exclamation-triangle" class="w-6 h-6 text-amber-600 dark:text-amber-400" />
+              </div>
+            </div>
+            <div class="flex-1">
+              <h3 class="text-lg font-semibold text-amber-800 dark:text-amber-200 mb-2">
+                Yanlış Giriş Paneli
+              </h3>
+              <p class="text-amber-700 dark:text-amber-300">
+                {{ wrongPanelMessage }}
+              </p>
+              <p class="text-sm text-amber-600 dark:text-amber-400 mt-2">
+                Lütfen aşağıdaki formu kullanarak normal kullanıcı girişi yapın.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Auth Form -->
       <PartialsFormAuthForm />
 
@@ -73,9 +98,23 @@ const authStore = useAuthStore()
 const route = useRoute()
 const { siteName } = useSettings()
 
+// Wrong panel message
+const wrongPanelMessage = ref('')
+
 // SEO Meta
 useHead({
   title: computed(() => `Giriş Yap - ${siteName.value}`)
+})
+
+// URL parametrelerinden yanlış panel mesajını oku
+onMounted(() => {
+  if (route.query.wrongPanel === 'admin' && route.query.message) {
+    wrongPanelMessage.value = decodeURIComponent(route.query.message)
+
+    // URL'den query parametrelerini temizle
+    const router = useRouter()
+    router.replace({ path: route.path, query: { ...route.query, wrongPanel: undefined, message: undefined } })
+  }
 })
 
 // Redirect if already logged in
