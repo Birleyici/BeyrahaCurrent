@@ -10,9 +10,16 @@
                             class="w-10 h-10 bg-secondary-500 dark:bg-secondary-600 rounded-full flex items-center justify-center">
                             <UIcon name="i-heroicons-user-circle" class="w-5 h-5 text-white" />
                         </div>
-                        <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
-                            Hesabım
-                        </h3>
+                        <div class="flex flex-col">
+                            <h3 class="text-lg font-bold text-neutral-900 dark:text-neutral-100">
+                                Hesabım
+                            </h3>
+                            <!-- Hoşgeldiniz mesajı -->
+                            <p v-if="authStore.token && authStore.currentUser && authStore.currentUser.user"
+                                class="text-sm text-secondary-600 dark:text-secondary-400">
+                                Hoşgeldiniz, {{ getFirstName(authStore.currentUser.user.name) }}
+                            </p>
+                        </div>
                     </div>
                     <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid"
                         class="hover:bg-white/50 dark:hover:bg-neutral-700/50 transition-colors duration-200"
@@ -162,4 +169,10 @@ const getMenuIcon = (menuName) => {
     }
     return iconMap[menuName] || 'i-heroicons-document'
 }
+
+// Helper function - sadece ilk ismi almak için
+const getFirstName = (fullName) => {
+    if (!fullName) return '';
+    return fullName.split(' ')[0];
+};
 </script>

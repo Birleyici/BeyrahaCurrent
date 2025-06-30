@@ -50,6 +50,18 @@
           </button>
         </div>
       </div>
+
+      <!-- Hoşgeldiniz mesajı (mobile için) -->
+      <div v-if="authStore.token && authStore.currentUser && authStore.currentUser.user"
+        class="mt-3 flex justify-center">
+        <div
+          class="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-secondary-50 to-secondary-100 dark:from-secondary-900/30 dark:to-secondary-800/30 rounded-lg border border-secondary-200 dark:border-secondary-700">
+          <UIcon name="i-heroicons-hand-raised" class="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
+          <span class="text-sm font-medium text-secondary-700 dark:text-secondary-300">
+            Hoşgeldiniz, {{ getFirstName(authStore.currentUser.user.name) }}
+          </span>
+        </div>
+      </div>
     </div>
 
     <!-- Arama Input'u -->
@@ -62,8 +74,9 @@ import { computed } from 'vue';
 
 const props = defineProps(["categories", "cart"]);
 
-// UI Store
+// Stores
 const uiStore = useUIStore();
+const authStore = useAuthStore();
 
 // Dark mode composable
 const { isDark, toggleDarkMode } = useDarkMode();
@@ -72,4 +85,10 @@ const { isDark, toggleDarkMode } = useDarkMode();
 const logoSrc = computed(() => {
   return isDark.value ? '/logo-for-dark.png' : '/logo-for-light.png';
 });
+
+// Helper function - sadece ilk ismi almak için
+const getFirstName = (fullName) => {
+  if (!fullName) return '';
+  return fullName.split(' ')[0];
+};
 </script>
