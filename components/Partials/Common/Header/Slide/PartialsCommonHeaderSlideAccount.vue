@@ -17,7 +17,7 @@
                             <!-- Hoşgeldiniz mesajı -->
                             <p v-if="authStore.token && authStore.currentUser && authStore.currentUser"
                                 class="text-sm text-secondary-600 dark:text-secondary-400">
-                                Hoşgeldiniz, {{ getFirstName(authStore.currentUser.user.name) }}
+                                Hoşgeldiniz, {{ getFirstName(authStore.currentUser?.user?.name) }}
                             </p>
                         </div>
                     </div>
