@@ -15,7 +15,7 @@
                                 Hesabım
                             </h3>
                             <!-- Hoşgeldiniz mesajı -->
-                            <p v-if="authStore.token && authStore.currentUser && authStore.currentUser.user"
+                            <p v-if="authStore.token && authStore.currentUser && authStore.currentUser"
                                 class="text-sm text-secondary-600 dark:text-secondary-400">
                                 Hoşgeldiniz, {{ getFirstName(authStore.currentUser.user.name) }}
                             </p>
@@ -37,14 +37,14 @@
                 <!-- Giriş yapmış kullanıcılar için menü -->
                 <div v-else class="p-4 space-y-2">
                     <ul class="list-none space-y-2">
-                        <li v-for="menu in menuItems" :key="menu.link"
+                        <li v-for="menu in accountMenuItems" :key="menu.link"
                             class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:shadow-md transition-all duration-300">
                             <NuxtLink :to="menu.link" class="flex items-center p-4 w-full">
                                 <div class="flex items-center space-x-3 w-full">
                                     <!-- İkon -->
                                     <div
                                         class="flex items-center justify-center w-10 h-10 rounded-full bg-gradient-to-r from-secondary-100 to-secondary-200 dark:from-secondary-800/50 dark:to-secondary-700/50 group-hover:from-secondary-200 group-hover:to-secondary-300 dark:group-hover:from-secondary-700/70 dark:group-hover:to-secondary-600/70 transition-all duration-200">
-                                        <UIcon :name="getMenuIcon(menu.name)"
+                                        <UIcon :name="menu.icon"
                                             class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
                                     </div>
                                     <!-- Menü adı -->
@@ -150,25 +150,8 @@ const { isDark, toggleDarkMode } = useDarkMode();
 const { useBackHandler } = await import('~/composables/useNativeBackHandler.js')
 useBackHandler(model)
 
-const menuItems = [
-    {
-        name: 'Siparişlerim',
-        link: '/hesap/siparislerim'
-    },
-    {
-        name: 'Adreslerim',
-        link: '/hesap/adreslerim'
-    }
-]
-
-// Menü ikonlarını belirleyen fonksiyon
-const getMenuIcon = (menuName) => {
-    const iconMap = {
-        'Siparişlerim': 'i-heroicons-shopping-bag',
-        'Adreslerim': 'i-heroicons-map-pin'
-    }
-    return iconMap[menuName] || 'i-heroicons-document'
-}
+// Merkezi account menu composable'ını kullan
+const { accountMenuItems, getMenuIcon } = useAccountMenu()
 
 // Helper function - sadece ilk ismi almak için
 const getFirstName = (fullName) => {

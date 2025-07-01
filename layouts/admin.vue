@@ -91,6 +91,26 @@
             </NuxtLink>
           </div>
 
+          <!-- Sorular Section -->
+          <div class="pt-6">
+            <h3 class="px-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">
+              Soru & Cevap
+            </h3>
+
+            <NuxtLink to="/management/sorular"
+              class="flex items-center px-4 py-3.5 text-neutral-700 dark:text-neutral-200 rounded-xl hover:bg-primary-50 dark:hover:bg-neutral-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors duration-200 group touch-manipulation"
+              :class="{ 'bg-primary-50 dark:bg-neutral-700 text-primary-600 dark:text-primary-400': $route.path.includes('/management/sorular') }"
+              @click="closeMobileSidebar">
+              <UIcon name="i-heroicons-question-mark-circle"
+                class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
+              <span class="font-medium">Soru Yönetimi</span>
+              <span v-if="pendingQuestionsCount > 0"
+                class="ml-auto bg-orange-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
+                {{ pendingQuestionsCount }}
+              </span>
+            </NuxtLink>
+          </div>
+
           <!-- Kuponlar Section -->
           <div class="pt-6">
             <h3 class="px-4 text-xs font-semibold text-neutral-500 dark:text-neutral-400 uppercase tracking-wider mb-3">
@@ -276,6 +296,7 @@
 const sidebarOpen = ref(false);
 const showUserMenu = ref(false);
 const pendingOrdersCount = ref(3);
+const pendingQuestionsCount = ref(5);
 
 // Admin stats composable'ını kullan
 const { pendingReviewsCount, initAdminStats } = useAdminStats();

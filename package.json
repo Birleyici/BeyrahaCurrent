@@ -42,7 +42,8 @@
     "pinia-plugin-persistedstate": "^4.0.0",
     "slugify": "^1.6.6",
     "uuid": "^10.0.0",
-    "yup": "^1.4.0"
+    "yup": "^1.4.0",
+    "zod": "^3.25.67"
   },
   "overrides": {
     "vue": "latest"

@@ -175,7 +175,7 @@ const loginHandler = async () => {
 // Eğer zaten giriş yapılmışsa yönlendir
 onMounted(() => {
   if (authStore.token && authStore.currentUser) {
-    const userRole = authStore.currentUser?.user?.role || authStore.currentUser?.role
+    const userRole = authStore.currentUser?.user.role || authStore.currentUser?.user.role
     if (userRole === 'admin' || userRole === 'vendor') {
       navigateTo('/management')
     }

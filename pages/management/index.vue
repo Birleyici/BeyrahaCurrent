@@ -163,6 +163,18 @@
                     </div>
                 </NuxtLink>
 
+                <NuxtLink to="/management/sorular"
+                    class="flex items-center p-4 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg hover:bg-cyan-100 dark:hover:bg-cyan-900/30 transition-colors duration-200 group">
+                    <div
+                        class="p-2 bg-cyan-600 rounded-lg mr-4 group-hover:scale-110 transition-transform duration-200">
+                        <Icon name="mdi:help-circle" class="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                        <h3 class="font-semibold text-neutral-900 dark:text-white">Soru & Cevap</h3>
+                        <p class="text-sm text-neutral-600 dark:text-neutral-400">S&C moderasyonu</p>
+                    </div>
+                </NuxtLink>
+
                 <button @click="refreshData" :disabled="isRefreshing"
                     class="flex items-center p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-600 transition-colors duration-200 group disabled:opacity-50">
                     <div

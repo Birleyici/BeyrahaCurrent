@@ -67,12 +67,22 @@
       </div>
     </section>
 
+    <section class="py-8 lg:py-12 bg-neutral-50 dark:bg-neutral-800 transition-colors duration-300">
+      <div class="md:container md:mx-auto md:px-6 lg:px-8">
+        <ProductQASection v-if="productState.product && productState.product.id" :product="productState.product" />
+      </div>
+    </section>
+
+
+
     <!-- Ürün Yorumları -->
-    <section class="py-8 lg:py-12 bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
+    <section class="py-8 lg:py-12 bg-white dark:bg-neutral-900 transition-colors duration-300">
       <div class="md:container md:mx-auto md:px-6 lg:px-8">
         <ProductReviewsSection v-if="productState.product && productState.product.id" :product="productState.product" />
       </div>
     </section>
+
+    <!-- Soru-Cevap Bölümü -->
 
     <!-- Benzer Ürünler -->
     <UiSlidesProductSlide id="similar-products" :is-ssr="false" title="Benzer Ürünler"
@@ -105,13 +115,13 @@ const authStore = useAuthStore()
 // Admin kontrolü - currentUser'da role bilgisi varsa kullan, yoksa management route'una erişimi kontrol et
 const isAdmin = computed(() => {
   // Basit kontrol: kullanıcı giriş yapmış mı ve token var mı
-  if (!authStore.token || !authStore.currentUser || !authStore.currentUser.user) {
+  if (!authStore.token || !authStore.currentUser || !authStore.currentUser) {
     return false;
   }
 
-  // Rol bilgisi kontrolü - doğru yapı: authStore.currentUser.user.role
-  if (authStore.currentUser.user.role) {
-    return authStore.currentUser.user.role === 'admin' || authStore.currentUser.user.role === 'manager';
+  // Rol bilgisi kontrolü - doğru yapı: authStore.currentUser.role
+  if (authStore.currentUser.role) {
+    return authStore.currentUser.role === 'admin' || authStore.currentUser.role === 'manager';
   }
 
   return false;

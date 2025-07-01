@@ -47,9 +47,8 @@
       <div class="lg:hidden mobile-breakout-viewport">
         <div class="overflow-x-auto scrollbar-hide">
           <div class="flex gap-4 pb-4 pl-4" style="scroll-snap-type: x mandatory;">
-            <div v-for="(item, index) in products" :key="item.id"
-              class="flex-shrink-0 w-[280px] sm:w-[320px] snap-start" :class="{ 'pr-4': index === products.length - 1 }"
-              style="scroll-snap-align: start;">
+            <div v-for="(item, index) in products" :key="item.id" class="flex-shrink-0 snap-start"
+              :class="{ 'pr-4': index === products.length - 1 }" style="scroll-snap-align: start;">
               <PartialsProductCard :lcp="props.lcp" :index="index" :product="item" :key="item.id" />
             </div>
           </div>
@@ -83,7 +82,8 @@ if (props.isSsr) {
   const { data } = await useAsyncData(props.to, async () => {
     return await productState.getProducts(props.filters, true)
   })
-  products.value = data.value
+  // Response formatını kontrol et - data varsa kullan, yoksa doğrudan response'u kullan
+  products.value = data.value?.data || data.value || []
   isLoading.value = false // Yükleme bittiğinde durumu güncelle
 }
 
@@ -91,7 +91,8 @@ useShowElement(props.id, async () => {
   if (products?.value?.length == 0) {
     isLoading.value = true // Yükleme başlatılıyor
     const response = await productState.getProducts(props.filters, true)
-    products.value = response
+    // Response formatını kontrol et - data varsa kullan, yoksa doğrudan response'u kullan
+    products.value = response?.data || response || []
     isLoading.value = false // Yükleme tamamlandı
   }
 })

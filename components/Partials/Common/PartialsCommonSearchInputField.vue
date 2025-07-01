@@ -70,16 +70,36 @@ const emit = defineEmits([
 
 const input = ref(null)
 
-const popularSearches = [
-    'Tesettür Elbise',
-    'Başörtüsü',
-    'Tunik',
-    'Pantolon',
-    'Etek',
-    'Kap',
-    'Şal',
-    'Ayakkabı'
-]
+// Popüler kategoriler için composable kullan
+const { popularCategories, fetchPopularCategories } = useCategoriesPopular()
+
+// Gerçek verilerle popüler aramalar
+const popularSearches = computed(() => {
+    const fallback = [
+        'Tesettür Elbise',
+        'Başörtüsü',
+        'Tunik',
+        'Pantolon',
+        'Etek',
+        'Kap',
+        'Şal',
+        'Ayakkabı'
+    ]
+
+    if (popularCategories.value.length > 0) {
+        return [
+            ...popularCategories.value.map(cat => cat.name),
+            ...fallback.filter(item => !popularCategories.value.some(cat => cat.name.includes(item)))
+        ].slice(0, 8)
+    }
+
+    return fallback
+})
+
+// Component mount olduğunda popüler kategorileri getir
+onMounted(() => {
+    fetchPopularCategories(4)
+})
 
 function clearSearch() {
     emit('update:modelValue', '')

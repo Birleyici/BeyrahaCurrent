@@ -163,7 +163,7 @@
                         Popüler Kategoriler:
                     </p>
                     <div class="grid grid-cols-2 gap-2">
-                        <button v-for="category in popularCategories" :key="category.name"
+                        <button v-for="category in popularCategories" :key="category.id"
                             @click="$emit('category-click', category)"
                             class="flex items-center space-x-2 p-2 bg-neutral-50 dark:bg-neutral-700 hover:bg-secondary-50 dark:hover:bg-secondary-900/30 rounded-lg transition-colors duration-150 text-left border border-neutral-200/60 dark:border-neutral-600/60 hover:border-secondary-200 dark:hover:border-secondary-600">
                             <div
@@ -171,8 +171,14 @@
                                 <UIcon :name="category.icon"
                                     class="w-3 h-3 text-secondary-500 dark:text-secondary-400" />
                             </div>
-                            <span class="text-xs font-medium text-neutral-600 dark:text-neutral-300">{{ category.name
-                                }}</span>
+                            <div class="flex-1 min-w-0">
+                                <span
+                                    class="text-xs font-medium text-neutral-600 dark:text-neutral-300 block truncate">{{
+                                        category.name }}</span>
+                                <span v-if="category.sales_count > 0"
+                                    class="text-[10px] text-neutral-400 dark:text-neutral-500">{{ category.sales_count
+                                    }} satış</span>
+                            </div>
                         </button>
                     </div>
                 </div>
@@ -204,17 +210,17 @@ const emit = defineEmits([
     'category-click'
 ])
 
-const searchSuggestions = [
-    'Tesettür Elbise',
-    'Başörtüsü',
-    'Tunik',
-    'Pantolon'
-]
+// Popüler kategoriler için composable kullan
+const { popularCategories, fetchPopularCategories } = useCategoriesPopular()
 
-const popularCategories = [
-    { name: 'Elbise', icon: 'i-heroicons-sparkles' },
-    { name: 'Başörtüsü', icon: 'i-heroicons-heart' },
-    { name: 'Tunik', icon: 'i-heroicons-star' },
-    { name: 'Pantolon', icon: 'i-heroicons-fire' }
-]
+// Gerçek verilerle arama önerileri
+const searchSuggestions = computed(() => {
+    return popularCategories.value.map(cat => cat.name).slice(0, 4)
+})
+
+// Component mount olduğunda popüler kategorileri getir
+onMounted(async () => {
+    await fetchPopularCategories(4)
+    console.log('PartialsCommonSearchResults - Popüler kategoriler yüklendi:', popularCategories.value)
+})
 </script>

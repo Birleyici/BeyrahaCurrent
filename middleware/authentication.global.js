@@ -47,7 +47,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
       // Management alanı için admin kontrolü
       if (to.path.startsWith('/management')) {
-        const userRole = authStore.currentUser?.user?.role || authStore.currentUser?.role
+        const userRole = authStore.currentUser?.user.role || authStore.currentUser?.user.role
         if (userRole !== 'admin' && userRole !== 'vendor') {
           console.log('Insufficient permissions for management area')
           throw createError({

@@ -52,8 +52,7 @@
       </div>
 
       <!-- Hoşgeldiniz mesajı (mobile için) -->
-      <div v-if="authStore.token && authStore.currentUser && authStore.currentUser.user"
-        class="mt-3 flex justify-center">
+      <div v-if="authStore.token && authStore.currentUser && authStore.currentUser" class="mt-3 flex justify-center">
         <div
           class="flex items-center space-x-2 px-3 py-2 bg-gradient-to-r from-secondary-50 to-secondary-100 dark:from-secondary-900/30 dark:to-secondary-800/30 rounded-lg border border-secondary-200 dark:border-secondary-700">
           <UIcon name="i-heroicons-hand-raised" class="w-4 h-4 text-secondary-600 dark:text-secondary-400" />

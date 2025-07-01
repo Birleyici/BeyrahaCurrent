@@ -25,7 +25,8 @@
           <!-- Mobile Results -->
           <div class="flex-1 overflow-y-auto">
             <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
-              :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch" />
+              :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch"
+              @suggestion-click="handleSuggestionClick" @category-click="handleCategoryClick" />
           </div>
         </div>
       </div>
@@ -47,7 +48,8 @@
         <div v-if="searchWord && $mainState.isOpenSearch && !isMobile"
           class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200/80 dark:border-neutral-700/80 z-50 max-h-[400px] overflow-hidden results-container transition-colors duration-300">
           <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
-            :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch" />
+            :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch"
+            @suggestion-click="handleSuggestionClick" @category-click="handleCategoryClick" />
         </div>
       </Transition>
     </div>
@@ -101,6 +103,18 @@ function goSearch() {
   closeSearch()
 }
 
+function handleSuggestionClick(suggestion) {
+  searchWord.value = suggestion
+  goSearch()
+}
+
+function handleCategoryClick(category) {
+  // Kategori slug'ına göre kategoriye yönlendir
+  const categoryPath = `/${category.slug}-a${category.id}`
+  router.push(categoryPath)
+  closeSearch()
+}
+
 function handleBlur(event) {
   // Eğer tıklanan element arama sonuçları içinde değilse blur işlemi yapılır
   if (
@@ -125,16 +139,21 @@ const debouncedSearch = debounce(async (newVal) => {
     return
   }
 
+  console.log('🔍 Arama yapılıyor:', newVal)
   isSearching.value = true
 
   try {
-    const response = await productState.getProducts(
-      {
-        searchWord: newVal,
-        limit: 8
-      },
-      true
-    )
+    const searchParams = {
+      searchWord: newVal,
+      limit: 8
+    }
+
+    console.log('📤 Arama parametreleri:', searchParams)
+
+    const response = await productState.getProducts(searchParams, true)
+
+    console.log('📥 Arama yanıtı:', response)
+    console.log('📊 Bulunan ürün sayısı:', response?.data?.length || 0)
 
     productsSearched.value = response.data || []
   } catch (error) {
