@@ -26,16 +26,8 @@
         </div>
 
         <!-- Siparişler -->
-        <div v-if="paginatedOrders?.length" class="space-y-6">
-          <PartialsOrderItem v-for="(order, index) in paginatedOrders" :key="order.id" :item="order" :index="index">
-            <!-- Adres Kartları -->
-            <div class="grid md:grid-cols-2 gap-4">
-              <PartialsOrderAddressCard title="Teslimat Adresi" :address="order.shipping_address || {}"
-                :address-options="{ allAction: false }" />
-              <PartialsOrderAddressCard title="Fatura Adresi" :address="order.billing_address || {}"
-                :address-options="{ allAction: false }" />
-            </div>
-          </PartialsOrderItem>
+        <div v-if="paginatedOrders?.length" class="space-y-4">
+          <PartialsOrderSummaryCard v-for="order in paginatedOrders" :key="order.id" :item="order" />
         </div>
 
         <!-- Sayfalandırma -->

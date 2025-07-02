@@ -67,7 +67,7 @@
       </div>
     </section>
 
-    <section class="py-8 lg:py-12 bg-neutral-50 dark:bg-neutral-800 transition-colors duration-300">
+    <section class="py-8 lg:py-12 bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
       <div class="md:container md:mx-auto md:px-6 lg:px-8">
         <ProductQASection v-if="productState.product && productState.product.id" :product="productState.product" />
       </div>
