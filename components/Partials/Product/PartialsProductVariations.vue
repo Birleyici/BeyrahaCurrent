@@ -864,62 +864,76 @@ Detayları konuşabilir miyiz?`;
 
 // Görseli galeriye ekle
 const addImageToGallery = (item) => {
+  console.log('🖼️ addImageToGallery called:', item?.term_name);
+
   if (!item?.term_images?.[0]?.path) {
+    console.log('❌ No term image found');
     return;
   }
 
   const termImage = item.term_images[0];
+  console.log('📸 Term image:', termImage);
 
   // Galeri dizisini al
   let currentGallery = [...(props.productState.product.selectedImages || [])];
+  console.log('🖼️ Current gallery length:', currentGallery.length);
 
   // Aynı görsel zaten var mı kontrol et
   const existingIndex = currentGallery.findIndex(img => img.id === termImage.id);
+  console.log('🔍 Existing index:', existingIndex);
 
   if (existingIndex === -1) {
     // Görsel yoksa sonuna ekle
     currentGallery.push(termImage);
+    console.log('➕ Added new image, new length:', currentGallery.length);
 
     // Product state'ini güncelle
     props.productState.product.selectedImages = currentGallery;
 
     // Eklenen görseli seçili yap (son index)
     const newImageIndex = currentGallery.length - 1;
+    console.log('🎯 Setting gallery index to:', newImageIndex);
 
-    // galleryCurrentIndex'i güncellemeden önce sıfırla sonra güncelle (reactivity için)
-    props.productState.product.galleryCurrentIndex = -1;
-    nextTick(() => {
+    // Daha güvenli reactivity için farklı yöntem
+    props.productState.product.galleryCurrentIndex = null;
+    setTimeout(() => {
       props.productState.product.galleryCurrentIndex = newImageIndex;
-    });
+      console.log('✅ Gallery index set to:', newImageIndex);
+    }, 0);
 
     // Galerinin başına scroll yap
-    nextTick(() => {
+    setTimeout(() => {
       const galleryElement = document.getElementById('product-gallery');
       if (galleryElement) {
         galleryElement.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
         });
+        console.log('📜 Scrolled to gallery');
       }
-    });
+    }, 100);
   } else {
     // Görsel zaten varsa o görseli seçili yap ve galeriye git
-    // galleryCurrentIndex'i güncellemeden önce sıfırla sonra güncelle (reactivity için)
-    props.productState.product.galleryCurrentIndex = -1;
-    nextTick(() => {
+    console.log('🔄 Image exists, setting index to:', existingIndex);
+
+    // Daha güvenli reactivity için farklı yöntem
+    props.productState.product.galleryCurrentIndex = null;
+    setTimeout(() => {
       props.productState.product.galleryCurrentIndex = existingIndex;
-    });
+      console.log('✅ Gallery index set to existing:', existingIndex);
+    }, 0);
 
     // Galerinin başına scroll yap
-    nextTick(() => {
+    setTimeout(() => {
       const galleryElement = document.getElementById('product-gallery');
       if (galleryElement) {
         galleryElement.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
         });
+        console.log('📜 Scrolled to gallery');
       }
-    });
+    }, 100);
   }
 };
 

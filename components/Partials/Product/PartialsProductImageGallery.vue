@@ -309,8 +309,10 @@ watch(
 watch(
   () => props.currentIndex,
   (newIndex) => {
+    console.log('🎯 Gallery received new index:', newIndex);
     if (newIndex !== undefined && newIndex !== null && newIndex >= 0) {
       currentIndex.value = newIndex;
+      console.log('✅ Gallery index updated to:', newIndex);
     }
   },
   { immediate: true }
