@@ -881,9 +881,11 @@ const addImageToGallery = (item) => {
   // Galeri dizisini al
   let currentGallery = [...(props.productState.product[galleryArrayKey] || [])];
 
-  // Aynı görsel zaten var mı kontrol et (hem orijinal hem flag'li halini kontrol et)
+  // Aynı görsel zaten var mı kontrol et (hem ID hem path ile kontrol et)
   const existingIndex = currentGallery.findIndex(img =>
-    img.id === termImage.id || (img.isTermImage && img.id === termImage.id)
+    img.id === termImage.id ||
+    img.path === termImage.path ||
+    (img.isTermImage && img.id === termImage.id)
   );
 
   if (existingIndex === -1) {
