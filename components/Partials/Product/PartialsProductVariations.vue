@@ -216,6 +216,7 @@ const { $mainState } = useNuxtApp();
 const nuxtApp = useNuxtApp();
 const currentRoute = useRoute();
 const { whatsappNumber } = useSettings();
+const toast = useToast();
 
 const qyt = ref(1);
 
