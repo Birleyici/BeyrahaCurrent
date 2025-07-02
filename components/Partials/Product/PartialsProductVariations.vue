@@ -112,14 +112,17 @@
                       {{ option.term_name }}
                     </button>
 
-                    <!-- Soru İşareti İkonu - Diğer Nitelikler İçin -->
                     <div v-if="option?.term_images?.[0]?.path && isSelected(attribute.name, option.term_name)"
                       class="absolute -top-2 -right-2">
                       <button @click.stop="addImageToGallery(option)"
-                        class="w-6 h-6 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group border border-gray-200 dark:border-gray-600"
-                        :title="`${option.term_name} görselini galeriye ekle`">
-                        <UIcon name="i-heroicons-photo"
-                          class="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-secondary-500" />
+                        class="w-6 h-6 bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 group border-2 border-white dark:border-neutral-800 relative animate-pulse hover:animate-none"
+                        :title="`${option.term_name} detay görselini incele`">
+                        <UIcon name="i-heroicons-question-mark-circle" class="w-4 h-4 text-white" />
+                        <!-- Tooltip -->
+                        <div
+                          class="absolute -bottom-9 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-10 after:content-[''] after:absolute after:top-[-4px] after:left-1/2 after:transform after:-translate-x-1/2 after:border-l-4 after:border-r-4 after:border-b-4 after:border-transparent after:border-b-blue-600">
+                          Detayına bak
+                        </div>
                       </button>
                     </div>
                   </div>
