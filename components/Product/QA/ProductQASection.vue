@@ -1,15 +1,15 @@
 <template>
     <div
-        class="bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 p-4 md:p-6 shadow-sm transition-colors duration-300">
+        class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-4 md:p-6 shadow-none md:shadow-sm transition-colors duration-300">
         <!-- Başlık -->
         <div class="flex items-center justify-between mb-6">
-            <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center space-x-2">
-                <UIcon name="i-heroicons-question-mark-circle" class="w-5 h-5 text-secondary-600" />
+            <h2 class="text-xl lg:text-2xl font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                <UIcon name="i-heroicons-question-mark-circle" class="w-6 h-6 text-secondary-600" />
                 <span>Sorular ve Cevaplar</span>
                 <span v-if="questionsData?.total" class="text-sm font-normal text-neutral-500 dark:text-neutral-400">
                     ({{ questionsData.total }})
                 </span>
-            </h3>
+            </h2>
 
             <!-- Soru Sor Butonu -->
             <ClientOnly>

@@ -172,7 +172,7 @@
     </UModal>
 
     <!-- Media Selection Modal -->
-    <UModal v-model="isMediaModalOpen" :ui="{ width: 'sm:max-w-4xl' }">
+    <UModal v-model="isMediaModalOpen" :ui="{ width: 'sm:max-w-4xl' }" fullscreen="true">
       <div class="h-full bg-white dark:bg-gray-900 flex flex-col">
         <!-- Modal Header -->
         <div

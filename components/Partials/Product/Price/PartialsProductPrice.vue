@@ -1,31 +1,30 @@
 <template>
-    <div class="text-center md:flex space-x-2 md:items-center" :class="props.class">
+    <div class="flex items-center gap-2" :class="props.class">
         <!-- Varyasyonlı ürün fiyat gösterimi -->
         <template v-if="props.isVariationProduct">
-            <div v-if="props.displayPrice" class="flex flex-col items-center">
-                <p :class="priceClasses">
+            <div v-if="props.displayPrice">
+                <span :class="priceClasses">
                     {{ formatPrice(props.displayPrice) }}<span v-if="props.hasPriceRange">+</span>
-                </p>
-                <p v-if="props.type === 'page'" class="text-sm text-neutral-500 dark:text-neutral-400 mt-1">
-                    Varyasyonlara göre
-                </p>
+                </span>
+                <span v-if="props.type === 'page'" class="text-sm text-neutral-500 dark:text-neutral-400 ml-2">
+                    varyasyonlara göre
+                </span>
             </div>
             <div v-else>
-                <p class="text-sm text-orange-500 dark:text-orange-400">
-                    Varyasyon fiyatı belirlenmemiş
-                </p>
+                <span class="text-sm text-orange-500 dark:text-orange-400">
+                    Fiyat belirlenmemiş
+                </span>
             </div>
         </template>
 
         <!-- Normal ürün fiyat gösterimi -->
         <template v-else>
-            <p :class="delClasses" v-if="props.salePrice && props.delPrice"
-                class="line-through text-neutral-400 dark:text-neutral-500">
+            <span v-if="props.salePrice && props.delPrice" :class="delClasses" class="line-through">
                 {{ formatPrice(props.price) }}
-            </p>
-            <p :class="priceClasses">
+            </span>
+            <span :class="priceClasses">
                 {{ formatPrice(props.salePrice || props.price) }}
-            </p>
+            </span>
         </template>
     </div>
 </template>
@@ -45,14 +44,14 @@ const props = defineProps({
 
 const priceClasses = computed(() => {
     return {
-        'text-heading-3 font-bold text-secondary-600 dark:text-secondary-400': props.type == 'page',
+        'text-2xl md:text-3xl font-bold text-secondary-600 dark:text-secondary-400': props.type == 'page',
         'text-lg font-semibold text-secondary-600 dark:text-secondary-400': props.type == 'card',
     }
 })
 
 const delClasses = computed(() => {
     return {
-        'text-xl text-neutral-500 dark:text-neutral-400': props.type == 'page',
+        'text-lg text-neutral-400 dark:text-neutral-500': props.type == 'page',
         'text-sm text-neutral-400 dark:text-neutral-500': props.type == 'card',
     }
 })

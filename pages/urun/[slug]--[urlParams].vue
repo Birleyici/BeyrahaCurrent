@@ -1,58 +1,63 @@
 <template>
-  <div class="bg-neutral-50 dark:bg-neutral-900 min-h-screen transition-colors duration-300">
+  <div class="bg-neutral-50 dark:bg-neutral-900 min-h-screen">
     <!-- Breadcrumb -->
     <UiCommonBreadcrumb :links="breadcrumbLinks" />
 
     <!-- Ürün Detay -->
-    <section class="pb-8 md:py-8 lg:py-12">
+    <section class="py-6 md:py-10 lg:py-12">
       <div class="md:container mx-auto  md:px-6 lg:px-8">
-        <div class="lg:grid lg:grid-cols-12 lg:gap-12 space-y-6 lg:space-y-0">
-          <!-- Ürün Görselleri - Mobilde tam genişlik -->
-          <div id="product-gallery" class="col-span-5  md:mx-0" v-if="$mainState.isLoaded">
+        <div class="lg:grid lg:grid-cols-12 lg:gap-8 xl:gap-12 space-y-8 lg:space-y-0">
+          <!-- Ürün Görselleri -->
+          <div id="product-gallery" class="col-span-5" v-if="$mainState.isLoaded">
             <div class="lg:sticky lg:top-24">
               <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages"
                 :current-index="productState.product.galleryCurrentIndex" />
             </div>
           </div>
-          <SkeletonProductGallery v-else class="col-span-5  md:mx-0"></SkeletonProductGallery>
+          <SkeletonProductGallery v-else class="col-span-5" />
 
           <!-- Ürün Bilgileri -->
-          <div class="col-span-7 px-4 md:px-0">
-            <div class="space-y-6 md:space-y-8">
+          <div class="col-span-7">
+            <div class="space-y-8">
               <!-- Ürün Başlığı -->
-              <div>
-                <h1 class="text-heading-1 font-bold text-neutral-900 dark:text-neutral-100 mb-4">
+              <header>
+                <h1
+                  class="px-4 text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight">
                   {{ productState.product.name }}
                 </h1>
-              </div>
+              </header>
 
               <!-- Ürün Varyasyonları -->
-              <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
-                :product-state="productState" />
+              <div class="px-4">
+                <PartialsProductVariations :attrs-and-vars-state="attributeState.transformedAttrs"
+                  :product-state="productState" />
+              </div>
 
               <!-- Öne Çıkan Bilgiler -->
               <div
-                class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-4 md:p-6 shadow-none md:shadow-sm transition-colors duration-300 -mx-4 md:mx-0">
-                <h3 class="font-semibold text-neutral-900 dark:text-neutral-100 mb-4">Öne çıkan bilgiler</h3>
-                <ul class="space-y-3 text-neutral-700 dark:text-neutral-300">
-                  <li class="flex items-start space-x-3">
+                class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border border-neutral-200 dark:border-neutral-700 p-6   md:mx-0 px-4">
+                <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
+                  Öne çıkan bilgiler
+                </h2>
+                <ul class="space-y-3">
+                  <li class="flex items-start gap-3">
                     <UIcon name="i-heroicons-check-circle"
                       class="w-5 h-5 text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                    <span>15 gün içerisinde ücretsiz iade</span>
+                    <span class="text-neutral-700 dark:text-neutral-300">15 gün içerisinde ücretsiz iade</span>
                   </li>
                   <li v-for="feature in productState.product.featured_infos.slice(0, 2)" :key="feature.id"
-                    class="flex items-start space-x-3">
+                    class="flex items-start gap-3">
                     <UIcon name="i-heroicons-check-circle"
                       class="w-5 h-5 text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                    <span>{{ feature.content }}</span>
+                    <span class="text-neutral-700 dark:text-neutral-300">{{ feature.content }}</span>
                   </li>
                 </ul>
 
                 <button @click="goInfo()" v-if="productState.product?.featured_infos?.length > 2"
-                  class="mt-4 group flex items-center space-x-2 text-secondary-600 dark:text-secondary-400 hover:text-secondary-700 dark:hover:text-secondary-300 font-medium transition-colors duration-200">
+                  class="mt-4 group inline-flex items-center gap-2 text-secondary-600 dark:text-secondary-400 hover:text-secondary-700 dark:hover:text-secondary-300 font-medium transition-colors duration-200">
                   <span>Tüm ürün bilgilerini gör</span>
                   <UIcon name="i-heroicons-chevron-down"
-                    class="w-4 h-4 transition-transform duration-200 group-hover:translate-y-1" />
+                    class="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5" />
                 </button>
               </div>
             </div>
@@ -62,42 +67,43 @@
     </section>
 
     <!-- Ürün Açıklaması -->
-    <section ref="productInformation" class="py-8 lg:py-12 bg-white dark:bg-neutral-800 transition-colors duration-300">
-      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+    <section ref="productInformation" class="py-8 lg:py-12 bg-white dark:bg-neutral-800">
+      <div class="md:container mx-auto px-4 md:px-6 lg:px-8">
         <PartialsProductInformation :attributes="attributeState.transformedAttrs" />
       </div>
     </section>
 
-    <section class="py-8 lg:py-12 bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
-      <div class="md:container md:mx-auto md:px-6 lg:px-8">
+    <!-- Soru-Cevap Bölümü -->
+    <section class="py-8 lg:py-12 bg-neutral-50 dark:bg-neutral-900">
+      <div class="md:container mx-auto md:px-6 lg:px-8">
         <ProductQASection v-if="productState.product && productState.product.id" :product="productState.product" />
       </div>
     </section>
 
-
-
     <!-- Ürün Yorumları -->
-    <section class="py-8 lg:py-12 bg-white dark:bg-neutral-900 transition-colors duration-300">
-      <div class="md:container md:mx-auto md:px-6 lg:px-8">
+    <section class="py-10 lg:py-12 bg-white dark:bg-neutral-800">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8">
         <ProductReviewsSection v-if="productState.product && productState.product.id" :product="productState.product" />
       </div>
     </section>
 
-    <!-- Soru-Cevap Bölümü -->
-
     <!-- Benzer Ürünler -->
-    <UiSlidesProductSlide id="similar-products" :is-ssr="false" title="Benzer Ürünler"
-      :filters="similarProductsFilters" />
+    <section class="py-10 lg:py-12 bg-neutral-50 dark:bg-neutral-900">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+        <UiSlidesProductSlide id="similar-products" :is-ssr="false" title="Benzer Ürünler"
+          :filters="similarProductsFilters" />
+      </div>
+    </section>
 
-    <!-- Admin Edit Button - Sabit konumda sol alt köşe -->
-    <div v-if="isAdmin" class="fixed bottom-6 left-4 sm:bottom-6 sm:left-6 z-50">
+    <!-- Admin Edit Button -->
+    <div v-if="isAdmin" class="fixed bottom-6 left-6 z-50">
       <UButton :to="`/management/urunler/${productState.product.id}`" color="green" variant="solid" size="lg"
         icon="i-heroicons-pencil-square"
         class="shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm" :ui="{
           rounded: 'rounded-full',
           background: 'bg-orange-500/90 hover:bg-orange-600/90 dark:bg-orange-600/90 dark:hover:bg-orange-700/90'
         }" title="Ürünü Düzenle">
-        <span class=" ml-2">Düzenle</span>
+        <span class="ml-2">Düzenle</span>
       </UButton>
     </div>
   </div>
