@@ -10,6 +10,7 @@ export const useProductState = defineStore('productState', () => {
     selectedImages: [],
     selectedCategories: [],
     selectedColorTermImages: [],
+    selectedColorTerm: null,
     selectedInput: null,
     inputValue: null,
     price: null,

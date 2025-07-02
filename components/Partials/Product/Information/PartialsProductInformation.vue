@@ -16,7 +16,7 @@
       </div>
 
       <!-- Detaylı Açıklama -->
-      <div v-if="productState.product.additional_info" class="space-y-4">
+      <div v-if="productState.product.additional_info" class="space-y-4 mt-6">
         <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
           Detaylı Açıklama
         </h3>

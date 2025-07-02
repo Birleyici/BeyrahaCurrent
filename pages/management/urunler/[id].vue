@@ -76,9 +76,12 @@
 
           <!-- Tab Content -->
           <div class="p-6">
-            <KeepAlive>
-              <component :is="tabs[currentTab]" />
-            </KeepAlive>
+            <!-- Video Tab - special handling -->
+            <AdminPartialsProductVideoTab v-if="currentTab === 'VideoTab'" :product-id="productState.product.id"
+              :initial-video-data="productVideoData" :product-attributes="attributeState.attributes"
+              @video-updated="handleVideoUpdated" />
+            <!-- Other Tabs -->
+            <component v-else :is="tabs[currentTab]" />
           </div>
         </div>
       </div>
@@ -383,6 +386,24 @@ const selectedCategoriesProxy = computed({
   }
 });
 
+// Video data computed
+const productVideoData = computed(() => {
+  if (!productState.product.video_url) return null;
+
+  const result = {
+    url: productState.product.video_url,
+    type: productState.product.video_type,
+    thumbnail: productState.product.video_thumbnail,
+    description: productState.product.video_description,
+    is_featured: Boolean(productState.product.is_video_featured)
+  };
+
+  console.log('productVideoData computed:', result);
+  console.log('Product state is_video_featured:', productState.product.is_video_featured, typeof productState.product.is_video_featured);
+
+  return result;
+});
+
 // Tab configuration
 const tabList = [
   {
@@ -399,6 +420,11 @@ const tabList = [
     key: 'VariationTab',
     label: 'Varyasyonlar',
     icon: 'i-heroicons-squares-2x2'
+  },
+  {
+    key: 'VideoTab',
+    label: 'Video',
+    icon: 'i-heroicons-play-circle'
   },
   {
     key: 'FeaturedTab',
@@ -903,5 +929,24 @@ const getProductUrl = () => {
 
   // Renk niteliği yoksa normal URL formatı: /urun/[slug]--[id]
   return `/urun/${slug}--${productState.product.id}`;
+};
+
+// Video updated handler
+const handleVideoUpdated = (videoData) => {
+  console.log('Video güncellendi:', videoData);
+  console.log('videoData.is_featured:', videoData.is_featured, typeof videoData.is_featured);
+
+  // Product state'ini güncelle
+  productState.product.video_url = videoData.url;
+  productState.product.video_type = videoData.type;
+  productState.product.video_thumbnail = videoData.thumbnail;
+  productState.product.video_description = videoData.description;
+  productState.product.is_video_featured = Boolean(videoData.is_featured);
+
+  console.log('Product state güncellendi:', {
+    video_url: productState.product.video_url,
+    video_type: productState.product.video_type,
+    is_video_featured: productState.product.is_video_featured
+  });
 };
 </script>

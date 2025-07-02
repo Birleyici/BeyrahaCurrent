@@ -10,7 +10,12 @@
           <!-- Ürün Görselleri -->
           <div id="product-gallery" class="col-span-5" v-if="$mainState.isLoaded">
             <div class="lg:sticky lg:top-24">
-              <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages"
+              <!-- Video destekli galeri kullan (genel video veya renk videosu varsa) -->
+              <PartialsProductVideoGallery v-if="productState.product.video_url || selectedColorVideoData"
+                :alt="productState.product.name" :images="selectedImages" :video="productVideoData"
+                :color-video="selectedColorVideoData" :current-index="productState.product.galleryCurrentIndex" />
+              <!-- Video yoksa normal galeri kullan -->
+              <PartialsProductImageGallery v-else :alt="productState.product.name" :images="selectedImages"
                 :current-index="productState.product.galleryCurrentIndex" />
             </div>
           </div>
@@ -174,6 +179,38 @@ const selectedImages = computed(() => {
   return productState.product.selectedColorTermImages?.length
     ? productState.product.selectedColorTermImages
     : productState.product.selectedImages;
+});
+
+// Video verilerini hazırla
+const productVideoData = computed(() => {
+  if (!productState.product.video_url) return null;
+
+  return {
+    url: productState.product.video_url,
+    type: productState.product.video_type,
+    thumbnail: productState.product.video_thumbnail,
+    description: productState.product.video_description,
+    is_featured: productState.product.is_video_featured
+  };
+});
+
+// Seçili renk için video verilerini hazırla
+const selectedColorVideoData = computed(() => {
+  // Önce seçili rengin video verisi var mı kontrol et
+  const selectedColorTerm = productState.product.selectedColorTerm;
+
+  if (selectedColorTerm && selectedColorTerm.term_videos && selectedColorTerm.term_videos.length > 0) {
+    const videoData = selectedColorTerm.term_videos[0];
+    return {
+      url: videoData.video_url,
+      type: videoData.video_type,
+      thumbnail: videoData.video_thumbnail,
+      description: videoData.video_description,
+      is_featured: videoData.is_video_featured
+    };
+  }
+
+  return null;
 });
 
 useHead({

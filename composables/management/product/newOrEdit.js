@@ -5,6 +5,7 @@ import {
     AdminPartialsProductVariationTab,
     AdminPartialsProductFeaturedInfos,
     AdminPartialsProductExtrasTab,
+    AdminPartialsProductVideoTab,
 } from "#components";
 
 export function useProductCreate() {
@@ -15,6 +16,7 @@ export function useProductCreate() {
         GeneralTab: AdminPartialsProductGeneralTab,
         VariationTab: AdminPartialsProductVariationTab,
         AttributeTab: AdminPartialsProductAttributeTab,
+        VideoTab: AdminPartialsProductVideoTab,
         FeaturedTab: AdminPartialsProductFeaturedInfos,
         ExstrasTab: AdminPartialsProductExtrasTab
     };

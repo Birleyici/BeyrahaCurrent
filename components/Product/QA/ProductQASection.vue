@@ -5,7 +5,6 @@
         <div class="flex items-center justify-between mb-6">
             <h2
                 class="text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
-                <UIcon name="i-heroicons-question-mark-circle" class="w-6 h-6 text-secondary-600" />
                 <span>Sorular ve Cevaplar</span>
                 <span v-if="questionsData?.total" class="text-sm font-normal text-neutral-500 dark:text-neutral-400">
                     ({{ questionsData.total }})

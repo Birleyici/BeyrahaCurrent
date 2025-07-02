@@ -175,9 +175,6 @@
                                 <span
                                     class="text-xs font-medium text-neutral-600 dark:text-neutral-300 block truncate">{{
                                         category.name }}</span>
-                                <span v-if="category.sales_count > 0"
-                                    class="text-[10px] text-neutral-400 dark:text-neutral-500">{{ category.sales_count
-                                    }} satış</span>
                             </div>
                         </button>
                     </div>

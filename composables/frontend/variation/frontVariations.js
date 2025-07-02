@@ -44,7 +44,8 @@ export const useVariationsFront = () => {
             term_images: item.term_images.map((image) => ({
               id: image.id,
               path: image.path
-            }))
+            })),
+            term_videos: item.term_videos || []
           }
         })
 
@@ -143,6 +144,9 @@ export const useVariationsFront = () => {
 
   const selectOption = (attributeName, option, colorTerm = null) => {
     if (colorTerm) {
+      // Seçili renk terimi product state'ine set et
+      productState.product.selectedColorTerm = colorTerm
+      
       // Mevcut terim görsellerini koru, sadece renk görsellerini değiştir
       const currentTermImages = productState.product.selectedColorTermImages?.filter(img => img.isTermImage) || []
       
