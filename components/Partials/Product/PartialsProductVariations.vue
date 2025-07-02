@@ -881,12 +881,18 @@ const addImageToGallery = (item) => {
   // Galeri dizisini al
   let currentGallery = [...(props.productState.product[galleryArrayKey] || [])];
 
-  // Aynı görsel zaten var mı kontrol et
-  const existingIndex = currentGallery.findIndex(img => img.id === termImage.id);
+  // Aynı görsel zaten var mı kontrol et (hem orijinal hem flag'li halini kontrol et)
+  const existingIndex = currentGallery.findIndex(img =>
+    img.id === termImage.id || (img.isTermImage && img.id === termImage.id)
+  );
 
   if (existingIndex === -1) {
-    // Görsel yoksa sonuna ekle
-    currentGallery.push(termImage);
+    // Görsel yoksa sonuna ekle (terim görseli olarak işaretle)
+    const termImageWithFlag = {
+      ...termImage,
+      isTermImage: true
+    };
+    currentGallery.push(termImageWithFlag);
 
     // Product state'ini güncelle (doğru array'e)
     props.productState.product[galleryArrayKey] = currentGallery;

@@ -143,8 +143,16 @@ export const useVariationsFront = () => {
 
   const selectOption = (attributeName, option, colorTerm = null) => {
     if (colorTerm) {
-      productState.product.selectedColorTermImages = []
-      productState.product.selectedColorTermImages = colorTerm.term_images
+      // Mevcut terim görsellerini koru, sadece renk görsellerini değiştir
+      const currentTermImages = productState.product.selectedColorTermImages?.filter(img => img.isTermImage) || []
+      
+      productState.product.selectedColorTermImages = [
+        ...colorTerm.term_images,
+        ...currentTermImages
+      ]
+      
+      // Renk değiştirildiğinde her zaman yeni renk görselinin ilkini seç
+      productState.product.galleryCurrentIndex = 0
 
       if (process.client) {
         const currentSlug = router.currentRoute.value.params.slug
