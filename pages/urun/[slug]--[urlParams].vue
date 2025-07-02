@@ -165,9 +165,16 @@ attributeState.transformedAttrs = transform(
 );
 
 const selectedImages = computed(() => {
-  return productState.product.selectedColorTermImages?.length
+  console.log('🖼️ Computing selectedImages...');
+  console.log('📸 selectedColorTermImages:', productState.product.selectedColorTermImages?.length || 0);
+  console.log('📸 selectedImages:', productState.product.selectedImages?.length || 0);
+
+  const result = productState.product.selectedColorTermImages?.length
     ? productState.product.selectedColorTermImages
     : productState.product.selectedImages;
+
+  console.log('🎯 Final selectedImages result length:', result?.length || 0);
+  return result;
 });
 
 useHead({
