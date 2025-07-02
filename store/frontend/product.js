@@ -19,7 +19,8 @@ export const useProductState = defineStore('productState', () => {
     stock: 0,
     loading: false,
     categories: [],
-    featured_infos: []
+    featured_infos: [],
+    galleryCurrentIndex: 0
   })
 
   const newProduct = toRaw({ ...product.value })

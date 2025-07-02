@@ -19,12 +19,12 @@
 
     <!-- Ürün Stokta İse Normal Component -->
     <template v-else>
-      <div>
+      <div class="space-y-6">
         <div v-for="attribute in props.attrsAndVarsState" :key="attribute.name">
           <!-- Öznitelik Adı -->
           <div>
             <div v-if="attribute.name.toLowerCase() == 'renk' && attribute?.options?.length > 1">
-              <div class="space-y-4 mb-4"
+              <div class="space-y-4"
                 :class="{ 'p-4 border border-red-200 rounded-xl bg-red-50 dark:bg-red-900/10 dark:border-red-700': selectionRequired && !selectedOptions['Renk'] }">
                 <!-- Renk Başlığı ve Seçili Renk -->
                 <div class="flex items-center justify-between">
@@ -108,16 +108,28 @@
               <div class="space-y-3">
                 <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">{{ attribute.name }}</h3>
                 <div class="flex flex-wrap gap-2">
-                  <button v-for="option in attribute.options" :key="option.term_name"
-                    :disabled="!isActive(attribute.name, option.term_name)"
-                    @click="selectOption(attribute.name, option.term_name)" :class="{
-                      'bg-secondary-500 text-white border-secondary-500 shadow-md': isSelected(attribute.name, option.term_name),
-                      'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:bg-secondary-50 dark:hover:bg-secondary-900/20': !isSelected(attribute.name, option.term_name) && isActive(attribute.name, option.term_name),
-                      'opacity-50 cursor-not-allowed': !isActive(attribute.name, option.term_name)
-                    }"
-                    class="px-4 py-2.5 text-sm font-medium border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-400 dark:focus:ring-secondary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800 hover:scale-105 active:scale-95">
-                    {{ option.term_name }}
-                  </button>
+                  <div v-for="option in attribute.options" :key="option.term_name" class="relative">
+                    <button :disabled="!isActive(attribute.name, option.term_name)"
+                      @click="selectOption(attribute.name, option.term_name)" :class="{
+                        'bg-secondary-500 text-white border-secondary-500 shadow-md': isSelected(attribute.name, option.term_name),
+                        'bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 border-neutral-200 dark:border-neutral-700 hover:border-secondary-300 dark:hover:border-secondary-600 hover:bg-secondary-50 dark:hover:bg-secondary-900/20': !isSelected(attribute.name, option.term_name) && isActive(attribute.name, option.term_name),
+                        'opacity-50 cursor-not-allowed': !isActive(attribute.name, option.term_name)
+                      }"
+                      class="px-4 py-2.5 text-sm font-medium border rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-400 dark:focus:ring-secondary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800 hover:scale-105 active:scale-95">
+                      {{ option.term_name }}
+                    </button>
+
+                    <!-- Soru İşareti İkonu - Diğer Nitelikler İçin -->
+                    <div v-if="option?.term_images?.[0]?.path && isSelected(attribute.name, option.term_name)"
+                      class="absolute -top-2 -right-2">
+                      <button @click.stop="addImageToGallery(option)"
+                        class="w-6 h-6 bg-white dark:bg-gray-800 rounded-full shadow-lg flex items-center justify-center hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors group border border-gray-200 dark:border-gray-600"
+                        :title="`${option.term_name} görselini galeriye ekle`">
+                        <UIcon name="i-heroicons-photo"
+                          class="w-4 h-4 text-gray-600 dark:text-gray-400 group-hover:text-secondary-500" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -252,7 +264,6 @@ const cartState = useCartState();
 const { $mainState } = useNuxtApp();
 const nuxtApp = useNuxtApp();
 const currentRoute = useRoute();
-const toast = useToast();
 const { whatsappNumber } = useSettings();
 
 const qyt = ref(1);
@@ -849,6 +860,67 @@ Detayları konuşabilir miyiz?`;
     color: 'green',
     icon: "i-simple-icons-whatsapp",
   })
+};
+
+// Görseli galeriye ekle
+const addImageToGallery = (item) => {
+  if (!item?.term_images?.[0]?.path) {
+    return;
+  }
+
+  const termImage = item.term_images[0];
+
+  // Galeri dizisini al
+  let currentGallery = [...(props.productState.product.selectedImages || [])];
+
+  // Aynı görsel zaten var mı kontrol et
+  const existingIndex = currentGallery.findIndex(img => img.id === termImage.id);
+
+  if (existingIndex === -1) {
+    // Görsel yoksa sonuna ekle
+    currentGallery.push(termImage);
+
+    // Product state'ini güncelle
+    props.productState.product.selectedImages = currentGallery;
+
+    // Eklenen görseli seçili yap (son index)
+    const newImageIndex = currentGallery.length - 1;
+
+    // galleryCurrentIndex'i güncellemeden önce sıfırla sonra güncelle (reactivity için)
+    props.productState.product.galleryCurrentIndex = -1;
+    nextTick(() => {
+      props.productState.product.galleryCurrentIndex = newImageIndex;
+    });
+
+    // Galerinin başına scroll yap
+    nextTick(() => {
+      const galleryElement = document.getElementById('product-gallery');
+      if (galleryElement) {
+        galleryElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  } else {
+    // Görsel zaten varsa o görseli seçili yap ve galeriye git
+    // galleryCurrentIndex'i güncellemeden önce sıfırla sonra güncelle (reactivity için)
+    props.productState.product.galleryCurrentIndex = -1;
+    nextTick(() => {
+      props.productState.product.galleryCurrentIndex = existingIndex;
+    });
+
+    // Galerinin başına scroll yap
+    nextTick(() => {
+      const galleryElement = document.getElementById('product-gallery');
+      if (galleryElement) {
+        galleryElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  }
 };
 
 </script>

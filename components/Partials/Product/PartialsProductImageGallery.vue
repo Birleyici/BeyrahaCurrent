@@ -59,10 +59,10 @@
           'ring-2 ring-secondary-500 ring-offset-2': index === currentIndex,
           'hover:ring-2 hover:ring-neutral-300 hover:ring-offset-1': index !== currentIndex
         }"
-          class="relative aspect-square rounded-lg overflow-hidden bg-neutral-100 transition-all duration-300 hover:scale-105">
+          class="h-24 relative aspect-square rounded-lg overflow-hidden bg-neutral-100 transition-all duration-300 hover:scale-105">
           <NuxtImg v-if="!image.placeholder && image.path !== '/img-placeholder.jpg'" :src="'cl/' + image.path"
             :alt="image.alt" class="w-full h-full object-cover" format="webp" quality="60" :width="120" :height="120"
-            fit="cover" />
+            fit="contain" />
           <img v-else src="/img-placeholder.jpg" alt="Ürün Resmi" class="w-full h-full object-cover" />
         </button>
       </div>
@@ -177,7 +177,7 @@
 </template>
 
 <script setup lang="ts">
-const props = defineProps(['images', 'alt']);
+const props = defineProps(['images', 'alt', 'currentIndex']);
 
 // Dark mode reactive tracking
 const isDarkMode = ref(false);
@@ -231,7 +231,7 @@ const images = computed(() => {
     ];
 });
 
-const currentIndex = ref(0);
+const currentIndex = ref(props.currentIndex ?? 0);
 const currentImage = computed(() => images.value[currentIndex.value]);
 
 const isFullscreen = ref(false);
@@ -302,8 +302,18 @@ onUnmounted(() => {
 watch(
   () => props.images,
   () => {
-    currentIndex.value = 0;
+    currentIndex.value = props.currentIndex ?? 0;
   }
+);
+
+watch(
+  () => props.currentIndex,
+  (newIndex) => {
+    if (newIndex !== undefined && newIndex !== null && newIndex >= 0) {
+      currentIndex.value = newIndex;
+    }
+  },
+  { immediate: true }
 );
 
 // Computed properties

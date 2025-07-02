@@ -7,7 +7,7 @@
 
       },
       default: {
-        class: 'bg-white border border-neutral-200  dark:bg-neutral-800 hover:bg-orange-50 dark:hover:bg-neutral-700'
+        class: 'bg-white border border-neutral-200  dark:bg-neutral-800 hover:text-orange-600 dark:hover:text-orange-400'
       }
     }">
       <!-- Ürün Bilgileri Slot -->
@@ -39,11 +39,11 @@
               v-html="productState.product.additional_info"></div>
           </div>
 
-          <!-- Teknik Özellikler -->
+          <!-- Ürün Nitelikleri -->
           <div v-if="props.attributes?.length" class="space-y-3">
             <h4 class="font-medium text-neutral-900 dark:text-neutral-100 flex items-center">
               <UIcon name="i-heroicons-cog-6-tooth" class="w-4 h-4 mr-2 text-blue-500" />
-              Teknik Özellikler
+              Ürün Nitelikleri
             </h4>
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               <div v-for="attr in props.attributes" :key="attr.name"

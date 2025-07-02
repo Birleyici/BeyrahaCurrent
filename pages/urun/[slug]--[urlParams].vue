@@ -10,7 +10,8 @@
           <!-- Ürün Görselleri - Mobilde tam genişlik -->
           <div id="product-gallery" class="col-span-5  md:mx-0" v-if="$mainState.isLoaded">
             <div class="lg:sticky lg:top-24">
-              <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages" />
+              <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages"
+                :current-index="productState.product.galleryCurrentIndex" />
             </div>
           </div>
           <SkeletonProductGallery v-else class="col-span-5  md:mx-0"></SkeletonProductGallery>

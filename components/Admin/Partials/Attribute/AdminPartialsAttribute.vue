@@ -65,6 +65,17 @@
               <div class="flex flex-wrap gap-2">
                 <div v-for="term in props.item.product_attribute_terms" :key="term.id"
                   class="group flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 rounded-full pl-4 pr-2 py-2 transition-colors duration-200">
+
+                  <!-- Görsel İkonu -->
+                  <button @click="openImageSelector(term)"
+                    class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors"
+                    :title="term.term_images?.length > 0 ? 'Görsel değiştir' : 'Görsel ekle'">
+                    <UIcon v-if="term.term_images?.length > 0" name="i-heroicons-photo"
+                      class="w-4 h-4 text-orange-500" />
+                    <UIcon v-else name="i-heroicons-photo"
+                      class="w-4 h-4 text-gray-400 hover:text-orange-500 transition-colors" />
+                  </button>
+
                   <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ term.term_name }}</span>
                   <UButton :loading="term.loading" @click="showDeleteTermConfirmation(term)" icon="i-heroicons-x-mark"
                     variant="ghost" color="gray" size="2xs" :ui="{ rounded: 'rounded-full' }"
@@ -159,6 +170,41 @@
         </div>
       </UCard>
     </UModal>
+
+    <!-- Media Selection Modal -->
+    <UModal v-model="isMediaModalOpen" :ui="{ width: 'sm:max-w-4xl' }">
+      <div class="h-full bg-white dark:bg-gray-900 flex flex-col">
+        <!-- Modal Header -->
+        <div
+          class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky top-0 z-10">
+          <h3 class="text-base font-semibold leading-6 text-gray-900 dark:text-white">
+            {{ selectedTerm?.term_name }} için Görsel Seç
+          </h3>
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark" @click="closeMediaModal" />
+        </div>
+
+        <!-- Modal Content -->
+        <div class="flex-1 overflow-y-auto">
+          <AdminPartialsMedia v-model="selectedImages" />
+        </div>
+
+        <!-- Modal Footer -->
+        <div
+          class="flex justify-end space-x-3 p-6 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 sticky bottom-0 z-10">
+          <UButton color="gray" variant="ghost" @click="closeMediaModal">
+            İptal
+          </UButton>
+          <UButton v-if="selectedTerm?.term_images?.length > 0" color="red" variant="outline" @click="removeTermImage"
+            :loading="isUpdatingImage">
+            Görseli Kaldır
+          </UButton>
+          <UButton color="orange" @click="assignImageToTerm" :disabled="!selectedImages.length"
+            :loading="isUpdatingImage">
+            Görseli Ata
+          </UButton>
+        </div>
+      </div>
+    </UModal>
   </div>
 </template>
 
@@ -166,6 +212,7 @@
 const props = defineProps(["item"]);
 
 const { deleteAttr, addTerm, removeTerm } = useAttributes();
+const toast = useToast();
 
 // Accordion state
 const isOpen = ref(false)
@@ -175,6 +222,12 @@ const showDeleteTermModal = ref(false)
 const termToDelete = ref(null)
 const showDeleteAttrModal = ref(false)
 const attrToDelete = ref(null)
+
+// Media modal states
+const isMediaModalOpen = ref(false)
+const selectedTerm = ref(null)
+const selectedImages = ref([])
+const isUpdatingImage = ref(false)
 
 // Accordion change handler
 const handleAccordionChange = (data) => {
@@ -227,6 +280,124 @@ const confirmDeleteAttr = async () => {
     console.error('Nitelik silme hatası:', error)
   } finally {
     hideDeleteAttrModal()
+  }
+}
+
+// Media modal functions
+const openImageSelector = (term) => {
+  selectedTerm.value = term
+  // Mevcut görseli seçili olarak göster
+  if (term.term_images && term.term_images.length > 0) {
+    selectedImages.value = [{
+      id: term.term_images[0].id,
+      path: term.term_images[0].path
+    }]
+  } else {
+    selectedImages.value = []
+  }
+  isMediaModalOpen.value = true
+}
+
+const closeMediaModal = () => {
+  isMediaModalOpen.value = false
+  selectedTerm.value = null
+  selectedImages.value = []
+}
+
+const assignImageToTerm = async () => {
+  if (!selectedTerm.value || !selectedImages.value.length) return
+
+  try {
+    isUpdatingImage.value = true
+
+    // ID'yi hem id hem de product_attribute_term_id alanlarından kontrol et
+    const termId = selectedTerm.value.id || selectedTerm.value.product_attribute_term_id
+
+    if (!termId) {
+      throw new Error('Term ID bulunamadı')
+    }
+
+    // API çağrısı - laravel routes'da mevcut endpoint'i kullan
+    const response = await useBaseOFetchWithAuth(`product-attribute-terms/${termId}/image`, {
+      method: 'POST',
+      body: {
+        image_ids: [selectedImages.value[0].id]  // Array olarak gönder
+      }
+    })
+
+    if (!response.error) {
+      // Terime görseli ekle
+      if (!selectedTerm.value.term_images) {
+        selectedTerm.value.term_images = []
+      }
+      selectedTerm.value.term_images = [{
+        id: selectedImages.value[0].id,
+        path: selectedImages.value[0].path
+      }]
+
+      toast.add({
+        title: 'Başarıyla kaydedildi!',
+        description: `${selectedTerm.value.term_name} terimine görsel atandı.`,
+        color: 'green',
+        icon: "i-heroicons-check-circle",
+      })
+
+      closeMediaModal()
+    }
+  } catch (error) {
+    console.error('Görsel atama hatası:', error)
+    toast.add({
+      title: 'Hata oluştu!',
+      description: 'Görsel ataması sırasında bir hata oluştu.',
+      color: 'red',
+      icon: "i-heroicons-exclamation-triangle",
+    })
+  } finally {
+    isUpdatingImage.value = false
+  }
+}
+
+const removeTermImage = async () => {
+  if (!selectedTerm.value) return
+
+  try {
+    isUpdatingImage.value = true
+
+    // ID'yi hem id hem de product_attribute_term_id alanlarından kontrol et
+    const termId = selectedTerm.value.id || selectedTerm.value.product_attribute_term_id
+
+    if (!termId) {
+      throw new Error('Term ID bulunamadı')
+    }
+
+    // API çağrısı - laravel routes'da mevcut endpoint'i kullan
+    const response = await useBaseOFetchWithAuth(`product-attribute-terms/${termId}/image`, {
+      method: 'DELETE'
+    })
+
+    if (!response.error) {
+      // Terimden görseli kaldır
+      selectedTerm.value.term_images = []
+
+      toast.add({
+        title: 'Başarıyla kaldırıldı!',
+        description: `${selectedTerm.value.term_name} teriminden görsel kaldırıldı.`,
+        color: 'green',
+        icon: "i-heroicons-check-circle",
+      })
+
+      closeMediaModal()
+    }
+  } catch (error) {
+    console.error('Görsel kaldırma hatası:', error)
+    toast.add({
+      title: 'Hata oluştu!',
+      description: 'Görsel kaldırılması sırasında bir hata oluştu.',
+      color: 'red',
+      icon: "i-heroicons-exclamation-triangle",
+    })
+  } finally {
+    isUpdatingImage.value = false
   }
 }
 </script>
