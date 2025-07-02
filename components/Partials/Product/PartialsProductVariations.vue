@@ -52,35 +52,28 @@
                   <button v-for="item in attribute.options" :key="item.term_name"
                     @click="isActive(attribute.name, item.term_name) && selectColorOption(attribute.name, item.term_name, item)"
                     :disabled="!isActive(attribute.name, item.term_name)" :class="{
-                      'ring-2 ring-secondary-500 ring-offset-2 dark:ring-offset-neutral-800 scale-105': isSelected(attribute.name, item.term_name),
+                      'ring-2 ring-secondary-500 ring-offset-1': isSelected(attribute.name, item.term_name),
                       'opacity-50 cursor-not-allowed': !isActive(attribute.name, item.term_name),
-                      'hover:scale-105 hover:shadow-lg active:scale-95': isActive(attribute.name, item.term_name)
+                      'hover:scale-102': isActive(attribute.name, item.term_name)
                     }"
-                    class="group relative aspect-square rounded-xl overflow-hidden border border-neutral-200 dark:border-neutral-700 transition-all duration-300 ease-out focus:outline-none focus:ring-2 focus:ring-secondary-400 dark:focus:ring-secondary-500 focus:ring-offset-2 dark:focus:ring-offset-neutral-800">
+                    class="group relative aspect-square rounded-lg overflow-hidden border border-neutral-100 dark:border-neutral-700 transition-all duration-200 ease-out focus:outline-none focus:ring-2 focus:ring-secondary-400 dark:focus:ring-secondary-500 focus:ring-offset-1">
 
                     <!-- Renk Resmi -->
                     <NuxtImg v-if="item?.term_images?.[0]?.path" :src="getTermImageSrc(item, item.term_name)"
-                      :alt="item.term_name" width="100" height="120" fit="cover"
-                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
-                    <img v-else src="/img-placeholder.jpg" :alt="item.term_name"
-                      class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110" />
-
-                    <!-- Hover Overlay -->
-                    <div
-                      class="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300 pointer-events-none">
-                    </div>
+                      :alt="item.term_name" width="100" height="120" fit="cover" class="w-full h-full object-cover" />
+                    <img v-else src="/img-placeholder.jpg" :alt="item.term_name" class="w-full h-full object-cover" />
 
                     <!-- Seçili Durumu -->
                     <div v-if="isSelected(attribute.name, item.term_name)"
-                      class="absolute inset-0 bg-secondary-500/20 flex items-center justify-center">
-                      <div class="w-8 h-8 bg-secondary-500 rounded-full flex items-center justify-center shadow-lg">
-                        <UIcon name="i-heroicons-check" class="w-5 h-5 text-white" />
+                      class="absolute inset-0 flex items-center justify-center">
+                      <div class="w-6 h-6 bg-secondary-500 rounded-full flex items-center justify-center shadow-sm">
+                        <UIcon name="i-heroicons-check" class="w-4 h-4 text-white" />
                       </div>
                     </div>
 
                     <!-- Renk Adı Tooltip -->
                     <div
-                      class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                       <span class="text-xs font-medium text-white truncate block">{{ item.term_name }}</span>
                     </div>
                   </button>
@@ -193,7 +186,7 @@
           <!-- WhatsApp Sipariş Butonu -->
           <UButton @click="orderViaWhatsApp()" :disabled="!isSelectedVariationInStock"
             class="!rounded-full font-bold flex justify-center items-center text-sm px-8 flex-1 h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 transition-all duration-200 relative overflow-hidden">
-            <Icon name="logos:whatsapp-icon" class="w-14 h-14 absolute left-1 top-0 opacity-30"></Icon>
+            <Icon name="logos:whatsapp-icon" class="w-12 h-12 absolute left-1 top-0 opacity-30"></Icon>
             <span class="text-white">WhatsApp Sipariş</span>
           </UButton>
         </div>

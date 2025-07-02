@@ -4,7 +4,7 @@
     <UiCommonBreadcrumb :links="breadcrumbLinks" />
 
     <!-- Ürün Detay -->
-    <section class="py-6 md:py-10 lg:py-12">
+    <section class="pb-6 md:py-10 lg:py-12">
       <div class="md:container mx-auto  md:px-6 lg:px-8">
         <div class="lg:grid lg:grid-cols-12 lg:gap-8 xl:gap-12 space-y-8 lg:space-y-0">
           <!-- Ürün Görselleri -->
@@ -82,14 +82,14 @@
 
     <!-- Ürün Yorumları -->
     <section class="py-10 lg:py-12 bg-white dark:bg-neutral-800">
-      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+      <div class="md:container mx-auto px-4 md:px-6 lg:px-8">
         <ProductReviewsSection v-if="productState.product && productState.product.id" :product="productState.product" />
       </div>
     </section>
 
     <!-- Benzer Ürünler -->
     <section class="py-10 lg:py-12 bg-neutral-50 dark:bg-neutral-900">
-      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+      <div class="md:container mx-auto px-4 md:px-6 lg:px-8">
         <UiSlidesProductSlide id="similar-products" :is-ssr="false" title="Benzer Ürünler"
           :filters="similarProductsFilters" />
       </div>

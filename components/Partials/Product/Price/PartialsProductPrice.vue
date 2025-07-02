@@ -19,7 +19,7 @@
 
         <!-- Normal ürün fiyat gösterimi -->
         <template v-else>
-            <span v-if="props.salePrice && props.delPrice" :class="delClasses" class="line-through">
+            <span v-if="props.salePrice && props.delPrice" :class="delClasses" class="line-through text-sm">
                 {{ formatPrice(props.price) }}
             </span>
             <span :class="priceClasses">

@@ -3,7 +3,8 @@
         class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border-0 md:border border-neutral-200 dark:border-neutral-700 p-4 md:p-6 shadow-none md:shadow-sm transition-colors duration-300">
         <!-- Başlık -->
         <div class="flex items-center justify-between mb-6">
-            <h2 class="text-xl lg:text-2xl font-bold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+            <h2
+                class="text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
                 <UIcon name="i-heroicons-question-mark-circle" class="w-6 h-6 text-secondary-600" />
                 <span>Sorular ve Cevaplar</span>
                 <span v-if="questionsData?.total" class="text-sm font-normal text-neutral-500 dark:text-neutral-400">

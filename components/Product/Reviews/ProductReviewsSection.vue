@@ -2,7 +2,7 @@
     <div>
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
-            <h2 class="px-4 md:px-0 text-xl lg:text-2xl font-bold text-neutral-900 dark:text-neutral-100">
+            <h2 class="md:px-0 text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
                 Müşteri Yorumları
             </h2>
 

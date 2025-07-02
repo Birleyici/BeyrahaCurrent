@@ -31,9 +31,9 @@
 
     <div v-if="!isLoading && products?.length > 0" class="space-y-8">
       <!-- Header -->
-      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+      <div class="md:container mx-auto  md:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-8">
-          <h2 class="text-xl lg:text-2xl font-bold text-neutral-900 dark:text-neutral-100">{{ props.title }}</h2>
+          <h2 class="text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{ props.title }}</h2>
           <NuxtLink v-if="props.to" :to="props.to"
             class="group flex items-center gap-2 text-secondary-600 hover:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-300 font-medium transition-colors duration-200">
             <span>Tümünü Gör</span>
