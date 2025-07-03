@@ -59,7 +59,7 @@
                         <p class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                             {{ totalProductCount }} ürün
                         </p>
-                        <UBadge :color="getStatusColor(props.item.status)" :label="getStatusLabel(props.item.status)"
+                        <UBadge :color="getStatusColor(getOrderStatus())" :label="getStatusLabel(getOrderStatus())"
                             size="xs" variant="soft" :ui="{ rounded: 'rounded-full' }" />
                     </div>
                 </div>
@@ -118,15 +118,28 @@ const remainingProductCount = computed(() => {
     return remaining > 0 ? remaining : 0
 })
 
+// Sipariş durumunu doğru yerden al
+const getOrderStatus = () => {
+    // Eğer sub_orders varsa, ilk sub_order'ın durumunu al
+    if (props.item?.sub_orders?.length > 0) {
+        return props.item.sub_orders[0].status
+    }
+    // Fallback olarak ana order'ın durumunu al
+    return props.item.status || 'pending'
+}
+
 // Durum rengini getir
 const getStatusColor = (status) => {
     const statusColors = {
         'pending': 'yellow',
         'processing': 'blue',
-        'shipped': 'indigo',
-        'delivered': 'green',
+        'prepared': 'orange',
+        'shipped': 'green',
+        'in_transit': 'yellow',
+        'delivered': 'emerald',
         'cancelled': 'red',
-        'refunded': 'gray'
+        'returned': 'purple',
+        'failed': 'red'
     }
     return statusColors[status] || 'gray'
 }
@@ -135,11 +148,14 @@ const getStatusColor = (status) => {
 const getStatusLabel = (status) => {
     const statusLabels = {
         'pending': 'Beklemede',
-        'processing': 'Hazırlanıyor',
-        'shipped': 'Kargoda',
+        'processing': 'İşleme Alındı',
+        'prepared': 'Hazırlandı',
+        'shipped': 'Kargoya Verildi',
+        'in_transit': 'Yolda',
         'delivered': 'Teslim Edildi',
         'cancelled': 'İptal Edildi',
-        'refunded': 'İade Edildi'
+        'returned': 'İade Edildi',
+        'failed': 'Başarısız'
     }
     return statusLabels[status] || 'Bilinmiyor'
 }

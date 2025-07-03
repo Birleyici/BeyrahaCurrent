@@ -18,6 +18,15 @@
         :class="{ 'group-hover:bg-black/10 dark:group-hover:bg-black/20': isProductInStock }">
       </div>
 
+      <!-- Video Badge -->
+      <div v-if="hasProductVideo" class="absolute top-3 right-3">
+        <div
+          class="bg-gradient-to-r from-red-500 to-pink-500 backdrop-blur-sm rounded-lg px-2 py-1 flex items-center space-x-1 transition-all duration-300 hover:from-red-600 hover:to-pink-600 shadow-lg">
+          <UIcon name="i-heroicons-play-circle-solid" class="w-4 h-4 text-white" />
+          <span class="text-xs font-medium text-white">Video</span>
+        </div>
+      </div>
+
       <!-- Stok Durumu Badge -->
       <div v-if="!isProductInStock" class="absolute top-3 left-3">
         <UBadge :color="stockBadgeColor" variant="solid" size="sm" class="font-medium">
@@ -35,6 +44,12 @@
             {{ props.product.name }}
           </h3>
         </NuxtLink>
+      </div>
+
+      <!-- Değerlendirme Yıldızları -->
+      <div v-if="props.product.review_count > 0" class="flex justify-center">
+        <UiCommonStarRating :rating="props.product.average_rating" :review-count="props.product.review_count" size="sm"
+          :show-text="true" />
       </div>
 
       <div class="flex justify-center pt-2">
@@ -176,6 +191,14 @@ const stockBadgeColor = computed(() => {
   }
 
   return 'red';
+});
+
+// Video kontrolü
+const hasProductVideo = computed(() => {
+  return props.product.video_url ||
+    (props.product.selectedColorTerm &&
+      props.product.selectedColorTerm.term_videos &&
+      props.product.selectedColorTerm.term_videos.length > 0);
 });
 
 // Dark mode reactive tracking

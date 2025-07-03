@@ -30,8 +30,8 @@
                                 <p class="text-neutral-600 dark:text-neutral-400 transition-colors duration-300">
                                     {{ formatDate(order.created_at) }}
                                 </p>
-                                <UBadge :color="getStatusColor(order.status)" :label="getStatusLabel(order.status)"
-                                    variant="soft" />
+                                <UBadge :color="getStatusColor(getOrderStatus())"
+                                    :label="getStatusLabel(getOrderStatus())" variant="soft" />
                             </div>
                         </div>
 
@@ -169,15 +169,28 @@ const orderState = useOrderStoreFront()
 const orderLoaded = ref(false)
 const order = ref(null)
 
+// Sipariş durumunu doğru yerden al
+const getOrderStatus = () => {
+    // Eğer sub_orders varsa, ilk sub_order'ın durumunu al
+    if (order.value?.sub_orders?.length > 0) {
+        return order.value.sub_orders[0].status
+    }
+    // Fallback olarak ana order'ın durumunu al
+    return order.value?.status || 'pending'
+}
+
 // Durum rengini getir
 const getStatusColor = (status) => {
     const statusColors = {
         'pending': 'yellow',
         'processing': 'blue',
-        'shipped': 'indigo',
-        'delivered': 'green',
+        'prepared': 'orange',
+        'shipped': 'green',
+        'in_transit': 'yellow',
+        'delivered': 'emerald',
         'cancelled': 'red',
-        'refunded': 'gray'
+        'returned': 'purple',
+        'failed': 'red'
     }
     return statusColors[status] || 'gray'
 }
@@ -186,11 +199,14 @@ const getStatusColor = (status) => {
 const getStatusLabel = (status) => {
     const statusLabels = {
         'pending': 'Beklemede',
-        'processing': 'Hazırlanıyor',
-        'shipped': 'Kargoda',
+        'processing': 'İşleme Alındı',
+        'prepared': 'Hazırlandı',
+        'shipped': 'Kargoya Verildi',
+        'in_transit': 'Yolda',
         'delivered': 'Teslim Edildi',
         'cancelled': 'İptal Edildi',
-        'refunded': 'İade Edildi'
+        'returned': 'İade Edildi',
+        'failed': 'Başarısız'
     }
     return statusLabels[status] || 'Bilinmiyor'
 }

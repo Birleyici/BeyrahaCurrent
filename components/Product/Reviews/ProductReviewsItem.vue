@@ -218,23 +218,36 @@ const currentImageIndex = ref(null)
 const maskedUserName = computed(() => {
     // review.user?.name verisini kullan, yoksa user_name'i kullan
     const name = props.review.user?.name || props.review.user_name
+    const email = props.review.user?.email
 
     if (!name) return 'Anonim Kullanıcı'
 
-    const words = name.trim().split(' ').filter(word => word.length > 0)
+    // Eğer name "User" ile başlıyorsa email adresinin @ öncesi kısmını kullan
+    if (name.startsWith('User') && email) {
+        const emailPart = email.split('@')[0]
 
-    if (words.length === 0) return 'Anonim Kullanıcı'
+        // Email kısmının ilk 2 ve son 2 karakterini göster
+        if (emailPart.length <= 2) {
+            return emailPart[0] + '***'
+        }
 
-    if (words.length === 1) {
-        // Tek kelime ise: "Mehmet" -> "M****"
-        const word = words[0]
-        return word.length <= 2 ? word : word[0] + '*'.repeat(word.length - 1)
-    } else {
-        // Çok kelime ise: "Mehmet Çelik" -> "M**** Ç***"
-        return words.map(word => {
-            return word.length <= 2 ? word : word[0] + '*'.repeat(word.length - 1)
-        }).join(' ')
+        if (emailPart.length <= 4) {
+            return emailPart.substring(0, 2) + '***'
+        }
+
+        return emailPart.substring(0, 2) + '*'.repeat(Math.max(0, emailPart.length - 4)) + emailPart.substring(emailPart.length - 2)
     }
+
+    // Normal name için ilk 2 ve son 2 karakterini göster
+    if (name.length <= 2) {
+        return name[0] + '***'
+    }
+
+    if (name.length <= 4) {
+        return name.substring(0, 2) + '***'
+    }
+
+    return name.substring(0, 2) + '*'.repeat(Math.max(0, name.length - 4)) + name.substring(name.length - 2)
 })
 
 const showOptions = computed(() => {

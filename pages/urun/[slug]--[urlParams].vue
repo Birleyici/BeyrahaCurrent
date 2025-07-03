@@ -10,13 +10,15 @@
           <!-- Ürün Görselleri -->
           <div id="product-gallery" class="col-span-5" v-if="$mainState.isLoaded">
             <div class="lg:sticky lg:top-24">
-              <!-- Video destekli galeri kullan (genel video veya renk videosu varsa) -->
-              <PartialsProductVideoGallery v-if="productState.product.video_url || selectedColorVideoData"
-                :alt="productState.product.name" :images="selectedImages" :video="productVideoData"
-                :color-video="selectedColorVideoData" :current-index="productState.product.galleryCurrentIndex" />
-              <!-- Video yoksa normal galeri kullan -->
-              <PartialsProductImageGallery v-else :alt="productState.product.name" :images="selectedImages"
+              <!-- Resim Galerisi -->
+              <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages"
                 :current-index="productState.product.galleryCurrentIndex" />
+
+              <!-- Video İzleme Butonu -->
+              <div class="mx-4">
+                <PartialsProductVideoPlayer :video="productVideoData" :color-video="selectedColorVideoData"
+                  :title="productState.product.name" />
+              </div>
             </div>
           </div>
           <SkeletonProductGallery v-else class="col-span-5" />
@@ -30,6 +32,19 @@
                   class="px-4 text-2xl md:text-3xl lg:text-4xl font-bold text-neutral-900 dark:text-neutral-100 leading-tight">
                   {{ productState.product.name }}
                 </h1>
+
+                <!-- Değerlendirme Yıldızları -->
+                <div v-if="productState.product.review_count > 0" class="px-4 mt-3">
+                  <button @click="scrollToReviews"
+                    class="group flex items-center space-x-2 hover:opacity-80 transition-opacity">
+                    <UiCommonStarRating :rating="productState.product.average_rating"
+                      :review-count="productState.product.review_count" size="md" />
+                    <span
+                      class="text-sm text-neutral-500 dark:text-neutral-400 group-hover:text-secondary-600 dark:group-hover:text-secondary-400 transition-colors">
+                      değerlendirme
+                    </span>
+                  </button>
+                </div>
               </header>
 
               <!-- Ürün Varyasyonları -->
@@ -86,7 +101,7 @@
     </section>
 
     <!-- Ürün Yorumları -->
-    <section class="py-10 lg:py-12 bg-white dark:bg-neutral-800">
+    <section ref="reviewsSection" class="py-10 lg:py-12 bg-white dark:bg-neutral-800">
       <div class="md:container mx-auto px-4 md:px-6 lg:px-8">
         <ProductReviewsSection v-if="productState.product && productState.product.id" :product="productState.product" />
       </div>
@@ -119,6 +134,7 @@ const productState = useProductState();
 const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
 const productInformation = ref(null)
+const reviewsSection = ref(null)
 const { settings } = useSettings()
 
 // Auth kontrolü için
@@ -298,6 +314,13 @@ useHead({
 
 const goInfo = () => {
   productInformation.value?.scrollIntoView({ behavior: "smooth" })
+}
+
+const scrollToReviews = () => {
+  // Yorumlar bölümüne scroll yap
+  if (reviewsSection.value) {
+    reviewsSection.value.scrollIntoView({ behavior: "smooth" })
+  }
 }
 
 const breadcrumbLinks = computed(() => {

@@ -115,7 +115,7 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
   currentRefreshToken = currentToken
 
   try {
-    console.log('Attempting token refresh with token:', currentToken.substring(0, 20) + '...')
+    console.log('Attempting token refresh...')
     
     const response = await $fetch(apiBaseUrl + 'auth/refresh', {
       method: 'POST',
@@ -131,7 +131,7 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
         authStore.currentUser = response.user
       }
 
-      console.log('Token refreshed successfully, new token:', response.token.substring(0, 20) + '...')
+      console.log('Token refreshed successfully')
       onRefreshed(response.token)
 
       // Original isteği yeni token ile tekrar yap
@@ -157,10 +157,8 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
       }
       
       // Backend'den gelen spesifik hatalar
-      if (errorData.error === 'TOKEN_INVALID') {
-        errorMessage = 'Token geçersiz. Lütfen tekrar giriş yapın.'
-      } else if (errorData.error === 'TOKEN_EXPIRED') {
-        errorMessage = 'Oturum tamamen sona erdi. Lütfen tekrar giriş yapın.'
+      if (['TOKEN_BLACKLISTED', 'TOKEN_INVALID', 'TOKEN_EXPIRED'].includes(errorData.error)) {
+        errorMessage = errorData.message || 'Oturum geçersiz. Lütfen tekrar giriş yapın.'
       }
     }
 
