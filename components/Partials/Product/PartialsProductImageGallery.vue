@@ -390,15 +390,15 @@ const handleTouchStart = (e) => {
 };
 
 const handleTouchMove = (e) => {
-    e.preventDefault();
-
     if (e.touches.length === 1 && isTouching.value && zoomLevel.value > 1) {
         // Tek parmak - pan (sadece zoom yapılmışsa)
+        e.preventDefault();
         panX.value = e.touches[0].clientX - touchStartX.value;
         panY.value = e.touches[0].clientY - touchStartY.value;
         limitPan();
     } else if (e.touches.length === 2) {
         // İki parmak - pinch zoom
+        e.preventDefault();
         const currentDistance = getTouchDistance(e.touches);
         const distanceRatio = currentDistance / lastTouchDistance.value;
 
@@ -477,7 +477,13 @@ const handleMainTouchStart = (e) => {
 
 const handleMainTouchMove = (e) => {
     if (mainIsTouching.value && e.touches.length === 1) {
-        e.preventDefault();
+        // Sadece yatay hareket varsa preventDefault yap (swipe için)
+        const deltaX = Math.abs(e.touches[0].clientX - mainTouchStartX.value);
+        const deltaY = Math.abs(e.touches[0].clientY - mainTouchStartY.value);
+
+        if (deltaX > deltaY && deltaX > 10) {
+            e.preventDefault();
+        }
     }
 };
 

@@ -15,7 +15,7 @@
                 :current-index="productState.product.galleryCurrentIndex" />
 
               <!-- Video İzleme Butonu -->
-              <div class="mx-4">
+              <div class="mx-4 md:mx-0">
                 <PartialsProductVideoPlayer :video="productVideoData" :color-video="selectedColorVideoData"
                   :title="productState.product.name" />
               </div>
