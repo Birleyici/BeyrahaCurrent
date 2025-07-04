@@ -195,10 +195,24 @@ const stockBadgeColor = computed(() => {
 
 // Video kontrolü
 const hasProductVideo = computed(() => {
-  return props.product.video_url ||
-    (props.product.selectedColorTerm &&
-      props.product.selectedColorTerm.term_videos &&
-      props.product.selectedColorTerm.term_videos.length > 0);
+  // Önce products tablosundaki video var mı kontrol et
+  if (props.product.video_url) {
+    return true;
+  }
+
+  // Seçili renk varsa onun videosunu kontrol et
+  if (props.product.selectedColorTerm &&
+    props.product.selectedColorTerm.term_videos &&
+    props.product.selectedColorTerm.term_videos.length > 0) {
+    return true;
+  }
+
+  // Renk varyantı ürünse, term_videos'u kontrol et (backend'ten gelen)
+  if (props.product.term_videos && props.product.term_videos.length > 0) {
+    return true;
+  }
+
+  return false;
 });
 
 // Dark mode reactive tracking
