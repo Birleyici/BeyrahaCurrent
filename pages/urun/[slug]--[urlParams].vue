@@ -12,13 +12,8 @@
             <div class="lg:sticky lg:top-24">
               <!-- Resim Galerisi -->
               <PartialsProductImageGallery :alt="productState.product.name" :images="selectedImages"
-                :current-index="productState.product.galleryCurrentIndex" />
-
-              <!-- Video İzleme Butonu -->
-              <div class="mx-4 md:mx-0">
-                <PartialsProductVideoPlayer :video="productVideoData" :color-video="selectedColorVideoData"
-                  :title="productState.product.name" />
-              </div>
+                :current-index="productState.product.galleryCurrentIndex" :video="productVideoData"
+                :color-video="selectedColorVideoData" :title="productState.product.name" />
             </div>
           </div>
           <SkeletonProductGallery v-else class="col-span-5" />

@@ -58,7 +58,6 @@
         <!-- Thumbnail Grid (Sadece masaüstünde görünür) -->
         <div v-if="images.length > 1" class="mt-4 hidden md:block">
             <div class="grid grid-cols-4 sm:grid-cols-5 md:grid-cols-6 gap-2">
-                <!-- Resim Thumbnails -->
                 <button v-for="(image, index) in images" :key="'img-' + index" @click="goToImage(index)" :class="{
                     'ring-2 ring-secondary-500 ring-offset-2': index === currentImageIndex,
                     'hover:ring-2 hover:ring-neutral-300 hover:ring-offset-1': index !== currentImageIndex
@@ -72,13 +71,33 @@
             </div>
         </div>
 
-        <!-- Navigate Dots (Sadece mobilde görünür) -->
-        <div v-if="images.length > 1" class="mt-4 flex justify-center md:hidden px-4">
-            <div class="flex space-x-2">
+        <!-- Video Butonu (Sadece masaüstünde görünür) -->
+        <div v-if="hasVideo" class="mt-4 hidden md:flex justify-center">
+            <button @click="openVideoModal"
+                class="bg-gradient-to-r from-red-500 to-pink-500 rounded-lg px-6 py-3 flex items-center space-x-3 transition-all duration-300 hover:from-red-600 hover:to-pink-600 shadow-lg hover:scale-105 group">
+                <UIcon name="i-heroicons-play-circle-solid"
+                    class="w-6 h-6 text-white group-hover:scale-110 transition-transform duration-200" />
+                <span class="text-sm font-medium text-white">Ürün Videosunu İzle</span>
+            </button>
+        </div>
+
+        <!-- Navigate Dots ve Video Butonu (Sadece mobilde görünür) -->
+        <div v-if="images.length > 1 || hasVideo" class="mt-4 flex flex-col items-center space-y-3 md:hidden px-4">
+            <!-- Navigate Dots -->
+            <div v-if="images.length > 1" class="flex space-x-2">
                 <button v-for="(image, index) in images" :key="'dot-' + index" @click="goToImage(index)" :class="{
                     'bg-secondary-500 scale-110': index === currentImageIndex,
                     'bg-neutral-300 hover:bg-neutral-400': index !== currentImageIndex
                 }" class="w-3 h-3 rounded-full transition-all duration-300 hover:scale-105" />
+            </div>
+
+            <!-- Video Butonu -->
+            <div v-if="hasVideo">
+                <button @click="openVideoModal"
+                    class="bg-gradient-to-r from-red-500 to-pink-500 rounded-lg px-4 py-2 flex items-center space-x-2 transition-all duration-300 hover:from-red-600 hover:to-pink-600 shadow-lg hover:scale-105">
+                    <UIcon name="i-heroicons-play-circle-solid" class="w-5 h-5 text-white" />
+                    <span class="text-sm font-medium text-white">Videoyu İzle</span>
+                </button>
             </div>
         </div>
 
@@ -168,6 +187,54 @@
                 </div>
             </Transition>
         </Teleport>
+
+        <!-- Video Modal -->
+        <Teleport to="body">
+            <Transition name="modal">
+                <div v-if="isVideoModalOpen" class="fixed inset-0 z-50 bg-black/95 backdrop-blur-sm"
+                    @click="closeVideoModal">
+                    <!-- Modal Header -->
+                    <div class="absolute top-0 left-0 right-0 z-10 p-4">
+                        <div class="flex items-center justify-between">
+                            <div class="text-white">
+                                <span class="text-lg font-medium">{{ videoTitle }}</span>
+                            </div>
+                            <button @click="closeVideoModal"
+                                class="bg-white/10 backdrop-blur-sm rounded-full p-2 hover:bg-white/20 transition-colors duration-200">
+                                <UIcon name="i-heroicons-x-mark" class="w-6 h-6 text-white" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Modal Content -->
+                    <div class="flex items-center justify-center h-full p-4 pt-16 pb-16">
+                        <div class="w-full h-full max-w-5xl">
+                            <div v-if="currentVideoData" class="w-full h-full">
+                                <!-- YouTube Video -->
+                                <iframe v-if="currentVideoData.type === 'youtube'"
+                                    :src="`https://www.youtube.com/embed/${getYouTubeId(currentVideoData.url)}?autoplay=1&rel=0`"
+                                    class="w-full h-full rounded-lg" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                                </iframe>
+
+                                <!-- Vimeo Video -->
+                                <iframe v-else-if="currentVideoData.type === 'vimeo'"
+                                    :src="`https://player.vimeo.com/video/${getVimeoId(currentVideoData.url)}?autoplay=1`"
+                                    class="w-full h-full rounded-lg" frameborder="0"
+                                    allow="autoplay; fullscreen; picture-in-picture" allowfullscreen>
+                                </iframe>
+
+                                <!-- Local Video -->
+                                <video v-else-if="currentVideoData.type === 'local'" :src="currentVideoData.url"
+                                    class="w-full h-full rounded-lg" controls autoplay>
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </Transition>
+        </Teleport>
     </div>
 </template>
 
@@ -177,7 +244,10 @@ import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
 const props = defineProps({
     images: Array,
     alt: String,
-    currentIndex: Number
+    currentIndex: Number,
+    video: Object,
+    colorVideo: Object,
+    title: String
 });
 
 const images = computed(() => {
@@ -234,6 +304,9 @@ const zoomImage = ref(null);
 // Renk değişkenleri
 const backgroundColor = '#f5f5f5';
 
+// Video değişkenleri
+const isVideoModalOpen = ref(false);
+
 // Computed properties
 const currentImage = computed(() => images.value[currentImageIndex.value] || images.value[0]);
 
@@ -241,6 +314,32 @@ const imageStyle = computed(() => ({
     transform: `translate(${panX.value}px, ${panY.value}px) scale(${zoomLevel.value})`,
     transformOrigin: 'center center',
 }));
+
+// Video kontrolü
+const hasVideo = computed(() => {
+    return (props.video && props.video.url) || (props.colorVideo && props.colorVideo.url);
+});
+
+// Aktif video verisi
+const currentVideoData = computed(() => {
+    // Önce renk videosunu kontrol et
+    if (props.colorVideo && props.colorVideo.url) {
+        return props.colorVideo;
+    }
+    // Sonra genel video
+    if (props.video && props.video.url) {
+        return props.video;
+    }
+    return null;
+});
+
+// Video başlığı
+const videoTitle = computed(() => {
+    if (props.title) {
+        return props.title;
+    }
+    return 'Video';
+});
 
 // Resim navigasyonu
 const nextImage = () => {
@@ -269,6 +368,31 @@ const closeFullscreen = () => {
     isFullscreen.value = false;
     document.body.style.overflow = '';
     resetZoom();
+};
+
+// Video modal işlemleri
+const openVideoModal = () => {
+    isVideoModalOpen.value = true;
+    document.body.style.overflow = 'hidden';
+};
+
+const closeVideoModal = () => {
+    isVideoModalOpen.value = false;
+    document.body.style.overflow = '';
+};
+
+// YouTube ID çıkarma
+const getYouTubeId = (url) => {
+    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
+};
+
+// Vimeo ID çıkarma
+const getVimeoId = (url) => {
+    const regex = /(?:vimeo\.com\/)([0-9]+)/;
+    const match = url.match(regex);
+    return match ? match[1] : null;
 };
 
 // Zoom işlemleri
@@ -533,6 +657,10 @@ const handleKeydown = (e) => {
             case '0':
                 resetZoom();
                 break;
+        }
+    } else if (isVideoModalOpen.value) {
+        if (e.key === 'Escape') {
+            closeVideoModal();
         }
     }
 };
