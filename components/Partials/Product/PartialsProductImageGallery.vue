@@ -49,7 +49,7 @@
                 <div v-if="images.length > 1" class="absolute bottom-4 right-4">
                     <div class="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
                         <span class="text-white text-sm font-medium">{{ currentImageIndex + 1 }} / {{ images.length
-                            }}</span>
+                        }}</span>
                     </div>
                 </div>
             </div>
@@ -92,7 +92,7 @@
                         <div class="flex items-center justify-between">
                             <div class="text-white">
                                 <span class="text-sm font-medium">{{ currentImageIndex + 1 }} / {{ images.length
-                                    }}</span>
+                                }}</span>
                             </div>
                             <button @click="closeFullscreen"
                                 class="bg-white/10 backdrop-blur-sm rounded-full p-2 hover:bg-white/20 transition-colors duration-200">
@@ -148,7 +148,7 @@
                             <div v-if="zoomLevel > 1" class="absolute top-4 left-4">
                                 <div class="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
                                     <span class="text-white text-sm font-medium">{{ Math.round(zoomLevel * 100)
-                                        }}%</span>
+                                    }}%</span>
                                 </div>
                             </div>
                         </div>
@@ -558,6 +558,13 @@ const limitPan = () => {
         console.warn('limitPan error:', error);
     }
 };
+
+// Props currentIndex değişikliklerini izle
+watch(() => props.currentIndex, (newIndex) => {
+    if (newIndex !== undefined && newIndex !== null && newIndex >= 0) {
+        currentImageIndex.value = newIndex;
+    }
+}, { immediate: true });
 
 // Resim değiştiğinde zoom'u sıfırla
 watch(currentImageIndex, () => {
