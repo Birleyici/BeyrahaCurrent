@@ -4,8 +4,8 @@
     :class="{ 'opacity-75': !isProductInStock }">
     <div class="relative overflow-hidden rounded-t-xl">
       <NuxtLink :to="productUrl">
-        <NuxtImg v-if="props.product.coverImage" :src="`cl/${props.product.coverImage}`" format="webp" quality="90"
-          fit="contain" :loading="imgLoadingType" :preload="imgPreload" width="200" :alt="props.product.name"
+        <NuxtImg v-if="props.product.coverImage" :src="`cl/${props.product.coverImage}`" format="webp" quality="95"
+          fit="contain" :loading="imgLoadingType" :preload="imgPreload" width="120" :alt="props.product.name"
           :background="backgroundColor" class="w-full h-[320px] object-cover transition-transform duration-300"
           :class="{ 'group-hover:scale-105': isProductInStock }" />
         <img v-else :src="img_placeholder" class="w-full h-[320px] object-cover transition-transform duration-300"
