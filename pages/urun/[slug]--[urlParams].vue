@@ -78,6 +78,7 @@
 
     <!-- Benzer Ürünler -->
     <section class="py-10 lg:py-12 bg-neutral-50 dark:bg-neutral-900">
+
       <div class="md:container mx-auto px-4 md:px-6 lg:px-8">
         <UiSlidesProductSlide id="similar-products" :is-ssr="false" title="Benzer Ürünler"
           :filters="similarProductsFilters" />
@@ -109,16 +110,16 @@ const { settings } = useSettings()
 // Auth kontrolü için
 const authStore = useAuthStore()
 
-// Admin kontrolü - currentUser'da role bilgisi varsa kullan, yoksa management route'una erişimi kontrol et
+// Admin kontrolü - currentUser.user.role yapısına göre düzeltildi
 const isAdmin = computed(() => {
-  // Basit kontrol: kullanıcı giriş yapmış mı ve token var mı
-  if (!authStore.token || !authStore.currentUser || !authStore.currentUser) {
+  // Token ve currentUser kontrolü
+  if (!authStore.token || !authStore.currentUser) {
     return false;
   }
 
-  // Rol bilgisi kontrolü - doğru yapı: authStore.currentUser.role
-  if (authStore.currentUser.role) {
-    return authStore.currentUser.role === 'admin' || authStore.currentUser.role === 'manager';
+  // currentUser.user.role yapısına göre kontrol
+  if (authStore.currentUser.user && authStore.currentUser.user.role) {
+    return authStore.currentUser.user.role === 'admin' || authStore.currentUser.user.role === 'manager';
   }
 
   return false;
