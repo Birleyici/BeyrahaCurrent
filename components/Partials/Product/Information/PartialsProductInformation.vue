@@ -5,7 +5,7 @@
       <div v-if="productState.product.featured_infos?.length"
         class="border border-neutral-200 dark:border-neutral-700 rounded-lg">
         <button @click="toggleAccordion('featured')"
-          class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors duration-200">
+          class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-neutral-50  hover:rounded-lg dark:hover:bg-neutral-800 transition-colors duration-200">
           <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
             <UIcon name="i-heroicons-star" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
             Öne Çıkan Özellikler
@@ -29,7 +29,7 @@
       <div v-if="productState.product.additional_info"
         class="border border-neutral-200 dark:border-neutral-700 rounded-lg">
         <button @click="toggleAccordion('description')"
-          class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors duration-200">
+          class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-neutral-50  hover:rounded-lg dark:hover:bg-neutral-800 transition-colors duration-200">
           <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
             <UIcon name="i-heroicons-document-text" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
             Detaylı Açıklama
@@ -49,7 +49,7 @@
       <!-- Ürün Nitelikleri -->
       <div v-if="props.attributes?.length" class="border border-neutral-200 dark:border-neutral-700 rounded-lg">
         <button @click="toggleAccordion('attributes')"
-          class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-neutral-50 dark:hover:bg-neutral-800 transition-colors duration-200">
+          class="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-neutral-50  hover:rounded-lg dark:hover:bg-neutral-800 transition-colors duration-200">
           <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
             <UIcon name="i-heroicons-list-bullet" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
             Ürün Nitelikleri
