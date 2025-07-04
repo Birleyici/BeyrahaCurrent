@@ -33,7 +33,11 @@
       <!-- Header -->
       <div class="md:container mx-auto  md:px-6 lg:px-8">
         <div class="flex justify-between items-center mb-8">
-          <h2 class="text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100">{{ props.title }}</h2>
+          <h2 class="text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
+            <UIcon name="i-heroicons-squares-plus"
+              class="w-5 h-5 lg:w-6 lg:h-6 text-secondary-600 dark:text-secondary-400" />
+            {{ props.title }}
+          </h2>
           <NuxtLink v-if="props.to" :to="props.to"
             class="group flex items-center gap-2 text-secondary-600 hover:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-300 font-medium transition-colors duration-200">
             <span>Tümünü Gör</span>

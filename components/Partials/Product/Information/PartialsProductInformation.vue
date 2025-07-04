@@ -3,7 +3,8 @@
     <div>
       <!-- Öne Çıkan Özellikler -->
       <div v-if="productState.product.featured_infos?.length" class="space-y-4">
-        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
+          <UIcon name="i-heroicons-star" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
           Öne Çıkan Özellikler
         </h3>
         <ul class="space-y-2">
@@ -17,7 +18,8 @@
 
       <!-- Detaylı Açıklama -->
       <div v-if="productState.product.additional_info" class="space-y-4 mt-6">
-        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
+          <UIcon name="i-heroicons-document-text" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
           Detaylı Açıklama
         </h3>
         <div
@@ -27,7 +29,8 @@
 
       <!-- Ürün Nitelikleri -->
       <div v-if="props.attributes?.length" class="space-y-4">
-        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">
+        <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
+          <UIcon name="i-heroicons-list-bullet" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
           Ürün Nitelikleri
         </h3>
         <div class="space-y-4">

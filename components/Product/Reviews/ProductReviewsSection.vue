@@ -2,7 +2,10 @@
     <div>
         <!-- Header -->
         <div class="flex items-center justify-between mb-8">
-            <h2 class="md:px-0 text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100">
+            <h2
+                class="md:px-0 text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
+                <UIcon name="i-heroicons-chat-bubble-left-right"
+                    class="w-5 h-5 lg:w-6 lg:h-6 text-secondary-600 dark:text-secondary-400" />
                 Müşteri Yorumları
             </h2>
 

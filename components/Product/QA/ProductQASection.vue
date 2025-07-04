@@ -4,7 +4,9 @@
         <!-- Başlık -->
         <div class="flex items-center justify-between mb-6">
             <h2
-                class="text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-2">
+                class="text-lg lg:text-2xl font-semibold text-neutral-900 dark:text-neutral-100 flex items-center gap-3">
+                <UIcon name="i-heroicons-question-mark-circle"
+                    class="w-5 h-5 lg:w-6 lg:h-6 text-secondary-600 dark:text-secondary-400" />
                 <span>Sorular ve Cevaplar</span>
                 <span v-if="questionsData?.total" class="text-sm font-normal text-neutral-500 dark:text-neutral-400">
                     ({{ questionsData.total }})

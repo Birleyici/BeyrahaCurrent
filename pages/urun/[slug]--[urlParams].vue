@@ -48,33 +48,7 @@
                   :product-state="productState" />
               </div>
 
-              <!-- Öne Çıkan Bilgiler -->
-              <div
-                class="bg-white dark:bg-neutral-800 rounded-none md:rounded-xl border border-neutral-200 dark:border-neutral-700 p-6   md:mx-0 px-4">
-                <h2 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100 mb-4">
-                  Öne çıkan bilgiler
-                </h2>
-                <ul class="space-y-3">
-                  <li class="flex items-start gap-3">
-                    <UIcon name="i-heroicons-check-circle"
-                      class="w-5 h-5 text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                    <span class="text-neutral-700 dark:text-neutral-300">15 gün içerisinde ücretsiz iade</span>
-                  </li>
-                  <li v-for="feature in productState.product.featured_infos.slice(0, 2)" :key="feature.id"
-                    class="flex items-start gap-3">
-                    <UIcon name="i-heroicons-check-circle"
-                      class="w-5 h-5 text-green-500 dark:text-green-400 mt-0.5 flex-shrink-0" />
-                    <span class="text-neutral-700 dark:text-neutral-300">{{ feature.content }}</span>
-                  </li>
-                </ul>
 
-                <button @click="goInfo()" v-if="productState.product?.featured_infos?.length > 2"
-                  class="mt-4 group inline-flex items-center gap-2 text-secondary-600 dark:text-secondary-400 hover:text-secondary-700 dark:hover:text-secondary-300 font-medium transition-colors duration-200">
-                  <span>Tüm ürün bilgilerini gör</span>
-                  <UIcon name="i-heroicons-chevron-down"
-                    class="w-4 h-4 transition-transform duration-200 group-hover:translate-y-0.5" />
-                </button>
-              </div>
             </div>
           </div>
         </div>
