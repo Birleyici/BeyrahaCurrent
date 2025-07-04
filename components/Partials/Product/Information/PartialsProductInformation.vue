@@ -80,8 +80,10 @@
 const productState = useProductState();
 const props = defineProps(['attributes']);
 
-// Akordiyonlar için reactive state
-const activeAccordion = ref('featured'); // Varsayılan olarak 'featured' açık
+// Akordiyonlar için reactive state - öne çıkan özellik yoksa detaylı açıklama açık olsun
+const activeAccordion = ref(
+  productState.product.featured_infos?.length ? 'featured' : 'description'
+);
 
 // Akordiyonu toggle etme fonksiyonu
 const toggleAccordion = (accordion) => {
