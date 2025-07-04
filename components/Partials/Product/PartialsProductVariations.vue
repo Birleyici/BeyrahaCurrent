@@ -142,19 +142,26 @@
         <div class="flex items-center justify-between gap-4">
           <!-- Adet Sayacı -->
           <div class="flex-shrink-0">
-            <div
-              class="flex items-center bg-neutral-50 dark:bg-neutral-800 rounded-lg border border-neutral-200 dark:border-neutral-700">
-              <button @click="decreaseQty" :disabled="qyt <= 1"
-                class="flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 text-neutral-600 dark:text-neutral-400 hover:text-secondary-600 dark:hover:text-secondary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                <UIcon name="i-heroicons-minus" class="w-3 h-3 sm:w-4 sm:h-4" />
-              </button>
-              <input v-model="qyt" type="number" min="1" max="99"
-                class="w-16 sm:w-20 h-9 sm:h-11 text-center bg-transparent border-0 text-neutral-900 dark:text-neutral-100 font-medium focus:outline-none focus:ring-0"
-                @input="validateQty" />
-              <button @click="increaseQty" :disabled="qyt >= 99"
-                class="flex items-center justify-center w-9 h-9 sm:w-11 sm:h-11 text-neutral-600 dark:text-neutral-400 hover:text-secondary-600 dark:hover:text-secondary-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
-                <UIcon name="i-heroicons-plus" class="w-3 h-3 sm:w-4 sm:h-4" />
-              </button>
+            <div class="flex flex-col space-y-2">
+              <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Adet</label>
+              <div
+                class="flex items-center bg-white dark:bg-neutral-800 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 shadow-sm hover:border-secondary-300 dark:hover:border-secondary-600 transition-all duration-200 focus-within:border-secondary-500 dark:focus-within:border-secondary-400 focus-within:ring-4 focus-within:ring-secondary-500/10">
+                <button @click="decreaseQty" :disabled="qyt <= 1"
+                  class="flex items-center justify-center w-10 h-10 text-neutral-500 dark:text-neutral-400 hover:text-secondary-600 dark:hover:text-secondary-400 hover:bg-secondary-50 dark:hover:bg-secondary-900/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-all duration-200 rounded-l-xl group">
+                  <UIcon name="i-heroicons-minus"
+                    class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+                </button>
+                <div class="flex-1 px-2">
+                  <input v-model="qyt" type="number" min="1" max="99"
+                    class="w-full h-10 text-center bg-transparent border-0 text-neutral-900 dark:text-neutral-100 font-semibold text-lg focus:outline-none focus:ring-0 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+                    @input="validateQty" />
+                </div>
+                <button @click="increaseQty" :disabled="qyt >= 99"
+                  class="flex items-center justify-center w-10 h-10 text-neutral-500 dark:text-neutral-400 hover:text-secondary-600 dark:hover:text-secondary-400 hover:bg-secondary-50 dark:hover:bg-secondary-900/20 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent transition-all duration-200 rounded-r-xl group">
+                  <UIcon name="i-heroicons-plus"
+                    class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" />
+                </button>
+              </div>
             </div>
           </div>
 

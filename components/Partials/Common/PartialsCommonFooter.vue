@@ -2,8 +2,8 @@
   <footer
     class="bg-gradient-to-br from-neutral-50 via-white to-neutral-100 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 text-neutral-700 dark:text-neutral-200 relative overflow-hidden">
     <!-- Dekoratif arka plan -->
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.12),transparent_50%)]"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(100,116,139,0.08),transparent_50%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.06),transparent_50%)]"></div>
+    <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(100,116,139,0.04),transparent_50%)]"></div>
 
     <!-- Ana Footer İçeriği -->
     <div class="container relative z-10 py-16">
