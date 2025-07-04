@@ -5,10 +5,9 @@
       class="relative bg-gradient-to-br from-white to-neutral-50 dark:from-neutral-900 dark:to-neutral-800 flex py-32 lg:py-48 items-center overflow-hidden transition-colors duration-300">
       <!-- Background Image with Enhanced Styling -->
       <div class="absolute inset-0 z-0">
-        <img
-          src="https://cdn.beyraha.com/cdn-cgi/image/f=webp,q=90/cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g/a1b16e65-a1d1-4348-faeb-2b97373d7900/public"
-          alt="Beyraha Mağaza" class="w-full h-full object-cover object-top opacity-40 dark:opacity-30"
-          loading="eager" />
+        <NuxtImg src="cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g/a1b16e65-a1d1-4348-faeb-2b97373d7900/public"
+          format="webp" quality="95" fit="contain" alt="Beyraha Mağaza"
+          class="w-full h-full object-cover object-top opacity-40 dark:opacity-30" loading="eager" />
         <!-- Subtle Gradient Overlay -->
         <div
           class="absolute inset-0 bg-gradient-to-br from-white/60 via-white/40 to-neutral-50/50 dark:from-neutral-900/80 dark:via-neutral-900/60 dark:to-neutral-800/70">
