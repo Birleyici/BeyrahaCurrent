@@ -14,39 +14,61 @@
     }" @change="handleAccordionChange">
       <template #default="{ item, index, open }">
         <div :class="[
-          'bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700 dark:to-gray-800 text-md flex justify-between border-gray-200 dark:border-gray-600 p-4 cursor-pointer hover:from-gray-100 hover:to-gray-200 dark:hover:from-gray-600 dark:hover:to-gray-700 transition-all duration-300',
-          open ? 'rounded-t-xl border-b' : 'rounded-xl'
+          'bg-white dark:bg-gray-800 p-4 cursor-pointer transition-all duration-200 hover:bg-gray-50 dark:hover:bg-gray-750',
+          open ? 'rounded-t-xl border-b border-gray-200 dark:border-gray-700' : 'rounded-xl'
         ]">
-          <!-- Variation Info -->
-          <div class="flex items-center space-x-4">
-            <div class="w-3 h-3 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full"></div>
-            <div class="flex items-center space-x-3">
-              <!-- Variation Terms -->
-              <div class="flex items-center space-x-2">
+          <!-- Header Row -->
+          <div class="flex items-center justify-between mb-3">
+            <!-- Left: Status Indicator + Terms -->
+            <div class="flex items-center space-x-3 min-w-0 flex-1">
+              <!-- Status Indicator -->
+              <div class="w-2 h-2 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex-shrink-0"></div>
+
+              <!-- Terms for Mobile & Desktop -->
+              <div class="flex flex-wrap gap-1.5 min-w-0">
                 <span v-for="(term, index) in (item.data.terms || [])" :key="term.id || index"
-                  class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 border border-orange-200 dark:border-orange-700">
+                  class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800">
                   {{ term.term_name }}
                 </span>
               </div>
+            </div>
 
-              <!-- Price Info -->
-              <div v-if="item.data.price" class="text-sm text-gray-600 dark:text-gray-300">
-                <span class="font-medium">{{ formatPrice(item.data.sale_price || item.data.price) }}</span>
-                <span v-if="item.data.sale_price && item.data.price !== item.data.sale_price"
-                  class="line-through text-gray-400 dark:text-gray-500 ml-2">
-                  {{ formatPrice(item.data.price) }}
-                </span>
-              </div>
+            <!-- Right: Actions -->
+            <div class="flex items-center space-x-1 flex-shrink-0">
+              <UButton icon="i-heroicons-trash" color="red" variant="ghost" @click.prevent="showDeleteConfirmation"
+                :loading="isDeleting" size="sm"
+                class="opacity-60 hover:opacity-100 hover:bg-red-50 dark:hover:bg-red-900/20" />
+              <UIcon name="i-heroicons-chevron-down"
+                class="w-4 h-4 text-gray-400 dark:text-gray-500 transform transition-transform duration-200"
+                :class="[open && 'rotate-180']" />
             </div>
           </div>
 
-          <!-- Actions -->
-          <div class="flex items-center space-x-2">
-            <UButton icon="i-heroicons-trash" color="red" variant="ghost" @click.prevent="showDeleteConfirmation"
-              :loading="isDeleting" size="sm" class="hover:bg-red-50 dark:hover:bg-red-900/20" />
-            <UIcon name="i-heroicons-chevron-right-20-solid"
-              class="w-5 h-5 text-gray-400 dark:text-gray-500 transform transition-transform duration-200"
-              :class="[open && 'rotate-90']" />
+          <!-- Price Row -->
+          <div v-if="item.data.price" class="flex items-center justify-between">
+            <!-- Price Info -->
+            <div class="flex items-center space-x-2">
+              <span class="text-lg font-semibold text-gray-900 dark:text-white">
+                {{ formatPrice(item.data.sale_price || item.data.price) }}
+              </span>
+              <span v-if="item.data.sale_price && item.data.price !== item.data.sale_price"
+                class="text-sm line-through text-gray-400 dark:text-gray-500">
+                {{ formatPrice(item.data.price) }}
+              </span>
+
+            </div>
+
+            <!-- Stock Status -->
+            <div class="flex items-center space-x-2">
+              <div :class="[
+                'w-2 h-2 rounded-full',
+                item.data.stock_status === 'in_stock' ? 'bg-green-500' :
+                  item.data.stock_status === 'out_of_stock' ? 'bg-red-500' : 'bg-gray-400'
+              ]"></div>
+              <span class="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                {{ getStockStatusText(item.data.stock_status) }}
+              </span>
+            </div>
           </div>
         </div>
       </template>
@@ -332,5 +354,14 @@ const formatPrice = (price) => {
     style: 'currency',
     currency: 'TRY'
   }).format(price)
+}
+
+const getStockStatusText = (status) => {
+  const statusMap = {
+    'in_stock': 'Stokta',
+    'out_of_stock': 'Stok Dışı',
+    'discontinued': 'Durduruldu'
+  }
+  return statusMap[status] || 'Belirsiz'
 }
 </script>
