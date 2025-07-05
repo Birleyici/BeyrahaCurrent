@@ -1,5 +1,5 @@
 <template>
-    <UModal v-model="isOpen" :ui="{ width: 'w-full sm:max-w-lg' }">
+    <UModal v-model="isOpen" :ui="{ width: 'w-full sm:max-w-lg' }" :fullscreen="useDevice().isMobile">
         <div class="p-6">
             <!-- Header -->
             <div class="flex items-center justify-between mb-6">

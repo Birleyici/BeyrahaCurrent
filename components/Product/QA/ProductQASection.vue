@@ -43,6 +43,9 @@
         <ProductQAQuestionForm v-if="showQuestionForm" :product="product" @close="showQuestionForm = false"
             @question-submitted="handleQuestionSubmitted" />
 
+        <!-- Auth Modal -->
+        <PartialsModalAuthModal v-model:show="showAuthModal" @auth-success="handleAuthSuccess" />
+
         <!-- Filtreleme ve Sıralama -->
         <div v-if="questionsData?.total > 1" class="flex flex-col sm:flex-row gap-3 mb-6">
             <div class="flex gap-2">
@@ -116,6 +119,7 @@ const props = defineProps({
 })
 
 const authStore = useAuthStore()
+const toast = useToast()
 
 // Hydration-safe auth state
 const isAuthenticated = ref(false)
@@ -123,6 +127,7 @@ const isClient = ref(false)
 
 // Reactive state
 const showQuestionForm = ref(false)
+const showAuthModal = ref(false)
 const currentPage = ref(1)
 const questionsData = ref(null)
 const pending = ref(false)
@@ -186,13 +191,26 @@ const handleAnswerSubmitted = () => {
     fetchQuestions()
 }
 
-const handleQuestionButtonClick = async () => {
+const handleQuestionButtonClick = () => {
     if (isAuthenticated.value) {
         showQuestionForm.value = true
     } else {
         // Giriş modalını aç
-        await navigateTo('/auth')
+        showAuthModal.value = true
     }
+}
+
+const handleAuthSuccess = async () => {
+    // Auth durumunu güncelle
+    isAuthenticated.value = !!authStore.token && !!authStore.currentUser
+
+    // Toast bildirim göster
+    toast.add({
+        title: 'Giriş başarılı!',
+        description: 'Artık soru sorabilirsiniz',
+        color: 'green',
+        icon: 'i-heroicons-check-circle'
+    })
 }
 
 // Watchers
