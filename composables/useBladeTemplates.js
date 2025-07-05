@@ -263,7 +263,8 @@ export const useBladeTemplates = () => {
          'currency': 'Currency',
          'adet': 'Adet',
          'miktar': 'Miktar',
-         'quantity': 'Quantity'
+         'quantity': 'Quantity',
+         'odeme_yontem_kodu': 'Ödeme Yöntemi Kodu'
        },
        shipping: {
          'kargo_firma': 'Kargo Firması',
@@ -288,7 +289,8 @@ export const useBladeTemplates = () => {
          'kdv_tutari': 'KDV Tutarı',
          'ara_toplam': 'Ara Toplam',
          'indirim_tutari': 'İndirim Tutarı',
-         'kupon_kodu': 'Kupon Kodu'
+         'kupon_kodu': 'Kupon Kodu',
+         'banka_hesap_sahibi': 'Banka Hesap Sahibi'
        },
        address: {
          'teslimat_adresi': 'Teslimat Adresi',

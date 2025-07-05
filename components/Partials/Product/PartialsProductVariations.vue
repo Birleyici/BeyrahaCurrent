@@ -143,7 +143,6 @@
           <!-- Adet Sayacı -->
           <div class="flex-shrink-0">
             <div class="flex flex-col space-y-2">
-              <label class="text-sm font-medium text-neutral-700 dark:text-neutral-300">Adet</label>
               <div
                 class="flex items-center bg-white dark:bg-neutral-800 rounded-xl border-2 border-neutral-200 dark:border-neutral-700 shadow-sm hover:border-secondary-300 dark:hover:border-secondary-600 transition-all duration-200 focus-within:border-secondary-500 dark:focus-within:border-secondary-400 focus-within:ring-4 focus-within:ring-secondary-500/10">
                 <button @click="decreaseQty" :disabled="qyt <= 1"

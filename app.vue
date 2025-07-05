@@ -30,7 +30,6 @@ onMounted(async () => {
 
   $changeMainState({ isLoaded: true });
 
-  $changeMainState({ isLoaded: true });
   await cartState.cartDBToState()
 });
 

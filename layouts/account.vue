@@ -17,12 +17,6 @@
                 <div class="lg:col-span-3 lg:mt-0">
                     <slot />
 
-                    <!-- Mobil Menü Linki -->
-                    <div class="lg:hidden mt-6">
-                        <UButton to="/hesap" variant="soft" color="gray" block icon="i-heroicons-arrow-left">
-                            Hesap Menüsüne Dön
-                        </UButton>
-                    </div>
                 </div>
             </div>
         </div>

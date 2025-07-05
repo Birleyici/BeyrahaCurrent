@@ -192,27 +192,11 @@ const handleFiltersUpdate = async () => {
 const handleVote = async (reviewId, isHelpful) => {
     try {
         await voteReview(reviewId, isHelpful)
-        toast.add({
-            title: 'Oyunuz kaydedildi',
-            color: 'green',
-            icon: 'i-heroicons-check-circle'
-        })
+        // Toast mesajı kaldırıldı
     } catch (error) {
-        let errorMessage = 'Oy verilemedi'
-
-        // 403 hatası için özel mesaj
-        if (error.response?.status === 403) {
-            errorMessage = 'Kendi yorumunuza oy veremezsiniz'
-        } else if (error.message) {
-            errorMessage = error.message
-        }
-
-        toast.add({
-            title: 'Bir hata oluştu',
-            description: errorMessage,
-            color: 'red',
-            icon: 'i-heroicons-exclamation-triangle'
-        })
+        // Hata durumunda da toast mesajı kaldırıldı
+        // Sadece console'da log tutulabilir
+        console.error('Vote error:', error)
     }
 }
 

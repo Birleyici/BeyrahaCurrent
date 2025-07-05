@@ -5,8 +5,8 @@ let isRefreshing = false
 let currentRefreshToken = null
 let refreshSubscribers = []
 let refreshAttempts = 0
-const MAX_REFRESH_ATTEMPTS = 3
-const REFRESH_COOLDOWN = 5000 // 5 saniye
+const MAX_REFRESH_ATTEMPTS = 2
+const REFRESH_COOLDOWN = 10000
 
 function addRefreshSubscriber(callback) {
   refreshSubscribers.push(callback)
@@ -70,17 +70,24 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
       if (errorData && errorData.requires_login) {
         console.log('Login required, error:', errorData.error)
         
-        // Token expired durumu için refresh dene
+        // TOKEN_EXPIRED için refresh dene, diğer durumlarda logout
         if (errorData.error === 'TOKEN_EXPIRED') {
           return await handleTokenRefresh(authStore, apiBaseUrl, route, router, url, params)
-        } else if (['TOKEN_INVALID', 'TOKEN_ERROR', 'USER_NOT_FOUND', 'TOKEN_BLACKLISTED'].includes(errorData.error)) {
-          // Bu durumda token tamamen geçersiz, logout yap
-          await handleLogout(authStore, router, route, errorData.message)
+        } else {
+          // TOKEN_INVALID, TOKEN_ERROR, USER_NOT_FOUND, TOKEN_BLACKLISTED için immediate logout
+          await handleLogout(authStore, router, route, errorData.message || 'Oturum geçersiz. Lütfen tekrar giriş yapın.')
           throw error
         }
       }
 
-      // Diğer 401 durumları için token refresh dene
+      // Backend error data yoksa genel 401 için refresh dene
+      // AMA SADECE refresh attempts limitini aşmadıysak
+      if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
+        console.log('Max refresh attempts reached, forcing logout without trying refresh')
+        await handleLogout(authStore, router, route, 'Oturum yenileme başarısız. Lütfen tekrar giriş yapın.')
+        throw error
+      }
+
       return await handleTokenRefresh(authStore, apiBaseUrl, route, router, url, params)
     }
 
@@ -91,18 +98,11 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
 async function handleTokenRefresh(authStore, apiBaseUrl, route, router, originalUrl, originalParams) {
   const currentToken = authStore.token
 
-  // Refresh cooldown kontrolü
-  const now = Date.now()
+  // Early exit: Max attempts kontrolü
   if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
-    const timeSinceLastAttempt = now - (refreshAttempts * REFRESH_COOLDOWN)
-    if (timeSinceLastAttempt < REFRESH_COOLDOWN) {
-      console.log('Refresh cooldown active, forcing logout')
-      await handleLogout(authStore, router, route, 'Çok fazla refresh denemesi. Lütfen tekrar giriş yapın.')
-      throw new Error('Refresh cooldown active')
-    } else {
-      // Cooldown süresi geçti, sayacı sıfırla
-      refreshAttempts = 0
-    }
+    console.log('Max refresh attempts reached, forcing logout')
+    await handleLogout(authStore, router, route, 'Çok fazla refresh denemesi. Lütfen tekrar giriş yapın.')
+    throw new Error('Max refresh attempts reached')
   }
 
   // Eğer aynı token ile refresh işlemi devam ediyorsa, bekle
@@ -167,20 +167,26 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
   } catch (error) {
     console.error(`Token refresh failed (attempt ${refreshAttempts}/${MAX_REFRESH_ATTEMPTS}):`, error)
     
+    // Backend'den "cannot be refreshed" hatası gelirse immediate logout
+    if (error.response && error.response._data) {
+      const errorData = error.response._data
+      if (errorData.message && errorData.message.includes('cannot be refreshed')) {
+        console.log('Token cannot be refreshed, forcing immediate logout')
+        await handleLogout(authStore, router, route, 'Oturum süresi doldu. Lütfen tekrar giriş yapın.')
+        onRefreshed(null)
+        throw error
+      }
+    }
+    
     // Max deneme sayısına ulaştıysak logout yap
     if (refreshAttempts >= MAX_REFRESH_ATTEMPTS) {
-      console.log('Max refresh attempts reached, forcing logout')
+      console.log('Max refresh attempts reached after error, forcing logout')
       let errorMessage = 'Oturum yenileme başarısız. Lütfen tekrar giriş yapın.'
       
       if (error.response && error.response._data) {
         const errorData = error.response._data
         if (errorData.message) {
           errorMessage = errorData.message
-        }
-        
-        // Backend'den gelen spesifik hatalar
-        if (['TOKEN_BLACKLISTED', 'TOKEN_INVALID', 'TOKEN_EXPIRED'].includes(errorData.error)) {
-          errorMessage = errorData.message || 'Oturum geçersiz. Lütfen tekrar giriş yapın.'
         }
       }
 

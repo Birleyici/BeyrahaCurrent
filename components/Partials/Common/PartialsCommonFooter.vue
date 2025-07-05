@@ -178,8 +178,8 @@
         <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
           <div class="text-center md:text-left">
             <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-              © 2017 - 2024 <span class="text-neutral-800 dark:text-neutral-100 font-semibold">{{ siteName || 'Beyraha'
-                }}</span>
+              © 2017 - {{ new Date().getFullYear() }} <span
+                class="text-neutral-800 dark:text-neutral-100 font-semibold">{{ siteName || 'Beyraha' }}</span>
               <br class="md:hidden">
               <span class="hidden md:inline text-neutral-400 dark:text-neutral-500">•</span> Tüm hakları saklıdır.
             </p>

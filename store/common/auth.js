@@ -45,7 +45,7 @@ export const useAuthStore = defineStore(
       loading.value.fetchUser = true
       try {
         const response = await useBaseOFetchWithAuth('auth/me')
-        currentUser.value = response
+        currentUser.value = response.user
         return response
       } catch (error) {
         console.error('User fetch error:', error)
@@ -54,25 +54,8 @@ export const useAuthStore = defineStore(
         // Token geçersizse veya 401 hatası varsa logout yap
         if (error.response && error.response.status === 401) {
           console.log('🚨 fetchUser failed with 401, forcing logout')
-          // Timer'ı durdur
-          clearTokenRefreshTimer()
-          // Store'u temizle
-          token.value = null
-          currentUser.value = null
-          // LocalStorage'ı temizle
-          if (process.client) {
-            try {
-              localStorage.removeItem('authStore')
-              // Tüm auth ile ilgili localStorage items'ları temizle
-              Object.keys(localStorage).forEach(key => {
-                if (key.includes('auth') || key.includes('token') || key.includes('user')) {
-                  localStorage.removeItem(key)
-                }
-              })
-            } catch (e) {
-              console.warn('Failed to clear localStorage in fetchUser error:', e)
-            }
-          }
+          // Sessiz logout yap - kullanıcıyı yönlendirme
+          await logout(null, false, false)
         }
         
         return null
@@ -376,7 +359,7 @@ export const useAuthStore = defineStore(
       }
     }
 
-    // Token geçerliliğini kontrol eden helper fonksiyon (iyileştirilmiş)
+    // Token geçerliliğini kontrol eden helper fonksiyon (daha az agresif)
     const isTokenValid = () => {
       if (!token.value) return false
       
@@ -389,9 +372,10 @@ export const useAuthStore = defineStore(
         const payload = JSON.parse(atob(parts[1]))
         const now = Math.floor(Date.now() / 1000)
         
-        // Exp kontrolü - 5 dakika tolerans ekle (clock skew için)
-        if (payload.exp && payload.exp < (now + 300)) {
-          console.log('Token expired or expiring soon locally')
+        // Exp kontrolü - token gerçekten süresi dolmuşsa false döndür
+        // Sadece gerçekten expired tokenları yakala, refresh için fazla margin verme
+        if (payload.exp && payload.exp < (now - 60)) { // 1 dakika tolerans
+          console.log('Token expired locally')
           return false
         }
         
@@ -414,10 +398,10 @@ export const useAuthStore = defineStore(
       }
 
       if (process.client && token.value) {
-        // Her 15 dakikada bir token kontrolü yap (daha az agresif)
+        // Her 30 dakikada bir token refresh dene - daha az agresif
         refreshTimer = setInterval(async () => {
-          if (token.value && !isTokenValid()) {
-            console.log('Token expired or expiring soon, attempting refresh...')
+          if (token.value) {
+            console.log('Attempting periodic token refresh...')
             try {
               const response = await useBaseOFetchWithAuth('auth/refresh', {
                 method: 'POST'
@@ -431,15 +415,18 @@ export const useAuthStore = defineStore(
               }
             } catch (error) {
               console.warn('Auto token refresh failed:', error)
-              // Timer'ı durdur ve sessiz bir şekilde logout yap
+              // Timer'ı durdur ama logout yapma - kullanıcı fark etmeyecek
               if (refreshTimer) {
                 clearInterval(refreshTimer)
                 refreshTimer = null
               }
-              await logout(null, false)
+              // Sessiz logout yap sadece 401 durumunda
+              if (error.response && error.response.status === 401) {
+                await logout(null, false, false)
+              }
             }
           }
-        }, 15 * 60 * 1000) // 15 dakika
+        }, 30 * 60 * 1000) // 30 dakika
       }
     }
 

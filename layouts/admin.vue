@@ -65,7 +65,7 @@
                 class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
               <span class="font-medium">Siparişler</span>
               <span v-if="pendingOrdersCount > 0"
-                class="ml-auto bg-red-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
+                class="ml-auto bg-primary-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
                 {{ pendingOrdersCount }}
               </span>
             </NuxtLink>
@@ -85,7 +85,7 @@
                 class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
               <span class="font-medium">Yorum Yönetimi</span>
               <span v-if="pendingReviewsCount > 0"
-                class="ml-auto bg-red-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
+                class="ml-auto bg-primary-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
                 {{ pendingReviewsCount }}
               </span>
             </NuxtLink>
@@ -105,7 +105,7 @@
                 class="w-5 h-5 mr-3 group-hover:scale-110 transition-transform duration-200" />
               <span class="font-medium">Soru Yönetimi</span>
               <span v-if="pendingQuestionsCount > 0"
-                class="ml-auto bg-orange-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
+                class="ml-auto bg-primary-500 text-white text-xs font-semibold px-2.5 py-1 rounded-full min-w-[22px] text-center">
                 {{ pendingQuestionsCount }}
               </span>
             </NuxtLink>
@@ -295,11 +295,16 @@
 <script setup>
 const sidebarOpen = ref(false);
 const showUserMenu = ref(false);
-const pendingOrdersCount = ref(3);
-const pendingQuestionsCount = ref(5);
 
-// Admin stats composable'ını kullan
-const { pendingReviewsCount, initAdminStats } = useAdminStats();
+// Admin stats composable'ını kullan - sahte veriler yerine API'dan veri al
+const {
+  pendingReviewsCount,
+  pendingQuestionsCount,
+  pendingOrdersCount,
+  loading: statsLoading,
+  error: statsError,
+  initAdminStats
+} = useAdminStats();
 
 // Dark mode composable'ını kullan
 const { isDark, toggleDarkMode, initDarkMode } = useDarkMode();

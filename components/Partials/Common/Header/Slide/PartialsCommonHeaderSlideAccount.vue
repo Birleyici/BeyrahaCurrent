@@ -15,9 +15,14 @@
                                 Hesabım
                             </h3>
                             <!-- Hoşgeldiniz mesajı -->
-                            <p v-if="authStore.token && authStore.currentUser && authStore.currentUser"
+                            <p v-if="authStore.token && authStore.currentUser?.name"
                                 class="text-sm text-secondary-600 dark:text-secondary-400">
-                                Hoşgeldiniz, {{ getFirstName(authStore.currentUser?.user?.name) }}
+                                Hoşgeldiniz, {{ getFirstName(authStore.currentUser?.name) }}
+                            </p>
+                            <!-- Loading state -->
+                            <p v-else-if="authStore.token && authStore.loading?.fetchUser"
+                                class="text-sm text-secondary-600 dark:text-secondary-400">
+                                Kullanıcı bilgileri yükleniyor...
                             </p>
                         </div>
                     </div>

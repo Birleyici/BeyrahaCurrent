@@ -512,7 +512,7 @@ export const useErrorHandler = () => {
     // Current user ID implementasyonu
     try {
       const authStore = JSON.parse(localStorage.getItem('authStore') || '{}')
-      return authStore.currentUser?.user.id || null
+      return authStore.currentUser?.id || null
     } catch {
       return null
     }

@@ -211,7 +211,7 @@ let newAddress = ref({
 const addressObj = props.address ? props.address : newAddress.value
 
 // Giriş yapmış kullanıcı için email'i otomatik doldur
-if (isLoggedIn.value && authStore.currentUser?.user.email && !(addressObj as any).email) {
+if (isLoggedIn.value && authStore.currentUser?.email && !(addressObj as any).email) {
   (addressObj as any).email = authStore.currentUser.email
 }
 

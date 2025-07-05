@@ -32,22 +32,25 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
 
     // Token geçerliliği kontrolü
     try {
-      // Eğer currentUser yoksa veya token geçersizse, user fetch dene
+      // Eğer currentUser yoksa user fetch dene
       if (!authStore.currentUser) {
         console.log('No current user, attempting to fetch...')
-        await authStore.fetchUser()
-      }
-
-      // Hala user yoksa token geçersiz demektir
-      if (!authStore.currentUser) {
-        console.log('Failed to fetch user, token might be invalid')
-        authStore.token = null
-        return navigateTo(`/auth?callback=${encodeURIComponent(to.fullPath)}`)
+        const user = await authStore.fetchUser()
+        
+        // User fetch başarısız olursa token geçersiz demektir
+        if (!user) {
+          console.log('Failed to fetch user, token might be invalid')
+          if (to.path.startsWith('/management')) {
+            return navigateTo('/management/login')
+          } else {
+            return navigateTo(`/auth?callback=${encodeURIComponent(to.fullPath)}`)
+          }
+        }
       }
 
       // Management alanı için admin kontrolü
       if (to.path.startsWith('/management')) {
-        const userRole = authStore.currentUser?.user.role || authStore.currentUser?.user.role
+        const userRole = authStore.currentUser?.role
         if (userRole !== 'admin' && userRole !== 'vendor') {
           console.log('Insufficient permissions for management area')
           throw createError({
@@ -60,11 +63,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     } catch (error) {
       console.error('Auth middleware error:', error)
       
-      // Auth hatası durumunda token'ı temizle ve login'e yönlendir
-      authStore.token = null
-      authStore.currentUser = null
-      
-      // Management alanı için admin login'e yönlendir
+      // Auth hatası durumunda login'e yönlendir
+      // State temizleme işi fetchUser içinde yapılıyor
       if (to.path.startsWith('/management')) {
         return navigateTo('/management/login')
       } else {

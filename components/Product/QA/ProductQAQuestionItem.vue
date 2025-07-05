@@ -49,7 +49,7 @@
         <div class="mt-4 ml-4 md:ml-6">
 
 
-            <div v-if="!showAnswerForm && authStore.token && authStore.currentUser && authStore.currentUser?.user.role === 'admin'"
+            <div v-if="!showAnswerForm && authStore.token && authStore.currentUser && authStore.currentUser?.role === 'admin'"
                 class="border-l-2 border-neutral-200 dark:border-neutral-700 pl-4">
                 <UButton @click="showAnswerForm = true" color="secondary" variant="ghost" size="sm"
                     icon="i-heroicons-chat-bubble-left">

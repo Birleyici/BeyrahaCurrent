@@ -118,8 +118,8 @@ const isAdmin = computed(() => {
   }
 
   // currentUser.user.role yapısına göre kontrol
-  if (authStore.currentUser.user && authStore.currentUser.user.role) {
-    return authStore.currentUser.user.role === 'admin' || authStore.currentUser.user.role === 'manager';
+  if (authStore.currentUser && authStore.currentUser.role) {
+    return authStore.currentUser.role === 'admin' || authStore.currentUser.role === 'manager';
   }
 
   return false;

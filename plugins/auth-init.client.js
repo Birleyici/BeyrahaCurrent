@@ -21,7 +21,7 @@ export default defineNuxtPlugin(async () => {
       console.log('Auth system initialized successfully')
     } catch (error) {
       console.warn('Auth initialization failed:', error)
-      // Hata yönetimini useBaseOFetchWithAuth'a bırakıyoruz
+      // Hata durumunda sessizce geç - fetchUser içinde zaten error handling var
     }
   }
 

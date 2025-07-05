@@ -6,3 +6,4 @@ alwaysApply: true
 -Api çağrıları için [useBaseOFetch.js](mdc:beyraha-nuxt-frontend/composables/common/bases/useBaseOFetch.js) kullan auth gerektiren çağrılar için [useBaseOFetchWithAuth.js](mdc:beyraha-nuxt-frontend/composables/common/bases/useBaseOFetchWithAuth.js) kullan.
 -Uzun string yazdırmalarda '' yerine `` kullan.
 -Lazım olduğunda \Log::info kullanma Log::info 
+-Api localhost:8000 portunda değil localhost/api üzerinde çalışıyor.
