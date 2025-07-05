@@ -15,13 +15,13 @@
 
             <!-- Soru Sor Butonu -->
             <ClientOnly>
-                <UButton @click="showQuestionForm = true" color="secondary" variant="outline" size="sm"
-                    icon="i-heroicons-plus" :disabled="!isAuthenticated" class="shrink-0">
+                <UButton v-if="isAuthenticated" @click="handleQuestionButtonClick" color="secondary" variant="outline"
+                    size="sm" icon="i-heroicons-plus" class="shrink-0">
                     Soru Sor
                 </UButton>
 
                 <template #fallback>
-                    <div class="animate-pulse">
+                    <div v-if="isAuthenticated" class="animate-pulse">
                         <div class="h-8 bg-neutral-200 dark:bg-neutral-700 rounded w-20"></div>
                     </div>
                 </template>
@@ -44,7 +44,7 @@
             @question-submitted="handleQuestionSubmitted" />
 
         <!-- Filtreleme ve Sıralama -->
-        <div class="flex flex-col sm:flex-row gap-3 mb-6">
+        <div v-if="questionsData?.total > 1" class="flex flex-col sm:flex-row gap-3 mb-6">
             <div class="flex gap-2">
                 <USelect v-model="filters.filter" :options="filterOptions" size="sm" class="min-w-32" by="value" />
                 <USelect v-model="filters.sort_by" :options="sortOptions" size="sm" class="min-w-32" by="value" />
@@ -92,9 +92,8 @@
                     Bu ürün hakkında ilk soruyu siz sorun!
                 </p>
                 <ClientOnly>
-                    <UButton @click="showQuestionForm = true" color="secondary" variant="solid"
-                        :disabled="!isAuthenticated">
-                        İlk Soruyu Sor
+                    <UButton @click="handleQuestionButtonClick" color="secondary" variant="solid">
+                        {{ isAuthenticated ? 'İlk Soruyu Sor' : 'Giriş Yap' }}
                     </UButton>
 
                     <template #fallback>
@@ -185,6 +184,15 @@ const handleQuestionSubmitted = () => {
 const handleAnswerSubmitted = () => {
     // Soruları yenile
     fetchQuestions()
+}
+
+const handleQuestionButtonClick = async () => {
+    if (isAuthenticated.value) {
+        showQuestionForm.value = true
+    } else {
+        // Giriş modalını aç
+        await navigateTo('/auth')
+    }
 }
 
 // Watchers
