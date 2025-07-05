@@ -24,4 +24,11 @@ export default defineNuxtPlugin(async () => {
       // Hata yönetimini useBaseOFetchWithAuth'a bırakıyoruz
     }
   }
+
+  // Cleanup fonksiyonu - uygulama kapanırken timer'ları temizle
+  if (process.client) {
+    window.addEventListener('beforeunload', () => {
+      authStore.clearTokenRefreshTimer()
+    })
+  }
 }) 

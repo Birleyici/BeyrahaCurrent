@@ -330,8 +330,12 @@ const userMenuItems = [
     icon: 'i-heroicons-arrow-right-on-rectangle',
     click: async () => {
       try {
-        // Auth store'dan logout fonksiyonunu çağır
-        await authStore.logout('/management/login', false);
+        // Management area'da çıkış yaparken current route'u callback olarak ekle
+        const currentRoute = useRoute().fullPath
+        const callback = currentRoute.startsWith('/management') ? currentRoute : '/management'
+
+        // Management login'e yönlendir
+        await authStore.logout(`/management/login?callback=${encodeURIComponent(callback)}`, true, true);
         showUserMenu.value = false;
       } catch (error) {
         console.error('Çıkış yapılırken hata:', error);

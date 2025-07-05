@@ -31,7 +31,8 @@
             <div class="flex-1 overflow-y-auto bg-neutral-50 dark:bg-neutral-900 transition-colors duration-300">
                 <!-- Giriş yapmamış kullanıcılar için form -->
                 <div v-if="!authStore.token" class="p-4">
-                    <PartialsFormAuthForm :redirect="false" />
+                    <PartialsFormAuthForm :redirect="false" @login-success="handleAuthSuccess"
+                        @register-success="handleAuthSuccess" />
                 </div>
 
                 <!-- Giriş yapmış kullanıcılar için menü -->
@@ -66,7 +67,7 @@
                         </li>
 
                         <!-- Çıkış yap butonu -->
-                        <li @click="authStore.logout()"
+                        <li @click="handleLogout"
                             class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-red-200 dark:border-red-800/50 hover:border-red-300 dark:hover:border-red-700 hover:shadow-md transition-all duration-300 cursor-pointer">
                             <div class="flex items-center p-4 w-full">
                                 <div class="flex items-center space-x-3 w-full">
@@ -158,4 +159,24 @@ const getFirstName = (fullName) => {
     if (!fullName) return '';
     return fullName.split(' ')[0];
 };
+
+// Auth işlemlerinden sonra modal'ı kapatma
+const handleAuthSuccess = () => {
+    // Sadece modal'ı kapat, yönlendirme yapma
+    model.value = false
+}
+
+// Logout işlemi - redirect yapmadan
+const handleLogout = async () => {
+    try {
+        // Logout yaparken redirect yapmıyoruz (forceRedirect: false)
+        await authStore.logout(null, true, false)
+        // Modal'ı kapat
+        model.value = false
+    } catch (error) {
+        console.error('Logout error:', error)
+        // Hata durumunda da modal'ı kapat
+        model.value = false
+    }
+}
 </script>

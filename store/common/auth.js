@@ -50,6 +50,31 @@ export const useAuthStore = defineStore(
       } catch (error) {
         console.error('User fetch error:', error)
         currentUser.value = null
+        
+        // Token geçersizse veya 401 hatası varsa logout yap
+        if (error.response && error.response.status === 401) {
+          console.log('🚨 fetchUser failed with 401, forcing logout')
+          // Timer'ı durdur
+          clearTokenRefreshTimer()
+          // Store'u temizle
+          token.value = null
+          currentUser.value = null
+          // LocalStorage'ı temizle
+          if (process.client) {
+            try {
+              localStorage.removeItem('authStore')
+              // Tüm auth ile ilgili localStorage items'ları temizle
+              Object.keys(localStorage).forEach(key => {
+                if (key.includes('auth') || key.includes('token') || key.includes('user')) {
+                  localStorage.removeItem(key)
+                }
+              })
+            } catch (e) {
+              console.warn('Failed to clear localStorage in fetchUser error:', e)
+            }
+          }
+        }
+        
         return null
       } finally {
         loading.value.fetchUser = false
@@ -116,8 +141,6 @@ export const useAuthStore = defineStore(
       await orderState.fetchAddresses()
       await cartState.cartDBToState()
     }
-
-
 
     const actionsOnLogout = async () => {
       currentUser.value = null
@@ -222,7 +245,7 @@ export const useAuthStore = defineStore(
       }
     }
 
-    const logout = async (callback = null, showMessage = true) => {
+    const logout = async (callback = null, showMessage = true, forceRedirect = false) => {
       try {
         // Loading state
         loading.value.logout = true
@@ -263,6 +286,12 @@ export const useAuthStore = defineStore(
         if (process.client) {
           try {
             localStorage.removeItem('authStore')
+            // Tüm auth ile ilgili localStorage items'ları temizle
+            Object.keys(localStorage).forEach(key => {
+              if (key.includes('auth') || key.includes('token') || key.includes('user')) {
+                localStorage.removeItem(key)
+              }
+            })
             console.log('localStorage authStore cleared manually')
           } catch (e) {
             console.warn('Failed to clear localStorage:', e)
@@ -284,11 +313,26 @@ export const useAuthStore = defineStore(
           }
         }
 
-        // Yönlendirme
-        if (callback) {
-          await navigateTo(callback)
-        } else {
-          await navigateTo('/auth')
+        // Yönlendirme mantığı - sadece gerektiğinde yönlendir
+        if (process.client && (forceRedirect || callback)) {
+          const currentPath = useRoute().fullPath
+          
+          // Protected route kontrolü
+          const protectedRoutes = ['/hesap', '/management']
+          const isOnProtectedRoute = protectedRoutes.some(route => currentPath.startsWith(route))
+          
+          if (callback) {
+            // Explicit callback varsa oraya yönlendir
+            await navigateTo(callback)
+          } else if (isOnProtectedRoute) {
+            // Protected route'ta ise uygun giriş sayfasına yönlendir
+            if (currentPath.startsWith('/management')) {
+              await navigateTo('/management/login')
+            } else {
+              await navigateTo('/auth')
+            }
+          }
+          // Normal sayfalarda yönlendirme yapmıyoruz - kullanıcı olduğu yerde kalır
         }
 
       } catch (error) {
@@ -302,21 +346,37 @@ export const useAuthStore = defineStore(
         if (process.client) {
           try {
             localStorage.removeItem('authStore')
+            // Tüm auth ile ilgili localStorage items'ları temizle
+            Object.keys(localStorage).forEach(key => {
+              if (key.includes('auth') || key.includes('token') || key.includes('user')) {
+                localStorage.removeItem(key)
+              }
+            })
           } catch (e) {
             console.warn('Failed to clear localStorage in error handling:', e)
           }
         }
         
-        // En son çare olarak auth sayfasına yönlendir
+        // Hata durumunda sadece protected route'larda yönlendir
         if (process.client) {
-          window.location.href = '/auth'
+          const currentPath = useRoute().fullPath
+          const protectedRoutes = ['/hesap', '/management']
+          const isOnProtectedRoute = protectedRoutes.some(route => currentPath.startsWith(route))
+          
+          if (isOnProtectedRoute) {
+            if (currentPath.startsWith('/management')) {
+              window.location.href = '/management/login'
+            } else {
+              window.location.href = '/auth'
+            }
+          }
         }
       } finally {
         loading.value.logout = false
       }
     }
 
-    // Token geçerliliğini kontrol eden helper fonksiyon
+    // Token geçerliliğini kontrol eden helper fonksiyon (iyileştirilmiş)
     const isTokenValid = () => {
       if (!token.value) return false
       
@@ -329,9 +389,9 @@ export const useAuthStore = defineStore(
         const payload = JSON.parse(atob(parts[1]))
         const now = Math.floor(Date.now() / 1000)
         
-        // Exp kontrolü
-        if (payload.exp && payload.exp < now) {
-          console.log('Token expired locally')
+        // Exp kontrolü - 5 dakika tolerans ekle (clock skew için)
+        if (payload.exp && payload.exp < (now + 300)) {
+          console.log('Token expired or expiring soon locally')
           return false
         }
         
@@ -342,13 +402,22 @@ export const useAuthStore = defineStore(
       }
     }
 
-    // Otomatik token yenileme için periodic check
+    // Global timer referansı
+    let refreshTimer = null
+
+    // Otomatik token yenileme için periodic check (optimize edilmiş)
     const startTokenRefreshTimer = () => {
+      // Mevcut timer'ı temizle
+      if (refreshTimer) {
+        clearInterval(refreshTimer)
+        refreshTimer = null
+      }
+
       if (process.client && token.value) {
-        // Her 5 dakikada bir token kontrolü yap
-        setInterval(async () => {
+        // Her 15 dakikada bir token kontrolü yap (daha az agresif)
+        refreshTimer = setInterval(async () => {
           if (token.value && !isTokenValid()) {
-            console.log('Token expired, attempting refresh...')
+            console.log('Token expired or expiring soon, attempting refresh...')
             try {
               const response = await useBaseOFetchWithAuth('auth/refresh', {
                 method: 'POST'
@@ -358,15 +427,27 @@ export const useAuthStore = defineStore(
                 if (response.user) {
                   currentUser.value = response.user
                 }
-                console.log('Token auto-refreshed')
+                console.log('Token auto-refreshed successfully')
               }
             } catch (error) {
               console.warn('Auto token refresh failed:', error)
-              // Sessiz bir şekilde logout yap
+              // Timer'ı durdur ve sessiz bir şekilde logout yap
+              if (refreshTimer) {
+                clearInterval(refreshTimer)
+                refreshTimer = null
+              }
               await logout(null, false)
             }
           }
-        }, 5 * 60 * 1000) // 5 dakika
+        }, 15 * 60 * 1000) // 15 dakika
+      }
+    }
+
+    // Timer'ı temizleme fonksiyonu
+    const clearTokenRefreshTimer = () => {
+      if (refreshTimer) {
+        clearInterval(refreshTimer)
+        refreshTimer = null
       }
     }
 
@@ -395,6 +476,7 @@ export const useAuthStore = defineStore(
       fetchUser,
       isTokenValid,
       startTokenRefreshTimer,
+      clearTokenRefreshTimer,
       setToken,
       setCurrentUser
     }

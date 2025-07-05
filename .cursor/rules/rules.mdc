@@ -1,7 +1,0 @@
----
-description: 
-globs: 
-alwaysApply: false
----
--Api çağrıları için [useBaseOFetch.js](mdc:beyraha-frontend-nuxt/composables/common/bases/useBaseOFetch.js) kullan auth gerektiren çağrılar için [useBaseOFetchWithAuth.js](mdc:beyraha-frontend-nuxt/composables/common/bases/useBaseOFetchWithAuth.js) kullan.
--Uzun string yazdırmalarda '' yerine `` kullan.

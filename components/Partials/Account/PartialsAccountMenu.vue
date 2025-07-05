@@ -30,7 +30,7 @@
         </NuxtLink>
 
         <!-- Çıkış Yap -->
-        <div @click="authStore.logout()" class="flex-shrink-0 cursor-pointer">
+        <div @click="handleLogout" class="flex-shrink-0 cursor-pointer">
           <div
             class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-red-200 dark:border-red-800/50 hover:border-red-300 dark:hover:border-red-700 hover:shadow-md transition-all duration-300 w-[200px]">
             <div class="flex items-center space-x-3 p-4">
@@ -89,7 +89,7 @@
       </NuxtLink>
 
       <!-- Çıkış Yap -->
-      <div @click="authStore.logout()" class="cursor-pointer">
+      <div @click="handleLogout" class="cursor-pointer">
         <div
           class="group relative overflow-hidden rounded-xl bg-white dark:bg-neutral-800 border border-red-200 dark:border-red-800/50 hover:border-red-300 dark:hover:border-red-700 hover:shadow-md transition-all duration-300 w-full">
           <div class="flex items-center space-x-3 p-4">
@@ -128,14 +128,16 @@ const { accountMenuItems, getActiveItem } = useAccountMenu()
 
 // Aktif öğe kontrolü
 const isItemActive = (item) => {
-  const currentPath = route.fullPath
+  return getActiveItem(route.path) === item.link
+}
 
-  // Sorularım için özel kontrol (nested routes)
-  if (item.link === '/hesap/sorularim') {
-    return currentPath.startsWith('/hesap/sorularim')
+// Logout handler - hesap alanında olduğumuz için logout sonrası auth'a yönlendirecek
+const handleLogout = async () => {
+  try {
+    // Hesap alanında olduğumuz için forceRedirect: true - auth sayfasına yönlendirecek
+    await authStore.logout(null, true, true)
+  } catch (error) {
+    console.error('Logout error:', error)
   }
-
-  // Diğer öğeler için exact match
-  return currentPath === item.link
 }
 </script>
