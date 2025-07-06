@@ -2,8 +2,8 @@
   <div>
     <NuxtLoadingIndicator />
     <NuxtLayout>
-      <Transition name="page" mode="out-in" appear>
-        <NuxtPage />
+      <Transition name="page" appear>
+        <NuxtPage :keepalive="{ max: 10 }" />
       </Transition>
     </NuxtLayout>
     <UNotifications icon="i-heroicons-check-badge" color="orange" />
@@ -44,12 +44,12 @@ watch(router.currentRoute, () => {
 /* Native-style Page Transitions */
 .page-enter-active,
 .page-leave-active {
-  transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .page-enter-from {
   opacity: 0;
-  transform: translateY(8px);
+  transform: translateY(4px);
 }
 
 .page-leave-to {
