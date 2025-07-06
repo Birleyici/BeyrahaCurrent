@@ -26,10 +26,10 @@
 
         <div class="flex items-center gap-2 w-full sm:w-auto">
           <UButtonGroup size="sm" orientation="horizontal" class="flex-1 sm:flex-none">
-            <UButton :color="viewMode === 'grid' ? 'primary' : 'neutral'"
+            <UButton :color="viewMode === 'grid' ? 'primary' : 'gray'"
               :variant="viewMode === 'grid' ? 'solid' : 'outline'" icon="i-heroicons-squares-2x2"
               @click="viewMode = 'grid'" class="flex-1 sm:flex-none touch-manipulation" />
-            <UButton :color="viewMode === 'table' ? 'primary' : 'neutral'"
+            <UButton :color="viewMode === 'table' ? 'primary' : 'gray'"
               :variant="viewMode === 'table' ? 'solid' : 'outline'" icon="i-heroicons-list-bullet"
               @click="viewMode = 'table'" class="flex-1 sm:flex-none touch-manipulation" />
           </UButtonGroup>
@@ -169,7 +169,7 @@
                 </div>
 
                 <UDropdown :items="getProductActions(product)" :popper="{ placement: 'bottom-end' }">
-                  <UButton icon="i-heroicons-ellipsis-vertical" size="xs" color="neutral" variant="ghost"
+                  <UButton icon="i-heroicons-ellipsis-vertical" size="xs" color="gray" variant="ghost"
                     class="touch-manipulation p-2" />
                 </UDropdown>
               </div>
@@ -291,7 +291,7 @@
 
                     <!-- Actions -->
                     <UDropdown :items="getProductActions(product)" :popper="{ placement: 'bottom-end' }">
-                      <UButton icon="i-heroicons-ellipsis-horizontal" size="xs" color="neutral" variant="ghost"
+                      <UButton icon="i-heroicons-ellipsis-horizontal" size="xs" color="gray" variant="ghost"
                         class="touch-manipulation p-2" />
                     </UDropdown>
                   </div>
@@ -444,7 +444,7 @@
             <template #actions-data="{ row }">
               <div class="flex justify-end">
                 <UDropdown :items="getProductActions(row)" :popper="{ placement: 'bottom-end' }">
-                  <UButton icon="i-heroicons-ellipsis-horizontal" size="xs" color="neutral" variant="ghost" />
+                  <UButton icon="i-heroicons-ellipsis-horizontal" size="xs" color="gray" variant="ghost" />
                 </UDropdown>
               </div>
             </template>

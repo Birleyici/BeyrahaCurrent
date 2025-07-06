@@ -5,7 +5,7 @@
       :description="isNewProduct ? 'Yeni bir ürün oluşturun ve detaylarını ekleyin' : 'Ürün bilgilerini güncelleyin'"
       :breadcrumb-links="links">
       <template #actions>
-        <UButton icon="i-heroicons-arrow-left" size="sm" color="neutral" variant="outline" label="Geri Dön"
+        <UButton icon="i-heroicons-arrow-left" size="sm" color="gray" variant="outline" label="Geri Dön"
           to="/management/urunler" />
         <UButton v-if="!isNewProduct && productState.product.is_active === 1"
           icon="i-heroicons-arrow-top-right-on-square" size="sm" color="green" variant="outline" label="Ürüne Git"
@@ -68,7 +68,7 @@
 
             <!-- Tab Navigation -->
             <div class="flex flex-wrap gap-1">
-              <UButton v-for="tab in tabList" :key="tab.key" :color="currentTab === tab.key ? 'primary' : 'neutral'"
+              <UButton v-for="tab in tabList" :key="tab.key" :color="currentTab === tab.key ? 'primary' : 'gray'"
                 :variant="currentTab === tab.key ? 'solid' : 'ghost'" size="sm" :icon="tab.icon" :label="tab.label"
                 @click="currentTab = tab.key" class="flex-shrink-0" />
             </div>
@@ -162,8 +162,8 @@
               </ul>
             </div>
 
-            <UButton :loading="productState.product.loading" @click="handleSaveDraft()" color="neutral"
-              variant="outline" size="lg" icon="i-heroicons-document" block class="justify-center">
+            <UButton :loading="productState.product.loading" @click="handleSaveDraft()" color="gray" variant="outline"
+              size="lg" icon="i-heroicons-document" block class="justify-center">
               Taslak Olarak Kaydet
             </UButton>
 
@@ -285,7 +285,7 @@
           <h3 class="text-base sm:text-lg font-semibold leading-6 text-neutral-900 dark:text-white">
             Medya Galerisi
           </h3>
-          <UButton color="neutral" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
+          <UButton color="gray" variant="ghost" icon="i-heroicons-x-mark-20-solid" class="-my-1"
             @click="isOpenMediaModal = false" />
         </div>
 
@@ -330,7 +330,7 @@
               Taslak Olarak Kaydet ve Çık
             </UButton>
 
-            <UButton color="neutral" variant="outline" size="lg" block class="justify-center" @click="cancelExit">
+            <UButton color="gray" variant="outline" size="lg" block class="justify-center" @click="cancelExit">
               Vazgeç
             </UButton>
           </div>

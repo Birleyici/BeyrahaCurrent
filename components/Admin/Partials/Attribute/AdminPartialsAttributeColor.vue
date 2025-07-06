@@ -110,14 +110,22 @@
 
                       <!-- Mevcut Görseller - Grid Layout -->
                       <div v-if="hasTermImage(term)" class="space-y-3">
-                        <!-- Görseller Grid -->
-                        <div class="grid grid-cols-2 gap-2">
+                        <!-- Görseller Grid - Sürükle-Bırak -->
+                        <div :ref="(el) => setSortableContainer(el, term)"
+                          class="grid grid-cols-2 gap-2 sortable-container"
+                          :data-term-id="term.id || term.product_attribute_term_id">
                           <!-- Önce image formatını kontrol et (backward compatibility) -->
-                          <div v-if="term.image" class="relative group/image">
+                          <div v-if="term.image" class="relative group/image sortable-item cursor-move"
+                            :data-image-id="term.image.id">
                             <div
                               class="aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
                               <NuxtImg :src="'cl/' + term.image.path" :alt="term.term_name"
                                 class="w-full h-full object-cover" />
+                            </div>
+                            <!-- Sürükle İkonu -->
+                            <div class="absolute top-1 right-1 z-10">
+                              <UButton icon="i-heroicons-bars-3" color="white" variant="solid" size="xs"
+                                class="opacity-75 hover:opacity-100" />
                             </div>
                             <!-- Hover Aksiyonları -->
                             <div
@@ -134,11 +142,16 @@
 
                           <!-- term_images formatını kontrol et -->
                           <div v-for="(termImage, imageIndex) in term.term_images" :key="termImage.id || imageIndex"
-                            class="relative group/image">
+                            class="relative group/image sortable-item cursor-move" :data-image-id="termImage.id">
                             <div
                               class="aspect-square rounded-lg overflow-hidden border border-gray-200 dark:border-gray-600">
                               <NuxtImg :src="'cl/' + termImage.path" :alt="term.term_name"
                                 class="w-full h-full object-cover" />
+                            </div>
+                            <!-- Sürükle İkonu -->
+                            <div class="absolute top-1 right-1 z-10">
+                              <UButton icon="i-heroicons-bars-3" color="white" variant="solid" size="xs"
+                                class="opacity-75 hover:opacity-100" />
                             </div>
                             <!-- Hover Aksiyonları -->
                             <div
@@ -339,6 +352,9 @@
 </template>
 
 <script setup>
+import { useSortable } from '@vueuse/integrations/useSortable'
+import Sortable from 'sortablejs'
+
 const props = defineProps(['item'])
 
 const {
@@ -362,6 +378,176 @@ const showDeleteAttrModal = ref(false)
 const termToDelete = ref(null)
 const imageToDelete = ref(null)
 const attrToDelete = ref(null)
+
+// Sortable state management
+const sortableInstances = ref(new Map())
+const sortableContainers = ref(new Map())
+
+// Sortable container reference management
+const setSortableContainer = (el, term) => {
+  if (!el || !term) return
+
+  const termId = term.id || term.product_attribute_term_id
+  if (!termId) return
+
+  // Store the container reference
+  sortableContainers.value.set(termId, el)
+
+  // Initialize sortable if not already done
+  nextTick(() => {
+    initializeSortable(el, term)
+  })
+}
+
+// Initialize sortable for a container
+const initializeSortable = (container, term) => {
+  if (!container || !term) return
+
+  const termId = term.id || term.product_attribute_term_id
+  if (!termId) return
+
+  // Destroy existing sortable if exists
+  if (sortableInstances.value.has(termId)) {
+    sortableInstances.value.get(termId).destroy()
+    sortableInstances.value.delete(termId)
+  }
+
+  // Create new sortable instance
+  const sortable = new Sortable(container, {
+    animation: 150,
+    ghostClass: 'sortable-ghost',
+    chosenClass: 'sortable-chosen',
+    dragClass: 'sortable-drag',
+    handle: '.sortable-item',
+    onEnd: (evt) => onSortEnd(evt, term)
+  })
+
+  sortableInstances.value.set(termId, sortable)
+}
+
+// Handle sort end event
+const onSortEnd = async (evt, term) => {
+  if (evt.oldIndex === evt.newIndex) return
+
+  console.log('Sıralama değişti:', {
+    term: term.term_name,
+    oldIndex: evt.oldIndex,
+    newIndex: evt.newIndex
+  })
+
+  // Update image order via API
+  await updateImageOrder(term)
+}
+
+// Update image order via API
+const updateImageOrder = async (term) => {
+  try {
+    const termId = term.id || term.product_attribute_term_id
+    if (!termId) {
+      console.error('Term ID bulunamadı:', term)
+      return
+    }
+
+    // Gather all images with their current order
+    const imageOrder = []
+    let sortOrder = 0
+
+    // Add term.image if exists (backward compatibility)
+    if (term.image && term.image.id) {
+      imageOrder.push({
+        id: term.image.id,
+        sort_order: sortOrder++
+      })
+    }
+
+    // Add term_images
+    if (term.term_images && term.term_images.length > 0) {
+      term.term_images.forEach(img => {
+        if (img.id) {
+          imageOrder.push({
+            id: img.id,
+            sort_order: sortOrder++
+          })
+        }
+      })
+    }
+
+    // Get current DOM order
+    const container = sortableContainers.value.get(termId)
+    if (container) {
+      const items = container.querySelectorAll('.sortable-item')
+      const newOrder = []
+
+      items.forEach((item, index) => {
+        const imageId = parseInt(item.dataset.imageId)
+        if (imageId) {
+          newOrder.push({
+            id: imageId,
+            sort_order: index
+          })
+        }
+      })
+
+      if (newOrder.length > 0) {
+        // Call API to update order
+        const response = await useBaseOFetchWithAuth(`product-attribute-terms/${termId}/images/reorder`, {
+          method: 'POST',
+          body: {
+            image_order: newOrder
+          }
+        })
+
+        if (!response.error) {
+          console.log('Görsel sıralaması güncellendi:', response)
+
+          try {
+            const nuxtApp = useNuxtApp()
+            if (nuxtApp && nuxtApp.$toast) {
+              nuxtApp.$toast.add({
+                title: 'Görsel sıralaması güncellendi',
+                color: 'green',
+                icon: 'i-heroicons-check'
+              })
+            }
+          } catch (toastError) {
+            console.log('Toast hatası:', toastError)
+          }
+        } else {
+          console.error('API yanıt hatası:', response.error)
+        }
+      }
+    }
+  } catch (error) {
+    console.error('Görsel sıralaması güncelleme hatası:', error)
+
+    try {
+      const nuxtApp = useNuxtApp()
+      if (nuxtApp && nuxtApp.$toast) {
+        nuxtApp.$toast.add({
+          title: 'Görsel sıralaması güncellenirken hata oluştu',
+          color: 'red',
+          icon: 'i-heroicons-x-mark'
+        })
+      }
+    } catch (toastError) {
+      console.log('Toast hatası:', toastError)
+    }
+  }
+}
+
+// Cleanup sortable instances
+const destroySortables = () => {
+  sortableInstances.value.forEach(sortable => {
+    sortable.destroy()
+  })
+  sortableInstances.value.clear()
+  sortableContainers.value.clear()
+}
+
+// Cleanup on unmount
+onUnmounted(() => {
+  destroySortables()
+})
 
 // Accordion change handler
 const handleAccordionChange = (data) => {
@@ -809,3 +995,43 @@ const getTermImageCount = (term) => {
   return count
 }
 </script>
+
+<style scoped>
+/* Sortable CSS classes */
+.sortable-ghost {
+  opacity: 0.4;
+  background: #e5e7eb;
+  border: 2px dashed #9ca3af;
+  border-radius: 0.5rem;
+}
+
+.sortable-chosen {
+  transform: scale(1.05);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  z-index: 999;
+}
+
+.sortable-drag {
+  opacity: 0.8;
+  transform: rotate(5deg);
+}
+
+.sortable-item {
+  transition: all 0.3s ease;
+}
+
+.sortable-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sortable-container {
+  position: relative;
+}
+
+/* Dark mode support */
+.dark .sortable-ghost {
+  background: #374151;
+  border-color: #6b7280;
+}
+</style>

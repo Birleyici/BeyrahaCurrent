@@ -69,8 +69,8 @@
                                     </p>
                                 </div>
                                 <UDropdown :items="getTemplateActions(template)" :popper="{ placement: 'bottom-end' }">
-                                    <UButton icon="i-heroicons-ellipsis-vertical" size="xs" color="neutral"
-                                        variant="ghost" class="touch-manipulation" />
+                                    <UButton icon="i-heroicons-ellipsis-vertical" size="xs" color="gray" variant="ghost"
+                                        class="touch-manipulation" />
                                 </UDropdown>
                             </div>
                         </div>
@@ -286,7 +286,7 @@ const getTemplateName = (template) => {
     // Diğer şablon tipleri için
     const templateTypeNames = {
         'order-confirmation': 'Sipariş Onayı',
-        'shipping-notification': 'Kargo Bildirimi', 
+        'shipping-notification': 'Kargo Bildirimi',
         'welcome': 'Hoş Geldin',
         'password-reset': 'Şifre Sıfırlama',
         'newsletter': 'Haber Bülteni',

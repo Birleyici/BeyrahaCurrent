@@ -188,7 +188,7 @@ export const useAdminReviews = () => {
             approved: 'success',
             rejected: 'error'
         }
-        return colors[status] || 'neutral'
+        return colors[status] || 'gray'
     }
 
     return {

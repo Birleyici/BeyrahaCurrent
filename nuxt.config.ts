@@ -83,7 +83,7 @@ export default defineNuxtConfig({
     'pinia-plugin-persistedstate/nuxt',
     '@nuxt/ui',
     '@nuxtjs/tailwindcss',
-    'nuxt-icon',
+    '@nuxt/icon',
     '@nuxt/image',
     '@nuxtjs/device',
     'nuxt-tiptap-editor'

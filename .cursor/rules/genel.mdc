@@ -7,3 +7,4 @@ alwaysApply: true
 -Uzun string yazdırmalarda '' yerine `` kullan.
 -Lazım olduğunda \Log::info kullanma Log::info 
 -Api localhost:8000 portunda değil localhost/api üzerinde çalışıyor.
+-Modüler çalışmaya dikkat et, yeniden kullanılabilir, components, composables gibi nuxt özelliklerini iyi kullan.

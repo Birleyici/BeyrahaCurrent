@@ -6,23 +6,23 @@
       <div class="toolbar-group">
         <UButton @click="editor.chain().focus().toggleBold().run()"
           :disabled="!editor.can().chain().focus().toggleBold().run()"
-          :color="editor.isActive('bold') ? 'orange' : 'neutral'" :variant="editor.isActive('bold') ? 'solid' : 'ghost'"
+          :color="editor.isActive('bold') ? 'orange' : 'gray'" :variant="editor.isActive('bold') ? 'solid' : 'ghost'"
           size="xs" icon="i-heroicons-bold" square />
         <UButton @click="editor.chain().focus().toggleItalic().run()"
           :disabled="!editor.can().chain().focus().toggleItalic().run()"
-          :color="editor.isActive('italic') ? 'orange' : 'neutral'"
+          :color="editor.isActive('italic') ? 'orange' : 'gray'"
           :variant="editor.isActive('italic') ? 'solid' : 'ghost'" size="xs" icon="i-heroicons-italic" square />
         <UButton @click="editor.chain().focus().toggleStrike().run()"
           :disabled="!editor.can().chain().focus().toggleStrike().run()"
-          :color="editor.isActive('strike') ? 'orange' : 'neutral'"
+          :color="editor.isActive('strike') ? 'orange' : 'gray'"
           :variant="editor.isActive('strike') ? 'solid' : 'ghost'" size="xs" square>
           <span class="text-xs font-bold">S</span>
         </UButton>
         <UButton @click="editor.chain().focus().toggleCode().run()"
           :disabled="!editor.can().chain().focus().toggleCode().run()"
-          :color="editor.isActive('code') ? 'orange' : 'neutral'" :variant="editor.isActive('code') ? 'solid' : 'ghost'"
+          :color="editor.isActive('code') ? 'orange' : 'gray'" :variant="editor.isActive('code') ? 'solid' : 'ghost'"
           size="xs" icon="i-heroicons-code-bracket" square />
-        <UButton @click="editor.chain().focus().unsetAllMarks().run()" color="neutral" variant="ghost" size="xs"
+        <UButton @click="editor.chain().focus().unsetAllMarks().run()" color="gray" variant="ghost" size="xs"
           icon="i-heroicons-x-mark" square title="Formatı temizle" />
       </div>
 
@@ -32,12 +32,12 @@
       <!-- Headings -->
       <div class="toolbar-group">
         <UButton @click="editor.chain().focus().toggleHeading({ level: 2 }).run()"
-          :color="editor.isActive('heading', { level: 2 }) ? 'orange' : 'neutral'"
+          :color="editor.isActive('heading', { level: 2 }) ? 'orange' : 'gray'"
           :variant="editor.isActive('heading', { level: 2 }) ? 'solid' : 'ghost'" size="xs" square>
           <span class="text-xs font-bold">H2</span>
         </UButton>
         <UButton @click="editor.chain().focus().toggleHeading({ level: 3 }).run()"
-          :color="editor.isActive('heading', { level: 3 }) ? 'orange' : 'neutral'"
+          :color="editor.isActive('heading', { level: 3 }) ? 'orange' : 'gray'"
           :variant="editor.isActive('heading', { level: 3 }) ? 'solid' : 'ghost'" size="xs" square>
           <span class="text-xs font-bold">H3</span>
         </UButton>
@@ -49,11 +49,11 @@
       <!-- Lists -->
       <div class="toolbar-group">
         <UButton @click="editor.chain().focus().toggleBulletList().run()"
-          :color="editor.isActive('bulletList') ? 'orange' : 'neutral'"
+          :color="editor.isActive('bulletList') ? 'orange' : 'gray'"
           :variant="editor.isActive('bulletList') ? 'solid' : 'ghost'" size="xs" icon="i-heroicons-list-bullet"
           square />
         <UButton @click="editor.chain().focus().toggleOrderedList().run()"
-          :color="editor.isActive('orderedList') ? 'orange' : 'neutral'"
+          :color="editor.isActive('orderedList') ? 'orange' : 'gray'"
           :variant="editor.isActive('orderedList') ? 'solid' : 'ghost'" size="xs" square>
           <span class="text-xs font-bold">1.</span>
         </UButton>
@@ -65,9 +65,9 @@
       <!-- Undo/Redo -->
       <div class="toolbar-group">
         <UButton @click="editor.chain().focus().undo().run()" :disabled="!editor.can().chain().focus().undo().run()"
-          color="neutral" variant="ghost" size="xs" icon="i-heroicons-arrow-uturn-left" square title="Geri al" />
+          color="gray" variant="ghost" size="xs" icon="i-heroicons-arrow-uturn-left" square title="Geri al" />
         <UButton @click="editor.chain().focus().redo().run()" :disabled="!editor.can().chain().focus().redo().run()"
-          color="neutral" variant="ghost" size="xs" icon="i-heroicons-arrow-uturn-right" square title="Yinele" />
+          color="gray" variant="ghost" size="xs" icon="i-heroicons-arrow-uturn-right" square title="Yinele" />
       </div>
     </div>
 

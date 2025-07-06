@@ -12,15 +12,16 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Toplam Ürün</p>
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{ stats.totalProducts }}
+                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{
+                            dashboardStats.totalProducts }}
                         </p>
                         <div class="flex items-center mt-2">
-                            <Icon :name="stats.productGrowth >= 0 ? 'mdi:trending-up' : 'mdi:trending-down'"
-                                :class="stats.productGrowth >= 0 ? 'text-green-500' : 'text-red-500'"
+                            <Icon :name="dashboardStats.productGrowth >= 0 ? 'mdi:trending-up' : 'mdi:trending-down'"
+                                :class="dashboardStats.productGrowth >= 0 ? 'text-green-500' : 'text-red-500'"
                                 class="w-4 h-4 mr-1" />
-                            <span :class="stats.productGrowth >= 0 ? 'text-green-600' : 'text-red-600'"
+                            <span :class="dashboardStats.productGrowth >= 0 ? 'text-green-600' : 'text-red-600'"
                                 class="text-sm font-medium">
-                                {{ Math.abs(stats.productGrowth) }}%
+                                {{ Math.abs(dashboardStats.productGrowth) }}%
                             </span>
                             <span class="text-neutral-500 dark:text-neutral-400 text-sm ml-1">bu ay</span>
                         </div>
@@ -37,38 +38,19 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Aktif Ürün</p>
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{ stats.activeProducts }}
+                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{
+                            dashboardStats.activeProducts }}
                         </p>
                         <div class="flex items-center mt-2">
                             <div class="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
                             <span class="text-neutral-500 dark:text-neutral-400 text-sm">
-                                {{ Math.round((stats.activeProducts / stats.totalProducts) * 100) }}% aktif
+                                {{ Math.round((dashboardStats.activeProducts / dashboardStats.totalProducts) * 100) || 0
+                                }}% aktif
                             </span>
                         </div>
                     </div>
                     <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-full">
                         <Icon name="mdi:check-circle" class="w-8 h-8 text-green-600 dark:text-green-400" />
-                    </div>
-                </div>
-            </div>
-
-            <!-- Draft Products -->
-            <div
-                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Taslak Ürün</p>
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{ stats.draftProducts }}
-                        </p>
-                        <div class="flex items-center mt-2">
-                            <div class="w-2 h-2 bg-yellow-500 rounded-full mr-2"></div>
-                            <span class="text-neutral-500 dark:text-neutral-400 text-sm">
-                                Yayınlanmayı bekliyor
-                            </span>
-                        </div>
-                    </div>
-                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-full">
-                        <Icon name="mdi:file-document-edit" class="w-8 h-8 text-yellow-600 dark:text-yellow-400" />
                     </div>
                 </div>
             </div>
@@ -79,20 +61,94 @@
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Toplam Sipariş</p>
-                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{ stats.totalOrders }}</p>
+                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{
+                            dashboardStats.totalOrders }}</p>
                         <div class="flex items-center mt-2">
-                            <Icon :name="stats.orderGrowth >= 0 ? 'mdi:trending-up' : 'mdi:trending-down'"
-                                :class="stats.orderGrowth >= 0 ? 'text-green-500' : 'text-red-500'"
+                            <Icon :name="dashboardStats.orderGrowth >= 0 ? 'mdi:trending-up' : 'mdi:trending-down'"
+                                :class="dashboardStats.orderGrowth >= 0 ? 'text-green-500' : 'text-red-500'"
                                 class="w-4 h-4 mr-1" />
-                            <span :class="stats.orderGrowth >= 0 ? 'text-green-600' : 'text-red-600'"
+                            <span :class="dashboardStats.orderGrowth >= 0 ? 'text-green-600' : 'text-red-600'"
                                 class="text-sm font-medium">
-                                {{ Math.abs(stats.orderGrowth) }}%
+                                {{ Math.abs(dashboardStats.orderGrowth) }}%
                             </span>
                             <span class="text-neutral-500 dark:text-neutral-400 text-sm ml-1">bu ay</span>
                         </div>
                     </div>
                     <div class="p-3 bg-purple-50 dark:bg-purple-900/20 rounded-full">
                         <Icon name="mdi:shopping" class="w-8 h-8 text-purple-600 dark:text-purple-400" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Total Revenue -->
+            <div
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Toplam Gelir</p>
+                        <p class="text-3xl font-bold text-neutral-900 dark:text-white mt-2">{{
+                            formatCurrency(dashboardStats.totalRevenue) }}</p>
+                        <div class="flex items-center mt-2">
+                            <Icon :name="dashboardStats.revenueGrowth >= 0 ? 'mdi:trending-up' : 'mdi:trending-down'"
+                                :class="dashboardStats.revenueGrowth >= 0 ? 'text-green-500' : 'text-red-500'"
+                                class="w-4 h-4 mr-1" />
+                            <span :class="dashboardStats.revenueGrowth >= 0 ? 'text-green-600' : 'text-red-600'"
+                                class="text-sm font-medium">
+                                {{ Math.abs(dashboardStats.revenueGrowth) }}%
+                            </span>
+                            <span class="text-neutral-500 dark:text-neutral-400 text-sm ml-1">bu ay</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-emerald-50 dark:bg-emerald-900/20 rounded-full">
+                        <Icon name="mdi:currency-try" class="w-8 h-8 text-emerald-600 dark:text-emerald-400" />
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Aylık İstatistikler -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Bu Ay Siparişler -->
+            <div
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Bu Ay Siparişler</p>
+                        <p class="text-2xl font-bold text-neutral-900 dark:text-white mt-2">{{
+                            dashboardStats.thisMonthOrders }}</p>
+                    </div>
+                    <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full">
+                        <Icon name="mdi:calendar-month" class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bu Ay Gelir -->
+            <div
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Bu Ay Gelir</p>
+                        <p class="text-2xl font-bold text-neutral-900 dark:text-white mt-2">{{
+                            formatCurrency(dashboardStats.thisMonthRevenue) }}</p>
+                    </div>
+                    <div class="p-3 bg-green-50 dark:bg-green-900/20 rounded-full">
+                        <Icon name="mdi:chart-line" class="w-6 h-6 text-green-600 dark:text-green-400" />
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bekleyen Siparişler -->
+            <div
+                class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <p class="text-sm font-medium text-neutral-600 dark:text-neutral-400">Bekleyen Siparişler</p>
+                        <p class="text-2xl font-bold text-neutral-900 dark:text-white mt-2">{{
+                            dashboardStats.pendingOrders }}</p>
+                    </div>
+                    <div class="p-3 bg-yellow-50 dark:bg-yellow-900/20 rounded-full">
+                        <Icon name="mdi:clock-outline" class="w-6 h-6 text-yellow-600 dark:text-yellow-400" />
                     </div>
                 </div>
             </div>
@@ -163,18 +219,6 @@
                     </div>
                 </NuxtLink>
 
-                <NuxtLink to="/management/sorular"
-                    class="flex items-center p-4 bg-cyan-50 dark:bg-cyan-900/20 rounded-lg hover:bg-cyan-100 dark:hover:bg-cyan-900/30 transition-colors duration-200 group">
-                    <div
-                        class="p-2 bg-cyan-600 rounded-lg mr-4 group-hover:scale-110 transition-transform duration-200">
-                        <Icon name="mdi:help-circle" class="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                        <h3 class="font-semibold text-neutral-900 dark:text-white">Soru & Cevap</h3>
-                        <p class="text-sm text-neutral-600 dark:text-neutral-400">S&C moderasyonu</p>
-                    </div>
-                </NuxtLink>
-
                 <button @click="refreshData" :disabled="isRefreshing"
                     class="flex items-center p-4 bg-neutral-50 dark:bg-neutral-700 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-600 transition-colors duration-200 group disabled:opacity-50">
                     <div
@@ -207,9 +251,38 @@
                         class="flex items-center p-3 bg-neutral-50 dark:bg-neutral-700 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-600 transition-colors duration-200">
                         <div
                             class="w-12 h-12 rounded-lg bg-neutral-200 dark:bg-neutral-600 flex items-center justify-center mr-4 overflow-hidden">
-                            <img v-if="product.image" :src="product.image" :alt="product.name"
-                                class="w-full h-full object-cover" />
-                            <Icon v-else name="mdi:image-outline" class="w-6 h-6 text-neutral-400" />
+                            <!-- Renk niteliği olan ürünlerde renk görselleri -->
+                            <div v-if="product.has_color_attribute && product.colorImages?.length > 0"
+                                class="w-full h-full">
+                                <div class="grid grid-cols-2 gap-0.5 w-full h-full p-1">
+                                    <div v-for="(colorImage, index) in product.colorImages.slice(0, 4)" :key="index"
+                                        class="relative rounded-full overflow-hidden bg-neutral-200 dark:bg-neutral-600"
+                                        :class="{
+                                            'col-span-2': product.colorImages.length === 1,
+                                            'w-full h-full': product.colorImages.length <= 4
+                                        }">
+                                        <NuxtImg :src="'cl/' + colorImage.image_path" :alt="colorImage.color_name"
+                                            class="w-full h-full object-cover" format="webp" quality="90" />
+                                    </div>
+                                    <!-- Fazla renk göstergesi -->
+                                    <div v-if="product.colorImages.length > 4"
+                                        class="absolute bottom-0 right-0 w-4 h-4 bg-neutral-800/80 text-white text-[8px] flex items-center justify-center rounded-full">
+                                        +{{ product.colorImages.length - 4 }}
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Normal ürün görseli -->
+                            <div v-else class="w-full h-full">
+                                <template v-if="getProductImagePath(product)">
+                                    <NuxtImg :src="'cl/' + getProductImagePath(product)" :alt="product.name"
+                                        class="w-full h-full object-cover" format="webp" quality="90" />
+                                </template>
+                                <template v-else>
+                                    <NuxtImg :src="'cl/' + 'edb26c39-166b-465f-780d-e930fa903900/public'"
+                                        :alt="product.name || 'Varsayılan görsel'" class="w-full h-full object-cover"
+                                        format="webp" quality="90" />
+                                </template>
+                            </div>
                         </div>
                         <div class="flex-1 min-w-0">
                             <h3 class="font-medium text-neutral-900 dark:text-white truncate">
@@ -247,15 +320,17 @@
                         </div>
                         <div class="flex items-center">
                             <span class="text-lg font-semibold text-neutral-900 dark:text-white mr-2">{{
-                                stats.activeProducts }}</span>
+                                dashboardStats.activeProducts }}</span>
                             <span class="text-sm text-neutral-500 dark:text-neutral-400">
-                                ({{ Math.round((stats.activeProducts / stats.totalProducts) * 100) || 0 }}%)
+                                ({{ Math.round((dashboardStats.activeProducts / dashboardStats.totalProducts) * 100) ||
+                                    0 }}%)
                             </span>
                         </div>
                     </div>
                     <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
                         <div class="bg-green-500 h-2 rounded-full transition-all duration-500"
-                            :style="{ width: `${(stats.activeProducts / stats.totalProducts) * 100 || 0}%` }"></div>
+                            :style="{ width: `${(dashboardStats.activeProducts / dashboardStats.totalProducts) * 100 || 0}%` }">
+                        </div>
                     </div>
 
                     <!-- Draft Products -->
@@ -266,15 +341,17 @@
                         </div>
                         <div class="flex items-center">
                             <span class="text-lg font-semibold text-neutral-900 dark:text-white mr-2">{{
-                                stats.draftProducts }}</span>
+                                dashboardStats.draftProducts }}</span>
                             <span class="text-sm text-neutral-500 dark:text-neutral-400">
-                                ({{ Math.round((stats.draftProducts / stats.totalProducts) * 100) || 0 }}%)
+                                ({{ Math.round((dashboardStats.draftProducts / dashboardStats.totalProducts) * 100) || 0
+                                }}%)
                             </span>
                         </div>
                     </div>
                     <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
                         <div class="bg-yellow-500 h-2 rounded-full transition-all duration-500"
-                            :style="{ width: `${(stats.draftProducts / stats.totalProducts) * 100 || 0}%` }"></div>
+                            :style="{ width: `${(dashboardStats.draftProducts / dashboardStats.totalProducts) * 100 || 0}%` }">
+                        </div>
                     </div>
 
                     <!-- Inactive Products -->
@@ -285,19 +362,21 @@
                         </div>
                         <div class="flex items-center">
                             <span class="text-lg font-semibold text-neutral-900 dark:text-white mr-2">{{
-                                stats.inactiveProducts }}</span>
+                                dashboardStats.inactiveProducts }}</span>
                             <span class="text-sm text-neutral-500 dark:text-neutral-400">
-                                ({{ Math.round((stats.inactiveProducts / stats.totalProducts) * 100) || 0 }}%)
+                                ({{ Math.round((dashboardStats.inactiveProducts / dashboardStats.totalProducts) * 100)
+                                    || 0 }}%)
                             </span>
                         </div>
                     </div>
                     <div class="w-full bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
                         <div class="bg-red-500 h-2 rounded-full transition-all duration-500"
-                            :style="{ width: `${(stats.inactiveProducts / stats.totalProducts) * 100 || 0}%` }"></div>
+                            :style="{ width: `${(dashboardStats.inactiveProducts / dashboardStats.totalProducts) * 100 || 0}%` }">
+                        </div>
                     </div>
                 </div>
 
-                <div v-if="stats.totalProducts === 0" class="text-center py-8">
+                <div v-if="dashboardStats.totalProducts === 0" class="text-center py-8">
                     <Icon name="mdi:chart-pie" class="w-12 h-12 text-neutral-400 mx-auto mb-3" />
                     <p class="text-neutral-600 dark:text-neutral-400">Henüz analiz edilecek veri yok</p>
                 </div>
@@ -323,58 +402,21 @@ const breadcrumbLinks = [
     }
 ];
 
-// Mock data for demonstration
-
 definePageMeta({
     layout: "admin",
 });
 
-const productState = useProductState();
-const { getVendorProducts } = useProductList();
+// Dashboard Stats Composable
+const { stats: dashboardStats, recentProducts, loading, error, fetchDashboardStats } = useDashboardStats();
 
 // Reactive data
 const isRefreshing = ref(false);
-
-// Computed properties
-const currentDate = computed(() => {
-    return new Date().toLocaleDateString('tr-TR', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-    });
-});
-
-const stats = computed(() => {
-    const products = productState.vendorProducts || [];
-    const totalProducts = products.length;
-    const activeProducts = products.filter(p => p.status === 'active').length;
-    const draftProducts = products.filter(p => p.status === 'draft').length;
-    const inactiveProducts = products.filter(p => p.status === 'inactive').length;
-
-    return {
-        totalProducts,
-        activeProducts,
-        draftProducts,
-        inactiveProducts,
-        totalOrders: 0, // Bu değer gerçek sipariş verilerinden gelecek
-        productGrowth: 12, // Bu değer gerçek büyüme verilerinden gelecek
-        orderGrowth: 8 // Bu değer gerçek büyüme verilerinden gelecek
-    };
-});
-
-const recentProducts = computed(() => {
-    const products = [...(productState.vendorProducts || [])];
-    return products
-        .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
-        .slice(0, 5);
-});
 
 // Methods
 const refreshData = async () => {
     isRefreshing.value = true;
     try {
-        await getVendorProducts();
-        // Diğer verileri de yenile
+        await fetchDashboardStats();
     } finally {
         isRefreshing.value = false;
     }
@@ -397,6 +439,34 @@ const formatDate = (dateString) => {
     });
 };
 
+const formatCurrency = (amount) => {
+    return new Intl.NumberFormat('tr-TR', {
+        style: 'currency',
+        currency: 'TRY'
+    }).format(amount || 0);
+};
+
+const getProductImagePath = (product) => {
+    // Önce cover image'i kontrol et
+    if (product.coverImage?.path || product.cover_image?.path) {
+        return product.coverImage?.path || product.cover_image?.path;
+    }
+    // Sonra oldest image'i kontrol et
+    else if (product.oldestImage?.image?.path || product.oldest_image?.image?.path) {
+        return product.oldestImage?.image?.path || product.oldest_image?.image?.path;
+    }
+    // API'den gelen image field'ini kontrol et
+    else if (product.image) {
+        return product.image;
+    }
+    // Eğer renk niteliği varsa ilk renk görseli
+    else if (product.has_color_attribute && product.colorImages?.length > 0) {
+        return product.colorImages[0].image_path;
+    }
+    // Hiçbiri yoksa null döndür
+    return null;
+};
+
 // Initialize data
-await getVendorProducts();
+await fetchDashboardStats();
 </script>

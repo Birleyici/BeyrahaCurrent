@@ -12,7 +12,9 @@ export async function useBaseOFetch(url, options = {}) {
   let response
 
   try {
-    response = await $fetch(apiBaseUrl + url, params)
+    // URL birleştirme - çift slash'ı önle
+    const fullUrl = apiBaseUrl.replace(/\/$/, '') + '/' + url.replace(/^\//, '')
+    response = await $fetch(fullUrl, params)
     return response
   } catch (error) {
     throw error

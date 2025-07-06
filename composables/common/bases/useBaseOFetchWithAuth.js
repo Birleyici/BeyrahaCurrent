@@ -43,7 +43,9 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
   const params = defu(defaults, options)
 
   try {
-    let response = await $fetch(apiBaseUrl + url, params)
+    // URL birleştirme - çift slash'ı önle
+    const fullUrl = apiBaseUrl.replace(/\/$/, '') + '/' + url.replace(/^\//, '')
+    let response = await $fetch(fullUrl, params)
 
     // Anonim kullanıcı ID'si döndüyse, bunu kaydet
     if (response.anonymous_user_id) {
@@ -52,7 +54,7 @@ export async function useBaseOFetchWithAuth(url, options = {}) {
 
       // Headers güncelle ve isteği tekrar yap
       params.headers['X-Anonymous-User-ID'] = response.anonymous_user_id
-      response = await $fetch(apiBaseUrl + url, params)
+      response = await $fetch(fullUrl, params)
     }
 
     // Refresh attempt sayacını sıfırla başarılı istek sonrası
@@ -113,7 +115,8 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
         if (token) {
           // Yeni token ile original isteği tekrar yap
           originalParams.headers['Authorization'] = `Bearer ${token}`
-          $fetch(apiBaseUrl + originalUrl, originalParams)
+          const retryUrl = apiBaseUrl.replace(/\/$/, '') + '/' + originalUrl.replace(/^\//, '')
+          $fetch(retryUrl, originalParams)
             .then(resolve)
             .catch(reject)
         } else {
@@ -136,7 +139,8 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
   try {
     console.log(`Attempting token refresh (attempt ${refreshAttempts}/${MAX_REFRESH_ATTEMPTS})...`)
     
-    const response = await $fetch(apiBaseUrl + 'auth/refresh', {
+    const refreshUrl = apiBaseUrl.replace(/\/$/, '') + '/auth/refresh'
+    const response = await $fetch(refreshUrl, {
       method: 'POST',
       headers: { Authorization: `Bearer ${currentToken}` }
     })
@@ -156,7 +160,8 @@ async function handleTokenRefresh(authStore, apiBaseUrl, route, router, original
 
       // Original isteği yeni token ile tekrar yap
       originalParams.headers['Authorization'] = `Bearer ${response.token}`
-      const retryResponse = await $fetch(apiBaseUrl + originalUrl, originalParams)
+      const retryUrl = apiBaseUrl.replace(/\/$/, '') + '/' + originalUrl.replace(/^\//, '')
+      const retryResponse = await $fetch(retryUrl, originalParams)
       
       return retryResponse
 
