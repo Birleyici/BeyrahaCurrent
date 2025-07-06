@@ -3,51 +3,50 @@
     'w-full': true
   }">
     <!-- Mobile Search Overlay -->
-    <div v-if="$mainState.isOpenSearch && isMobile" class="fixed inset-0 z-50">
-      <div class="absolute inset-0 p-4">
-        <div
-          class="bg-white dark:bg-neutral-800 rounded-xl shadow-xl max-h-[90vh] overflow-hidden transition-colors duration-300">
-          <!-- Mobile Header -->
-          <div class="flex items-center p-4 border-b border-neutral-100 dark:border-neutral-700">
-            <button @click="closeSearch"
-              class="p-2 -ml-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-150">
-              <UIcon name="i-heroicons-arrow-left" class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
-            </button>
-            <h3 class="ml-3 text-lg font-medium text-neutral-900 dark:text-neutral-100">Ürün Ara</h3>
-          </div>
+    <template v-if="$mainState.isOpenSearch && isMobile">
+      <Transition name="search-overlay">
+        <div class="fixed inset-0 z-50">
+          <div class="absolute inset-0 p-4">
+            <div
+              class="bg-white dark:bg-neutral-800 rounded-xl shadow-xl max-h-[90vh] overflow-hidden transition-colors duration-300">
+              <!-- Mobile Header -->
+              <div class="flex items-center p-4 border-b border-neutral-100 dark:border-neutral-700">
+                <button @click="closeSearch"
+                  class="p-2 -ml-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700 transition-colors duration-150">
+                  <UIcon name="i-heroicons-arrow-left" class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+                </button>
+                <h3 class="ml-3 text-lg font-medium text-neutral-900 dark:text-neutral-100">Ürün Ara</h3>
+              </div>
 
-          <!-- Mobile Search Input -->
-          <div class="p-4">
-            <PartialsCommonSearchInputField ref="searchInput" v-model="searchWord" :is-searching="isSearching"
-              @submit="goSearch" placeholder="Aradığınız ürünü yazınız..." class="w-full" />
-          </div>
+              <!-- Mobile Search Input -->
+              <div class="p-4">
+                <PartialsCommonSearchInputField ref="searchInput" v-model="searchWord" :is-searching="isSearching"
+                  :is-typing="isTyping" @submit="goSearch" placeholder="Aradığınız ürünü yazınız..." class="w-full" />
+              </div>
 
-          <!-- Mobile Results -->
-          <div class="flex-1 overflow-y-auto">
-            <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
-              :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch"
-              @suggestion-click="handleSuggestionClick" @category-click="handleCategoryClick" />
+              <!-- Mobile Results -->
+              <div class="flex-1 overflow-y-auto">
+                <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
+                  :is-typing="isTyping" :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch"
+                  @suggestion-click="handleSuggestionClick" @category-click="handleCategoryClick" />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </Transition>
+    </template>
 
     <!-- Desktop Search -->
     <div v-else class="relative w-full">
       <PartialsCommonSearchInputField ref="searchInput" v-model="searchWord" :is-searching="isSearching"
-        @submit="goSearch" @focus="$changeMainState({ isOpenSearch: true })" @blur="handleBlur"
+        :is-typing="isTyping" @submit="goSearch" @focus="$changeMainState({ isOpenSearch: true })" @blur="handleBlur"
         placeholder="Aradığınız ürünü yazınız..." class="w-full" />
 
       <!-- Desktop Results Dropdown -->
-      <Transition enter-active-class="transition duration-200 ease-out"
-        enter-from-class="transform scale-98 opacity-0 translate-y-1"
-        enter-to-class="transform scale-100 opacity-100 translate-y-0"
-        leave-active-class="transition duration-150 ease-in"
-        leave-from-class="transform scale-100 opacity-100 translate-y-0"
-        leave-to-class="transform scale-98 opacity-0 translate-y-1">
-        <div v-if="searchWord && $mainState.isOpenSearch && !isMobile"
+      <Transition name="search-dropdown">
+        <div v-if="$mainState.isOpenSearch && !isMobile"
           class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200/80 dark:border-neutral-700/80 z-50 max-h-[400px] overflow-hidden results-container transition-colors duration-300">
-          <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
+          <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching" :is-typing="isTyping"
             :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch"
             @suggestion-click="handleSuggestionClick" @category-click="handleCategoryClick" />
         </div>
@@ -71,6 +70,7 @@ const route = useRoute()
 const searchWord = ref(route.query.searchWord || '')
 const productsSearched = ref([])
 const isSearching = ref(false)
+const isTyping = ref(false)
 
 // Computed property for SSR compatibility
 const isOpenSearch = computed(() => {
@@ -133,13 +133,15 @@ function handleBlur(event) {
 
 // Debounce edilmiş arama fonksiyonu
 const debouncedSearch = debounce(async (newVal) => {
-  if (!newVal || newVal.length < 2) {
+  if (!newVal || newVal.length < 3) {
     productsSearched.value = []
     isSearching.value = false
+    isTyping.value = false
     return
   }
 
   console.log('🔍 Arama yapılıyor:', newVal)
+  isTyping.value = false
   isSearching.value = true
 
   try {
@@ -166,11 +168,18 @@ const debouncedSearch = debounce(async (newVal) => {
   } finally {
     isSearching.value = false
   }
-}, 300)
+}, 600)
 
 watch(
   () => searchWord.value,
   (newVal) => {
+    // Kullanıcı yazmaya başladığında hemen typing indicator'ı göster
+    if (newVal && newVal.length >= 1) {
+      isTyping.value = true
+    } else {
+      isTyping.value = false
+    }
+
     debouncedSearch(newVal)
   }
 )
@@ -214,3 +223,54 @@ watch(() => route.path, () => {
   closeSearch()
 })
 </script>
+
+<style scoped>
+/* Native-style Search Dropdown Transition */
+.search-dropdown-enter-active {
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-dropdown-leave-active {
+  transition: all 0.2s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.search-dropdown-enter-from {
+  opacity: 0;
+  transform: translateY(-8px) scale(0.98);
+}
+
+.search-dropdown-leave-to {
+  opacity: 0;
+  transform: translateY(-4px) scale(0.99);
+}
+
+/* Mobile Search Overlay Transition */
+.search-overlay-enter-active {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-overlay-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.search-overlay-enter-from {
+  opacity: 0;
+}
+
+.search-overlay-leave-to {
+  opacity: 0;
+}
+
+.search-overlay-enter-from .bg-white {
+  transform: translateY(20px) scale(0.96);
+}
+
+.search-overlay-leave-to .bg-white {
+  transform: translateY(-10px) scale(1.02);
+}
+
+.search-overlay-enter-active .bg-white,
+.search-overlay-leave-active .bg-white {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+</style>

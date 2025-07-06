@@ -22,6 +22,15 @@ export default defineNuxtConfig({
         { name: 'msapplication-TileColor', content: '#4F46E5' },
         { name: 'msapplication-TileImage', content: '/pwa-144x144.png' }
       ]
+    },
+    pageTransition: { 
+      name: 'page', 
+      mode: 'out-in',
+      appear: true
+    },
+    layoutTransition: { 
+      name: 'layout', 
+      mode: 'out-in'
     }
   },
   

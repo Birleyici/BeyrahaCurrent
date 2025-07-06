@@ -181,22 +181,26 @@
           </div>
         </div>
 
-        <!-- Butonlar -->
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
-          <!-- Sepete Ekle Butonu -->
-          <UButton :loading="cartState.addToCartloading" @click="addToCart()" color="secondary"
-            :disabled="!isSelectedVariationInStock"
-            class="!rounded-full font-bold flex justify-center relative text-sm px-8 overflow-hidden flex-1 h-12 text-white">
-            <Icon name="material-symbols:shopping-bag" class="w-14 h-14 absolute left-0 top-0 opacity-30">
-            </Icon>
-            <p class="text-white">SEPETE EKLE</p>
-          </UButton>
+        <!-- Sepete Ekle Butonu -->
+        <div class="w-full">
+          <UButton :loading="cartState.addToCartloading" @click="addToCart()" :disabled="!isSelectedVariationInStock"
+            class="w-full h-14 !rounded-2xl font-bold text-base tracking-wide relative overflow-hidden border-0 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-orange-500 via-orange-600 to-red-600 hover:from-orange-600 hover:via-orange-700 hover:to-red-700 text-white shadow-lg hover:shadow-xl disabled:shadow-md">
+            <!-- Arkaplan Efekti -->
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-2xl">
+            </div>
 
-          <!-- WhatsApp Sipariş Butonu -->
-          <UButton @click="orderViaWhatsApp()" :disabled="!isSelectedVariationInStock"
-            class="!rounded-full font-bold flex justify-center items-center text-sm px-8 flex-1 h-12 bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white border-0 transition-all duration-200 relative overflow-hidden">
-            <Icon name="logos:whatsapp-icon" class="w-12 h-12 absolute left-1 top-0 opacity-30"></Icon>
-            <span class="text-white">WhatsApp Sipariş</span>
+            <!-- İkon -->
+            <Icon name="material-symbols:shopping-bag-outline"
+              class="w-6 h-6 mr-3 relative z-10 transition-transform duration-300 group-hover:scale-110"></Icon>
+
+            <!-- Yazı -->
+            <span class="relative z-10 font-semibold tracking-wide">SEPETE EKLE</span>
+
+            <!-- Hover Efekti -->
+            <div
+              class="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full hover:translate-x-full transition-transform duration-700 ease-out rounded-2xl">
+            </div>
           </UButton>
         </div>
       </div>
@@ -221,7 +225,6 @@ const cartState = useCartState();
 const { $mainState } = useNuxtApp();
 const nuxtApp = useNuxtApp();
 const currentRoute = useRoute();
-const { whatsappNumber } = useSettings();
 const toast = useToast();
 
 const qyt = ref(1);
@@ -653,172 +656,7 @@ const addToCart = () => {
   cartState.patchCart(newCartItem, parseInt(qyt.value));
 };
 
-const orderViaWhatsApp = () => {
-  // Stok kontrolü
-  if (!isProductInStock.value) {
-    toast.add({
-      title: 'Ürün stok dışı!',
-      description: outOfStockMessage.value,
-      color: 'red',
-      icon: "i-heroicons-exclamation-triangle",
-    });
-    return;
-  }
 
-  // Varyasyonlu ürün kontrolü - addToCart ile aynı
-  if (isVariableProduct.value) {
-    // Gerekli varyantların seçilip seçilmediğini kontrol et
-    const requiredAttributes = props.attrsAndVarsState.filter(attr => {
-      return attr.useForVariation === 1 ||
-        attr.useForVariation === "1" ||
-        attr.useForVariation === true ||
-        attr.use_for_variation === 1 ||
-        attr.use_for_variation === "1" ||
-        attr.use_for_variation === true;
-    });
-    const missingSelections = [];
-
-    requiredAttributes.forEach(attr => {
-      if (!selectedOptions.value[attr.name]) {
-        missingSelections.push(attr.name);
-      }
-    });
-
-    if (missingSelections.length > 0) {
-      selectionRequired.value = true;
-      toast.add({
-        title: 'Varyant seçimi gerekli!',
-        description: `Lütfen şu seçenekleri belirleyin: ${missingSelections.join(', ')}`,
-        color: 'red',
-        icon: "i-heroicons-exclamation-triangle",
-      });
-      return;
-    }
-
-    // Varyant seçilmiş ama geçerli varyasyon yok
-    if (!getSelectedVariation.value) {
-      selectionRequired.value = true;
-      toast.add({
-        title: 'Geçersiz varyant kombinasyonu!',
-        description: 'Seçtiğiniz varyant kombinasyonu mevcut değil. Lütfen farklı seçenekler deneyin.',
-        color: 'red',
-        icon: "i-heroicons-exclamation-triangle",
-      });
-      return;
-    }
-
-    // Seçili varyasyonun stok durumunu kontrol et
-    const selectedVariation = getSelectedVariation.value;
-
-    // Seçili varyasyonun fiyat kontrolü - fiyatı yoksa hata ver
-    if (!selectedVariation.price && !selectedVariation.sale_price) {
-      toast.add({
-        title: 'Seçili varyantın fiyatı yok!',
-        description: 'Bu varyant için fiyat belirtilmemiş. Lütfen farklı bir varyant seçin.',
-        color: 'red',
-        icon: "i-heroicons-exclamation-triangle",
-      });
-      return;
-    }
-
-    if (selectedVariation.stock_status === 'out_of_stock' || selectedVariation.stock_status === 'discontinued') {
-      toast.add({
-        title: 'Seçili varyant stok dışı!',
-        description: 'Lütfen farklı bir varyant seçin.',
-        color: 'red',
-        icon: "i-heroicons-exclamation-triangle",
-      });
-      return;
-    }
-
-    if (selectedVariation.isStockManagement && selectedVariation.stockAmount <= 0) {
-      toast.add({
-        title: 'Seçili varyant stok dışı!',
-        description: 'Bu varyant için stok kalmamıştır.',
-        color: 'red',
-        icon: "i-heroicons-exclamation-triangle",
-      });
-      return;
-    }
-  }
-
-  // Başarılı seçim
-  selectionRequired.value = false;
-
-  const input = props.productState.product.inputs?.[0]
-  const inputValue = props.productState.product.inputValue
-
-  if (input?.isRequired && !inputValue) {
-    toast.add({
-      title: input.label + ' alanı gereklidir!',
-      color: 'red',
-      icon: "i-heroicons-exclamation-triangle",
-    })
-    return
-  }
-
-  // Miktar kontrolü
-  if (qyt.value == 0) {
-    return;
-  }
-
-  // Seçili varyasyon bilgilerini al
-  const selectedVariation = getSelectedVariation.value;
-  let productName = props.productState.product.name;
-  let productPrice;
-
-  if (selectedVariation) {
-    productName += ` (${selectedColor.value?.term_name || ''})`;
-    productPrice = selectedVariation.sale_price || selectedVariation.price;
-  } else if (isVariableProduct.value && defaultVariationPrice.value) {
-    // Varyantlı üründe varsayılan varyant fiyatını kullan
-    if (selectedColor.value) {
-      productName += ` (${selectedColor.value.term_name})`;
-    }
-    productPrice = defaultVariationPrice.value.sale_price || defaultVariationPrice.value.price;
-  } else {
-    // Basit ürün fiyatını kullan
-    if (selectedColor.value) {
-      productName += ` (${selectedColor.value.term_name})`;
-    }
-    productPrice = props.productState.product.sale_price || props.productState.product.price;
-  }
-
-  // WhatsApp mesajını oluştur
-  const message = `Merhaba! Aşağıdaki ürün için sipariş vermek istiyorum:
-
-🛍️ *Ürün:* ${productName}
-💰 *Fiyat:* ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(productPrice)}
-📦 *Adet:* ${qyt.value}
-💵 *Toplam:* ${new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(productPrice * qyt.value)}
-
-Detayları konuşabilir miyiz?`;
-
-  // WhatsApp numarasını ayarlardan al
-  if (!whatsappNumber.value) {
-    toast.add({
-      title: 'WhatsApp numarası bulunamadı!',
-      description: 'Lütfen normal iletişim yöntemlerini kullanın.',
-      color: 'red',
-      icon: "i-heroicons-exclamation-triangle",
-    });
-    return;
-  }
-
-  // WhatsApp URL'sini oluştur
-  const whatsappUrl = `https://wa.me/${whatsappNumber.value}?text=${encodeURIComponent(message)}`;
-
-  // WhatsApp'ı aç
-  window.open(whatsappUrl, '_blank');
-
-  // Başarı mesajı göster
-  toast.add({
-    title: 'WhatsApp açılıyor...',
-    description: 'Sipariş talebiniz WhatsApp üzerinden iletiliyor.',
-    color: 'green',
-    icon: "i-simple-icons-whatsapp",
-  })
-};
 
 // Görseli galeriye ekle
 const addImageToGallery = (item) => {

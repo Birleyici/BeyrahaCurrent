@@ -7,15 +7,34 @@
 
             }">
             <template #trailing>
-                <Transition enter-active-class="transition duration-150 ease-out"
-                    enter-from-class="transform scale-0 opacity-0" enter-to-class="transform scale-100 opacity-100"
-                    leave-active-class="transition duration-100 ease-in"
-                    leave-from-class="transform scale-100 opacity-100" leave-to-class="transform scale-0 opacity-0">
-                    <UButton v-if="modelValue && !isSearching" @click="clearSearch" color="gray" variant="link"
-                        icon="i-heroicons-x-mark" :padded="false" size="2xs" />
-                    <UIcon v-else-if="isSearching" name="i-heroicons-arrow-path" class="animate-spin w-4 h-4" />
-                    <UIcon v-else name="i-heroicons-magnifying-glass" class="w-4 h-4 text-neutral-400" />
-                </Transition>
+                <div class="relative w-4 h-4">
+                    <!-- Büyüteç İkonu -->
+                    <Transition name="search-icon" mode="out-in">
+                        <UIcon v-if="!modelValue && !isSearching && !isTyping" key="search"
+                            name="i-heroicons-magnifying-glass" data-icon="search"
+                            class="absolute inset-0 w-4 h-4 text-neutral-400 dark:text-neutral-500 transition-colors duration-300" />
+
+                        <!-- Typing İkonu -->
+                        <div v-else-if="isTyping && !isSearching" key="typing" data-icon="typing"
+                            class="absolute inset-0 w-4 h-4 flex items-center justify-center">
+                            <div class="typing-dots">
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                                <div class="typing-dot"></div>
+                            </div>
+                        </div>
+
+                        <!-- Loading İkonu -->
+                        <UIcon v-else-if="isSearching" key="loading" name="i-heroicons-arrow-path" data-icon="loading"
+                            class="absolute inset-0 w-4 h-4 text-secondary-500 dark:text-secondary-400 search-loading" />
+
+                        <!-- Temizleme Butonu -->
+                        <UButton v-else-if="modelValue && !isSearching && !isTyping" key="clear" @click="clearSearch"
+                            color="gray" variant="link" icon="i-heroicons-x-mark" :padded="false" size="2xs"
+                            data-icon="clear"
+                            class="absolute inset-0 w-4 h-4 text-neutral-400 dark:text-neutral-500 hover:text-red-500 dark:hover:text-red-400 transition-colors duration-200" />
+                    </Transition>
+                </div>
             </template>
         </UInput>
 
@@ -50,6 +69,10 @@ const props = defineProps({
         default: 'Ara...'
     },
     isSearching: {
+        type: Boolean,
+        default: false
+    },
+    isTyping: {
         type: Boolean,
         default: false
     },
@@ -118,3 +141,158 @@ defineExpose({
     blur: () => input.value?.$refs?.input?.blur()
 })
 </script>
+
+<style scoped>
+/* Smart Icon Transitions */
+.search-icon-enter-active {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-icon-leave-active {
+    transition: all 0.25s cubic-bezier(0.4, 0, 1, 1);
+}
+
+/* Default state - fade in with subtle scale */
+.search-icon-enter-from {
+    opacity: 0;
+    transform: scale(0.85) rotate(-15deg);
+}
+
+.search-icon-leave-to {
+    opacity: 0;
+    transform: scale(0.95) rotate(15deg);
+}
+
+/* Loading icon - enters with spin effect */
+.search-icon-enter-from[data-icon="loading"] {
+    opacity: 0;
+    transform: scale(0.6) rotate(-180deg);
+}
+
+.search-icon-leave-to[data-icon="loading"] {
+    opacity: 0;
+    transform: scale(0.8) rotate(180deg);
+}
+
+/* Clear button - enters with bounce */
+.search-icon-enter-from[data-icon="clear"] {
+    opacity: 0;
+    transform: scale(0.5) rotate(-90deg);
+}
+
+.search-icon-leave-to[data-icon="clear"] {
+    opacity: 0;
+    transform: scale(0.7) rotate(90deg);
+}
+
+/* Search icon - gentle fade and scale */
+.search-icon-enter-from[data-icon="search"] {
+    opacity: 0;
+    transform: scale(0.9) translateY(2px);
+}
+
+.search-icon-leave-to[data-icon="search"] {
+    opacity: 0;
+    transform: scale(1.1) translateY(-2px);
+}
+
+/* Enhanced hover effects */
+.search-icon-enter-active button {
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.search-icon-enter-active button:hover {
+    transform: scale(1.1);
+}
+
+/* Custom loading animation */
+@keyframes search-loading {
+    0% {
+        transform: rotate(0deg) scale(1);
+    }
+
+    25% {
+        transform: rotate(90deg) scale(1.05);
+    }
+
+    50% {
+        transform: rotate(180deg) scale(1);
+    }
+
+    75% {
+        transform: rotate(270deg) scale(1.05);
+    }
+
+    100% {
+        transform: rotate(360deg) scale(1);
+    }
+}
+
+.search-loading {
+    animation: search-loading 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Subtle pulse when loading enters */
+.search-icon-enter-active [data-icon="loading"] {
+    animation: search-loading 1.2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Modern Typing Dots Animation */
+.typing-dots {
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    justify-content: center;
+}
+
+.typing-dot {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: linear-gradient(45deg, #f59e0b, #ef4444);
+    animation: typing-bounce 1.4s infinite ease-in-out;
+}
+
+.typing-dot:nth-child(1) {
+    animation-delay: -0.32s;
+}
+
+.typing-dot:nth-child(2) {
+    animation-delay: -0.16s;
+}
+
+.typing-dot:nth-child(3) {
+    animation-delay: 0s;
+}
+
+@keyframes typing-bounce {
+
+    0%,
+    80%,
+    100% {
+        transform: scale(0.8);
+        opacity: 0.5;
+    }
+
+    40% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
+}
+
+/* Dark mode typing dots */
+.dark .typing-dot {
+    background: linear-gradient(45deg, #fbbf24, #f87171);
+}
+
+/* Typing container specific transitions */
+.search-icon-enter-from[data-icon="typing"] {
+    opacity: 0;
+    transform: scale(0.6) translateY(-4px);
+}
+
+.search-icon-leave-to[data-icon="typing"] {
+    opacity: 0;
+    transform: scale(0.8) translateY(4px);
+}
+</style>

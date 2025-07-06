@@ -70,19 +70,23 @@
         <!-- Ürün Grid -->
         <div class="relative">
           <!-- Loading Overlay -->
-          <div v-if="props.loading"
-            class="absolute inset-0 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl transition-colors duration-300">
-            <div class="flex flex-col items-center space-y-4">
-              <Icon name="mdi:loading" class="w-12 h-12 animate-spin text-secondary-500 dark:text-secondary-400"></Icon>
-              <p class="text-neutral-600 dark:text-neutral-400 font-medium transition-colors duration-300">Ürünler
-                yükleniyor...</p>
+          <Transition name="loading-overlay" appear>
+            <div v-if="props.loading"
+              class="absolute inset-0 bg-white/80 dark:bg-neutral-800/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl transition-colors duration-300">
+              <div class="flex flex-col items-center space-y-4">
+                <Icon name="mdi:loading" class="w-12 h-12 animate-spin text-secondary-500 dark:text-secondary-400">
+                </Icon>
+                <p class="text-neutral-600 dark:text-neutral-400 font-medium transition-colors duration-300">Ürünler
+                  yükleniyor...</p>
+              </div>
             </div>
-          </div>
+          </Transition>
 
           <!-- Ürün Grid -->
-          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8">
+          <TransitionGroup name="product-grid" tag="div"
+            class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 lg:gap-8" appear>
             <!-- Ürün Bulunamadı Durumu -->
-            <div v-if="props.products.data?.length === 0 && !props.loading" class="col-span-full">
+            <div v-if="props.products.data?.length === 0 && !props.loading" key="no-results" class="col-span-full">
               <div
                 class="text-center py-16 bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm transition-colors duration-300">
                 <UIcon name="i-heroicons-magnifying-glass"
@@ -100,9 +104,9 @@
             </div>
 
             <!-- Ürün Kartları -->
-            <PartialsProductCard :product="product" v-for="product in props.products.data"
-              :key="product.variant_id || `product-${product.id}`" />
-          </div>
+            <PartialsProductCard :product="product" v-for="(product, index) in props.products.data"
+              :key="product.variant_id || `product-${product.id}`" :style="{ '--stagger-delay': `${index * 50}ms` }" />
+          </TransitionGroup>
         </div>
       </div>
     </div>
@@ -122,3 +126,51 @@ const sortOptions = [
   { name: 'Yeni Ürünler', value: 'newest' },
 ]
 </script>
+
+<style scoped>
+/* Product Grid Transitions */
+.product-grid-enter-active {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  transition-delay: var(--stagger-delay, 0ms);
+}
+
+.product-grid-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.product-grid-enter-from {
+  opacity: 0;
+  transform: translateY(20px) scale(0.95);
+}
+
+.product-grid-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.98);
+}
+
+.product-grid-move {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* Loading Overlay Improvements */
+.loading-overlay-enter-active,
+.loading-overlay-leave-active {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loading-overlay-enter-from,
+.loading-overlay-leave-to {
+  opacity: 0;
+  backdrop-filter: blur(0px);
+}
+
+.loading-overlay-enter-active .flex,
+.loading-overlay-leave-active .flex {
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loading-overlay-enter-from .flex,
+.loading-overlay-leave-to .flex {
+  transform: scale(0.9) translateY(10px);
+}
+</style>

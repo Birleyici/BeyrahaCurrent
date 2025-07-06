@@ -30,25 +30,31 @@
         <div v-if="$mainState.isLoaded" id="finishProducts"></div>
 
         <!-- Infinite Scroll Loading Indicator -->
-        <div v-if="isLoadingMore" class="flex items-center justify-center py-8 mt-6">
-          <div class="flex flex-col items-center space-y-3">
-            <Icon name="mdi:loading" class="w-8 h-8 animate-spin text-secondary-500 dark:text-secondary-400"></Icon>
-            <p class="text-sm text-neutral-600 dark:text-neutral-400">Daha fazla ürün yükleniyor...</p>
+        <Transition name="loading-indicator" appear>
+          <div v-if="isLoadingMore" class="flex items-center justify-center py-8 mt-6">
+            <div class="flex flex-col items-center space-y-3">
+              <Icon name="mdi:loading" class="w-8 h-8 animate-spin text-secondary-500 dark:text-secondary-400"></Icon>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400 transition-colors duration-300">Daha fazla ürün
+                yükleniyor...</p>
+            </div>
           </div>
-        </div>
+        </Transition>
 
         <!-- End of Products Indicator -->
-        <div v-else-if="productState.products?.data?.length > 0 &&
-          query.page >= productState.products.last_page &&
-          !loading" class="flex items-center justify-center py-8 mt-6">
-          <div class="text-center">
-            <div
-              class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-3">
-              <Icon name="heroicons:check" class="w-6 h-6 text-neutral-600 dark:text-neutral-400"></Icon>
+        <Transition name="end-indicator" appear>
+          <div v-if="productState.products?.data?.length > 0 &&
+            query.page >= productState.products.last_page &&
+            !loading && !isLoadingMore" class="flex items-center justify-center py-8 mt-6">
+            <div class="text-center">
+              <div
+                class="w-12 h-12 bg-neutral-200 dark:bg-neutral-700 rounded-full flex items-center justify-center mx-auto mb-3 transition-colors duration-300">
+                <Icon name="heroicons:check" class="w-6 h-6 text-neutral-600 dark:text-neutral-400"></Icon>
+              </div>
+              <p class="text-sm text-neutral-600 dark:text-neutral-400 transition-colors duration-300">Tüm ürünler
+                gösterildi</p>
             </div>
-            <p class="text-sm text-neutral-600 dark:text-neutral-400">Tüm ürünler gösterildi</p>
           </div>
-        </div>
+        </Transition>
       </div>
     </div>
   </div>
@@ -343,3 +349,61 @@ const breadcrumbLinks = computed(() => {
 })
 
 </script>
+
+<style scoped>
+/* Loading Indicator Transitions */
+.loading-indicator-enter-active,
+.loading-indicator-leave-active {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.loading-indicator-enter-from,
+.loading-indicator-leave-to {
+  opacity: 0;
+  transform: translateY(10px) scale(0.95);
+}
+
+/* End Indicator Transitions */
+.end-indicator-enter-active {
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.end-indicator-leave-active {
+  transition: all 0.3s cubic-bezier(0.4, 0, 1, 1);
+}
+
+.end-indicator-enter-from {
+  opacity: 0;
+  transform: translateY(15px) scale(0.9);
+}
+
+.end-indicator-leave-to {
+  opacity: 0;
+  transform: translateY(-10px) scale(0.95);
+}
+
+/* Success icon animation */
+.end-indicator-enter-active .w-12 {
+  animation: success-bounce 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.2s both;
+}
+
+@keyframes success-bounce {
+  0% {
+    transform: scale(0.3);
+    opacity: 0;
+  }
+
+  50% {
+    transform: scale(1.05);
+  }
+
+  70% {
+    transform: scale(0.95);
+  }
+
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+</style>
