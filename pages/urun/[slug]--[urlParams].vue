@@ -279,6 +279,39 @@ useHead({
       property: 'product:price:currency',
       content: 'TRY'
     }
+  ],
+  script: [
+    {
+      type: 'application/ld+json',
+      children: computed(() => {
+        const product = productState.product;
+        return JSON.stringify({
+          '@context': 'https://schema.org/',
+          '@type': 'Product',
+          name: product.name,
+          image: selectedImages.value?.[0]?.image,
+          description: product.description || product.short_description,
+          brand: {
+            '@type': 'Brand',
+            name: settings.value.siteName
+          },
+          aggregateRating: product.review_count > 0 ? {
+            '@type': 'AggregateRating',
+            ratingValue: product.average_rating,
+            reviewCount: product.review_count,
+            bestRating: '5',
+            worstRating: '1'
+          } : undefined,
+          offers: {
+            '@type': 'Offer',
+            url: window?.location?.href,
+            priceCurrency: 'TRY',
+            price: product.sale_price || product.regular_price,
+            availability: product.stock_status === 'in_stock' ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+          }
+        });
+      })
+    }
   ]
 })
 
