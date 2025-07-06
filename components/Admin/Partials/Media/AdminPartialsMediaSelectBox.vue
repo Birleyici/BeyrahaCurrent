@@ -6,17 +6,35 @@
                 <h4 class="text-sm font-medium text-gray-900 dark:text-white">
                     Seçili Görseller ({{ props.selectedImages.length }})
                 </h4>
-                <UButton size="xs" color="gray" variant="ghost" icon="i-heroicons-x-mark" label="Tümünü Kaldır"
-                    @click="clearAllImages" class="self-end sm:self-auto" />
+                <div class="flex items-center gap-2">
+                    <span v-if="props.selectedImages.length > 1" class="text-xs text-gray-500 dark:text-gray-400">
+                        Sıralamak için sürükleyin
+                    </span>
+                    <UButton size="xs" color="gray" variant="ghost" icon="i-heroicons-x-mark" label="Tümünü Kaldır"
+                        @click="clearAllImages" class="self-end sm:self-auto" />
+                </div>
             </div>
 
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3">
-                <div v-for="(item, index) in props.selectedImages" :key="index"
-                    class="group relative aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border-2 transition-all duration-200"
+            <div ref="sortableContainer"
+                class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 sm:gap-3 sortable-container"
+                :class="{ 'cursor-grabbing': isDragging }">
+                <div v-for="(item, index) in props.selectedImages" :key="item.id" :data-image-id="item.id"
+                    class="group relative aspect-square bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden border-2 transition-all duration-200 sortable-item cursor-move"
                     :class="{
                         'border-primary-500 ring-2 ring-primary-500/20': item.id === coverImageId,
-                        'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600': item.id !== coverImageId
+                        'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600': item.id !== coverImageId,
+                        'opacity-50 scale-105 shadow-xl z-10': isDragging && draggedItem === item.id,
+                        'transform transition-transform': !isDragging
                     }">
+
+                    <!-- Drag Handle -->
+                    <div
+                        class="drag-handle absolute top-1 left-1 sm:top-2 sm:left-2 z-20 opacity-0 group-hover:opacity-100 transition-opacity cursor-grab active:cursor-grabbing">
+                        <div class="bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm rounded p-1">
+                            <Icon name="i-heroicons-bars-3" class="w-3 h-3 text-gray-600 dark:text-gray-400" />
+                        </div>
+                    </div>
+
                     <!-- Image -->
                     <NuxtImg :src="'cl/' + item.path" :alt="`Seçili görsel ${index + 1}`"
                         class="w-full h-full object-cover cursor-pointer" @click="setCoverImage(item.id)" />
@@ -26,14 +44,14 @@
 
                     <!-- Cover Badge -->
                     <div v-if="item.id === coverImageId"
-                        class="absolute top-1 left-1 sm:top-2 sm:left-2 bg-primary-500 text-white text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md font-medium">
+                        class="absolute top-1 right-1 sm:top-2 sm:right-2 bg-primary-500 text-white text-xs px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-md font-medium">
                         <Icon name="i-heroicons-star" class="w-3 h-3 inline mr-1" />
                         <span class="hidden sm:inline">Kapak</span>
                     </div>
 
                     <!-- Actions -->
                     <div
-                        class="absolute top-1 right-1 sm:top-2 sm:right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                        class="absolute bottom-1 right-1 sm:bottom-2 sm:right-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                         <div class="flex gap-1">
                             <UButton v-if="item.id !== coverImageId" icon="i-heroicons-star" size="2xs" color="yellow"
                                 variant="solid" @click="setCoverImage(item.id)"
@@ -84,6 +102,8 @@
 </template>
 
 <script setup>
+import Sortable from 'sortablejs'
+
 // Models
 const isOpenModal = defineModel('isOpenModal');
 const coverImageId = defineModel('coverImageId');
@@ -93,11 +113,137 @@ const props = defineProps({
     selectedImages: {
         type: Array,
         default: () => []
+    },
+    productId: {
+        type: [Number, String],
+        default: null
     }
 });
 
 // Emits
 const emit = defineEmits(['update:selectedImages']);
+
+// Reactive state
+const sortableContainer = ref(null)
+const isDragging = ref(false)
+const draggedItem = ref(null)
+const isEmitting = ref(false)
+const sortableInstance = ref(null)
+
+// Initialize sortable when component mounts and when images change
+const initializeSortable = () => {
+    if (!sortableContainer.value) return
+
+    // Destroy existing sortable if exists
+    if (sortableInstance.value) {
+        sortableInstance.value.destroy()
+        sortableInstance.value = null
+    }
+
+    // Don't initialize if less than 2 images
+    if (!props.selectedImages || props.selectedImages.length < 2) {
+        return
+    }
+
+    // Create new sortable instance
+    sortableInstance.value = new Sortable(sortableContainer.value, {
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        chosenClass: 'sortable-chosen',
+        dragClass: 'sortable-drag',
+        handle: '.sortable-item',
+        disabled: isEmitting.value,
+        onStart: (evt) => {
+            isDragging.value = true
+            draggedItem.value = props.selectedImages[evt.oldIndex]?.id
+            console.log('Drag started for image:', draggedItem.value)
+        },
+        onEnd: (evt) => {
+            isDragging.value = false
+            draggedItem.value = null
+            console.log('Drag ended, new order:', evt.newIndex, 'old:', evt.oldIndex)
+
+            if (evt.oldIndex !== evt.newIndex) {
+                handleImageReorder(evt.oldIndex, evt.newIndex)
+            }
+        }
+    })
+
+    console.log('Sortable initialized with', props.selectedImages.length, 'images')
+}
+
+// Handle image reordering
+const handleImageReorder = (oldIndex, newIndex) => {
+    try {
+        // Create new array with reordered items
+        const updatedImages = [...props.selectedImages]
+        const movedItem = updatedImages.splice(oldIndex, 1)[0]
+        updatedImages.splice(newIndex, 0, movedItem)
+
+        console.log('Updated images order:', updatedImages.map(img => img.id))
+
+        // Set emit flag
+        isEmitting.value = true
+
+        // Emit to parent
+        emit('update:selectedImages', updatedImages)
+
+        // Clear emit flag and save order
+        nextTick(() => {
+            isEmitting.value = false
+            saveImageOrder(updatedImages)
+        })
+
+        // Show success message
+        try {
+            const toast = useNuxtApp().$toast
+            if (toast) {
+                toast.success('Görsel sırası güncellendi')
+            }
+        } catch (error) {
+            console.log('Toast not available:', error)
+        }
+    } catch (error) {
+        console.error('Error during drag operation:', error)
+
+        try {
+            const toast = useNuxtApp().$toast
+            if (toast) {
+                toast.error('Görsel sırası güncellenemedi')
+            }
+        } catch (toastError) {
+            console.error('Toast error:', toastError)
+        }
+    }
+}
+
+// Watch for changes to reinitialize sortable
+watch(() => props.selectedImages, () => {
+    if (isEmitting.value) {
+        console.log('Emit işlemi sırasında sortable reinit skip ediliyor')
+        return
+    }
+
+    // Reinitialize sortable when images change
+    nextTick(() => {
+        initializeSortable()
+    })
+}, { immediate: false })
+
+// Initialize sortable when component mounts
+onMounted(() => {
+    nextTick(() => {
+        initializeSortable()
+    })
+})
+
+// Cleanup sortable when component unmounts
+onUnmounted(() => {
+    if (sortableInstance.value) {
+        sortableInstance.value.destroy()
+        sortableInstance.value = null
+    }
+})
 
 // Methods
 const openMediaModal = () => {
@@ -137,6 +283,78 @@ const getButtonText = () => {
         : 'Ürün Görsellerini Seç';
 };
 
+// Debounce save operations
+let saveTimeout = null
+
+const saveImageOrder = async (images) => {
+    // Clear existing timeout
+    if (saveTimeout) {
+        clearTimeout(saveTimeout)
+    }
+
+    if (!props.productId || !images.length) {
+        console.log('Product ID yok veya görseller boş, sıralama kaydedilmiyor', {
+            productId: props.productId,
+            imagesLength: images.length
+        })
+        return
+    }
+
+    // Debounce API call
+    saveTimeout = setTimeout(async () => {
+        try {
+            const imageOrder = images.map((image, index) => ({
+                image_id: image.id,
+                sort_order: index + 1
+            }))
+
+            console.log('Saving image order to backend:', {
+                productId: props.productId,
+                imageOrder,
+                totalImages: imageOrder.length
+            })
+
+            await useBaseOFetchWithAuth(`admin/products/${props.productId}/images/reorder`, {
+                method: 'POST',
+                body: { images: imageOrder }
+            })
+
+            console.log('Image order saved successfully')
+
+            // Product state'ini temizle ki ürün sayfasında güncel sıralama görünsün
+            if (process.client) {
+                const productState = useProductState()
+                if (productState && productState.product && productState.product.id) {
+                    console.log('Product state temizleniyor...')
+                    productState.product.selectedImages = []
+
+                    // Product'ı yeniden yükle (eğer mümkünse)
+                    try {
+                        const currentProduct = await useBaseOFetch(`product/${productState.product.slug}`)
+                        if (currentProduct && currentProduct.selectedImages) {
+                            productState.product.selectedImages = currentProduct.selectedImages
+                            console.log('Product images güncellendi:', currentProduct.selectedImages.length)
+                        }
+                    } catch (error) {
+                        console.log('Product reload hatası:', error)
+                    }
+                }
+            }
+        } catch (error) {
+            console.error('Error saving image order:', error)
+
+            try {
+                const toast = useNuxtApp().$toast
+                if (toast) {
+                    toast.error('Görsel sırası kaydedilemedi')
+                }
+            } catch (toastError) {
+                console.error('Toast error:', toastError)
+            }
+        }
+    }, 300) // 300ms debounce
+};
+
 // Auto-set cover image when first image is added
 watch(() => props.selectedImages, (newImages) => {
     if (newImages.length > 0 && !coverImageId.value) {
@@ -144,3 +362,50 @@ watch(() => props.selectedImages, (newImages) => {
     }
 }, { immediate: true });
 </script>
+
+<style scoped>
+.sortable-ghost {
+    opacity: 0.4;
+    background: #e5e7eb;
+    border: 2px dashed #9ca3af;
+    border-radius: 0.5rem;
+}
+
+.sortable-chosen {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    z-index: 999;
+}
+
+.sortable-drag {
+    opacity: 0.8;
+    transform: rotate(5deg);
+}
+
+.sortable-item {
+    transition: all 0.3s ease;
+}
+
+.sortable-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.sortable-container {
+    position: relative;
+}
+
+.drag-handle {
+    touch-action: none;
+}
+
+.sortable-item.sortable-chosen .drag-handle {
+    opacity: 1 !important;
+}
+
+/* Dark mode support */
+.dark .sortable-ghost {
+    background: #374151;
+    border-color: #6b7280;
+}
+</style>

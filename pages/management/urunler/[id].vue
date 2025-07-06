@@ -220,7 +220,7 @@
           </div>
 
           <AdminPartialsMediaSelectBox v-model:is-open-modal="isOpenMediaModal"
-            :selected-images="productState.product.selectedImages"
+            :selected-images="productState.product.selectedImages" :product-id="productState.product.id"
             v-model:cover-image-id="productState.product.coverImageId"
             @update:selected-images="productState.product.selectedImages = $event" />
         </div>
