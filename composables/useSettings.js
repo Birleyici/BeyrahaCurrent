@@ -1,10 +1,10 @@
 export const useSettings = () => {
   // Plugin'de oluşturulan global state'e erişim
-  const settings = useState('app-settings')
+  const settings = useState('app-settings', () => ({}))
   
   // Kargo hesaplama fonksiyonu
   const calculateShippingCost = (cartTotal) => {
-    if (!settings.value.freeShippingLimit || !settings.value.shippingCost) {
+    if (!settings.value?.freeShippingLimit || !settings.value?.shippingCost) {
       return 0
     }
     
@@ -13,7 +13,7 @@ export const useSettings = () => {
   
   // Ücretsiz kargo için kalan tutar
   const remainingForFreeShipping = (cartTotal) => {
-    if (!settings.value.freeShippingLimit) {
+    if (!settings.value?.freeShippingLimit) {
       return 0
     }
     
@@ -26,16 +26,16 @@ export const useSettings = () => {
     calculateShippingCost,
     remainingForFreeShipping,
     // Kolaylık için computed değerler
-    siteName: computed(() => settings.value.siteName || 'Beyraha'),
-    siteTitle: computed(() => settings.value.siteTitle || 'Beyraha'),
-    siteDescription: computed(() => settings.value.siteDescription || ''),
-    contactPhone: computed(() => settings.value.contactPhone || ''),
-    contactEmail: computed(() => settings.value.contactEmail || ''),
-    whatsappNumber: computed(() => settings.value.whatsappNumber || ''),
-    bankName: computed(() => settings.value.bankName || ''),
-    bankAccountName: computed(() => settings.value.bankAccountName || ''),
-    bankIban: computed(() => settings.value.bankIban || ''),
-    freeShippingLimit: computed(() => settings.value.freeShippingLimit || null),
-    shippingCost: computed(() => settings.value.shippingCost || null)
+    siteName: computed(() => settings.value?.siteName || 'Beyraha'),
+    siteTitle: computed(() => settings.value?.siteTitle || 'Beyraha'),
+    siteDescription: computed(() => settings.value?.siteDescription || ''),
+    contactPhone: computed(() => settings.value?.contactPhone || ''),
+    contactEmail: computed(() => settings.value?.contactEmail || ''),
+    whatsappNumber: computed(() => settings.value?.whatsappNumber || ''),
+    bankName: computed(() => settings.value?.bankName || ''),
+    bankAccountName: computed(() => settings.value?.bankAccountName || ''),
+    bankIban: computed(() => settings.value?.bankIban || ''),
+    freeShippingLimit: computed(() => settings.value?.freeShippingLimit || null),
+    shippingCost: computed(() => settings.value?.shippingCost || null)
   }
 } 
