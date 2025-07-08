@@ -111,7 +111,7 @@ const props = defineProps({
   },
   maxFileSize: {
     type: Number,
-    default: 10 * 1024 * 1024 // 10MB
+    default: 10 * 1024 * 1024 * 3 // MB
   },
   acceptedTypes: {
     type: Array,

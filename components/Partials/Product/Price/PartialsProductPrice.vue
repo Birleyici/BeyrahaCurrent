@@ -45,14 +45,14 @@ const props = defineProps({
 
 const priceClasses = computed(() => {
     return {
-        'text-3xl md:text-4xl font-bold text-secondary-600 dark:text-secondary-400': props.type == 'page',
+        'text-2xl md:text-4xl font-bold text-secondary-600 dark:text-secondary-400': props.type == 'page',
         'text-lg font-bold text-secondary-600 dark:text-secondary-400': props.type == 'card',
     }
 })
 
 const delClasses = computed(() => {
     return {
-        'text-xl text-slate-400 dark:text-slate-500': props.type == 'page',
+        'text-lg text-slate-400 dark:text-slate-500': props.type == 'page',
         'text-sm text-slate-400 dark:text-slate-500': props.type == 'card',
     }
 })
