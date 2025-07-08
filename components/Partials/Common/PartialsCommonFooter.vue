@@ -1,203 +1,143 @@
 <template>
   <footer
-    class="bg-gradient-to-br from-neutral-50 via-white to-neutral-100 dark:from-neutral-900 dark:via-neutral-800 dark:to-neutral-900 text-neutral-700 dark:text-neutral-200 relative overflow-hidden">
-    <!-- Dekoratif arka plan -->
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,rgba(249,115,22,0.06),transparent_50%)]"></div>
-    <div class="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,rgba(100,116,139,0.04),transparent_50%)]"></div>
+    class="border-t-2 border-gray-100 dark:border-neutral-700 relative bg-gradient-to-br from-neutral-100 via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-900 dark:to-neutral-950 text-neutral-800 dark:text-white overflow-hidden">
+    <!-- Geometrik Dekoratif Elementler -->
+    <div class="absolute inset-0">
+      <div
+        class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-secondary-500/10 to-transparent rounded-full blur-3xl">
+      </div>
+      <div
+        class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-primary-500/10 to-transparent rounded-full blur-3xl">
+      </div>
+      <div
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] border border-neutral-300/30 dark:border-neutral-700/30 rounded-full">
+      </div>
+      <div
+        class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] border border-neutral-300/20 dark:border-neutral-700/20 rounded-full">
+      </div>
+    </div>
 
     <!-- Ana Footer İçeriği -->
-    <div class="container relative z-10 py-16">
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
+    <div class="container mx-auto px-4 py-12 sm:py-16 lg:py-20 relative z-10">
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12 lg:gap-16">
 
-        <!-- Kişisel Bölümü -->
-        <div class="space-y-6">
-          <h3 class="text-xl font-bold text-neutral-800 dark:text-neutral-100 mb-6 relative">
-            Kişisel
-            <div
-              class="absolute -bottom-2 left-0 w-8 h-0.5 bg-gradient-to-r from-secondary-500 to-secondary-400 rounded-full">
-            </div>
-          </h3>
-          <nav class="space-y-4">
-            <NuxtLink to="/hesap/siparislerim"
-              class="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-300 group">
-              <span
-                class="flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700/50">
-                <div
-                  class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-secondary-500/25 to-secondary-400/25 dark:from-secondary-500/20 dark:to-secondary-400/20 rounded-lg flex items-center justify-center group-hover:from-secondary-500/35 group-hover:to-secondary-400/35 dark:group-hover:from-secondary-500/30 dark:group-hover:to-secondary-400/30 transition-all duration-300">
-                  <UIcon name="i-heroicons-shopping-bag"
-                    class="w-4 h-4 text-secondary-600 dark:text-secondary-400 group-hover:text-secondary-700 dark:group-hover:text-secondary-300" />
-                </div>
-                <span class="font-medium">Siparişlerim</span>
-              </span>
-            </NuxtLink>
-            <NuxtLink to="/hesap/adreslerim"
-              class="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-300 group">
-              <span
-                class="flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700/50">
-                <div
-                  class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-secondary-500/25 to-secondary-400/25 dark:from-secondary-500/20 dark:to-secondary-400/20 rounded-lg flex items-center justify-center group-hover:from-secondary-500/35 group-hover:to-secondary-400/35 dark:group-hover:from-secondary-500/30 dark:group-hover:to-secondary-400/30 transition-all duration-300">
-                  <UIcon name="i-heroicons-map-pin"
-                    class="w-4 h-4 text-secondary-600 dark:text-secondary-400 group-hover:text-secondary-700 dark:group-hover:text-secondary-300" />
-                </div>
-                <span class="font-medium">Adreslerim</span>
-              </span>
-            </NuxtLink>
-            <NuxtLink to="/sepet"
-              class="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-300 group">
-              <span
-                class="flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700/50">
-                <div
-                  class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-secondary-500/25 to-secondary-400/25 dark:from-secondary-500/20 dark:to-secondary-400/20 rounded-lg flex items-center justify-center group-hover:from-secondary-500/35 group-hover:to-secondary-400/35 dark:group-hover:from-secondary-500/30 dark:group-hover:to-secondary-400/30 transition-all duration-300">
-                  <UIcon name="i-heroicons-shopping-cart"
-                    class="w-4 h-4 text-secondary-600 dark:text-secondary-400 group-hover:text-secondary-700 dark:group-hover:text-secondary-300" />
-                </div>
-                <span class="font-medium">Sepet</span>
-              </span>
-            </NuxtLink>
-          </nav>
-        </div>
+        <!-- Sağ Taraf - Menüler -->
+        <div class="lg:col-span-2 order-1">
+          <div class="grid grid-cols-2 sm:grid-cols-3 gap-6 sm:gap-8 lg:gap-12">
 
-        <!-- Kurumsal Bölümü -->
-        <div class="space-y-6">
-          <h3 class="text-xl font-bold text-neutral-800 dark:text-neutral-100 mb-6 relative">
-            Kurumsal
-            <div
-              class="absolute -bottom-2 left-0 w-8 h-0.5 bg-gradient-to-r from-secondary-500 to-secondary-400 rounded-full">
+            <!-- Site Haritası -->
+            <div class="space-y-4 sm:space-y-6">
+              <h3 class="text-neutral-800 dark:text-white font-semibold text-lg">Site Haritası</h3>
+              <nav class="space-y-2.5 sm:space-y-3">
+                <NuxtLink to="/"
+                  class="block text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  Ana Sayfa
+                </NuxtLink>
+                <NuxtLink to="/hesap/siparislerim"
+                  class="block text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  Siparişlerim
+                </NuxtLink>
+                <NuxtLink to="/hesap/adreslerim"
+                  class="block text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  Adreslerim
+                </NuxtLink>
+                <NuxtLink to="/sepet"
+                  class="block text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  Sepet
+                </NuxtLink>
+              </nav>
             </div>
-          </h3>
-          <nav class="space-y-4">
-            <NuxtLink to="/menu/iade-ve-degisim"
-              class="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-300 group">
-              <span
-                class="flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-100 dark:hover:bg-neutral-700/50">
-                <div
-                  class="flex-shrink-0 w-8 h-8 bg-gradient-to-br from-secondary-500/25 to-secondary-400/25 dark:from-secondary-500/20 dark:to-secondary-400/20 rounded-lg flex items-center justify-center group-hover:from-secondary-500/35 group-hover:to-secondary-400/35 dark:group-hover:from-secondary-500/30 dark:group-hover:to-secondary-400/30 transition-all duration-300">
-                  <UIcon name="i-heroicons-arrow-path"
-                    class="w-4 h-4 text-secondary-600 dark:text-secondary-400 group-hover:text-secondary-700 dark:group-hover:text-secondary-300" />
-                </div>
-                <span class="font-medium">İade ve Değişim</span>
-              </span>
-            </NuxtLink>
-          </nav>
-        </div>
 
-        <!-- İletişim Bölümü -->
-        <div class="space-y-6">
-          <h3 class="text-xl font-bold text-neutral-800 dark:text-neutral-100 mb-6 relative">
-            İletişim
-            <div
-              class="absolute -bottom-2 left-0 w-8 h-0.5 bg-gradient-to-r from-secondary-500 to-secondary-400 rounded-full">
+            <!-- Kurumsal -->
+            <div class="space-y-4 sm:space-y-6">
+              <h3 class="text-neutral-800 dark:text-white font-semibold text-lg">Kurumsal</h3>
+              <nav class="space-y-2.5 sm:space-y-3">
+                <NuxtLink to="/menu/iade-ve-degisim"
+                  class="block text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  İade ve Değişim
+                </NuxtLink>
+                <NuxtLink to="/hakkimizda"
+                  class="block text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  Hakkımızda
+                </NuxtLink>
+                <NuxtLink to="/iletisim"
+                  class="block text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  İletişim
+                </NuxtLink>
+              </nav>
             </div>
-          </h3>
-          <div class="space-y-4">
-            <a v-if="whatsappNumber" :href="`https://wa.me/${whatsappNumber}`" target="_blank"
-              class="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-300 group">
-              <div
-                class="flex items-center space-x-3 p-3 rounded-xl border border-neutral-200 dark:border-neutral-700/60 hover:border-success-400/60 dark:hover:border-success-500/40 hover:bg-gradient-to-r hover:from-success-50/80 hover:to-success-100/40 dark:hover:from-success-900/20 dark:hover:to-success-800/20 transition-all duration-300">
-                <div
-                  class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-success-500 to-success-600 dark:from-success-500 dark:to-success-400 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-success-500/30 dark:group-hover:shadow-success-400/20 group-hover:scale-105 transition-all duration-300">
-                  <UIcon name="i-heroicons-phone" class="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <div class="font-semibold text-neutral-800 dark:text-neutral-100">WhatsApp Destek</div>
-                  <div
-                    class="text-sm text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
-                    {{ formatPhoneNumber(whatsappNumber) }}</div>
-                </div>
+
+            <!-- İletişim -->
+            <div class="col-span-2 sm:col-span-1 space-y-4 sm:space-y-6">
+              <h3 class="text-neutral-800 dark:text-white font-semibold text-lg">İletişim</h3>
+              <div class="space-y-2.5 sm:space-y-4">
+                <a v-if="whatsappNumber" :href="`https://wa.me/${whatsappNumber}`" target="_blank"
+                  class="flex items-center space-x-3 text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  <UIcon name="i-heroicons-phone" class="w-5 h-5 text-success-400" />
+                  <span>{{ formatPhoneNumber(whatsappNumber) }}</span>
+                </a>
+                <a v-if="contactEmail" :href="`mailto:${contactEmail}`"
+                  class="flex items-center space-x-3 text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 hover:translate-x-1 opacity-90 hover:opacity-100 transition-all duration-300 ease-in-out">
+                  <UIcon name="i-heroicons-envelope" class="w-5 h-5 text-secondary-400" />
+                  <span>{{ contactEmail }}</span>
+                </a>
               </div>
-            </a>
-            <a v-if="contactEmail" :href="`mailto:${contactEmail}`"
-              class="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-300 group">
-              <div
-                class="flex items-center space-x-3 p-3 rounded-xl border border-neutral-200 dark:border-neutral-700/60 hover:border-secondary-400/60 dark:hover:border-secondary-500/40 hover:bg-gradient-to-r hover:from-secondary-50/80 hover:to-secondary-100/40 dark:hover:from-secondary-900/20 dark:hover:to-secondary-800/20 transition-all duration-300">
-                <div
-                  class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-secondary-500 to-secondary-600 dark:from-secondary-500 dark:to-secondary-400 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-secondary-500/30 dark:group-hover:shadow-secondary-400/20 group-hover:scale-105 transition-all duration-300">
-                  <UIcon name="i-heroicons-envelope" class="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <div class="font-semibold text-neutral-800 dark:text-neutral-100">E-posta</div>
-                  <div
-                    class="text-sm text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
-                    {{ contactEmail }}</div>
-                </div>
-              </div>
-            </a>
+            </div>
           </div>
         </div>
 
-        <!-- Sosyal Medya Bölümü -->
-        <div class="space-y-6">
-          <h3 class="text-xl font-bold text-neutral-800 dark:text-neutral-100 mb-6 relative">
-            Sosyal Medya
-            <div
-              class="absolute -bottom-2 left-0 w-8 h-0.5 bg-gradient-to-r from-secondary-500 to-secondary-400 rounded-full">
+        <!-- Sağ Taraf - Marka ve Açıklama -->
+        <div class="lg:col-span-1 space-y-6 sm:space-y-8 order-2">
+          <div class="space-y-6 flex justify-center lg:justify-end">
+            <img src="/logo-for-dark.png" class="hidden dark:block w-40 sm:w-48 lg:w-52" alt="Beyraha Logo">
+            <img src="/logo-for-light.png" class="block dark:hidden w-40 sm:w-48 lg:w-52" alt="Beyraha Logo">
+          </div>
+
+          <!-- Sosyal Medya -->
+          <div class="space-y-4 flex flex-col items-center lg:items-end">
+            <h3 class="text-neutral-800 dark:text-white font-semibold text-lg">Bizi Takip Edin</h3>
+            <div class="flex flex-wrap gap-3 justify-center lg:justify-end">
+              <a href="https://instagram.com/beyrahaislamigiyim" target="_blank"
+                class="w-12 h-12 bg-neutral-200 dark:bg-neutral-800 hover:bg-gradient-to-r hover:from-purple-500 hover:to-pink-500 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 text-neutral-600 hover:text-white">
+                <Icon name="mdi:instagram" class="w-6 h-6  dark:text-white" />
+              </a>
+              <a href="https://www.facebook.com/beyraha.marketplace" target="_blank"
+                class="w-12 h-12 bg-neutral-200 dark:bg-neutral-800 hover:!bg-secondary-500 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 text-neutral-600 dark:text-white hover:!text-white">
+                <Icon name="mdi:facebook" class="w-6 h-6" />
+              </a>
             </div>
-          </h3>
-          <div class="space-y-4">
-            <a href="https://instagram.com/beyrahaislamigiyim" target="_blank"
-              class="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-300 group">
-              <div
-                class="flex items-center space-x-3 p-3 rounded-xl border border-neutral-200 dark:border-neutral-700/60 hover:border-pink-400/60 dark:hover:border-pink-500/40 hover:bg-gradient-to-r hover:from-pink-50/80 hover:to-purple-50/40 dark:hover:from-pink-900/20 dark:hover:to-purple-900/20 transition-all duration-300">
-                <div
-                  class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-500 dark:from-purple-500 dark:via-pink-500 dark:to-orange-400 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-pink-500/30 dark:group-hover:shadow-pink-400/20 group-hover:scale-105 transition-all duration-300">
-                  <Icon name="mdi:instagram" class="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <div class="font-semibold text-neutral-800 dark:text-neutral-100">Instagram</div>
-                  <div
-                    class="text-sm text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
-                    @beyrahaislamigiyim</div>
-                </div>
-              </div>
-            </a>
-            <a href="https://www.facebook.com/beyraha.marketplace" target="_blank"
-              class="block text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-all duration-300 group">
-              <div
-                class="flex items-center space-x-3 p-3 rounded-xl border border-neutral-200 dark:border-neutral-700/60 hover:border-accent-400/60 dark:hover:border-accent-500/40 hover:bg-gradient-to-r hover:from-accent-50/80 hover:to-accent-100/40 dark:hover:from-accent-900/20 dark:hover:to-accent-800/20 transition-all duration-300">
-                <div
-                  class="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-accent-500 to-accent-600 dark:from-accent-500 dark:to-accent-400 rounded-xl flex items-center justify-center shadow-lg group-hover:shadow-accent-500/30 dark:group-hover:shadow-accent-400/20 group-hover:scale-105 transition-all duration-300">
-                  <Icon name="mdi:facebook" class="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <div class="font-semibold text-neutral-800 dark:text-neutral-100">Facebook</div>
-                  <div
-                    class="text-sm text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-700 dark:group-hover:text-neutral-300">
-                    Beyraha</div>
-                </div>
-              </div>
-            </a>
           </div>
         </div>
+      </div>
+
+      <!-- Üste Dön Butonu -->
+      <div class="flex justify-center mt-12 sm:mt-16">
+        <button @click="scrollToTop"
+          class="flex items-center space-x-2 px-4 sm:px-6 py-2.5 sm:py-3 border border-neutral-400 dark:border-neutral-600 hover:border-secondary-500 rounded-lg text-neutral-600 dark:text-neutral-300 hover:text-secondary-500 transition-all duration-200 hover:bg-secondary-50 dark:hover:bg-neutral-800/50">
+          <UIcon name="i-heroicons-arrow-up" class="w-4 h-4" />
+          <span class="text-sm font-medium">Üste Dön</span>
+        </button>
       </div>
     </div>
 
     <!-- Alt Footer -->
     <div
-      class="border-t border-neutral-200 dark:border-neutral-700/60 bg-neutral-50/80 dark:bg-neutral-800/60 backdrop-blur-sm">
-      <div class="container relative z-10 py-8">
-        <div class="flex flex-col md:flex-row items-center justify-between space-y-6 md:space-y-0">
-          <div class="text-center md:text-left">
-            <p class="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed">
-              © 2017 - {{ new Date().getFullYear() }} <span
-                class="text-neutral-800 dark:text-neutral-100 font-semibold">{{ siteName || 'Beyraha' }}</span>
-              <br class="md:hidden">
-              <span class="hidden md:inline text-neutral-400 dark:text-neutral-500">•</span> Tüm hakları saklıdır.
+      class="relative z-10 border-t border-neutral-300/50 dark:border-neutral-700/50 bg-gradient-to-r from-secondary-500/90 to-secondary-600/90">
+      <div class="container mx-auto px-4 py-4 sm:py-6">
+        <div class="flex flex-col sm:flex-row items-center justify-between space-y-3 sm:space-y-0">
+          <div class="text-center sm:text-left">
+            <p class="text-white text-xs sm:text-sm">
+              © 2017 - {{ new Date().getFullYear() }} {{ siteName || 'Beyraha' }}. Tüm hakları saklıdır.
             </p>
           </div>
-          <div class="flex items-center space-x-8">
-            <div class="flex items-center space-x-2 text-neutral-600 dark:text-neutral-400 text-sm group">
-              <div
-                class="w-8 h-8 bg-success-500/25 dark:bg-success-500/20 rounded-lg flex items-center justify-center group-hover:bg-success-500/35 dark:group-hover:bg-success-500/30 transition-colors duration-300">
-                <UIcon name="i-heroicons-shield-check" class="w-4 h-4 text-success-600 dark:text-success-400" />
-              </div>
-              <span class="font-medium">Güvenli Alışveriş</span>
+          <div class="flex items-center gap-4 sm:gap-8">
+            <div class="flex items-center space-x-2 text-white text-xs sm:text-sm">
+              <UIcon name="i-heroicons-shield-check" class="w-4 h-4" />
+              <span>Güvenli Alışveriş</span>
             </div>
-            <div class="flex items-center space-x-2 text-neutral-600 dark:text-neutral-400 text-sm group">
-              <div
-                class="w-8 h-8 bg-secondary-500/25 dark:bg-secondary-500/20 rounded-lg flex items-center justify-center group-hover:bg-secondary-500/35 dark:group-hover:bg-secondary-500/30 transition-colors duration-300">
-                <UIcon name="i-heroicons-truck" class="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
-              </div>
-              <span class="font-medium">Hızlı Teslimat</span>
+            <div class="flex items-center space-x-2 text-white text-xs sm:text-sm">
+              <UIcon name="i-heroicons-truck" class="w-4 h-4" />
+              <span>Hızlı Teslimat</span>
             </div>
           </div>
         </div>
@@ -224,5 +164,13 @@ const formatPhoneNumber = (phoneNumber) => {
 
   // Diğer durumlarda olduğu gibi döndür
   return phoneNumber
+}
+
+// Üste dön fonksiyonu
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  })
 }
 </script>

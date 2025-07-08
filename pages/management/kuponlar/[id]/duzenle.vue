@@ -155,8 +155,8 @@
                                         :min="1" placeholder="Örn: 100" size="lg" />
 
                                     <div v-if="coupon.used_count > 0"
-                                        class="mt-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                                        <p class="text-sm text-blue-800 dark:text-blue-200">
+                                        class="mt-2 p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg">
+                                        <p class="text-sm text-secondary-800 dark:text-secondary-200">
                                             📊 Şu ana kadar {{ coupon.used_count }} kez kullanılmış
                                         </p>
                                     </div>

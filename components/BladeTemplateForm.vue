@@ -108,7 +108,7 @@
                                             @click="insertVariable(variableName)"
                                             class="w-full text-left px-2 py-1 text-xs bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 rounded transition-colors"
                                             :title="description">
-                                            <div class="font-mono text-blue-600 dark:text-blue-400">
+                                            <div class="font-mono text-secondary-600 dark:text-secondary-400">
                                                 {{ formatBladeVariable(variableName) }}
                                             </div>
                                             <div class="text-neutral-500 dark:text-neutral-400 text-xs mt-1">
@@ -129,7 +129,7 @@
                                     :title="directive.description">
                                     <div class="font-medium text-neutral-900 dark:text-white">{{ directive.name }}</div>
                                     <div class="text-neutral-500 dark:text-neutral-400 text-xs">{{ directive.description
-                                    }}
+                                        }}
                                     </div>
                                 </button>
                             </div>

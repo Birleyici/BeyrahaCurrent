@@ -96,9 +96,9 @@
       <!-- Step 3: Konum Seçimi -->
       <div v-if="currentStep === 2" class="space-y-6">
         <div
-          class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/50 dark:to-blue-800/50 rounded-2xl p-6 border border-blue-200 dark:border-blue-700">
+          class="bg-gradient-to-br from-secondary-50 to-secondary-100 dark:from-secondary-900/50 dark:to-secondary-800/50 rounded-2xl p-6 border border-secondary-200 dark:border-secondary-700">
           <div class="flex items-center space-x-3 mb-6">
-            <div class="w-12 h-12 bg-blue-500 rounded-2xl flex items-center justify-center">
+            <div class="w-12 h-12 bg-secondary-500 rounded-2xl flex items-center justify-center">
               <UIcon name="i-heroicons-map-pin" class="w-6 h-6 text-white" />
             </div>
             <div>
@@ -114,7 +114,7 @@
                 placeholder="Şehir seçin" :options="orderState.cities" v-model="addressObj.city" option-attribute="city"
                 :search-attributes="['city']" size="lg" :ui="{
                   base: 'transition-all duration-200',
-                  trigger: 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                  trigger: 'focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500'
                 }" />
             </UFormGroup>
 
@@ -125,7 +125,7 @@
                   :options="orderState.districts" v-model="addressObj.district" option-attribute="district"
                   :search-attributes="['district']" size="lg" :ui="{
                     base: 'transition-all duration-200',
-                    trigger: 'focus:ring-2 focus:ring-blue-500 focus:border-blue-500'
+                    trigger: 'focus:ring-2 focus:ring-secondary-500 focus:border-secondary-500'
                   }" />
               </UFormGroup>
             </div>

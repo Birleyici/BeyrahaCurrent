@@ -20,7 +20,7 @@
                             bulundu
                             <span v-if="searchWord" class="ml-1">
                                 "<span class="font-medium text-secondary-600 dark:text-secondary-400">{{ searchWord
-                                }}</span>"
+                                    }}</span>"
                                 için
                             </span>
                         </p>
@@ -101,9 +101,9 @@
                 <div v-else-if="isTyping && !isSearching" key="typing" class="p-6">
                     <div class="flex flex-col items-center justify-center space-y-3">
                         <div class="typing-dots-large">
-                            <div class="typing-dot-large !bg-orange-500"></div>
-                            <div class="typing-dot-large !bg-orange-500"></div>
-                            <div class="typing-dot-large !bg-orange-500"></div>
+                            <div class="typing-dot-large !bg-secondary-500"></div>
+                            <div class="typing-dot-large !bg-secondary-500"></div>
+                            <div class="typing-dot-large !bg-secondary-500"></div>
                         </div>
 
                     </div>
@@ -163,7 +163,7 @@
                                 Sonuç bulunamadı</h3>
                             <p class="text-neutral-500 dark:text-neutral-400 text-sm transition-colors duration-300">
                                 "<span class="font-medium text-secondary-600 dark:text-secondary-400">{{ searchWord
-                                    }}</span>"
+                                }}</span>"
                                 için sonuç bulunamadı.
                             </p>
                         </div>
@@ -211,7 +211,7 @@
                         <div class="mt-4 w-full">
                             <p
                                 class="text-xs text-neutral-500 dark:text-neutral-400 mb-3 flex items-center justify-center transition-colors duration-300">
-                                <UIcon name="i-heroicons-star" class="w-3 h-3 text-orange-400 mr-1" />
+                                <UIcon name="i-heroicons-star" class="w-3 h-3 text-secondary-400 mr-1" />
                                 Popüler Kategoriler:
                             </p>
                             <TransitionGroup name="category" tag="div" class="grid grid-cols-2 gap-2">

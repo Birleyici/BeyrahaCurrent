@@ -1,44 +1,45 @@
 <template>
   <div
-    class="card group cursor-pointer max-w-[220px]  w-full bg-white dark:bg-neutral-800 rounded-xl border border-neutral-200 dark:border-neutral-700 shadow-sm hover:shadow-md dark:hover:shadow-lg transition-all duration-300"
+    class="card group cursor-pointer w-full bg-white/95 dark:bg-slate-800/95 backdrop-blur-sm rounded-2xl border border-slate-200/50 dark:border-slate-700/50 shadow-lg hover:shadow-xl transition-all duration-500 overflow-hidden"
     :class="{ 'opacity-75': !isProductInStock }">
-    <div class="relative overflow-hidden rounded-t-xl">
+    <div class="relative overflow-hidden">
       <NuxtLink :to="productUrl">
         <NuxtImg v-if="props.product.coverImage" :src="`cl/${props.product.coverImage}`" format="webp" quality="95"
-          fit="contain" :loading="imgLoadingType" :preload="imgPreload" width="120" :alt="props.product.name"
-          :background="backgroundColor" class="w-full h-[320px] object-cover transition-transform duration-300"
+          :loading="imgLoadingType" :preload="imgPreload" :alt="props.product.name" :background="backgroundColor"
+          width="140" height="170" class="h-[300px] w-full object-cover object-top transition-transform duration-500"
           :class="{ 'group-hover:scale-105': isProductInStock }" />
-        <img v-else :src="img_placeholder" class="w-full h-[320px] object-cover transition-transform duration-300"
+        <img v-else :src="img_placeholder" class="w-full h-[340px] object-cover transition-transform duration-500"
           :class="{ 'group-hover:scale-105': isProductInStock }" alt="Ürün görseli yer tutucusu" />
       </NuxtLink>
 
-      <!-- Hover overlay -->
-      <div class="absolute inset-0 bg-black/0 transition-colors duration-300 pointer-events-none"
-        :class="{ 'group-hover:bg-black/10 dark:group-hover:bg-black/20': isProductInStock }">
+      <!-- Premium hover overlay -->
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 transition-opacity duration-500 pointer-events-none"
+        :class="{ 'group-hover:opacity-100': isProductInStock }">
       </div>
 
       <!-- Video Badge -->
-      <div v-if="hasProductVideo" class="absolute top-3 right-3">
+      <div v-if="hasProductVideo" class="absolute top-4 right-4">
         <div
-          class="bg-gradient-to-r from-red-500 to-pink-500 backdrop-blur-sm rounded-lg px-2 py-1 flex items-center space-x-1 transition-all duration-300 hover:from-red-600 hover:to-pink-600 shadow-lg">
-          <UIcon name="i-heroicons-play-circle-solid" class="w-4 h-4 text-white" />
-          <span class="text-xs font-medium text-white">Video</span>
+          class="bg-gradient-to-r from-red-500 to-pink-500 backdrop-blur-sm rounded-xl px-3 py-2 flex items-center space-x-2 transition-all duration-300 hover:from-red-600 hover:to-pink-600 shadow-lg">
+          <UIcon name="i-heroicons-play-circle-solid" class="w-5 h-5 text-white" />
+          <span class="text-sm font-medium text-white">Video</span>
         </div>
       </div>
 
       <!-- Stok Durumu Badge -->
-      <div v-if="!isProductInStock" class="absolute top-3 left-3">
-        <UBadge :color="stockBadgeColor" variant="solid" size="sm" class="font-medium">
+      <div v-if="!isProductInStock" class="absolute top-4 left-4">
+        <UBadge :color="stockBadgeColor" variant="solid" size="sm" class="font-medium backdrop-blur-sm">
           {{ stockStatusLabel }}
         </UBadge>
       </div>
     </div>
 
-    <div class="p-4 space-y-3">
-      <div class="text-center">
+    <div class="p-4 space-y-3 min-h-[140px] flex flex-col justify-between">
+      <div class="text-center flex-1 flex items-center justify-center">
         <NuxtLink :to="productUrl" class="block">
           <h3
-            class="font-medium text-neutral-900 dark:text-neutral-100 transition-colors duration-200 product-name-clamp line-clamp-2"
+            class="font-semibold text-slate-800 dark:text-slate-100 transition-colors duration-300 product-name-clamp line-clamp-2 text-base leading-snug"
             :class="{ 'group-hover:text-secondary-600 dark:group-hover:text-secondary-400': isProductInStock }">
             {{ props.product.name }}
           </h3>
@@ -51,11 +52,11 @@
           :show-text="true" />
       </div>
 
-      <div class="flex justify-center pt-2">
+      <div class="flex justify-center">
         <PartialsProductPrice v-if="isProductInStock" type="card" :sale-price="props.product.sale_price"
           :price="props.product.price" :display-price="props.product.display_price"
           :is-variation-product="props.product.is_variation_product" :has-price-range="props.product.has_price_range" />
-        <div v-else class="text-sm text-red-600 dark:text-red-400 font-medium">
+        <div v-else class="text-sm text-red-600 dark:text-red-400 font-semibold">
           {{ stockStatusLabel }}
         </div>
       </div>

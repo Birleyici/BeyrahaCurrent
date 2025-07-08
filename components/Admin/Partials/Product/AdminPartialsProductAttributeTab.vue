@@ -17,7 +17,7 @@
               placeholder: 'text-gray-500 dark:text-gray-400',
               color: {
                 white: {
-                  outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400'
+                  outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400'
                 }
               }
             }" />

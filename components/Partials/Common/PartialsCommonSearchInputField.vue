@@ -43,7 +43,7 @@
             class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200/80 dark:border-neutral-700/80 p-4 z-50 backdrop-blur-sm transition-colors duration-300">
             <div class="space-y-3">
                 <h4 class="text-sm font-medium text-neutral-700 dark:text-neutral-300 mb-3 flex items-center">
-                    <UIcon name="i-heroicons-fire" class="w-4 h-4 text-orange-400 mr-2" />
+                    <UIcon name="i-heroicons-fire" class="w-4 h-4 text-secondary-400 mr-2" />
                     Popüler Aramalar
                 </h4>
                 <div class="flex flex-wrap gap-2">

@@ -22,7 +22,7 @@
             <div class="flex space-x-1">
               <div class="w-3 h-3 bg-red-500 rounded-full"></div>
               <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-              <div class="w-3 h-3 bg-blue-500 rounded-full"></div>
+              <div class="w-3 h-3 bg-secondary-500 rounded-full"></div>
             </div>
             <span class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ item.label }}</span>
             <span
@@ -290,7 +290,7 @@
 
         <div class="space-y-4">
           <div class="flex items-center space-x-3">
-            <UIcon name="i-heroicons-photo" class="w-8 h-8 text-orange-500" />
+            <UIcon name="i-heroicons-photo" class="w-8 h-8 text-secondary-500" />
             <div>
               <p class="text-sm font-medium text-gray-900 dark:text-white">
                 "{{ imageToDelete?.term_name }}" renginin görselini kaldırmak istediğinizden emin misiniz?

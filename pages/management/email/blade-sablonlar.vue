@@ -52,7 +52,7 @@
 
                         <!-- Template Header -->
                         <div
-                            class="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-800 dark:to-blue-700 p-4 border-b border-neutral-200 dark:border-neutral-700">
+                            class="bg-gradient-to-r from-secondary-50 to-secondary-100 dark:from-secondary-800 dark:to-secondary-700 p-4 border-b border-neutral-200 dark:border-neutral-700">
                             <div class="flex items-start justify-between">
                                 <div class="flex-1 min-w-0">
                                     <div class="flex items-center gap-2 mb-2">

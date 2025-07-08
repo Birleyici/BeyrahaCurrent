@@ -36,9 +36,9 @@ export const useAccountMenu = () => {
     const getIconColorClasses = (color, isActive = false, isHover = false) => {
         const colorMap = {
             blue: {
-                bg: isActive ? 'bg-blue-500' : 'bg-blue-100 dark:bg-blue-900/30',
-                bgHover: 'group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50',
-                text: 'text-blue-600 dark:text-blue-400'
+                bg: isActive ? 'bg-secondary-500' : 'bg-secondary-100 dark:bg-secondary-900/30',
+                bgHover: 'group-hover:bg-secondary-200 dark:group-hover:bg-secondary-900/50',
+                text: 'text-secondary-600 dark:text-secondary-400'
             },
             green: {
                 bg: isActive ? 'bg-green-500' : 'bg-green-100 dark:bg-green-900/30',

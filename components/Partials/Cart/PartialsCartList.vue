@@ -5,8 +5,8 @@
       <!-- Product Image -->
       <div class="flex-shrink-0">
         <NuxtLink v-if="props.item.image_path" :to="props.item.product_url" class="block">
-          <NuxtImg width="80" height="80" fit="cover"
-            class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-lg border border-neutral-200 dark:border-neutral-600"
+          <NuxtImg width="80" height="120" fit="cover"
+            class="w-[80px] h-[120px] object-cover object-top rounded-lg border border-neutral-200 dark:border-neutral-600"
             :src="`cl/${props.item.image_path}`" />
         </NuxtLink>
         <div v-else
@@ -35,7 +35,7 @@
             <span class="font-medium text-neutral-600 dark:text-neutral-400">{{ key }}:</span>
             <span
               class="text-neutral-800 dark:text-neutral-200 bg-neutral-100 dark:bg-neutral-700 px-2 py-0.5 rounded-full">{{
-              value }}</span>
+                value }}</span>
           </div>
         </div>
 

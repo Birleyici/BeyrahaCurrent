@@ -8,11 +8,13 @@
         <!-- Email System Card -->
         <div class="grid grid-cols-1 gap-6">
             <!-- Blade Templates (Primary System) -->
-            <UCard class="hover:shadow-lg transition-shadow duration-200 ring-2 ring-blue-200 dark:ring-blue-800">
+            <UCard
+                class="hover:shadow-lg transition-shadow duration-200 ring-2 ring-secondary-200 dark:ring-secondary-800">
                 <template #header>
                     <div class="flex items-center gap-3">
-                        <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                            <UIcon name="i-heroicons-code-bracket" class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                        <div class="p-2 bg-secondary-100 dark:bg-secondary-900/30 rounded-lg">
+                            <UIcon name="i-heroicons-code-bracket"
+                                class="w-6 h-6 text-secondary-600 dark:text-secondary-400" />
                         </div>
                         <div>
                             <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">
@@ -38,9 +40,10 @@
                         <UBadge color="emerald" size="sm">Database Güvenli</UBadge>
                     </div>
 
-                    <div class="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-                        <h4 class="font-medium text-blue-900 dark:text-blue-100 text-sm mb-1">✨ Avantajları:</h4>
-                        <ul class="text-xs text-blue-700 dark:text-blue-300 space-y-1">
+                    <div class="bg-secondary-50 dark:bg-secondary-900/20 p-3 rounded-lg">
+                        <h4 class="font-medium text-secondary-900 dark:text-secondary-100 text-sm mb-1">✨ Avantajları:
+                        </h4>
+                        <ul class="text-xs text-secondary-700 dark:text-secondary-300 space-y-1">
                             <li>• @foreach döngüleri ile dinamik içerik</li>
                             <li>• @if koşulları ile akıllı email yapısı</li>
                             <li>• Laravel'de doğrudan render ediliyor</li>
@@ -86,8 +89,9 @@
 
             <UCard>
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-blue-100 dark:bg-blue-900/30 rounded-lg">
-                        <UIcon name="i-heroicons-paper-airplane" class="w-5 h-5 text-blue-600 dark:text-blue-400" />
+                    <div class="p-2 bg-secondary-100 dark:bg-secondary-900/30 rounded-lg">
+                        <UIcon name="i-heroicons-paper-airplane"
+                            class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
                     </div>
                     <div>
                         <div class="text-lg font-semibold text-neutral-900 dark:text-white">
@@ -118,9 +122,9 @@
 
             <UCard>
                 <div class="flex items-center gap-3">
-                    <div class="p-2 bg-orange-100 dark:bg-orange-900/30 rounded-lg">
+                    <div class="p-2 bg-secondary-100 dark:bg-secondary-900/30 rounded-lg">
                         <UIcon name="i-heroicons-cursor-arrow-rays"
-                            class="w-5 h-5 text-orange-600 dark:text-orange-400" />
+                            class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
                     </div>
                     <div>
                         <div class="text-lg font-semibold text-neutral-900 dark:text-white">
@@ -188,8 +192,8 @@ const recentActivities = ref([
         description: 'Laravel Blade template engine ile güçlü email şablonları artık kullanılabilir',
         time: '2 saat önce',
         icon: 'i-heroicons-code-bracket',
-        iconColor: 'text-blue-600 dark:text-blue-400',
-        bgColor: 'bg-blue-100 dark:bg-blue-900/30'
+        iconColor: 'text-secondary-600 dark:text-secondary-400',
+        bgColor: 'bg-secondary-100 dark:bg-secondary-900/30'
     },
     {
         id: 2,

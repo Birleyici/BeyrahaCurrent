@@ -39,11 +39,11 @@
                     <!-- Ürün Resimleri -->
                     <div class="flex -space-x-1">
                         <div v-for="(product, index) in displayedProducts" :key="index"
-                            class="relative w-8 h-8 rounded-full border-2 border-white dark:border-neutral-800 shadow-sm overflow-hidden bg-neutral-100 dark:bg-neutral-700"
+                            class="relative w-8 h-8 rounded-full border-2 border-gray dark:border-neutral-800 shadow-sm overflow-hidden bg-neutral-100 dark:bg-neutral-700"
                             :style="{ zIndex: 10 - index }">
                             <NuxtImg v-if="product.image?.path" :src="'cl/' + product.image.path" :alt="product.name"
-                                class="w-full h-full object-cover" format="webp" quality="80" :width="32" :height="32"
-                                fit="cover" />
+                                class="w-[32px] h-[32px] object-cover object-top" format="webp" quality="90" :width="32"
+                                :height="32" fit="cover" />
                             <img v-else class="w-full h-full object-cover" src="/img-placeholder.jpg"
                                 :alt="product.name">
                         </div>

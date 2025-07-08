@@ -22,9 +22,9 @@
                         <p class="text-xl sm:text-3xl font-bold text-neutral-900 dark:text-white mt-1 sm:mt-2">{{
                             userStats.total_users }}</p>
                     </div>
-                    <div class="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full">
+                    <div class="p-2 sm:p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-full">
                         <UIcon name="i-heroicons-users"
-                            class="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 dark:text-blue-400" />
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-secondary-600 dark:text-secondary-400" />
                     </div>
                 </div>
             </div>
@@ -36,12 +36,14 @@
                         <p class="text-xs sm:text-sm font-medium text-neutral-600 dark:text-neutral-400">Anonim
                             Kullanıcı
                         </p>
-                        <p class="text-xl sm:text-3xl font-bold text-orange-600 dark:text-orange-400 mt-1 sm:mt-2">{{
-                            userStats.total_anonymous_users }}</p>
+                        <p
+                            class="text-xl sm:text-3xl font-bold text-secondary-600 dark:text-secondary-400 mt-1 sm:mt-2">
+                            {{
+                                userStats.total_anonymous_users }}</p>
                     </div>
-                    <div class="p-2 sm:p-3 bg-orange-50 dark:bg-orange-900/20 rounded-full">
+                    <div class="p-2 sm:p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-full">
                         <UIcon name="i-heroicons-user-circle"
-                            class="w-6 h-6 sm:w-8 sm:h-8 text-orange-600 dark:text-orange-400" />
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-secondary-600 dark:text-secondary-400" />
                     </div>
                 </div>
             </div>
@@ -185,8 +187,10 @@
                 <div
                     class="bg-gradient-to-r from-neutral-50 to-neutral-100 dark:from-neutral-800 dark:to-neutral-700 px-6 py-4 border-b border-neutral-200 dark:border-neutral-700">
                     <div class="flex items-center space-x-3">
-                        <div class="w-8 h-8 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center">
-                            <UIcon name="i-heroicons-users" class="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                        <div
+                            class="w-8 h-8 bg-secondary-100 dark:bg-secondary-900 rounded-full flex items-center justify-center">
+                            <UIcon name="i-heroicons-users"
+                                class="w-4 h-4 text-secondary-600 dark:text-secondary-400" />
                         </div>
                         <h3 class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">{{ getListTitle() }}
                         </h3>
@@ -253,7 +257,7 @@
                                                 @{{ user.nickname }}
                                             </div>
                                             <div v-if="user.user_type === 'anonymous'"
-                                                class="text-xs text-orange-500 dark:text-orange-400">
+                                                class="text-xs text-secondary-500 dark:text-secondary-400">
                                                 Anonim Kullanıcı
                                             </div>
                                         </div>
@@ -296,7 +300,8 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div v-if="user.cart_items_count > 0" class="flex items-center">
-                                        <UIcon name="i-heroicons-shopping-cart" class="w-4 h-4 text-orange-500 mr-2" />
+                                        <UIcon name="i-heroicons-shopping-cart"
+                                            class="w-4 h-4 text-secondary-500 mr-2" />
                                         <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                                             {{ user.cart_items_count }} ürün
                                         </span>
@@ -355,9 +360,9 @@
             <!-- Loading State -->
             <div v-if="loading" class="text-center py-12">
                 <div
-                    class="w-16 h-16 bg-blue-100 dark:bg-blue-900/30 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
+                    class="w-16 h-16 bg-secondary-100 dark:bg-secondary-900/30 rounded-full flex items-center justify-center mx-auto mb-4 animate-pulse">
                     <UIcon name="i-heroicons-arrow-path"
-                        class="w-8 h-8 text-blue-600 dark:text-blue-400 animate-spin" />
+                        class="w-8 h-8 text-secondary-600 dark:text-secondary-400 animate-spin" />
                 </div>
                 <p class="text-lg font-medium text-neutral-600 dark:text-neutral-400">{{ getLoadingText() }}</p>
             </div>
@@ -383,7 +388,7 @@
                                     @{{ user.nickname }}
                                 </div>
                                 <div v-if="user.user_type === 'anonymous'"
-                                    class="text-xs text-orange-500 dark:text-orange-400">
+                                    class="text-xs text-secondary-500 dark:text-secondary-400">
                                     Anonim Kullanıcı
                                 </div>
                             </div>
@@ -432,7 +437,7 @@
                             <div class="col-span-2">
                                 <p class="text-xs text-neutral-500 dark:text-neutral-400 mb-1">Sepet</p>
                                 <div v-if="user.cart_items_count > 0" class="flex items-center">
-                                    <UIcon name="i-heroicons-shopping-cart" class="w-4 h-4 text-orange-500 mr-1" />
+                                    <UIcon name="i-heroicons-shopping-cart" class="w-4 h-4 text-secondary-500 mr-1" />
                                     <span class="text-sm font-medium text-neutral-900 dark:text-neutral-100">
                                         {{ user.cart_items_count }} ürün
                                     </span>

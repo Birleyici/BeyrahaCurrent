@@ -24,9 +24,9 @@
                         <p class="text-xl sm:text-3xl font-bold text-neutral-900 dark:text-white mt-1 sm:mt-2">{{
                             statistics.total_coupons || 0 }}</p>
                     </div>
-                    <div class="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full">
+                    <div class="p-2 sm:p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-full">
                         <UIcon name="i-heroicons-ticket"
-                            class="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 dark:text-blue-400" />
+                            class="w-6 h-6 sm:w-8 sm:h-8 text-secondary-600 dark:text-secondary-400" />
                     </div>
                 </div>
             </div>

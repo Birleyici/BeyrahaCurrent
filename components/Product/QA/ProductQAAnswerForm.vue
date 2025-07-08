@@ -33,8 +33,8 @@
 
             <!-- Uyarı -->
             <div
-                class="mt-3 p-2 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded text-xs">
-                <div class="flex items-start space-x-2 text-blue-700 dark:text-blue-300">
+                class="mt-3 p-2 bg-secondary-50 dark:bg-secondary-900/20 border border-secondary-200 dark:border-secondary-800 rounded text-xs">
+                <div class="flex items-start space-x-2 text-secondary-700 dark:text-secondary-300">
                     <UIcon name="i-heroicons-information-circle" class="w-3 h-3 mt-0.5" />
                     <span>Cevabınız moderasyon sonrası yayınlanacaktır.</span>
                 </div>

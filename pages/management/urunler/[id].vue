@@ -20,7 +20,7 @@
         <div
           class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
           <div class="flex items-center gap-2 mb-4">
-            <Icon name="i-heroicons-information-circle" class="w-5 h-5 text-blue-500" />
+            <Icon name="i-heroicons-information-circle" class="w-5 h-5 text-secondary-500" />
             <h2 class="text-lg font-semibold text-neutral-900 dark:text-white">Temel Bilgiler</h2>
           </div>
 
@@ -244,7 +244,7 @@
         <div
           class="bg-white dark:bg-neutral-800 rounded-lg shadow-sm border border-neutral-200 dark:border-neutral-700 p-6">
           <div class="flex items-center gap-2 mb-4">
-            <Icon name="i-heroicons-tag" class="w-5 h-5 text-orange-500" />
+            <Icon name="i-heroicons-tag" class="w-5 h-5 text-secondary-500" />
             <h3 class="text-lg font-semibold text-neutral-900 dark:text-white">Kategoriler</h3>
           </div>
 

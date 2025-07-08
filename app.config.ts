@@ -43,22 +43,22 @@ ui: {
       },
       color: {
         white: {
-          outline: 'shadow-sm bg-white dark:bg-gray-800 ring-1 ring-gray-300 dark:ring-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:ring-offset-0'
+          outline: 'shadow-sm bg-white dark:bg-gray-800 ring-1 ring-gray-300 dark:ring-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 focus:ring-offset-0'
         },
         orange: {
-          outline: 'shadow-sm bg-white dark:bg-gray-800 ring-1 ring-orange-200 dark:ring-orange-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:ring-offset-0'
+          outline: 'shadow-sm bg-white dark:bg-gray-800 ring-1 ring-secondary-200 dark:ring-secondary-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 focus:ring-offset-0'
         },
         gray: {
-          outline: 'shadow-sm bg-gray-50 dark:bg-gray-700 ring-1 ring-gray-200 dark:ring-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:ring-offset-0'
+          outline: 'shadow-sm bg-gray-50 dark:bg-gray-700 ring-1 ring-gray-200 dark:ring-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 focus:ring-offset-0'
         }
       },
       variant: {
-        outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-200 dark:ring-gray-600 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:ring-offset-0',
+        outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-200 dark:ring-gray-600 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 focus:ring-offset-0',
         none: 'bg-transparent focus:ring-0 focus:shadow-none'
       },
       icon: {
         base: 'flex-shrink-0 text-gray-400 dark:text-gray-500',
-        color: 'text-orange-500 dark:text-orange-400',
+        color: 'text-secondary-500 dark:text-secondary-400',
         size: {
           '2xs': 'h-4 w-4',
           xs: 'h-4 w-4',
@@ -121,17 +121,17 @@ ui: {
       },
       color: {
         white: {
-          outline: 'shadow-sm bg-white dark:bg-gray-800 ring-1 ring-gray-300 dark:ring-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:ring-offset-0'
+          outline: 'shadow-sm bg-white dark:bg-gray-800 ring-1 ring-gray-300 dark:ring-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 focus:ring-offset-0'
         },
         orange: {
-          outline: 'shadow-sm bg-white dark:bg-gray-800 ring-1 ring-orange-200 dark:ring-orange-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:ring-offset-0'
+          outline: 'shadow-sm bg-white dark:bg-gray-800 ring-1 ring-secondary-200 dark:ring-secondary-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 focus:ring-offset-0'
         },
         gray: {
-          outline: 'shadow-sm bg-gray-50 dark:bg-gray-700 ring-1 ring-gray-200 dark:ring-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:ring-offset-0'
+          outline: 'shadow-sm bg-gray-50 dark:bg-gray-700 ring-1 ring-gray-200 dark:ring-gray-600 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 focus:ring-offset-0'
         }
       },
       variant: {
-        outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-200 dark:ring-gray-600 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400 focus:ring-offset-0',
+        outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-inset ring-gray-200 dark:ring-gray-600 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400 focus:ring-offset-0',
         none: 'bg-transparent focus:ring-0 focus:shadow-none'
       },
       default: {
@@ -191,12 +191,12 @@ ui: {
       },
       color: {
         white: {
-          outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400'
+          outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400'
         }
       },
       variant: {
-        outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400',
-        custom: 'shadow-sm bg-transparent text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-400 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400'
+        outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400',
+        custom: 'shadow-sm bg-transparent text-gray-900 dark:text-white ring-1 ring-inset ring-gray-300 dark:ring-gray-400 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400'
       },
       icon: {
         base: 'flex-shrink-0 text-gray-400',

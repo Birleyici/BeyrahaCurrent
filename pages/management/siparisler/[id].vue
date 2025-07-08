@@ -120,20 +120,22 @@
 
               <!-- Takip Kodu Bildirimi -->
               <div v-if="trackingCode" class="mb-6">
-                <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+                <div
+                  class="bg-secondary-50 dark:bg-secondary-900/20 border border-secondary-200 dark:border-secondary-800 rounded-lg p-4">
                   <div class="flex items-start justify-between">
                     <div class="flex items-start space-x-3">
                       <UIcon name="i-heroicons-magnifying-glass"
-                        class="w-5 h-5 text-blue-600 dark:text-blue-400 mt-0.5" />
+                        class="w-5 h-5 text-secondary-600 dark:text-secondary-400 mt-0.5" />
                       <div>
-                        <h4 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-1">Kargo Takip Kodu</h4>
+                        <h4 class="text-sm font-medium text-secondary-900 dark:text-secondary-100 mb-1">Kargo Takip Kodu
+                        </h4>
                         <p
-                          class="text-sm text-blue-700 dark:text-blue-300 font-mono bg-blue-100 dark:bg-blue-800 px-2 py-1 rounded">
+                          class="text-sm text-secondary-700 dark:text-secondary-300 font-mono bg-secondary-100 dark:bg-secondary-800 px-2 py-1 rounded">
                           {{ trackingCode }}
                         </p>
                         <div v-if="trackingUrl" class="mt-2">
                           <a :href="trackingUrl" target="_blank"
-                            class="inline-flex items-center text-xs text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-200 underline">
+                            class="inline-flex items-center text-xs text-secondary-600 dark:text-secondary-400 hover:text-secondary-800 dark:hover:text-secondary-200 underline">
                             <UIcon name="i-heroicons-arrow-top-right-on-square" class="w-3 h-3 mr-1" />
                             Kargo Takip Et
                           </a>

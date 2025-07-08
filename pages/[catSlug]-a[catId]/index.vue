@@ -61,11 +61,10 @@
 </template>
 
 <script setup>
-
 const productState = useProductState();
 const categoryState = useCategoryState();
-const route = useRoute();
 const router = useRouter();
+const route = useRoute();
 const { settings } = useSettings()
 const catSlug = route.params.catSlug
 const catId = route.params.catId
@@ -75,7 +74,6 @@ const isChangeRoute = ref(false)
 const { isMobile } = useDevice()
 
 watch(() => router.currentRoute.value.path, (newVal, oldVal) => {
-  console.log(newVal, oldVal)
   if (newVal != oldVal) {
     isChangeRoute.value = true
 
@@ -83,11 +81,58 @@ watch(() => router.currentRoute.value.path, (newVal, oldVal) => {
     const newRoute = router.currentRoute.value
     const newCategoryIds = newRoute.query.selectedCategoryIds
 
+    // Yeni route'dan catId ve catSlug al
+    const newCatId = newRoute.params.catId
+    const newCatSlug = newRoute.params.catSlug
+
+    // Kategori state'ini temizle ve yeni kategori ile güncelle
+    categoryState.selectedCategories = []
+
+    // Yeni ana kategoriyi ekle (eğer kategori sayfasındaysak)
+    if ((newCatSlug && newCatId) && newCatSlug != 'arama') {
+      categoryState.patchSelectedCategories(newCatId.toString(), false)
+    }
+
+    // Kategoriler yüklendiyse tam bilgileri güncelle
+    if (categoryState.categories.length > 0) {
+      categoryState.updateSelectedCategoriesWithFullData()
+    }
+
+    // URL'den gelen ek kategori ID'lerini işle
     if (newCategoryIds && categoryState.categories.length > 0) {
-      categoryState.selectedCategories = []
       categoryState.patchSelectedCategories(newCategoryIds)
       categoryState.updateSelectedCategoriesWithFullData()
     }
+
+    // Yeni kategori ile ürünleri yükle
+    const newQuery = {
+      searchWord: newRoute.query.searchWord,
+      page: parseInt(newRoute.query.page) || 1,
+      sort: newRoute.query.sort || 'popular'
+    }
+
+    // Query değerlerini güncelle
+    Object.assign(query.value, newQuery)
+
+    // Ürünleri yeniden yükle
+    setTimeout(async () => {
+      try {
+        loading.value = true
+
+        await productState.getProducts({
+          ...query.value,
+          selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
+        })
+      } catch (error) {
+        console.error('❌ [ROUTE CHANGE] Ürün yükleme hatası:', error)
+      } finally {
+        loading.value = false
+        // Route değişikliği tamamlandı
+        setTimeout(() => {
+          isChangeRoute.value = false
+        }, 100)
+      }
+    }, 50)
   }
 });
 
@@ -98,7 +143,6 @@ const query = ref({
   page: parseInt(route.query.page) || 1,
   sort: route.query.sort || 'popular', // Varsayılan sıralama: en çok satılan
 });
-
 
 await useAsyncData('initDataProducts', async () => {
   try {
@@ -128,11 +172,10 @@ await useAsyncData('initDataProducts', async () => {
 
     return [true, true];
   } catch (error) {
-    console.error('Hata oluştu:', error);
+    console.error('❌ [INIT DATA] Hata oluştu:', error);
     return [false, false];
   }
 });
-
 
 const loading = ref(false);
 const isLoadingMore = ref(false); // Infinite scroll için ayrı loading state
@@ -143,19 +186,32 @@ watch([
   () => query.value.sort,
   () => categoryState.selectedCategoryIds.slice(),
   () => query.value.searchWord,
-  () => route.query.searchWord
+  () => route.query.searchWord,
+  () => route.params.catId,
+  () => route.params.catSlug
 ], async (newValues, oldValues) => {
-  // newValues ve oldValues dizileri aşağıdaki indekslere sahiptir:
-  // [0]: query.value.page
-  // [1]: query.value.sort
-  // [2]: categoryState.selectedCategoryIds
-  // [3]: query.value.searchWord
-  // [4]: route.query.searchWord
-
   if (!isChangeRoute.value) {
     // Eğer zaten bir istek işleniyorsa, yeni isteği engelle
     if (isProcessingRequest.value) {
       return;
+    }
+
+    // catId veya catSlug değişti mi kontrol et
+    const categoryChanged = newValues[5] !== oldValues[5] || newValues[6] !== oldValues[6]
+
+    if (categoryChanged) {
+      // Kategori state'ini temizle ve yeni kategori ile güncelle
+      categoryState.selectedCategories = []
+
+      // Yeni ana kategoriyi ekle (eğer kategori sayfasındaysak)
+      if ((newValues[6] && newValues[5]) && newValues[6] != 'arama') {
+        categoryState.patchSelectedCategories(newValues[5].toString(), false)
+
+        // Kategoriler yüklendiyse tam bilgileri güncelle
+        if (categoryState.categories.length > 0) {
+          categoryState.updateSelectedCategoriesWithFullData()
+        }
+      }
     }
 
     // Filtreler değiştiğinde sayfayı 1'e resetlemek için kontrol
@@ -164,7 +220,8 @@ watch([
 
     if (newValues[1] !== oldValues[1] || // sort değişti mi?
       JSON.stringify(newValues[2]) !== JSON.stringify(oldValues[2]) || // selectedCategoryIds değişti mi?
-      newValues[3] !== oldValues[3]) { // searchWord değişti mi?
+      newValues[3] !== oldValues[3] || // searchWord değişti mi?
+      categoryChanged) { // kategori değişti mi?
       filtersChanged = true;
     }
 
@@ -187,41 +244,47 @@ watch([
     try {
       query.value.searchWord = route.query.searchWord;
 
-      await productState.getProducts({
+      const productParams = {
         ...query.value,
         selectedCategoryIds: JSON.stringify(categoryState.selectedCategoryIds)
-      });
+      }
+
+      await productState.getProducts(productParams);
     } catch (error) {
-      console.error('Ürün yükleme hatası:', error);
+      console.error('❌ [WATCH] Ürün yükleme hatası:', error);
     } finally {
       loading.value = false;
       isLoadingMore.value = false;
       isProcessingRequest.value = false; // İstek tamamlandı
     }
+  } else {
+    // Route değişikliği sonrası isChangeRoute'u false yap
+    setTimeout(() => {
+      isChangeRoute.value = false
+    }, 100)
   }
 }, {
   deep: true,
 });
 
-
-
 const pushQueryParams = () => {
   if (!isChangeRoute.value) {
+    const newQuery = {
+      ...route.query,
+      ...query.value,
+      selectedCategoryIds: categoryState.selectedCategoryIds.join(','),
+      searchWord: query.value.searchWord
+    }
+
     router.push({
-      query: {
-        ...route.query,
-        ...query.value,
-        selectedCategoryIds: categoryState.selectedCategoryIds.join(','),
-        searchWord: query.value.searchWord
-      }
+      query: newQuery
     });
   }
 }
 
-
-
 const slugsCat = computed(() => {
-  return categoryState.categories?.find(c => c.id === parseInt(catId))
+  const kategori = categoryState.categories?.find(c => c.id === parseInt(catId))
+  return kategori
 })
 
 

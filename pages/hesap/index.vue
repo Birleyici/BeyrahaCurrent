@@ -81,7 +81,7 @@ const { accountMenuItems } = useAccountMenu()
 // Renk sınıflarını get et
 const getColorClasses = (color) => {
     const colorMap = {
-        blue: 'bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-900/50',
+        blue: 'bg-secondary-100 dark:bg-secondary-900/30 group-hover:bg-secondary-200 dark:group-hover:bg-secondary-900/50',
         green: 'bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-900/50',
         amber: 'bg-amber-100 dark:bg-amber-900/30 group-hover:bg-amber-200 dark:group-hover:bg-amber-900/50',
         purple: 'bg-purple-100 dark:bg-purple-900/30 group-hover:bg-purple-200 dark:group-hover:bg-purple-900/50'
@@ -91,7 +91,7 @@ const getColorClasses = (color) => {
 
 const getIconColorClasses = (color) => {
     const colorMap = {
-        blue: 'text-blue-600 dark:text-blue-400',
+        blue: 'text-secondary-600 dark:text-secondary-400',
         green: 'text-green-600 dark:text-green-400',
         amber: 'text-amber-600 dark:text-amber-400',
         purple: 'text-purple-600 dark:text-purple-400'

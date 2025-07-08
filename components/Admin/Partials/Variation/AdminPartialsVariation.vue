@@ -22,12 +22,12 @@
             <!-- Left: Status Indicator + Terms -->
             <div class="flex items-center space-x-3 min-w-0 flex-1">
               <!-- Status Indicator -->
-              <div class="w-2 h-2 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex-shrink-0"></div>
+              <div class="w-2 h-2 bg-gradient-to-r from-secondary-500 to-amber-500 rounded-full flex-shrink-0"></div>
 
               <!-- Terms for Mobile & Desktop -->
               <div class="flex flex-wrap gap-1.5 min-w-0">
                 <span v-for="(term, index) in (item.data.terms || [])" :key="term.id || index"
-                  class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-orange-50 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 border border-orange-200 dark:border-orange-800">
+                  class="inline-flex items-center px-2.5 py-1 rounded-md text-xs font-medium bg-secondary-50 dark:bg-secondary-900/30 text-secondary-700 dark:text-secondary-300 border border-secondary-200 dark:border-secondary-800">
                   {{ term.term_name }}
                 </span>
               </div>
@@ -88,12 +88,12 @@
               <div class="bg-gray-50 dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg p-4">
                 <div class="flex items-center space-x-4">
                   <div @click="openImageSelector"
-                    class="relative w-20 h-20 bg-gray-100 dark:bg-gray-600 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-500 cursor-pointer hover:border-orange-400 dark:hover:border-orange-500 transition-colors duration-200 flex items-center justify-center group">
+                    class="relative w-20 h-20 bg-gray-100 dark:bg-gray-600 rounded-lg border-2 border-dashed border-gray-300 dark:border-gray-500 cursor-pointer hover:border-secondary-400 dark:hover:border-secondary-500 transition-colors duration-200 flex items-center justify-center group">
                     <NuxtImg v-if="item.image" :src="'cl/' + item.image.path" :alt="'Varyasyon görseli'"
                       class="w-full h-full object-cover rounded-lg" />
                     <div v-else class="text-center">
                       <UIcon name="i-heroicons-photo"
-                        class="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover:text-orange-500 transition-colors" />
+                        class="w-6 h-6 text-gray-400 dark:text-gray-500 group-hover:text-secondary-500 transition-colors" />
                     </div>
 
                     <div
@@ -243,7 +243,7 @@
               </p>
               <div v-if="item && item.terms && item.terms.length > 0" class="flex space-x-2 mt-2">
                 <span v-for="term in item.terms" :key="term.id"
-                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200">
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-secondary-100 dark:bg-secondary-900 text-secondary-800 dark:text-secondary-200">
                   {{ term.term_name }}
                 </span>
               </div>

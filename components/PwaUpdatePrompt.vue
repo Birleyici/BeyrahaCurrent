@@ -1,15 +1,16 @@
 <template>
     <div v-if="needRefresh" class="fixed top-4 left-4 right-4 z-50 mx-auto max-w-md">
-        <div class="bg-blue-50 dark:bg-blue-900 border border-blue-200 dark:border-blue-700 rounded-lg p-4">
+        <div
+            class="bg-secondary-50 dark:bg-secondary-900 border border-secondary-200 dark:border-secondary-700 rounded-lg p-4">
             <div class="flex items-start space-x-3">
                 <div class="flex-shrink-0">
-                    <Icon name="heroicons:arrow-path" class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    <Icon name="heroicons:arrow-path" class="w-6 h-6 text-secondary-600 dark:text-secondary-400" />
                 </div>
                 <div class="flex-1 min-w-0">
-                    <h3 class="text-sm font-medium text-blue-800 dark:text-blue-200">
+                    <h3 class="text-sm font-medium text-secondary-800 dark:text-secondary-200">
                         Yeni Güncelleme Mevcut
                     </h3>
-                    <p class="text-sm text-blue-600 dark:text-blue-300 mt-1">
+                    <p class="text-sm text-secondary-600 dark:text-secondary-300 mt-1">
                         Yeni özellikleri kullanmak için sayfayı yenileyin.
                     </p>
                 </div>
@@ -17,11 +18,11 @@
 
             <div class="mt-3 flex space-x-2">
                 <button @click="handleUpdate"
-                    class="bg-blue-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-700 transition-colors">
+                    class="bg-secondary-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-secondary-700 transition-colors">
                     Güncelle
                 </button>
                 <button @click="handleClose"
-                    class="px-4 py-2 border border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-300 rounded-md text-sm font-medium hover:bg-blue-100 dark:hover:bg-blue-800 transition-colors">
+                    class="px-4 py-2 border border-secondary-300 dark:border-secondary-600 text-secondary-700 dark:text-secondary-300 rounded-md text-sm font-medium hover:bg-secondary-100 dark:hover:bg-secondary-800 transition-colors">
                     Kapat
                 </button>
             </div>

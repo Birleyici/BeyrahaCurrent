@@ -21,7 +21,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <button @click="testClientValidationError"
-                        class="p-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition">
+                        class="p-4 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg transition">
                         Client Validation Error
                     </button>
 
@@ -36,7 +36,7 @@
                     </button>
 
                     <button @click="testJavaScriptError"
-                        class="p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition">
+                        class="p-4 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg transition">
                         JavaScript Error
                     </button>
 
@@ -58,7 +58,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <button @click="testValidationError"
-                        class="p-4 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition">
+                        class="p-4 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg transition">
                         Validation Error (422)
                     </button>
 
@@ -73,7 +73,7 @@
                     </button>
 
                     <button @click="testNotFoundError"
-                        class="p-4 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition">
+                        class="p-4 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg transition">
                         Not Found Error (404)
                     </button>
 
@@ -129,7 +129,7 @@
                     </button>
 
                     <button @click="exportErrorLogs"
-                        class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition">
+                        class="px-4 py-2 bg-secondary-500 hover:bg-secondary-600 text-white rounded-lg transition">
                         Export Error Logs
                     </button>
 
@@ -149,7 +149,7 @@
                         class="p-3 border border-gray-200 rounded-lg">
                         <div class="flex items-center justify-between mb-2">
                             <span class="px-2 py-1 text-xs font-medium rounded" :class="{
-                                'bg-blue-100 text-blue-800': error.severity === 'info',
+                                'bg-secondary-100 text-secondary-800': error.severity === 'info',
                                 'bg-yellow-100 text-yellow-800': error.severity === 'warning',
                                 'bg-red-100 text-red-800': error.severity === 'error',
                                 'bg-purple-100 text-purple-800': error.severity === 'critical'

@@ -19,14 +19,14 @@
 
       <!-- Varyasyonlu ürün için bilgilendirme -->
       <div v-if="hasVariationAttributes"
-        class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4">
+        class="bg-secondary-50 dark:bg-secondary-900/20 border border-secondary-200 dark:border-secondary-800 rounded-lg p-4">
         <div class="flex items-start space-x-3">
-          <UIcon name="i-heroicons-information-circle" class="w-5 h-5 text-blue-500 mt-0.5 flex-shrink-0" />
+          <UIcon name="i-heroicons-information-circle" class="w-5 h-5 text-secondary-500 mt-0.5 flex-shrink-0" />
           <div>
-            <h4 class="text-sm font-medium text-blue-900 dark:text-blue-100">
+            <h4 class="text-sm font-medium text-secondary-900 dark:text-secondary-100">
               Varyasyonlu Ürün
             </h4>
-            <p class="text-xs text-blue-700 dark:text-blue-300 mt-1">
+            <p class="text-xs text-secondary-700 dark:text-secondary-300 mt-1">
               Bu ayar ürünün genel stok durumunu belirler. Varyasyon bazlı fiyat ve stok ayarları için
               <strong>Varyasyonlar</strong> sekmesini kullanın.
             </p>
@@ -130,29 +130,30 @@
 
     <!-- Varyasyon Ürünü Bilgilendirmesi -->
     <div v-else class="space-y-4">
-      <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-6">
+      <div
+        class="bg-secondary-50 dark:bg-secondary-900/20 border border-secondary-200 dark:border-secondary-800 rounded-lg p-6">
         <div class="flex items-start space-x-4">
-          <UIcon name="i-heroicons-squares-2x2" class="w-8 h-8 text-orange-500 mt-1 flex-shrink-0" />
+          <UIcon name="i-heroicons-squares-2x2" class="w-8 h-8 text-secondary-500 mt-1 flex-shrink-0" />
           <div>
-            <h3 class="text-lg font-semibold text-orange-900 dark:text-orange-100">
+            <h3 class="text-lg font-semibold text-secondary-900 dark:text-secondary-100">
               Varyasyonlu Ürün
             </h3>
-            <p class="text-sm text-orange-700 dark:text-orange-300 mt-2">
+            <p class="text-sm text-secondary-700 dark:text-secondary-300 mt-2">
               Bu ürün için varyasyon nitelikleri tanımlanmış. Varyasyon bazlı fiyat ve stok ayarları
               <strong>Varyasyonlar</strong> sekmesinden yönetilmelidir.
             </p>
             <div class="mt-4">
-              <p class="text-xs text-orange-600 dark:text-orange-400 font-medium">
+              <p class="text-xs text-secondary-600 dark:text-secondary-400 font-medium">
                 Varyasyon için kullanılan nitelikler:
               </p>
-              <ul class="list-disc list-inside mt-1 text-xs text-orange-700 dark:text-orange-300">
+              <ul class="list-disc list-inside mt-1 text-xs text-secondary-700 dark:text-secondary-300">
                 <li v-for="attr in variationAttributes" :key="attr.attribute_id">
                   {{ attr.attribute_name }}
                 </li>
               </ul>
             </div>
-            <div class="mt-4 p-3 bg-orange-100 dark:bg-orange-800/30 rounded-md">
-              <p class="text-xs text-orange-800 dark:text-orange-200 font-medium">
+            <div class="mt-4 p-3 bg-secondary-100 dark:bg-secondary-800/30 rounded-md">
+              <p class="text-xs text-secondary-800 dark:text-secondary-200 font-medium">
                 💡 <strong>Not:</strong> Yukarıdaki "Ürün Stok Durumu" ayarı tüm ürünü genel olarak stok dışı yapmak
                 için kullanılabilir.
               </p>

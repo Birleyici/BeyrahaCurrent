@@ -18,10 +18,10 @@
           open ? 'rounded-t-xl border-b' : 'rounded-xl'
         ]">
           <div class="flex items-center space-x-3">
-            <div class="w-3 h-3 bg-orange-500 rounded-full"></div>
+            <div class="w-3 h-3 bg-secondary-500 rounded-full"></div>
             <span class="font-medium text-gray-900 dark:text-gray-100 truncate">{{ item.label }}</span>
             <span
-              class="px-2 py-1 bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 text-xs rounded-full">
+              class="px-2 py-1 bg-secondary-100 dark:bg-secondary-900 text-secondary-800 dark:text-secondary-200 text-xs rounded-full">
               {{ props.item.product_attribute_terms.length }} terim
             </span>
           </div>
@@ -68,12 +68,12 @@
 
                   <!-- Görsel İkonu -->
                   <button @click="openImageSelector(term)"
-                    class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-colors"
+                    class="flex items-center justify-center w-6 h-6 rounded-full hover:bg-secondary-100 dark:hover:bg-secondary-900/20 transition-colors"
                     :title="term.term_images?.length > 0 ? 'Görsel değiştir' : 'Görsel ekle'">
                     <UIcon v-if="term.term_images?.length > 0" name="i-heroicons-photo"
-                      class="w-4 h-4 text-orange-500" />
+                      class="w-4 h-4 text-secondary-500" />
                     <UIcon v-else name="i-heroicons-photo"
-                      class="w-4 h-4 text-gray-400 hover:text-orange-500 transition-colors" />
+                      class="w-4 h-4 text-gray-400 hover:text-secondary-500 transition-colors" />
                   </button>
 
                   <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ term.term_name }}</span>

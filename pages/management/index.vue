@@ -26,8 +26,8 @@
                             <span class="text-neutral-500 dark:text-neutral-400 text-sm ml-1">bu ay</span>
                         </div>
                     </div>
-                    <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full">
-                        <Icon name="mdi:package-variant" class="w-8 h-8 text-blue-600 dark:text-blue-400" />
+                    <div class="p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-full">
+                        <Icon name="mdi:package-variant" class="w-8 h-8 text-secondary-600 dark:text-secondary-400" />
                     </div>
                 </div>
             </div>
@@ -117,8 +117,8 @@
                         <p class="text-2xl font-bold text-neutral-900 dark:text-white mt-2">{{
                             dashboardStats.thisMonthOrders }}</p>
                     </div>
-                    <div class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full">
-                        <Icon name="mdi:calendar-month" class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                    <div class="p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-full">
+                        <Icon name="mdi:calendar-month" class="w-6 h-6 text-secondary-600 dark:text-secondary-400" />
                     </div>
                 </div>
             </div>
@@ -160,9 +160,9 @@
             <h2 class="text-xl font-bold text-neutral-900 dark:text-white mb-6">Hızlı İşlemler</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4">
                 <NuxtLink to="/management/urunler/yeni"
-                    class="flex items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 group">
+                    class="flex items-center p-4 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg hover:bg-secondary-100 dark:hover:bg-secondary-900/30 transition-colors duration-200 group">
                     <div
-                        class="p-2 bg-blue-600 rounded-lg mr-4 group-hover:scale-110 transition-transform duration-200">
+                        class="p-2 bg-secondary-600 rounded-lg mr-4 group-hover:scale-110 transition-transform duration-200">
                         <Icon name="mdi:plus" class="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -196,9 +196,9 @@
                 </NuxtLink>
 
                 <NuxtLink to="/management/kuponlar"
-                    class="flex items-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-colors duration-200 group">
+                    class="flex items-center p-4 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg hover:bg-secondary-100 dark:hover:bg-secondary-900/30 transition-colors duration-200 group">
                     <div
-                        class="p-2 bg-orange-600 rounded-lg mr-4 group-hover:scale-110 transition-transform duration-200">
+                        class="p-2 bg-secondary-600 rounded-lg mr-4 group-hover:scale-110 transition-transform duration-200">
                         <Icon name="mdi:ticket-percent" class="w-6 h-6 text-white" />
                     </div>
                     <div>
@@ -241,7 +241,7 @@
                 <div class="flex items-center justify-between mb-6">
                     <h2 class="text-xl font-bold text-neutral-900 dark:text-white">Son Eklenen Ürünler</h2>
                     <NuxtLink to="/management/urunler"
-                        class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 text-sm font-medium">
+                        class="text-secondary-600 dark:text-secondary-400 hover:text-secondary-700 dark:hover:text-secondary-300 text-sm font-medium">
                         Tümünü Gör →
                     </NuxtLink>
                 </div>

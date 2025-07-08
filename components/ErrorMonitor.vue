@@ -25,7 +25,7 @@
                             Clear
                         </button>
                         <button @click="exportLogs"
-                            class="text-xs bg-blue-100 hover:bg-blue-200 text-blue-700 px-2 py-1 rounded">
+                            class="text-xs bg-secondary-100 hover:bg-secondary-200 text-secondary-700 px-2 py-1 rounded">
                             Export
                         </button>
                         <button @click="showMonitor = false" class="text-gray-400 hover:text-gray-600">
@@ -66,7 +66,7 @@
                         <div class="flex items-start justify-between mb-1">
                             <div class="flex items-center gap-2">
                                 <span class="w-2 h-2 rounded-full" :class="{
-                                    'bg-blue-400': error.severity === 'info',
+                                    'bg-secondary-400': error.severity === 'info',
                                     'bg-yellow-400': error.severity === 'warning',
                                     'bg-red-400': error.severity === 'error',
                                     'bg-purple-400': error.severity === 'critical'
@@ -171,15 +171,16 @@
 
                             <!-- Business Logic Errors için özel görünüm -->
                             <div v-if="selectedError.type === 'BUSINESS_LOGIC_ERROR'" class="mb-3">
-                                <h4 class="text-sm font-medium text-orange-700 dark:text-orange-300 mb-2">Business Logic
+                                <h4 class="text-sm font-medium text-secondary-700 dark:text-secondary-300 mb-2">Business
+                                    Logic
                                     Error:</h4>
                                 <div
-                                    class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded p-3">
-                                    <div class="text-orange-800 dark:text-orange-200 text-sm">
+                                    class="bg-secondary-50 dark:bg-secondary-900/20 border border-secondary-200 dark:border-secondary-800 rounded p-3">
+                                    <div class="text-secondary-800 dark:text-secondary-200 text-sm">
                                         {{ selectedError.message }}
                                     </div>
                                     <div v-if="selectedError.details.full_response?.success === false"
-                                        class="text-orange-700 dark:text-orange-300 text-xs mt-2">
+                                        class="text-secondary-700 dark:text-secondary-300 text-xs mt-2">
                                         <strong>Status:</strong> Operation Failed
                                     </div>
                                 </div>

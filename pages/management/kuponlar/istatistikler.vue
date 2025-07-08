@@ -72,9 +72,9 @@
                                 {{ stats.total_coupons }}
                             </p>
                         </div>
-                        <div class="p-2 sm:p-3 bg-blue-50 dark:bg-blue-900/20 rounded-full">
+                        <div class="p-2 sm:p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-full">
                             <UIcon name="i-heroicons-ticket"
-                                class="w-6 h-6 sm:w-8 sm:h-8 text-blue-600 dark:text-blue-400" />
+                                class="w-6 h-6 sm:w-8 sm:h-8 text-secondary-600 dark:text-secondary-400" />
                         </div>
                     </div>
                 </div>
@@ -561,7 +561,7 @@ const getCouponTypeLabel = (type) => {
 
 const getTypeColor = (type) => {
     const colors = {
-        fixed: 'bg-blue-500',
+        fixed: 'bg-secondary-500',
         percentage: 'bg-green-500',
         free_shipping: 'bg-purple-500'
     }

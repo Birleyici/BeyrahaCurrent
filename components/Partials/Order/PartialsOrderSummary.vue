@@ -6,9 +6,10 @@
       <!-- Ürün Resmi -->
       <div class="flex-shrink-0">
         <div
-          class="w-20 h-20 lg:w-24 lg:h-24 rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-700 ring-1 ring-neutral-200 dark:ring-neutral-600">
+          class="w-[100px] h-[150px] lg:w-[120px] lg:h-[180px] rounded-xl overflow-hidden bg-neutral-100 dark:bg-neutral-700 ring-1 ring-neutral-200 dark:ring-neutral-600">
           <NuxtImg v-if="props.item.image?.path" :src="'cl/' + props.item.image?.path" :alt="props.item.product_name"
-            class="w-full h-full object-cover" format="webp" quality="80" :width="96" :height="96" fit="cover" />
+            class="w-[120px] h-[180px] object-cover object-top" format="webp" quality="80" :width="70" :height="100"
+            fit="cover" />
           <div v-else class="w-full h-full flex items-center justify-center bg-neutral-100 dark:bg-neutral-700">
             <UIcon name="i-heroicons-photo" class="w-8 h-8 text-neutral-400 dark:text-neutral-500" />
           </div>
@@ -45,10 +46,18 @@
           <div v-if="props.item.order_item_inputs?.length" class="space-y-2">
             <div v-for="input in props.item.order_item_inputs" :key="input.id"
               class="bg-neutral-50 dark:bg-neutral-700 rounded-lg p-3">
-              <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                <span class="text-sm font-medium text-neutral-700 dark:text-neutral-300">{{ input.label }}:</span>
-                <div v-if="!props.editingMode" class="text-sm font-semibold text-neutral-900 dark:text-neutral-100">
-                  {{ input.value }}
+              <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-x-4 gap-y-1">
+                <span class="text-xs font-medium text-neutral-500 dark:text-neutral-400 flex-shrink-0">{{ input.label
+                }}:</span>
+                <div v-if="!props.editingMode" class="text-xs text-neutral-700 dark:text-neutral-300 cursor-pointer"
+                  tabindex="0" @click="toggleExpand(input.id)" @blur="collapseInput(input.id)">
+                  <template v-if="isExpanded(input.id)">
+                    {{ input.value }}
+                  </template>
+                  <template v-else>
+                    {{ truncatedValue(input.value) }}
+                    <span v-if="input.value && input.value.length > 15" class="text-sky-500 font-semibold"> ...</span>
+                  </template>
                 </div>
                 <div v-else class="flex items-center gap-2">
                   <UInput v-model="input.new_value" :model-value="input.new_value || input.value" size="sm"
@@ -141,8 +150,33 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+
 const orderStore = useOrderManagementStore()
 const props = defineProps(['item', 'deletable', 'editingMode'])
+
+const expandedInputs = ref(new Set());
+
+const isExpanded = (inputId) => expandedInputs.value.has(inputId);
+
+const toggleExpand = (inputId) => {
+  if (expandedInputs.value.has(inputId)) {
+    expandedInputs.value.delete(inputId);
+  } else {
+    expandedInputs.value.add(inputId);
+  }
+};
+
+const collapseInput = (inputId) => {
+  expandedInputs.value.delete(inputId);
+};
+
+const truncatedValue = (value) => {
+  if (value && value.length > 20) {
+    return value.substring(0, 15);
+  }
+  return value;
+};
 
 const deleteCartItem = async (itemId) => {
   if (await useConfirmation("İşlem Onayı", "Sipariş öğesini silmek istediğinize emin misiniz?")) {

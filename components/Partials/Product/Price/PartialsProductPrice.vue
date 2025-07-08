@@ -6,12 +6,12 @@
                 <span :class="priceClasses">
                     {{ formatPrice(props.displayPrice) }}<span v-if="props.hasPriceRange">+</span>
                 </span>
-                <span v-if="props.type === 'page'" class="text-sm text-neutral-500 dark:text-neutral-400 ml-2">
+                <span v-if="props.type === 'page'" class="text-sm text-slate-500 dark:text-slate-400 ml-2">
                     varyasyonlara göre
                 </span>
             </div>
             <div v-else>
-                <span class="text-sm text-orange-500 dark:text-orange-400">
+                <span class="text-sm text-amber-600 dark:text-amber-400 font-medium">
                     Fiyat belirlenmemiş
                 </span>
             </div>
@@ -19,7 +19,7 @@
 
         <!-- Normal ürün fiyat gösterimi -->
         <template v-else>
-            <span v-if="props.salePrice && props.delPrice" :class="delClasses" class="line-through text-sm">
+            <span v-if="props.salePrice && props.delPrice" :class="delClasses" class="line-through">
                 {{ formatPrice(props.price) }}
             </span>
             <span :class="priceClasses">
@@ -28,6 +28,7 @@
         </template>
     </div>
 </template>
+
 <script setup>
 const props = defineProps({
     price: Number,
@@ -44,17 +45,15 @@ const props = defineProps({
 
 const priceClasses = computed(() => {
     return {
-        'text-2xl md:text-3xl font-bold text-secondary-600 dark:text-secondary-400': props.type == 'page',
-        'text-lg font-semibold text-secondary-600 dark:text-secondary-400': props.type == 'card',
+        'text-3xl md:text-4xl font-bold text-secondary-600 dark:text-secondary-400': props.type == 'page',
+        'text-lg font-bold text-secondary-600 dark:text-secondary-400': props.type == 'card',
     }
 })
 
 const delClasses = computed(() => {
     return {
-        'text-lg text-neutral-400 dark:text-neutral-500': props.type == 'page',
-        'text-sm text-neutral-400 dark:text-neutral-500': props.type == 'card',
+        'text-xl text-slate-400 dark:text-slate-500': props.type == 'page',
+        'text-sm text-slate-400 dark:text-slate-500': props.type == 'card',
     }
 })
-
-
 </script>

@@ -2,10 +2,10 @@
   <div class="space-y-6">
     <!-- Header Section -->
     <div
-      class="bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20 rounded-xl p-6 border border-orange-200 dark:border-orange-700">
+      class="bg-gradient-to-r from-secondary-50 to-amber-50 dark:from-secondary-900/20 dark:to-amber-900/20 rounded-xl p-6 border border-secondary-200 dark:border-secondary-700">
       <div class="flex items-center space-x-3 mb-4">
         <div
-          class="w-10 h-10 bg-gradient-to-r from-orange-500 to-amber-500 rounded-lg flex items-center justify-center">
+          class="w-10 h-10 bg-gradient-to-r from-secondary-500 to-amber-500 rounded-lg flex items-center justify-center">
           <UIcon name="i-heroicons-squares-2x2" class="w-5 h-5 text-white" />
         </div>
         <div>
@@ -26,7 +26,7 @@
             placeholder: 'text-gray-500 dark:text-gray-400',
             color: {
               white: {
-                outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400'
+                outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400'
               }
             }
           }" />
@@ -51,9 +51,9 @@
 
     <!-- Bulk Edit Section -->
     <div v-if="bulkEditMode"
-      class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-blue-200 dark:border-blue-700 space-y-6">
+      class="bg-gradient-to-r from-secondary-50 to-indigo-50 dark:from-secondary-900/20 dark:to-indigo-900/20 rounded-xl p-6 border border-secondary-200 dark:border-secondary-700 space-y-6">
       <div class="flex items-center space-x-3 mb-4">
-        <UIcon name="i-heroicons-pencil-square" class="w-5 h-5 text-blue-600 dark:text-blue-400" />
+        <UIcon name="i-heroicons-pencil-square" class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
         <h4 class="font-medium text-gray-900 dark:text-white">Toplu Düzenlemeler</h4>
       </div>
 
@@ -74,8 +74,8 @@
         </div>
 
         <!-- Selection Info -->
-        <div v-if="selectedVariations.length > 0" class="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-          <p class="text-sm text-blue-700 dark:text-blue-300">
+        <div v-if="selectedVariations.length > 0" class="mt-3 p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg">
+          <p class="text-sm text-secondary-700 dark:text-secondary-300">
             <UIcon name="i-heroicons-information-circle" class="w-4 h-4 inline mr-1" />
             {{ selectedVariations.length }} varyasyon seçildi
           </p>
@@ -132,7 +132,7 @@
     <div v-if="variationState.variations?.length > 0" class="space-y-4">
       <div class="flex items-center justify-between">
         <h4 class="text-lg font-semibold text-gray-900 dark:text-white flex items-center space-x-2">
-          <UIcon name="i-heroicons-rectangle-stack" class="w-5 h-5 text-orange-500" />
+          <UIcon name="i-heroicons-rectangle-stack" class="w-5 h-5 text-secondary-500" />
           <span>Mevcut Varyasyonlar ({{ variationState.variations.length }})</span>
         </h4>
 
@@ -155,7 +155,7 @@
 
           <AdminPartialsVariation :item="item" :class="[
             bulkEditMode ? 'pl-16' : '',
-            isVariationSelected(item.id) ? 'ring-2 ring-blue-500 dark:ring-blue-400' : ''
+            isVariationSelected(item.id) ? 'ring-2 ring-secondary-500 dark:ring-secondary-400' : ''
           ]" />
         </div>
       </div>
@@ -226,7 +226,7 @@
                 <button v-for="term in attribute.terms" :key="term.id" @click="toggleTermSelection(term)" :class="[
                   'px-3 py-2 rounded-lg text-sm font-medium border transition-colors',
                   selectedTermsForFilter.some(t => t.id === term.id)
-                    ? 'bg-orange-100 dark:bg-orange-900 text-orange-800 dark:text-orange-200 border-orange-300 dark:border-orange-600'
+                    ? 'bg-secondary-100 dark:bg-secondary-900 text-secondary-800 dark:text-secondary-200 border-secondary-300 dark:border-secondary-600'
                     : 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 border-gray-300 dark:border-gray-600 hover:bg-gray-200 dark:hover:bg-gray-600'
                 ]">
                   {{ term.term_name }}
@@ -241,17 +241,17 @@
           </div>
 
           <!-- Selected Terms Preview -->
-          <div v-if="selectedTermsForFilter.length > 0" class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
-            <h5 class="text-sm font-medium text-blue-900 dark:text-blue-100 mb-2">Seçili Terimler:</h5>
+          <div v-if="selectedTermsForFilter.length > 0" class="bg-secondary-50 dark:bg-secondary-900/20 rounded-lg p-4">
+            <h5 class="text-sm font-medium text-secondary-900 dark:text-secondary-100 mb-2">Seçili Terimler:</h5>
             <div class="flex flex-wrap gap-2">
               <span v-for="term in selectedTermsForFilter" :key="term.id"
-                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200">
+                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-secondary-100 dark:bg-secondary-800 text-secondary-800 dark:text-secondary-200">
                 {{ term.term_name }}
                 <UIcon name="i-heroicons-x-mark" class="w-3 h-3 ml-1 cursor-pointer"
                   @click="toggleTermSelection(term)" />
               </span>
             </div>
-            <p class="text-xs text-blue-700 dark:text-blue-300 mt-2">
+            <p class="text-xs text-secondary-700 dark:text-secondary-300 mt-2">
               {{ getVariationCountByTerms() }} varyasyon seçilecek
             </p>
           </div>

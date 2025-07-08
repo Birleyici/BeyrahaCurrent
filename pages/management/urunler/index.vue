@@ -113,7 +113,7 @@
             <div class="p-4">
               <div class="mb-3">
                 <NuxtLink :to="`/management/urunler/${product.id}`"
-                  class="text-base lg:text-lg font-semibold text-neutral-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors line-clamp-2 touch-manipulation">
+                  class="text-base lg:text-lg font-semibold text-neutral-900 dark:text-white hover:text-secondary-600 dark:hover:text-secondary-400 transition-colors line-clamp-2 touch-manipulation">
                   {{ product.name || `Taslak ürün #${product.id}` }}
                 </NuxtLink>
                 <p v-if="product.description" class="text-sm text-neutral-600 dark:text-neutral-400 mt-1 line-clamp-2">
@@ -138,7 +138,7 @@
                       </span>
                     </div>
                     <div v-else>
-                      <span class="text-sm text-orange-500 dark:text-orange-400">
+                      <span class="text-sm text-secondary-500 dark:text-secondary-400">
                         Varyasyon fiyatı belirlenmemiş
                       </span>
                     </div>
@@ -147,7 +147,7 @@
                     <!-- Normal ürün fiyat gösterimi -->
                     <div v-if="product.sale_price">
                       <!-- İndirimli fiyat varsa onu göster -->
-                      <span class="font-semibold text-orange-600 dark:text-orange-400">
+                      <span class="font-semibold text-secondary-600 dark:text-secondary-400">
                         {{ formatPrice(product.sale_price) }}
                       </span>
                       <span class="text-xs text-neutral-500 dark:text-neutral-400 line-through ml-2">
@@ -233,7 +233,7 @@
                   <div class="flex items-start justify-between">
                     <div class="flex-1 min-w-0">
                       <NuxtLink :to="`/management/urunler/${product.id}`"
-                        class="font-medium text-neutral-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors touch-manipulation"
+                        class="font-medium text-neutral-900 dark:text-white hover:text-secondary-600 dark:hover:text-secondary-400 transition-colors touch-manipulation"
                         :class="{ '!text-red-500': !product.name }">
                         <span class="line-clamp-1">{{ product.name || `Taslak ürün #${product.id}` }}</span>
                       </NuxtLink>
@@ -263,7 +263,7 @@
                             </span>
                           </div>
                           <div v-else>
-                            <span class="text-sm text-orange-500 dark:text-orange-400">
+                            <span class="text-sm text-secondary-500 dark:text-secondary-400">
                               Varyasyon fiyatı belirlenmemiş
                             </span>
                           </div>
@@ -272,7 +272,7 @@
                           <!-- Normal ürün fiyat gösterimi -->
                           <div v-if="product.sale_price">
                             <!-- İndirimli fiyat varsa onu göster -->
-                            <span class="font-semibold text-orange-600 dark:text-orange-400">
+                            <span class="font-semibold text-secondary-600 dark:text-secondary-400">
                               {{ formatPrice(product.sale_price) }}
                             </span>
                             <span class="text-xs text-neutral-500 dark:text-neutral-400 line-through ml-2">
@@ -348,7 +348,7 @@
                 </div>
                 <div class="min-w-0 flex-1">
                   <NuxtLink :to="`/management/urunler/${row.id}`"
-                    class="font-medium text-neutral-900 dark:text-white hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    class="font-medium text-neutral-900 dark:text-white hover:text-secondary-600 dark:hover:text-secondary-400 transition-colors"
                     :class="{ '!text-red-500': !row.name }">
                     {{ row.name || `Taslak ürün #${row.id}` }}
                   </NuxtLink>
@@ -374,7 +374,7 @@
                   </p>
                 </div>
                 <div v-else>
-                  <span class="text-orange-500 dark:text-orange-400 text-sm">
+                  <span class="text-secondary-500 dark:text-secondary-400 text-sm">
                     Varyasyon fiyatı belirlenmemiş
                   </span>
                 </div>
@@ -383,7 +383,7 @@
                 <!-- Normal ürün fiyat gösterimi -->
                 <div v-if="row.sale_price">
                   <!-- İndirimli fiyat varsa onu göster -->
-                  <span class="font-semibold text-orange-600 dark:text-orange-400">
+                  <span class="font-semibold text-secondary-600 dark:text-secondary-400">
                     {{ formatPrice(row.sale_price) }}
                   </span>
                   <span class="text-xs text-neutral-500 dark:text-neutral-400 line-through ml-2">

@@ -7,8 +7,8 @@
                 <!-- Ürün Resmi -->
                 <div class="flex-shrink-0">
                     <NuxtLink v-if="props.item.image_path" :to="props.item.product_url" class="block">
-                        <NuxtImg width="120" height="120" fit="cover"
-                            class="w-24 h-24 lg:w-30 lg:h-30 object-cover rounded-lg border border-neutral-200 dark:border-neutral-600"
+                        <NuxtImg width="60" height="90" fit="cover"
+                            class="w-[110px] h-[165px] object-cover object-top rounded-lg border border-neutral-200 dark:border-neutral-600"
                             :src="`cl/${props.item.image_path}`" />
                     </NuxtLink>
                     <div v-else

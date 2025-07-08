@@ -103,9 +103,9 @@
                             <div class="card-body">
                                 <div class="flex items-start space-x-4">
                                     <div
-                                        class="w-12 h-12 bg-blue-100 dark:bg-blue-800 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
+                                        class="w-12 h-12 bg-secondary-100 dark:bg-secondary-800 rounded-xl flex items-center justify-center flex-shrink-0 transition-colors duration-300">
                                         <UIcon name="i-heroicons-arrow-path"
-                                            class="w-6 h-6 text-blue-600 dark:text-blue-400" />
+                                            class="w-6 h-6 text-secondary-600 dark:text-secondary-400" />
                                     </div>
                                     <div class="flex-1">
                                         <h3
@@ -113,11 +113,13 @@
                                             Standart Ürünlerde İade ve Değişim
                                         </h3>
                                         <div
-                                            class="bg-blue-50 dark:bg-blue-900/30 border border-blue-200 dark:border-blue-700 rounded-lg p-4 mb-4 transition-colors duration-300">
+                                            class="bg-secondary-50 dark:bg-secondary-900/30 border border-secondary-200 dark:border-secondary-700 rounded-lg p-4 mb-4 transition-colors duration-300">
                                             <div class="flex items-center space-x-2 mb-2">
                                                 <UIcon name="i-heroicons-truck"
-                                                    class="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                                                <span class="font-medium text-blue-800 dark:text-blue-300">Kargo masrafı
+                                                    class="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
+                                                <span
+                                                    class="font-medium text-secondary-800 dark:text-secondary-300">Kargo
+                                                    masrafı
                                                     müşteriye
                                                     aittir</span>
                                             </div>

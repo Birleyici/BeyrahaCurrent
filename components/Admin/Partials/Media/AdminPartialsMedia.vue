@@ -50,7 +50,7 @@
               placeholder: 'text-gray-500 dark:text-gray-400',
               color: {
                 white: {
-                  outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-orange-500 dark:focus:ring-orange-400'
+                  outline: 'shadow-sm bg-white dark:bg-gray-800 text-gray-900 dark:text-white ring-1 ring-gray-300 dark:ring-gray-600 focus:ring-2 focus:ring-secondary-500 dark:focus:ring-secondary-400'
                 }
               }
             }" />
@@ -58,9 +58,9 @@
 
         <!-- Bulk Actions -->
         <div v-if="selectedCount > 0"
-          class="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
+          class="p-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg border border-secondary-200 dark:border-secondary-800">
           <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-            <span class="text-sm font-medium text-blue-900 dark:text-blue-100 text-center sm:text-left">
+            <span class="text-sm font-medium text-secondary-900 dark:text-secondary-100 text-center sm:text-left">
               {{ selectedCount }} görsel seçildi
             </span>
             <div class="flex items-center gap-2 justify-center sm:justify-end">

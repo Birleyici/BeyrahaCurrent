@@ -115,12 +115,12 @@
                     <div v-if="option?.term_images?.[0]?.path && isSelected(attribute.name, option.term_name)"
                       class="absolute -top-2 -right-2">
                       <button @click.stop="addImageToGallery(option)"
-                        class="w-6 h-6 bg-blue-500 hover:bg-blue-600 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 group border-2 border-white dark:border-neutral-800 relative animate-pulse hover:animate-none"
+                        class="w-6 h-6 bg-secondary-500 hover:bg-secondary-600 rounded-full shadow-lg flex items-center justify-center transition-all duration-200 group border-2 border-white dark:border-neutral-800 relative animate-pulse hover:animate-none"
                         :title="`${option.term_name} detay görselini incele`">
                         <UIcon name="i-heroicons-question-mark-circle" class="w-4 h-4 text-white" />
                         <!-- Tooltip -->
                         <div
-                          class="absolute -bottom-9 left-1/2 transform -translate-x-1/2 bg-blue-600 text-white text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-10 after:content-[''] after:absolute after:top-[-4px] after:left-1/2 after:transform after:-translate-x-1/2 after:border-l-4 after:border-r-4 after:border-b-4 after:border-transparent after:border-b-blue-600">
+                          class="absolute -bottom-9 left-1/2 transform -translate-x-1/2 bg-secondary-600 text-white text-xs px-2 py-1 rounded shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none z-10 after:content-[''] after:absolute after:top-[-4px] after:left-1/2 after:transform after:-translate-x-1/2 after:border-l-4 after:border-r-4 after:border-b-4 after:border-transparent after:border-b-secondary-600">
                           Detayına bak
                         </div>
                       </button>
@@ -184,7 +184,7 @@
         <!-- Sepete Ekle Butonu -->
         <div class="w-full">
           <UButton :loading="cartState.addToCartloading" @click="addToCart()" :disabled="!isSelectedVariationInStock"
-            class="w-full h-14 !rounded-2xl font-bold text-base tracking-wide relative overflow-hidden border-0 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-orange-500 via-orange-600 to-red-600 hover:from-orange-600 hover:via-orange-700 hover:to-red-700 text-white shadow-lg hover:shadow-xl disabled:shadow-md">
+            class="w-full h-14 !rounded-2xl font-bold text-base tracking-wide relative overflow-hidden border-0 transition-all duration-300 ease-out transform hover:scale-[1.02] active:scale-[0.98] disabled:hover:scale-100 disabled:opacity-50 disabled:cursor-not-allowed bg-gradient-to-r from-secondary-500 via-secondary-600 to-red-600 hover:from-secondary-600 hover:via-secondary-700 hover:to-red-700 text-white shadow-lg hover:shadow-xl disabled:shadow-md">
             <!-- Arkaplan Efekti -->
             <div
               class="absolute inset-0 bg-gradient-to-r from-white/20 via-white/10 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-300 rounded-2xl">

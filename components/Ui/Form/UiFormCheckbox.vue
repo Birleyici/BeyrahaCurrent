@@ -65,6 +65,6 @@ input[type="checkbox"]:checked+label span:first-child {
 /* Dark mode support */
 .dark input[type="checkbox"]:checked+label span:first-child {
   background-color: #3b82f6;
-  /* bg-blue-500 for dark mode */
+  /* bg-secondary-500 for dark mode */
 }
 </style>

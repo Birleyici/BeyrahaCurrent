@@ -79,7 +79,7 @@
               <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Eski şifre</label>
               <UInput type="password" size="md" />
               <NuxtLink to="/sifremi-unuttum">
-                <p class="font-medium text-sm mt-1 text-orange-600 hover:text-orange-700">Şifremi unuttum</p>
+                <p class="font-medium text-sm mt-1 text-secondary-600 hover:text-secondary-700">Şifremi unuttum</p>
               </NuxtLink>
             </div>
 

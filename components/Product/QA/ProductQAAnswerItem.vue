@@ -5,9 +5,9 @@
             <div class="flex items-center space-x-2">
                 <UIcon :name="answer.is_vendor_answer ? 'i-heroicons-building-storefront' : 'i-heroicons-user-circle'"
                     class="w-5 h-5"
-                    :class="answer.is_vendor_answer ? 'text-orange-500 dark:text-orange-400' : 'text-neutral-500 dark:text-neutral-400'" />
+                    :class="answer.is_vendor_answer ? 'text-secondary-500 dark:text-secondary-400' : 'text-neutral-500 dark:text-neutral-400'" />
                 <span class="text-sm font-medium"
-                    :class="answer.is_vendor_answer ? 'text-orange-700 dark:text-orange-300' : 'text-neutral-900 dark:text-neutral-100'">
+                    :class="answer.is_vendor_answer ? 'text-secondary-700 dark:text-secondary-300' : 'text-neutral-900 dark:text-neutral-100'">
                     {{ answer.user_display_name }}
                 </span>
 

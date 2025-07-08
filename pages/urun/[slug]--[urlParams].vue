@@ -91,7 +91,7 @@
         icon="i-heroicons-pencil-square"
         class="shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 backdrop-blur-sm" :ui="{
           rounded: 'rounded-full',
-          background: 'bg-orange-500/90 hover:bg-orange-600/90 dark:bg-orange-600/90 dark:hover:bg-orange-700/90'
+          background: 'bg-secondary-500/90 hover:bg-secondary-600/90 dark:bg-secondary-600/90 dark:hover:bg-secondary-700/90'
         }" title="Ürünü Düzenle">
         <span class="ml-2">Düzenle</span>
       </UButton>

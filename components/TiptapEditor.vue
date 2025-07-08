@@ -194,6 +194,6 @@ onBeforeUnmount(() => {
 
 /* Selection styles */
 :deep(.tiptap-editor-content .ProseMirror ::selection) {
-  @apply bg-orange-200 dark:bg-orange-800;
+  @apply bg-secondary-200 dark:bg-secondary-800;
 }
 </style>
