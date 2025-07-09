@@ -45,7 +45,7 @@ const props = defineProps({
 
 const priceClasses = computed(() => {
     return {
-        'text-2xl md:text-4xl font-bold text-secondary-600 dark:text-secondary-400': props.type == 'page',
+        'text-xl md:text-4xl font-bold text-secondary-600 dark:text-secondary-400': props.type == 'page',
         'text-lg font-bold text-secondary-600 dark:text-secondary-400': props.type == 'card',
     }
 })
