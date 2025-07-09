@@ -77,7 +77,7 @@
     </section>
 
     <!-- Ürün Kategorileri -->
-    <section class="md:enhanced-section-spacing">
+    <section class="enhanced-section-spacing">
       <div class="container content-gap">
 
         <!-- Çarşaf Koleksiyonu -->

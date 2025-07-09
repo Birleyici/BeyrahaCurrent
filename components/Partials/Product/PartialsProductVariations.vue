@@ -614,13 +614,34 @@ const addToCart = () => {
     };
   }
 
+  // Güvenli image_id alma fonksiyonu
+  const getImageId = () => {
+    // Önce varyasyon görseli
+    if (selectedVariation?.images?.[0]?.id) {
+      return selectedVariation.images[0].id;
+    }
+
+    // Sonra seçili renk terim görseli
+    if (props.productState.product.selectedColorTermImages?.length > 0 && props.productState.product.selectedColorTermImages[0]?.id) {
+      return props.productState.product.selectedColorTermImages[0].id;
+    }
+
+    // Son olarak ürün görseli
+    if (props.productState.product.selectedImages?.length > 0 && props.productState.product.selectedImages[0]?.id) {
+      return props.productState.product.selectedImages[0].id;
+    }
+
+    // Hiçbiri yoksa null
+    return null;
+  };
+
   if (selectedVariation) {
     // Varyasyonlu ürün için
     newCartItem = {
       ...newCartItem,
       product_id: props.productState.product.id,
       product_name: `${props.productState.product.name} ` + (selectedColor.value?.term_name || ''), // Varyasyon adını ekle
-      image_id: selectedVariation.images?.[0]?.id || props.productState.product.selectedColorTermImages?.[0].id || props.productState.product.selectedImages?.[0]?.id,
+      image_id: getImageId(),
       qyt: parseInt(qyt.value),
       variation: selectedVariation,
       price: selectedVariation.sale_price ? selectedVariation.sale_price : selectedVariation.price, // Varyasyonun fiyatını ekle
@@ -645,7 +666,7 @@ const addToCart = () => {
       ...newCartItem,
       product_id: props.productState.product.id,
       product_name: props.productState.product.name + ' ' + (selectedColor.value?.term_name || ''),
-      image_id: props.productState.product.selectedColorTermImages?.[0]?.id || props.productState.product.selectedImages?.[0]?.id,
+      image_id: getImageId(),
       qyt: parseInt(qyt.value),
       price: effectiveSalePrice ? effectiveSalePrice : effectivePrice, // Efektif fiyatı kullan
       total: (effectiveSalePrice ? effectiveSalePrice : effectivePrice) * parseInt(qyt.value) // Toplam tutarı hesapla

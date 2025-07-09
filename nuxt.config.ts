@@ -112,7 +112,7 @@ export default defineNuxtConfig({
     // and more...
   },
 
-  devtools: { enabled: true },
+  devtools: { enabled: false },
 
   postcss: {
     plugins: {

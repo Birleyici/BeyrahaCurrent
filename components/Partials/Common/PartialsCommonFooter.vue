@@ -3,9 +3,7 @@
     class="border-t-2 border-gray-100 dark:border-neutral-700 relative bg-gradient-to-br from-neutral-100 via-neutral-50 to-white dark:from-neutral-800 dark:via-neutral-900 dark:to-neutral-950 text-neutral-800 dark:text-white overflow-hidden">
     <!-- Geometrik Dekoratif Elementler -->
     <div class="absolute inset-0">
-      <div
-        class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-secondary-500/10 to-transparent rounded-full blur-3xl">
-      </div>
+
       <div
         class="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-primary-500/10 to-transparent rounded-full blur-3xl">
       </div>
