@@ -125,8 +125,8 @@ function goSearch() {
 }
 
 function handleProductClick(product, productUrl) {
-  // Önce arama kapat, sonra yönlendir (çift transition efektini önlemek için)
-  closeSearch()
+  // // Önce arama kapat, sonra yönlendir (çift transition efektini önlemek için)
+  // closeSearch()
 
   // Arama kapanma animasyonu tamamlandıktan sonra yönlendir
   setTimeout(() => {
