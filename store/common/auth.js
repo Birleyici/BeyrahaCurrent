@@ -12,7 +12,7 @@ export const useAuthStore = defineStore(
       password: ''
     })
 
-    const currentUser = ref(null)
+    const currentUser = ref({})
 
     const register = ref({
       email: '',
@@ -49,7 +49,7 @@ export const useAuthStore = defineStore(
         return response
       } catch (error) {
         console.error('User fetch error:', error)
-        currentUser.value = null
+        currentUser.value = {}
         
         // Token geçersizse veya 401 hatası varsa logout yap
         if (error.response && error.response.status === 401) {
@@ -126,7 +126,7 @@ export const useAuthStore = defineStore(
     }
 
     const actionsOnLogout = async () => {
-      currentUser.value = null
+      currentUser.value = {}
       await orderState.fetchAddresses()
       await cartState.cartDBToState()
     }
@@ -247,7 +247,7 @@ export const useAuthStore = defineStore(
 
         // Local state'i temizle
         token.value = null
-        currentUser.value = null
+        currentUser.value = {}
         user.value = {
           email: '',
           password: ''
@@ -323,7 +323,7 @@ export const useAuthStore = defineStore(
         
         // Hata durumunda da state'i temizle
         token.value = null
-        currentUser.value = null
+        currentUser.value = {}
         
         // LocalStorage'ı da temizle
         if (process.client) {

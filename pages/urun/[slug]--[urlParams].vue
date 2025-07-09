@@ -106,6 +106,7 @@ const variationsFrontState = useVariationsFrontState();
 const productInformation = ref(null)
 const reviewsSection = ref(null)
 const { settings } = useSettings()
+const { $mainState } = useNuxtApp()
 
 // Auth kontrolü için
 const authStore = useAuthStore()
@@ -136,7 +137,10 @@ const route = useRoute();
 
 const { transform } = useVariationsFront();
 
-await useAsyncData("initProductPageData", async () => {
+await useAsyncData(`product-${route.params.slug}-${route.params.urlParams}`, async () => {
+  // Loading state'ini false yap
+  $mainState.isLoaded = false
+
   const response = await productState.fetchProduct(route.params)
   await variationsFrontState.fetchVariations(response.id)
   await attributeState.fetchAttributes(response.id, route.params)
@@ -146,11 +150,75 @@ await useAsyncData("initProductPageData", async () => {
     await authStore.fetchUser()
   }
 
+  // Loading state'ini true yap
+  $mainState.isLoaded = true
+
   return true
 })
 
 // Ürün ismini kontrol et ve hata yönetimi uygula
 await useErrorHandle(productState.product.name);
+
+// Route parametreleri değiştiğinde yeni ürün verilerini yükle
+watch(() => route.params, async (newParams, oldParams) => {
+  if (newParams.slug !== oldParams?.slug || newParams.urlParams !== oldParams?.urlParams) {
+    // Loading state'ini false yap
+    $mainState.isLoaded = false
+
+    // Önceki ürün verilerini temizle
+    productState.patchProduct({
+      id: null,
+      name: '',
+      description: '',
+      additional_info: '',
+      coverImageId: null,
+      selectedImages: [],
+      selectedCategories: [],
+      selectedColorTermImages: [],
+      selectedColorTerm: null,
+      selectedInput: null,
+      inputValue: null,
+      price: null,
+      sale_price: null,
+      sku: null,
+      stock_management: false,
+      stock: 0,
+      loading: true,
+      categories: [],
+      featured_infos: [],
+      galleryCurrentIndex: 0
+    });
+
+    // Yeni ürün verilerini yükle
+    try {
+      const response = await productState.fetchProduct(newParams);
+      await variationsFrontState.fetchVariations(response.id);
+      await attributeState.fetchAttributes(response.id, newParams);
+
+      // Varyasyonları dönüştür
+      attributeState.transformedAttrs = transform(
+        attributeState.attributes || [],
+        variationsFrontState.variations || []
+      );
+
+      // Kategori ürünlerini yükle
+      await productState.fetchCategoryProducts(response.categories || []);
+
+      // Ürün ismini kontrol et ve hata yönetimi uygula
+      await useErrorHandle(response.name);
+
+      // Loading state'ini true yap
+      $mainState.isLoaded = true
+    } catch (error) {
+      console.error('Ürün yükleme hatası:', error);
+      $mainState.isLoaded = true // Hata durumunda da loading'i kapat
+      throw createError({
+        statusCode: 404,
+        statusMessage: 'Ürün bulunamadı'
+      });
+    }
+  }
+}, { immediate: false });
 
 onMounted(async () => {
   await productState.fetchCategoryProducts(productState.product.categories || [])

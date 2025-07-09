@@ -1,9 +1,9 @@
 <template>
-  <div v-if="!isMobile || $mainState.isOpenSearch" class="relative" :class="{
+  <div v-if="!isMobile || isOpenSearch" class="relative" :class="{
     'w-full': true
   }">
     <!-- Mobile Search Overlay -->
-    <template v-if="$mainState.isOpenSearch && isMobile">
+    <template v-if="isOpenSearch && isMobile">
       <Transition name="search-overlay">
         <div class="fixed inset-0 z-50">
           <div class="absolute inset-0 p-4">
@@ -39,12 +39,12 @@
     <!-- Desktop Search -->
     <div v-else class="relative w-full">
       <PartialsCommonSearchInputField ref="searchInput" v-model="searchWord" :is-searching="isSearching"
-        :is-typing="isTyping" @submit="goSearch" @focus="$changeMainState({ isOpenSearch: true })" @blur="handleBlur"
+        :is-typing="isTyping" @submit="goSearch" @focus="openSearch" @blur="handleBlur"
         placeholder="Aradığınız ürünü yazınız..." class="w-full" />
 
       <!-- Desktop Results Dropdown -->
       <Transition name="search-dropdown">
-        <div v-if="$mainState.isOpenSearch && !isMobile"
+        <div v-if="isOpenSearch && !isMobile"
           class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200/80 dark:border-neutral-700/80 z-50 max-h-[400px] overflow-hidden results-container transition-colors duration-300">
           <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching" :is-typing="isTyping"
             :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch"
@@ -75,16 +75,24 @@ const isTyping = ref(false)
 // Computed property for SSR compatibility
 const isOpenSearch = computed(() => {
   if (process.server) return false
-  return $mainState?.value?.isOpenSearch || false
+  // $mainState'in var olup olmadığını kontrol et
+  if (!$mainState) return false
+  return $mainState.isOpenSearch || false
 })
 
 // Native back button handler - TEK SATIR!
 const { useBackHandler, BACK_HANDLER_PRIORITIES } = await import('~/composables/useNativeBackHandler.js')
 useBackHandler(isOpenSearch, BACK_HANDLER_PRIORITIES.SEARCH, () => $changeMainState({ isOpenSearch: false }))
 
+function openSearch() {
+  if (process.client && $changeMainState) {
+    $changeMainState({ isOpenSearch: true })
+  }
+}
+
 function closeSearch() {
-  if (process.client && $mainState) {
-    $mainState.isOpenSearch = false
+  if (process.client && $changeMainState) {
+    $changeMainState({ isOpenSearch: false })
   }
   if (searchInput.value?.$refs?.input) {
     searchInput.value.$refs.input.blur()
@@ -122,8 +130,8 @@ function handleBlur(event) {
     !event.relatedTarget.closest('.results-container')
   ) {
     setTimeout(() => {
-      if (process.client && $mainState) {
-        $mainState.isOpenSearch = false
+      if (process.client && $changeMainState) {
+        $changeMainState({ isOpenSearch: false })
       }
     }, 150)
 
