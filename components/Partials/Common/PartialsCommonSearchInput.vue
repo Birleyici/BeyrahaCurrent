@@ -27,8 +27,9 @@
               <!-- Mobile Results -->
               <div class="flex-1 overflow-y-auto">
                 <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching"
-                  :is-typing="isTyping" :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch"
-                  @suggestion-click="handleSuggestionClick" @category-click="handleCategoryClick" />
+                  :is-typing="isTyping" :search-word="searchWord" @product-click="handleProductClick"
+                  @view-all="goSearch" @suggestion-click="handleSuggestionClick"
+                  @category-click="handleCategoryClick" />
               </div>
             </div>
           </div>
@@ -47,7 +48,7 @@
         <div v-if="isOpenSearch && !isMobile"
           class="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-neutral-800 rounded-lg shadow-lg border border-neutral-200/80 dark:border-neutral-700/80 z-50 max-h-[400px] overflow-hidden results-container transition-colors duration-300">
           <PartialsCommonSearchResults :products="productsSearched" :is-searching="isSearching" :is-typing="isTyping"
-            :search-word="searchWord" @product-click="closeSearch" @view-all="goSearch"
+            :search-word="searchWord" @product-click="handleProductClick" @view-all="goSearch"
             @suggestion-click="handleSuggestionClick" @category-click="handleCategoryClick" />
         </div>
       </Transition>
@@ -72,25 +73,33 @@ const productsSearched = ref([])
 const isSearching = ref(false)
 const isTyping = ref(false)
 
-// Computed property for SSR compatibility
-const isOpenSearch = computed(() => {
-  if (process.server) return false
-  // $mainState'in var olup olmadığını kontrol et
-  if (!$mainState) return false
-  return $mainState.isOpenSearch || false
-})
+// Local reactive state for search open/close
+const isOpenSearch = ref(false)
+
+// Watch mainState ve sync et
+watch(() => $mainState?.isOpenSearch, (newValue) => {
+  if (newValue !== undefined) {
+    isOpenSearch.value = newValue
+  }
+}, { immediate: true })
 
 // Native back button handler - TEK SATIR!
 const { useBackHandler, BACK_HANDLER_PRIORITIES } = await import('~/composables/useNativeBackHandler.js')
-useBackHandler(isOpenSearch, BACK_HANDLER_PRIORITIES.SEARCH, () => $changeMainState({ isOpenSearch: false }))
+useBackHandler(isOpenSearch, BACK_HANDLER_PRIORITIES.SEARCH, () => {
+  if (process.client && $changeMainState) {
+    $changeMainState({ isOpenSearch: false })
+  }
+})
 
 function openSearch() {
+  isOpenSearch.value = true
   if (process.client && $changeMainState) {
     $changeMainState({ isOpenSearch: true })
   }
 }
 
 function closeSearch() {
+  isOpenSearch.value = false
   if (process.client && $changeMainState) {
     $changeMainState({ isOpenSearch: false })
   }
@@ -102,13 +111,34 @@ function closeSearch() {
 function goSearch() {
   if (!searchWord.value.trim()) return
 
-  router.push({
-    path: '/arama-a0',
-    query: {
-      searchWord: searchWord.value.trim()
-    }
-  })
   closeSearch()
+
+  // Arama kapanma animasyonu tamamlandıktan sonra yönlendir
+  setTimeout(() => {
+    router.push({
+      path: '/arama-a0',
+      query: {
+        searchWord: searchWord.value.trim()
+      }
+    })
+  }, 250) // Search dropdown leave transition (0.2s) + küçük buffer
+}
+
+function handleProductClick(product, productUrl) {
+  // Önce arama kapat, sonra yönlendir (çift transition efektini önlemek için)
+  closeSearch()
+
+  // Arama kapanma animasyonu tamamlandıktan sonra yönlendir
+  setTimeout(() => {
+    // ProductUrl kontrolü - eğer gelmemişse product objesinden oluştur
+    const targetUrl = productUrl || product?.product_url
+
+    if (targetUrl) {
+      router.push(targetUrl)
+    } else {
+      console.error('Product URL bulunamadı:', { product, productUrl })
+    }
+  }, 250) // Search dropdown leave transition (0.2s) + küçük buffer
 }
 
 function handleSuggestionClick(suggestion) {
@@ -118,9 +148,12 @@ function handleSuggestionClick(suggestion) {
 
 function handleCategoryClick(category) {
   // Kategori slug'ına göre kategoriye yönlendir
-  const categoryPath = `/${category.slug}-a${category.id}`
-  router.push(categoryPath)
   closeSearch()
+
+  setTimeout(() => {
+    const categoryPath = `/${category.slug}-a${category.id}`
+    router.push(categoryPath)
+  }, 250)
 }
 
 function handleBlur(event) {

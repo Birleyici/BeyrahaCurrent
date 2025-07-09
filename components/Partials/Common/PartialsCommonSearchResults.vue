@@ -20,7 +20,7 @@
                             bulundu
                             <span v-if="searchWord" class="ml-1">
                                 "<span class="font-medium text-secondary-600 dark:text-secondary-400">{{ searchWord
-                                    }}</span>"
+                                }}</span>"
                                 için
                             </span>
                         </p>
@@ -29,9 +29,9 @@
                     <!-- Product Results -->
                     <div class="p-2">
                         <TransitionGroup name="product" tag="div" class="space-y-1">
-                            <NuxtLink v-for="(product, index) in products.slice(0, 6)" :key="product.id"
-                                :to="product.product_url" @click="$emit('product-click', product)"
-                                class="group flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors duration-150"
+                            <button v-for="(product, index) in products.slice(0, 6)" :key="product.id"
+                                @click="$emit('product-click', product, product.product_url)"
+                                class="group flex items-center space-x-3 p-2 rounded-lg hover:bg-neutral-50 dark:hover:bg-neutral-700 transition-colors duration-150 text-left w-full"
                                 :style="{ '--stagger-delay': `${index * 50}ms` }">
                                 <!-- Product Image -->
                                 <div class="flex-shrink-0">
@@ -65,7 +65,7 @@
                                             class="w-3 h-3 text-neutral-400 dark:text-neutral-500 group-hover:text-secondary-500 dark:group-hover:text-secondary-400 group-hover:translate-x-0.5 transition-all duration-150" />
                                     </div>
                                 </div>
-                            </NuxtLink>
+                            </button>
                         </TransitionGroup>
 
                         <!-- View All Button -->
@@ -163,7 +163,7 @@
                                 Sonuç bulunamadı</h3>
                             <p class="text-neutral-500 dark:text-neutral-400 text-sm transition-colors duration-300">
                                 "<span class="font-medium text-secondary-600 dark:text-secondary-400">{{ searchWord
-                                }}</span>"
+                                    }}</span>"
                                 için sonuç bulunamadı.
                             </p>
                         </div>
