@@ -341,7 +341,7 @@ useHead({
     },
     {
       property: 'product:price:amount',
-      content: computed(() => productState.product.sale_price || productState.product.regular_price)
+      content: computed(() => productState.product.sale_price || productState.product.price)
     },
     {
       property: 'product:price:currency',
@@ -353,29 +353,46 @@ useHead({
       type: 'application/ld+json',
       children: computed(() => {
         const product = productState.product;
+        const productImages = selectedImages.value || [];
+        const price = product.sale_price || product.price;
+        const description = product.description || product.short_description || `${product.name} - Kaliteli ürün en uygun fiyatlarla ${settings.value.siteName}'de.`;
+
         return JSON.stringify({
           '@context': 'https://schema.org/',
           '@type': 'Product',
-          name: product.name,
-          image: selectedImages.value?.[0]?.image,
-          description: product.description || product.short_description,
+          name: product.name || '',
+          image: productImages.length > 0 ? productImages.map(img => `https://cdn.beyraha.com/cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g/${img.path}`).filter(Boolean) : [],
+          description: description,
+          sku: product.sku || product.id?.toString() || '',
           brand: {
             '@type': 'Brand',
-            name: settings.value.siteName
+            name: settings.value.siteName || 'Beyraha'
           },
+          category: product.categories?.[0]?.name || '',
           aggregateRating: product.review_count > 0 ? {
             '@type': 'AggregateRating',
-            ratingValue: product.average_rating,
-            reviewCount: product.review_count,
-            bestRating: '5',
-            worstRating: '1'
+            ratingValue: parseFloat(product.average_rating) || 0,
+            reviewCount: parseInt(product.review_count) || 0,
+            bestRating: 5,
+            worstRating: 1
           } : undefined,
           offers: {
             '@type': 'Offer',
-            url: window?.location?.href,
+            url: process.client ? window.location.href : `https://beyraha.com/urun/${product.slug || ''}`,
             priceCurrency: 'TRY',
-            price: product.sale_price || product.regular_price,
-            availability: product.stock_status === 'in_stock' ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock'
+            price: parseFloat(price) || 0,
+            priceSpecification: {
+              '@type': 'PriceSpecification',
+              price: parseFloat(price) || 0,
+              priceCurrency: 'TRY'
+            },
+            availability: product.stock_status === 'in_stock' || product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+            itemCondition: 'https://schema.org/NewCondition',
+            seller: {
+              '@type': 'Organization',
+              name: settings.value.siteName || 'Beyraha'
+            },
+            validFrom: product.created_at ? new Date(product.created_at).toISOString() : new Date().toISOString()
           }
         });
       })
