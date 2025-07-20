@@ -100,6 +100,8 @@
 </template>
 
 <script setup>
+import { convertYouTubeShortsToWatch } from '~/utils/videoHelpers.js'
+
 const productState = useProductState();
 const attributeState = useAttributeState();
 const variationsFrontState = useVariationsFrontState();
@@ -178,8 +180,13 @@ const selectedImages = computed(() => {
 const productVideoData = computed(() => {
   if (!productState.product.video_url) return null;
 
+  // YouTube Shorts URL'lerini düzenli URL'e çevir
+  const processedUrl = productState.product.video_type === 'youtube'
+    ? convertYouTubeShortsToWatch(productState.product.video_url)
+    : productState.product.video_url;
+
   return {
-    url: productState.product.video_url,
+    url: processedUrl,
     type: productState.product.video_type,
     thumbnail: productState.product.video_thumbnail,
     description: productState.product.video_description,
@@ -194,8 +201,14 @@ const selectedColorVideoData = computed(() => {
 
   if (selectedColorTerm && selectedColorTerm.term_videos && selectedColorTerm.term_videos.length > 0) {
     const videoData = selectedColorTerm.term_videos[0];
+
+    // YouTube Shorts URL'lerini düzenli URL'e çevir
+    const processedUrl = videoData.video_type === 'youtube'
+      ? convertYouTubeShortsToWatch(videoData.video_url)
+      : videoData.video_url;
+
     return {
-      url: videoData.video_url,
+      url: processedUrl,
       type: videoData.video_type,
       thumbnail: videoData.video_thumbnail,
       description: videoData.video_description,

@@ -150,6 +150,8 @@
 </template>
 
 <script setup lang="ts">
+import { getVideoEmbedUrl as getEmbedUrl } from '~/utils/videoHelpers.js';
+
 const props = defineProps({
     images: Array,
     video: Object,
@@ -255,17 +257,7 @@ const currentImage = computed(() => {
 // Video helper fonksiyonları
 const getVideoEmbedUrl = (url: string, type: string) => {
     if (!url) return null;
-
-    switch (type) {
-        case 'youtube':
-            const youtubeMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/);
-            return youtubeMatch ? `https://www.youtube.com/embed/${youtubeMatch[1]}` : url;
-        case 'vimeo':
-            const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
-            return vimeoMatch ? `https://player.vimeo.com/video/${vimeoMatch[1]}` : url;
-        default:
-            return url;
-    }
+    return getEmbedUrl(url, type, false);
 };
 
 const videoThumbnailUrl = computed(() => {

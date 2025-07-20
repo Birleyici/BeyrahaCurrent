@@ -240,6 +240,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { extractYouTubeId, extractVimeoId } from '~/utils/videoHelpers.js'
 
 const props = defineProps({
     images: Array,
@@ -383,16 +384,12 @@ const closeVideoModal = () => {
 
 // YouTube ID çıkarma
 const getYouTubeId = (url) => {
-    const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
+    return extractYouTubeId(url);
 };
 
 // Vimeo ID çıkarma
 const getVimeoId = (url) => {
-    const regex = /(?:vimeo\.com\/)([0-9]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : null;
+    return extractVimeoId(url);
 };
 
 // Zoom işlemleri

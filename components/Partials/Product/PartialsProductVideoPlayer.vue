@@ -72,6 +72,7 @@
 
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { extractYouTubeId, extractVimeoId } from '~/utils/videoHelpers.js'
 
 const props = defineProps({
     video: Object,
@@ -104,33 +105,7 @@ const currentVideo = computed(() => {
 
 const hasVideo = computed(() => !!currentVideo.value);
 
-// Video ID çıkarma fonksiyonları
-const extractYouTubeId = (url) => {
-    const patterns = [
-        /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-        /youtube\.com\/v\/([^&\n?#]+)/,
-        /youtube\.com\/watch\?.*v=([^&\n?#]+)/
-    ];
-
-    for (const pattern of patterns) {
-        const match = url.match(pattern);
-        if (match) return match[1];
-    }
-    return null;
-};
-
-const extractVimeoId = (url) => {
-    const patterns = [
-        /vimeo\.com\/(\d+)/,
-        /player\.vimeo\.com\/video\/(\d+)/
-    ];
-
-    for (const pattern of patterns) {
-        const match = url.match(pattern);
-        if (match) return match[1];
-    }
-    return null;
-};
+// Video ID çıkarma fonksiyonları artık utils'ten import ediliyor
 
 // Modal işlemleri
 const openVideoModal = () => {
