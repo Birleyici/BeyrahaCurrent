@@ -1,0 +1,22 @@
+name: Deploy to VPS
+on:
+  push:
+    branches: [main] # Ana branch’inize göre değiştirin (örneğin, master)
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          key: ${{ secrets.PRIVATE_KEY }}
+          port: 22
+          script: |
+            cd ~/projects/BeyrahaCurrent
+            git pull origin main
+            npm install
+            npx nuxi build
+            pm2 restart nuxt-app
