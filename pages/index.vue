@@ -35,7 +35,6 @@
             <span class="block">Koleksiyonu</span>
           </h1>
 
-          <!-- Enhanced Description -->
           <p
             class="text-lg lg:text-xl text-neutral-600 dark:text-neutral-300 mb-12 leading-relaxed max-w-3xl mx-auto font-light transition-colors duration-300">
             Kaliteli kumaşlar ve özenli işçilikle hazırlanmış
