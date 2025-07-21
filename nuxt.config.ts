@@ -73,7 +73,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL,
+      apiBase: process.env.API_BASE_URL || (process.env.NODE_ENV === 'production' ? 'https://api.beyraha.com/api' : 'http://localhost/api'),
       nuxtSecret: process.env.NUXT_SECRET,
       isDevelopment: process.env.NODE_ENV !== 'production' ? true : false,
       slugify: {

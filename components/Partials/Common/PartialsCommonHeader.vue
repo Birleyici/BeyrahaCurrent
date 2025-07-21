@@ -9,7 +9,8 @@
 const { isMobile } = useDevice()
 
 const cartState = useCartState()
-const { data: categories } = await useFetch(useBaseUrl() + 'categories', {
+const config = useRuntimeConfig()
+const { data: categories } = await useFetch(config.public.apiBase + '/categories', {
   params: {
     transform: true
   }

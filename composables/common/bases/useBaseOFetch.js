@@ -1,7 +1,9 @@
 import { defu } from 'defu'
-const apiBaseUrl = useBaseUrl()
 
 export async function useBaseOFetch(url, options = {}) {
+  const config = useRuntimeConfig()
+  const apiBaseUrl = config.public.apiBase
+
   const defaults = {
     baseURL: apiBaseUrl,
     headers: {}

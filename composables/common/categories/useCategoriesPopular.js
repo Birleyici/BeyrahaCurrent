@@ -1,5 +1,4 @@
 export const useCategoriesPopular = () => {
-    const config = useRuntimeConfig()
     const popularCategories = ref([])
     const isLoading = ref(false)
     const error = ref(null)
@@ -9,9 +8,7 @@ export const useCategoriesPopular = () => {
         error.value = null
 
         try {
-            const apiUrl = config.public.apiBase || 'http://localhost/api'
-            console.log('API URL:', apiUrl)
-            const response = await $fetch(`${apiUrl}/categories/popular`, {
+            const response = await useBaseOFetch('categories/popular', {
                 params: { limit }
             })
             

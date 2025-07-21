@@ -19,7 +19,8 @@ function onRefreshed(token) {
 
 export async function useBaseOFetchWithAuth(url, options = {}) {
   const authStore = useAuthStore()
-  const apiBaseUrl = useBaseUrl()
+  const config = useRuntimeConfig()
+  const apiBaseUrl = config.public.apiBase
   const route = useRoute()
   const router = useRouter()
 
