@@ -125,6 +125,15 @@ export default defineNuxtConfig({
     },
   },
 
+  server: {
+    host: '0.0.0.0', // Tüm IP adreslerini dinle
+    port: 3000
+  },
+
+  nitro: {
+    preset: 'node-server' // Node.js sunucusu için
+  },
+
   compatibilityDate: '2024-08-21',
 
   routeRules: {
