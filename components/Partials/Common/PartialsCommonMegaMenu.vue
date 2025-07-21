@@ -9,7 +9,6 @@
     <!-- Desktop Mega Menu -->
     <div v-else class="hidden lg:block">
       <!-- Desktop specific mega menu content -->
-      <!-- ... diğer desktop menu içeriği ... -->
     </div>
   </div>
 </template>
