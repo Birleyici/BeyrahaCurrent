@@ -8,7 +8,6 @@
 
     <!-- Desktop Mega Menu -->
     <div v-else class="hidden lg:block">
-      <!-- Desktop specific mega menu content -->
     </div>
   </div>
 </template>
