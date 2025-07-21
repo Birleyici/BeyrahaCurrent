@@ -5,7 +5,7 @@
   </div>
 </template>
 <script setup>
-// SSR-safe device detection
+
 const { isMobile } = useDevice()
 
 const cartState = useCartState()
