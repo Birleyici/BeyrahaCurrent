@@ -6,7 +6,6 @@
       <!-- ... diğer mobile menu içeriği ... -->
     </div>
 
-    <!-- Desktop Mega Menu -->
     <div v-else class="hidden lg:block">
     </div>
   </div>
