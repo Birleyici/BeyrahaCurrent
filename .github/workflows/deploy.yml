@@ -21,5 +21,5 @@ jobs:
             git pull origin main
             npm install
             npx nuxi build
-            pm2 restart beyraha-app
+            pm2 restart nuxt-app
             echo "Deployment completed"
