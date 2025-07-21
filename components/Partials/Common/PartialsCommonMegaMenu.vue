@@ -3,7 +3,7 @@
     <!-- Mobile Mega Menu -->
     <div v-if="isMobile" class="lg:hidden">
       <!-- Mobile specific mega menu content -->
-      <!-- ... diğer mobile menu içeriği ... -->
+
     </div>
 
     <div v-else class="hidden lg:block">
