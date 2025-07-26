@@ -13,8 +13,8 @@
                         <NuxtImg v-if="!image.placeholder && image.path !== '/img-placeholder.jpg'"
                             :src="'cl/' + image.path" :alt="image.alt"
                             class="w-full h-full object-cover cursor-zoom-in transition-transform duration-300 group-hover:scale-105"
-                            @click="openFullscreen" format="webp" quality="90" :width="600" :height="800" fit="inside"
-                            :background="backgroundColor" />
+                            @click="openFullscreen" format="webp" quality="90" :width="600" :height="800"
+                            fit="inside" />
                         <img v-else src="/img-placeholder.jpg" alt="Ürün Resmi"
                             class="w-full h-full object-cover cursor-zoom-in transition-transform duration-300 group-hover:scale-105"
                             @click="openFullscreen" />
@@ -49,7 +49,7 @@
                 <div v-if="images.length > 1" class="absolute bottom-4 right-4">
                     <div class="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
                         <span class="text-white text-sm font-medium">{{ currentImageIndex + 1 }} / {{ images.length
-                            }}</span>
+                        }}</span>
                     </div>
                 </div>
             </div>
@@ -111,7 +111,7 @@
                         <div class="flex items-center justify-between">
                             <div class="text-white">
                                 <span class="text-sm font-medium">{{ currentImageIndex + 1 }} / {{ images.length
-                                    }}</span>
+                                }}</span>
                             </div>
                             <button @click="closeFullscreen"
                                 class="bg-white/10 backdrop-blur-sm rounded-full p-2 hover:bg-white/20 transition-colors duration-200">
@@ -167,7 +167,7 @@
                             <div v-if="zoomLevel > 1" class="absolute top-4 left-4">
                                 <div class="bg-black/50 backdrop-blur-sm rounded-full px-3 py-1">
                                     <span class="text-white text-sm font-medium">{{ Math.round(zoomLevel * 100)
-                                        }}%</span>
+                                    }}%</span>
                                 </div>
                             </div>
                         </div>
