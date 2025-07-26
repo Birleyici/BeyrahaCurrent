@@ -35,7 +35,7 @@ onMounted(async () => {
   await cartState.cartDBToState()
 });
 
-watch(router.currentRoute, () => {
+watch(router?.currentRoute, () => {
   uiStore.closeAll()
 })
 </script>

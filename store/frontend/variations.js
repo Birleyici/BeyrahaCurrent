@@ -7,9 +7,7 @@ export const useVariationsFrontState = defineStore('variationsFront', () => {
 
     const fetchVariations = async (productId) => {
 
-        const response = await useBaseOFetch(`front/products/${productId}/variations`, {
-            
-        })
+        const response = await useBaseOFetch(`front/products/${productId}/variations`)
 
         variations.value = response;
 

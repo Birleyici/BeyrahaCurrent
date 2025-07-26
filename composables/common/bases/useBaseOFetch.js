@@ -1,8 +1,8 @@
 import { defu } from 'defu'
+import { API_CONFIG } from '~/utils/constants'
 
 export async function useBaseOFetch(url, options = {}) {
-  const config = useRuntimeConfig()
-  const apiBaseUrl = config.public.apiBase
+  const apiBaseUrl = API_CONFIG.BASE_URL
 
   const defaults = {
     baseURL: apiBaseUrl,

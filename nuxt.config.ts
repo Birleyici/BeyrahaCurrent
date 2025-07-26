@@ -1,4 +1,4 @@
-import vsharp from 'vite-plugin-vsharp';
+// import vsharp from 'vite-plugin-vsharp';
 
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
@@ -35,8 +35,8 @@ export default defineNuxtConfig({
   },
   
   sourcemap: {
-    server: true,
-    client: true
+    server: process.env.NODE_ENV === 'development',
+    client: process.env.NODE_ENV === 'development'
   },
 
   imports: {
@@ -73,7 +73,7 @@ export default defineNuxtConfig({
 
   runtimeConfig: {
     public: {
-      apiBase: process.env.API_BASE_URL || (process.env.NODE_ENV === 'production' ? 'http://69.62.121.214:8080/api' : 'http://localhost/api'),
+      apiBase: process.env.API_BASE_URL || (process.env.NODE_ENV === 'production' ? 'https://api.beyraha.com/api' : 'http://localhost/api'),
       nuxtSecret: process.env.NUXT_SECRET,
       isDevelopment: process.env.NODE_ENV !== 'production' ? true : false,
       slugify: {
@@ -125,14 +125,14 @@ export default defineNuxtConfig({
     },
   },
 
-  server: {
-    host: '0.0.0.0', // Tüm IP adreslerini dinle
-    port: 3000
-  },
+  // server: {
+  //   host: '0.0.0.0', // Tüm IP adreslerini dinle
+  //   port: 3000
+  // },
 
-  nitro: {
-    preset: 'node-server' // Node.js sunucusu için
-  },
+  // nitro: {
+  //   preset: 'node-server' // Node.js sunucusu için
+  // },
 
   compatibilityDate: '2024-08-21',
 

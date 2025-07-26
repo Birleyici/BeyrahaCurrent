@@ -1,5 +1,6 @@
 import { defu } from 'defu'
-import { useErrorHandler } from '~/composables/useErrorHandler'
+import { API_CONFIG } from '~/utils/constants'
+
 
 let isRefreshing = false
 let currentRefreshToken = null
@@ -19,8 +20,7 @@ function onRefreshed(token) {
 
 export async function useBaseOFetchWithAuth(url, options = {}) {
   const authStore = useAuthStore()
-  const config = useRuntimeConfig()
-  const apiBaseUrl = config.public.apiBase
+  const apiBaseUrl = API_CONFIG.BASE_URL
   const route = useRoute()
   const router = useRouter()
 

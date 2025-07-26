@@ -100,7 +100,6 @@
 </template>
 
 <script setup>
-import { convertYouTubeShortsToWatch } from '~/utils/videoHelpers.js'
 
 const productState = useProductState();
 const attributeState = useAttributeState();
@@ -145,6 +144,7 @@ await useAsyncData(`product-${route.params.slug}-${route.params.urlParams}`, asy
   await variationsFrontState.fetchVariations(response.id)
   await attributeState.fetchAttributes(response.id, route.params)
 
+
   // Kullanıcı giriş yapmışsa kullanıcı verilerini al
   if (authStore.token) {
     await authStore.fetchUser()
@@ -157,7 +157,7 @@ await useAsyncData(`product-${route.params.slug}-${route.params.urlParams}`, asy
 })
 
 // Ürün ismini kontrol et ve hata yönetimi uygula
-await useErrorHandle(productState.product.name);
+await useErrorHandler(productState.product.name);
 
 
 
