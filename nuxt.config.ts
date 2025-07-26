@@ -59,7 +59,7 @@ export default defineNuxtConfig({
    image: {
    provider: 'cloudflare',
    cloudflare:{
-    baseURL: 'https://cdn.beyraha.com'
+    baseURL: 'https://beyraha.com'
    },
    alias:{
     cl: 'cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g'
