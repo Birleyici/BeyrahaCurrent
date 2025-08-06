@@ -1,25 +1,52 @@
-name: Deploy to VPS
+name: Deploy Nuxt App to VPS
+
 on:
   push:
-    branches: [main]
+    branches: [ main ]
+  workflow_dispatch:
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    
     steps:
-      - uses: actions/checkout@v4
-      - name: Deploy to VPS
-        uses: appleboy/ssh-action@v1.0.3 # Sabit sürüm
-        with:
-          host: ${{ secrets.HOST }}
-          username: ${{ secrets.USERNAME }}
-          key: ${{ secrets.PRIVATE_KEY }}
-          port: 22
-          script: |
-            echo "Connecting to VPS..."
-            whoami
-            cd ~/projects/BeyrahaCurrent
-            git pull origin main
-            npm install
-            npx nuxi build
-            pm2 restart nuxt-app
-            echo "Deployment completed"
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+        cache: 'npm'
+        
+    - name: Install dependencies
+      run: npm ci
+      
+    - name: Build application
+      run: npm run build
+      
+    - name: Deploy to VPS
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script: |
+          echo "🚀 Starting deployment..."
+          cd /home/beyraha.com/nuxt-frontend
+          
+          echo "📦 Pulling latest code..."
+          git pull origin main
+          
+          echo "📦 Installing dependencies..."
+          npm ci --production=false
+          
+          echo "🔨 Building application..."
+          npm run build
+          
+          echo "🔄 Restarting PM2 service..."
+          pm2 restart nuxt-beyraha
+          
+          echo "✅ Deployment completed successfully!"
+          pm2 status nuxt-beyraha
