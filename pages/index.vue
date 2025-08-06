@@ -40,7 +40,7 @@
             Kaliteli kumaşlar ve özenli işçilikle hazırlanmış
             <span class="font-medium text-neutral-800 dark:text-neutral-200">çarşaf, ferace, peçe ve sufle</span>
             modellerimizle tarzınızı ve
-            konforunuzu bir arada yaşayınn
+            konforunuzu bir arada yaşayın
 
           </p>
 
