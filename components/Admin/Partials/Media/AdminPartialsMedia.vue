@@ -110,8 +110,8 @@
               'border-gray-200 dark:border-gray-700 hover:border-gray-300 dark:hover:border-gray-600': !isSelected(img.id)
             }">
             <!-- Image -->
-            <NuxtImg :src="'cl/' + img.path" :alt="`Görsel ${img.id}`" class="w-full h-full object-cover cursor-pointer"
-              @click="toggleSelection(img)" />
+            <NuxtImg :src="'/cl/' + img.path" :alt="`Görsel ${img.id}`"
+              class="w-full h-full object-cover cursor-pointer" @click="toggleSelection(img)" />
 
             <!-- Overlay -->
             <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-200" />
@@ -163,7 +163,7 @@
           <template #image-data="{ row }">
             <div class="flex items-center gap-2 sm:gap-3">
               <div class="relative flex-shrink-0">
-                <NuxtImg :src="'cl/' + row.path" :alt="`Görsel ${row.id}`"
+                <NuxtImg :src="'/cl/' + row.path" :alt="`Görsel ${row.id}`"
                   class="w-10 h-10 sm:w-12 sm:h-12 object-cover rounded-lg" />
                 <UCheckbox :model-value="isSelected(row.id)" @update:model-value="toggleSelection(row)" color="primary"
                   class="absolute -top-1 -left-1" :ui="{ base: 'h-3 w-3 sm:h-4 sm:w-4' }" />
