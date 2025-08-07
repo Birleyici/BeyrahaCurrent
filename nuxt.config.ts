@@ -62,7 +62,7 @@ export default defineNuxtConfig({
     baseURL: 'https://beyraha.com'
    },
    alias:{
-    cl: 'cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g'
+    cl: '/cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g'
    }
   },
 
