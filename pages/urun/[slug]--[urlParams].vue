@@ -313,7 +313,7 @@ useHead({
           '@context': 'https://schema.org/',
           '@type': 'Product',
           name: product.name || '',
-          image: productImages.length > 0 ? productImages.map(img => `https://cdn.beyraha.com/cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g/${img.path}`).filter(Boolean) : [],
+          image: productImages.length > 0 ? productImages.map(img => `https://beyraha.com/cdn-cgi/imagedelivery/st1uxlphT2vI8j_75ka47g/${img.path}`).filter(Boolean) : [],
           description: description,
           sku: product.sku || product.id?.toString() || '',
           brand: {
