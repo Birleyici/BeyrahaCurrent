@@ -266,9 +266,17 @@ export const useOrderManagementStore = defineStore(
         // Yeni sistem: ShippingDetail oluşturuldu, vendorOrder'ı yeniden yükle
         await fetchVendorOrder(subOrder.id)
         
+        // Kapıda ödeme durumuna göre mesaj özelleştir
+        let toastMessage = 'Kargo kodu alındı!'
+        if (response.payment_method === 'cash_on_delivery' && response.collect_amount) {
+          toastMessage = `Kargo kodu alındı! Kapıda tahsil edilecek: ${formatPrice(response.collect_amount)}`
+        }
+        
         toast.add({
-          title: 'Kargo kodu alındı!',
-          icon: 'i-heroicons-check-badge'
+          title: toastMessage,
+          description: response.message,
+          icon: 'i-heroicons-check-badge',
+          color: 'green'
         })
       }
     }
