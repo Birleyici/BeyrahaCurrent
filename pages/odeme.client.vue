@@ -1,5 +1,5 @@
 <template>
-  <div class=" pb-20 md:pb-0 !px-0 md:!px-x-mobile lg:!px-x-desktop">
+  <div class=" pb-20 md:pb-0 !px-0 ">
     <!-- Yükleniyor Durumu -->
     <div v-if="!isLoaded" class="min-h-screen flex items-center justify-center">
       <div class="text-center">
@@ -91,6 +91,29 @@
                     </div>
                   </label>
                 </div>
+
+                <!-- Kapıda Ödeme Seçeneği -->
+                <div
+                  class="border rounded-lg transition-all duration-200 hover:border-secondary-300 dark:hover:border-secondary-600"
+                  :class="orderState.orderOptions.selectedPaymentMethod == 'cod' ? 'bg-secondary-50 dark:bg-secondary-900/50 border-secondary-300 dark:border-secondary-600' : 'border-neutral-200 dark:border-neutral-700'">
+                  <label class="flex items-start space-x-4 p-4 cursor-pointer">
+                    <URadio v-model="orderState.orderOptions.selectedPaymentMethod" value="cod" name="paymentMethod"
+                      class="mt-1" />
+                    <div class="flex-1">
+                      <div class="flex items-center space-x-2 mb-2">
+                        <UIcon name="i-heroicons-truck" class="w-5 h-5 text-neutral-600 dark:text-neutral-400" />
+                        <h3 class="font-semibold text-neutral-900 dark:text-neutral-100">Kapıda Ödeme</h3>
+                      </div>
+                      <p class="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+                        Siparişiniz kargoya verildiğinde teslim anında nakit veya kart ile ödeme yapabilirsiniz.
+                        <span v-if="settings.cashOnDeliveryCost > 0"
+                          class="block mt-1 font-medium text-amber-600 dark:text-amber-400">
+                          Kapıda ödeme komisyonu: {{ formatPrice(settings.cashOnDeliveryCost) }}
+                        </span>
+                      </p>
+                    </div>
+                  </label>
+                </div>
               </div>
             </div>
           </div>
@@ -150,7 +173,8 @@
               <div class="flex flex-col">
                 <span class="text-sm text-neutral-500 dark:text-neutral-400">Toplam</span>
                 <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
-                  formatPrice(Math.max(0, cartState.cartFinalAmount + calculateShippingCost(cartState.cartFinalAmount)))
+                  formatPrice(Math.max(0, cartState.cartFinalAmount + calculateShippingCost(cartState.cartFinalAmount) +
+                    cashOnDeliveryCost))
                   }}</span>
               </div>
 
@@ -280,6 +304,15 @@ const isShowNewAddressButton = computed(() => {
 })
 
 const isLoaded = ref(false)
+
+// Kapıda ödeme ücretini hesapla
+const cashOnDeliveryCost = computed(() => {
+  const selectedMethod = orderState.orderOptions.selectedPaymentMethod
+  if (selectedMethod === 'cod' || selectedMethod === 'cash_on_delivery') {
+    return settings.cashOnDeliveryCost || 0
+  }
+  return 0
+})
 
 // Adres modal sayfalama
 const currentPage = ref(1)

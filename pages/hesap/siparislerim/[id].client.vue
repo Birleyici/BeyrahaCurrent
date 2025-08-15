@@ -108,12 +108,20 @@
                                     </span>
                                 </div>
 
+                                <!-- Kapıda Ödeme Ücreti -->
+                                <div v-if="order.order_summary.has_cash_on_delivery" class="flex justify-between">
+                                    <span class="text-neutral-600 dark:text-neutral-400">Kapıda Ödeme Ücreti:</span>
+                                    <span class="font-medium text-neutral-900 dark:text-neutral-100">
+                                        {{ order.order_summary.formatted.cash_on_delivery_cost }}
+                                    </span>
+                                </div>
+
                                 <!-- Toplam -->
                                 <div
                                     class="flex justify-between pt-3 border-t border-neutral-200 dark:border-neutral-600">
                                     <span class="font-semibold text-neutral-900 dark:text-neutral-100">Toplam:</span>
                                     <span class="font-bold text-lg text-secondary-600 dark:text-secondary-400">
-                                        {{ order.order_summary.formatted.total }}
+                                        {{ order.order_summary.formatted.final_total }}
                                     </span>
                                 </div>
                             </div>

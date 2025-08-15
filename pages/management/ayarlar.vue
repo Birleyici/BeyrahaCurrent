@@ -210,6 +210,15 @@ const settingsConfig = {
             placeholder: '60',
             min: 0,
             step: 5
+        },
+        {
+            key: 'cash_on_delivery_cost',
+            label: 'Kapıda Ödeme Komisyonu',
+            description: 'Kapıda ödeme seçeneği için ekstra ücret (TL). 0 yazarsanız komisyon alınmaz.',
+            type: 'number',
+            placeholder: '10',
+            min: 0,
+            step: 1
         }
     ],
     general: [

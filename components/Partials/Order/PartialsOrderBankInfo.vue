@@ -93,16 +93,16 @@ const copyName = ref(false)
 
 // IBAN kopyalama işlemi
 const copyIbanCode = () => {
-  if (settings.value.bankIban) {
-    navigator.clipboard.writeText(settings.value.bankIban)
+  if (settings.bankIban) {
+    navigator.clipboard.writeText(settings.bankIban)
     copyIban.value = true
   }
 }
 
 // Hesap adı kopyalama işlemi
 const copyAccountName = () => {
-  if (settings.value.bankAccountName) {
-    navigator.clipboard.writeText(settings.value.bankAccountName)
+  if (settings.bankAccountName) {
+    navigator.clipboard.writeText(settings.bankAccountName)
     copyName.value = true
   }
 }

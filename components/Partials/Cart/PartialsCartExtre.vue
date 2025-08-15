@@ -42,6 +42,14 @@
                         </span>
                     </div>
 
+                    <!-- Kapıda Ödeme Ücreti -->
+                    <div v-if="cashOnDeliveryCost > 0" class="flex justify-between items-center">
+                        <span class="text-neutral-600 dark:text-neutral-400">Kapıda ödeme ücreti:</span>
+                        <span class="font-medium text-neutral-900 dark:text-neutral-100">
+                            {{ formatPrice(cashOnDeliveryCost) }}
+                        </span>
+                    </div>
+
                     <!-- Ücretsiz Kargo Bilgisi -->
                     <div v-if="shippingCost > 0 && remainingAmount > 0"
                         class="bg-secondary-50 dark:bg-secondary-900/50 border border-secondary-200 dark:border-secondary-700 rounded-lg p-3">
@@ -62,7 +70,8 @@
                             <Transition name="slide-up" mode="out-in">
                                 <span class="text-xl font-bold text-secondary-600 dark:text-secondary-400"
                                     :key="cartState.cartFinalAmount">
-                                    {{ formatPrice(Math.max(0, cartState.cartFinalAmount + shippingCost)) }}
+                                    {{ formatPrice(Math.max(0, cartState.cartFinalAmount + shippingCost +
+                                        cashOnDeliveryCost)) }}
                                 </span>
                             </Transition>
                         </div>
@@ -81,10 +90,20 @@
 
 <script setup>
 const cartState = useCartState()
+const orderState = useOrderStoreFront()
 const { settings, calculateShippingCost, remainingForFreeShipping } = useSettings()
 
 const shippingCost = computed(() => {
     return calculateShippingCost(cartState.cartFinalAmount)
+})
+
+// Kapıda ödeme ücretini hesapla
+const cashOnDeliveryCost = computed(() => {
+    const selectedMethod = orderState.orderOptions.selectedPaymentMethod
+    if (selectedMethod === 'cod' || selectedMethod === 'cash_on_delivery') {
+        return settings.cashOnDeliveryCost || 0
+    }
+    return 0
 })
 
 const remainingAmount = computed(() => {

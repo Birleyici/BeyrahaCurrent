@@ -127,8 +127,9 @@ export const useOrderStoreFront = defineStore('orderStoreFront', () => {
     // Frontend'teki ödeme yöntemi kodlarını backend enum değerlerine dönüştür
     const paymentMethodMap = {
       'bacs': 'bank_transfer',      // Havale/EFT
+      'cod': 'cash_on_delivery',    // Kapıda Ödeme (cod)
       'credit_card': 'credit_card', // Kredi Kartı
-      'cash_on_delivery': 'cash_on_delivery', // Kapıda Ödeme
+      'cash_on_delivery': 'cash_on_delivery', // Kapıda Ödeme (uzun format)
       'digital_wallet': 'digital_wallet', // Dijital Cüzdan
       'installment': 'installment'  // Taksitli Ödeme
     }

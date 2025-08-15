@@ -36,6 +36,7 @@ export const useSettings = () => {
     bankAccountName: computed(() => settings.value?.bankAccountName || ''),
     bankIban: computed(() => settings.value?.bankIban || ''),
     freeShippingLimit: computed(() => settings.value?.freeShippingLimit || null),
-    shippingCost: computed(() => settings.value?.shippingCost || null)
+    shippingCost: computed(() => settings.value?.shippingCost || null),
+    cashOnDeliveryCost: computed(() => settings.value?.cashOnDeliveryCost || 0)
   }
 } 

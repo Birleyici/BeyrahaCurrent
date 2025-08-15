@@ -250,10 +250,19 @@
               </span>
             </div>
 
+            <!-- Kapıda Ödeme Ücreti -->
+            <div v-if="orderSummary?.has_cash_on_delivery"
+              class="flex justify-between items-center py-2 border-b border-neutral-200 dark:border-neutral-700">
+              <span class="text-neutral-600 dark:text-neutral-400">Kapıda Ödeme Ücreti:</span>
+              <span class="font-medium text-neutral-900 dark:text-neutral-100">
+                {{ orderSummary?.formatted?.cash_on_delivery_cost }}
+              </span>
+            </div>
+
             <!-- Ödeme Yöntemi -->
             <div class="flex justify-between items-center py-2 border-b border-neutral-200 dark:border-neutral-700">
               <span class="text-neutral-600 dark:text-neutral-400">Ödeme Yöntemi:</span>
-              <span class="font-medium text-secondary-600 dark:text-secondary-400">Havale / EFT</span>
+              <span class="font-medium text-secondary-600 dark:text-secondary-400">{{ paymentMethodName }}</span>
             </div>
 
             <!-- Genel Toplam -->
@@ -261,7 +270,8 @@
               class="flex justify-between items-center py-3 bg-secondary-50 dark:bg-secondary-900/20 rounded-lg px-4">
               <span class="text-lg font-semibold text-neutral-900 dark:text-neutral-100">Genel Toplam:</span>
               <span class="text-xl font-bold text-secondary-600 dark:text-secondary-400">
-                {{ orderSummary?.formatted?.total || formatPrice(orderState.vendorOrder.parent_order?.total || 0) }}
+                {{ orderSummary?.formatted?.final_total || formatPrice(orderState.vendorOrder.parent_order?.total || 0)
+                }}
               </span>
             </div>
           </div>
@@ -309,6 +319,22 @@ const badge = computed(() => {
 
 const orderSummary = computed(() => {
   return orderState.vendorOrder?.order_summary || null;
+});
+
+// Ödeme yöntemi adlarını Türkçe'ye çevir
+const paymentMethodNames = {
+  'bank_transfer': 'Havale/EFT',
+  'bacs': 'Havale/EFT',
+  'credit_card': 'Kredi Kartı',
+  'cash_on_delivery': 'Kapıda Ödeme',
+  'cod': 'Kapıda Ödeme',
+  'digital_wallet': 'Dijital Cüzdan',
+  'installment': 'Taksitli Ödeme'
+}
+
+const paymentMethodName = computed(() => {
+  const paymentMethod = orderState.vendorOrder?.order?.payment_method || 'bank_transfer'
+  return paymentMethodNames[paymentMethod] || 'Havale/EFT'
 });
 
 await useAsyncData('orderInManagement', async () => {

@@ -28,11 +28,11 @@
             <p class="text-lg text-neutral-600 dark:text-neutral-300 max-w-2xl mx-auto mb-8">
               <span class="font-semibold text-secondary-600 dark:text-secondary-400">{{
                 formatPrice(order.total_with_shipping) }}</span>
-              <span v-if="order.payment_method === 'bank_transfer'">
+              <span v-if="order.payment_method === 'bank_transfer' || order.payment_method === 'bacs'">
                 toplam tutarı aşağıdaki banka bilgilerimize, açıklama kısmına sipariş numaranızı yazarak
                 gönderdiğinizde siparişiniz onaylanarak işleme alınacaktır.
               </span>
-              <span v-else-if="order.payment_method === 'cash_on_delivery'">
+              <span v-else-if="order.payment_method === 'cash_on_delivery' || order.payment_method === 'cod'">
                 toplam tutarı siparişiniz kargoya verildiğinde nakit veya kart ile ödeyebilirsiniz.
               </span>
               <span v-else>
@@ -65,7 +65,7 @@
           <div class="max-w-6xl mx-auto">
 
             <!-- Banka Bilgileri -->
-            <div v-if="order.payment_method === 'bank_transfer'" class="mb-8">
+            <div v-if="order.payment_method === 'bank_transfer' || order.payment_method === 'bacs'" class="mb-8">
               <div class="card">
                 <div class="card-header">
                   <div class="flex items-center space-x-3 p-4">
@@ -88,7 +88,7 @@
             </div>
 
             <!-- Kapıda Ödeme Bilgileri -->
-            <div v-else-if="order.payment_method === 'cash_on_delivery'" class="mb-8">
+            <div v-else-if="order.payment_method === 'cash_on_delivery' || order.payment_method === 'cod'" class="mb-8">
               <div class="card">
                 <div class="card-header">
                   <div class="flex items-center space-x-3 p-4">
@@ -112,12 +112,16 @@
                         class="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
                       <div>
                         <h4 class="font-semibold text-green-800 dark:text-green-200 mb-2">Kapıda Ödeme Bilgileri</h4>
-                        <ul class="text-sm text-green-700 dark:text-green-300 space-y-1">
-                          <li>• Siparişiniz kargoya verildiğinde SMS ile bilgilendirileceksiniz</li>
-                          <li>• Teslimat anında nakit veya kart ile ödeme yapabilirsiniz</li>
-                          <li>• Kargo firması tarafından ekstra komisyon alınabilir</li>
-                          <li>• Ödeme tutarınız: <strong>{{ formatPrice(order.total_with_shipping) }}</strong></li>
-                        </ul>
+                        <div class="text-sm text-green-700 dark:text-green-300 space-y-2">
+                          <p class="leading-relaxed">
+                            Siparişiniz hazırlanıp kargo firmasına teslim edildiğinde,
+                            teslimat anında kargo görevlisine <strong>{{ formatPrice(order.total_with_shipping)
+                              }}</strong>
+                            tutarını nakit veya kart ile ödeyebilirsiniz.
+                          </p>
+
+
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -163,7 +167,8 @@
                   </div>
                   <div class="card-body">
                     <PartialsOrderExtre :total="order?.total" :shipping-cost="order?.shipping_cost"
-                      :coupon-usage="order?.coupon_usage" />
+                      :coupon-usage="order?.coupon_usage" :cash-on-delivery-cost="order?.cash_on_delivery_cost"
+                      :payment-method="order?.payment_method" />
                   </div>
                 </div>
               </div>
@@ -254,8 +259,10 @@ const orderLoaded = ref(false);
 // Ödeme yöntemi adlarını Türkçe'ye çevir
 const paymentMethodNames = {
   'bank_transfer': 'Havale/EFT',
+  'bacs': 'Havale/EFT',
   'credit_card': 'Kredi Kartı',
   'cash_on_delivery': 'Kapıda Ödeme',
+  'cod': 'Kapıda Ödeme',
   'digital_wallet': 'Dijital Cüzdan',
   'installment': 'Taksitli Ödeme'
 }
