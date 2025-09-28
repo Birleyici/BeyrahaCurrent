@@ -16,7 +16,7 @@ Bu döküman, Beyraha projesi için geliştirilen merkezi hata yönetim sistemin
 - **Merkezi State Yönetimi**: Global hata durumu
 - **Akıllı Toast Sistemi**: Hata seviyesine göre bildirimler
 - **Development Monitor**: Geliştirici paneli
-- **Local Hata Logları**: Client-side error storagee
+- **Local Hata Logları**: Client-side error storage
 
 ## 📋 Backend Kullanımı
 
