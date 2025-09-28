@@ -175,7 +175,7 @@
                 <span class="text-lg font-bold text-neutral-900 dark:text-neutral-100">{{
                   formatPrice(Math.max(0, cartState.cartFinalAmount + calculateShippingCost(cartState.cartFinalAmount) +
                     cashOnDeliveryCost))
-                  }}</span>
+                }}</span>
               </div>
 
               <!-- Siparişi Onayla Butonu -->
